@@ -107,7 +107,7 @@
   .chip{display:inline-flex;align-items:center;gap:9px;padding:7px 15px;border:1px solid rgba(255,255,255,.18);border-radius:999px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#d3dbe3;background:rgba(6,8,12,.48);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
   .chip i{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
   .hero h1{margin:30px 0 0;font-size:inherit;font-weight:700;letter-spacing:0}
-  .hero h1 .brandmark{display:block;font-family:var(--mono);font-size:13px;letter-spacing:.46em;text-indent:.46em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+  .hero h1 .brandmark{display:block;font-family:"Didot","Bodoni 72","Songti SC","Times New Roman",serif;font-weight:400;font-size:17px;letter-spacing:.6em;text-indent:.6em;text-transform:uppercase;color:rgba(255,255,255,.78)}
   .hero h1 .slogan{display:block;margin-top:26px;font-size:clamp(58px,11.5vw,164px);line-height:1.04;letter-spacing:-.042em;font-weight:700;
     background:linear-gradient(98deg,#ffffff 6%,#e4f5ff 40%,#d3caff 96%);-webkit-background-clip:text;background-clip:text;color:transparent;
     filter:drop-shadow(0 18px 50px rgba(0,0,0,.55))}
@@ -120,7 +120,7 @@
   .btn.primary{background:#f4f7f9;color:#07080a;box-shadow:0 10px 34px rgba(110,231,255,.2)}
   .btn.ghost{border:1px solid rgba(255,255,255,.26);color:#eef3f8;background:rgba(6,8,12,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
   .btn.ghost:hover{border-color:rgba(110,231,255,.55)}
-  .hero-meta{margin-top:24px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.66);text-shadow:0 1px 12px rgba(0,0,0,.7)}
+  .hero-meta{margin-top:24px;font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.66);text-shadow:0 1px 12px rgba(0,0,0,.7)}
   .hero-meta span+span::before{content:"·";margin:0 12px;color:rgba(255,255,255,.34)}
   .scroll-hint{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,.62);font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase}
   .scroll-hint svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6;animation:hint 2.4s ease-in-out infinite}
@@ -133,20 +133,21 @@
   .screen{position:relative;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.14);box-shadow:0 40px 120px rgba(0,0,0,.75),0 0 0 1px rgba(0,0,0,.6) inset;background:#000}
   .screen img{display:block;width:100%;height:auto}
   .screen::after{content:"";position:absolute;inset:0;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.10),transparent 18%,transparent 82%,rgba(0,0,0,.35));pointer-events:none}
-  .tv-note{margin:18px 0 0;font-size:13.5px;color:var(--faint);text-align:center}
+  .tv-note{margin:18px 0 0;font-size:15px;color:var(--faint);text-align:center}
 
   /* stats */
   .stats{margin:clamp(90px,13vh,150px) 0 0;border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);display:grid;grid-template-columns:repeat(4,1fr)}
   .stat{padding:30px 22px;text-align:center;border-left:1px solid var(--line-soft)}
   .stat:first-child{border-left:0}
   .stat b{display:block;font-family:var(--mono);font-size:24px;letter-spacing:-.01em;color:#eaf3f8}
-  .stat span{display:block;margin-top:7px;font-size:12.5px;color:var(--faint);letter-spacing:.04em}
+  .stat span{display:block;margin-top:7px;font-size:13.5px;color:var(--faint);letter-spacing:.04em}
   @media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}.stat:nth-child(3){border-left:0}.stat:nth-child(n+3){border-top:1px solid var(--line-soft)}}
 
   section{padding:clamp(130px,18vh,210px) 0 0}
+  .section-far{padding-top:clamp(200px,28vh,320px)}
   .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);opacity:.85}
   h2{margin:16px 0 0;font-size:clamp(34px,5vw,58px);line-height:1.12;letter-spacing:-.035em;font-weight:700;max-width:760px}
-  .section-sub{margin:20px 0 0;color:var(--sub);max-width:640px;font-size:clamp(16px,1.7vw,19px);line-height:1.75}
+  .section-sub{margin:20px 0 0;color:var(--sub);max-width:640px;font-size:clamp(17px,1.8vw,20px);line-height:1.75}
 
   /* compare */
   .compare{display:grid;grid-template-columns:1fr 1.3fr;gap:20px;margin-top:56px;align-items:start}
@@ -154,11 +155,11 @@
   .panel{position:relative;border:1px solid var(--line-soft);border-radius:var(--radius);padding:32px 30px;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012))}
   .panel.now{border-color:rgba(255,255,255,.16)}
   .panel.good{border-color:rgba(110,231,255,.32);background:linear-gradient(180deg,rgba(110,231,255,.075),rgba(255,255,255,.012))}
-  .panel h3{margin:0 0 4px;font-size:17px;font-weight:650;letter-spacing:-.01em}
-  .panel .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+  .panel h3{margin:0 0 4px;font-size:18px;font-weight:650;letter-spacing:-.01em}
+  .panel .tag{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
   .panel.good .tag{color:rgba(110,231,255,.85)}
   .panel ul{list-style:none;margin:20px 0 0;padding:0}
-  .panel li{position:relative;padding-left:24px;margin-bottom:13px;font-size:15px;color:#c8d0da;line-height:1.6}
+  .panel li{position:relative;padding-left:24px;margin-bottom:13px;font-size:16px;color:#c8d0da;line-height:1.6}
   .panel li::before{content:"";position:absolute;left:0;top:10px;width:7px;height:7px;border-radius:2px;background:#4a525b}
   .panel.good li::before{background:var(--cyan);box-shadow:0 0 10px rgba(110,231,255,.6)}
   .panel.good li{color:#e6edf4}
@@ -168,8 +169,8 @@
   .row{display:grid;grid-template-columns:5fr 7fr;gap:clamp(34px,5vw,76px);align-items:center}
   .row.flip .row-media{order:-1}
   .row h3{margin:0;font-size:clamp(28px,3.6vw,44px);line-height:1.15;letter-spacing:-.032em;font-weight:700}
-  .row p{margin:18px 0 0;color:var(--sub);font-size:16.5px;line-height:1.8;max-width:460px}
-  .row .row-index{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:14px}
+  .row p{margin:18px 0 0;color:var(--sub);font-size:17.5px;line-height:1.8;max-width:460px}
+  .row .row-index{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:14px}
   .row-media{border-radius:var(--radius);overflow:hidden;border:1px solid rgba(255,255,255,.1);box-shadow:0 30px 90px rgba(0,0,0,.55)}
   .row-media img{display:block;width:100%;height:auto;transform:scale(1.045);transition:transform 1.4s cubic-bezier(.2,.7,.2,1)}
   .row.in .row-media img{transform:scale(1)}
@@ -178,17 +179,17 @@
   /* statement */
   .statement{margin-top:clamp(96px,14vh,170px);text-align:center}
   .statement h3{margin:0;font-size:clamp(30px,4.6vw,54px);line-height:1.15;letter-spacing:-.035em;font-weight:700}
-  .statement p{margin:18px auto 0;color:var(--sub);max-width:560px;font-size:16.5px;line-height:1.8}
+  .statement p{margin:18px auto 0;color:var(--sub);max-width:560px;font-size:17.5px;line-height:1.8}
 
   /* gallery */
   .gallery-wide{margin-top:64px}
   .gallery-wide figure{margin:0}
   .gallery-wide img{display:block;width:100%;height:auto;border-radius:var(--radius);border:1px solid var(--line-soft);box-shadow:0 24px 70px rgba(0,0,0,.55)}
-  .gallery-wide figcaption{margin-top:14px;font-size:13.5px;color:var(--faint);text-align:center}
+  .gallery-wide figcaption{margin-top:14px;font-size:15px;color:var(--faint);text-align:center}
 
   /* languages */
   .langs{display:flex;flex-wrap:wrap;gap:10px;margin-top:44px}
-  .langs span{border:1px solid var(--line-soft);border-radius:999px;padding:9px 17px;font-size:14px;color:#c3cbd4;background:rgba(255,255,255,.022)}
+  .langs span{border:1px solid var(--line-soft);border-radius:999px;padding:10px 18px;font-size:15px;color:#c3cbd4;background:rgba(255,255,255,.022)}
 
   /* install */
   .steps{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:52px}
@@ -201,21 +202,21 @@
   .term pre{margin:0;padding:20px;font-family:var(--mono);font-size:12.8px;line-height:1.75;color:#c8e6f2;overflow-x:auto;white-space:pre}
   .term pre .c{color:#5f6a76}
   .step-copy{border:1px solid var(--line-soft);border-radius:var(--radius);padding:28px 26px;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent)}
-  .step-copy h3{margin:0 0 9px;font-size:16.5px;font-weight:650}
-  .step-copy p{margin:0;color:var(--sub);font-size:14.5px;line-height:1.7}
+  .step-copy h3{margin:0 0 9px;font-size:17px;font-weight:650}
+  .step-copy p{margin:0;color:var(--sub);font-size:15.5px;line-height:1.7}
   .step-copy code{font-family:var(--mono);font-size:12.8px;background:rgba(255,255,255,.06);padding:2px 6px;border-radius:5px;color:#d5ecf7}
 
   /* faq */
   .faq{margin-top:44px;border-top:1px solid var(--line-soft)}
   details{border-bottom:1px solid var(--line-soft);padding:24px 0}
-  summary{cursor:pointer;font-size:16.5px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:20px;align-items:center;letter-spacing:-.01em}
+  summary{cursor:pointer;font-size:17px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:20px;align-items:center;letter-spacing:-.01em}
   summary::-webkit-details-marker{display:none}
   summary::after{content:"+";font-family:var(--mono);color:var(--faint);font-size:18px;transition:transform .2s}
   details[open] summary::after{content:"–";color:var(--cyan)}
-  details p{margin:13px 0 0;color:var(--sub);font-size:14.5px;max-width:760px}
+  details p{margin:13px 0 0;color:var(--sub);font-size:15.5px;max-width:760px}
   details a{color:#bfe9fb;border-bottom:1px solid rgba(191,233,251,.35)}
 
-  footer{margin-top:clamp(130px,18vh,200px);border-top:1px solid var(--line-soft);padding:44px 0 68px;color:var(--faint);font-size:13px}
+  footer{margin-top:clamp(130px,18vh,200px);border-top:1px solid var(--line-soft);padding:44px 0 68px;color:var(--faint);font-size:13.5px}
   footer .row{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
   footer a{color:#9fb0bd}
   footer a:hover{color:#dff2fb}
@@ -253,7 +254,7 @@
         <span class="brandmark">HLine TV</span>
         <span class="slogan"><span>大屏之上</span><span>留白</span></span>
       </h1>
-      <p class="lead">抛弃喧嚣的浮华。开机的每一眼，只有时间、天气，和专属于你的视界。</p>
+      <p class="lead">抛弃喧嚣的浮华。<br>开机的每一眼，只有时间、天气，和专属于你的视界。</p>
       <p class="closer">电视，终属于你</p>
       <div class="actions">
         <a class="btn primary" href="https://github.com/Harleyline/hline-tv/releases/latest/download/HLine-TV.apk">下载 HLine TV</a>
@@ -285,27 +286,27 @@
 
   <section id="why" class="wrap reveal">
     <span class="eyebrow">Why HLine TV</span>
-    <h2>开机，只为你。</h2>
+    <h2>开机，只为你</h2>
     <p class="section-sub">默认桌面的每一屏，都在替别人挣钱。HLine TV 把这一屏，还给你。</p>
     <div class="compare">
       <div class="panel now">
         <span class="tag">Before</span>
         <h3>系统默认桌面</h3>
         <ul>
-          <li>开机先过一屏广告或影视推荐</li>
-          <li>首页塞满会员角标、热播榜、活动入口</li>
-          <li>想找自己的 App，要在推荐流里翻</li>
-          <li>预装应用删不掉，也关不干净</li>
+          <li>开机，先看广告</li>
+          <li>首页，全是推荐</li>
+          <li>找自己的 App，要翻半天</li>
+          <li>预装一堆，删不掉</li>
         </ul>
       </div>
       <div class="panel good">
         <span class="tag">After</span>
         <h3>HLine TV</h3>
         <ul>
-          <li>开机就是时钟、天气和你的 App</li>
-          <li>整屏没有一块是拿来卖的</li>
-          <li>常用 App 固定在底部，长按就能整理</li>
-          <li>不 root、不卸载系统应用，随时能换回去</li>
+          <li>开机即见时钟、天气与你的 App</li>
+          <li>整屏没有一块广告</li>
+          <li>常用 App 固定在底部</li>
+          <li>不 root，随时换回去</li>
         </ul>
       </div>
     </div>
@@ -313,14 +314,14 @@
 
   <section id="features" class="wrap">
     <span class="eyebrow reveal">Experience</span>
-    <h2 class="reveal">安静，而丰富。</h2>
+    <h2 class="reveal">安静，而丰富</h2>
     <p class="section-sub reveal">该有的都有，不该有的一样没有。</p>
 
     <div class="rows">
       <div class="row reveal">
         <div>
           <span class="row-index">01 · 首页</span>
-          <h3>一眼，就是全部。</h3>
+          <h3>一眼，就是全部</h3>
           <p>时间、天气、你的 App。开机第一眼，干净得像什么都没发生——这正是重点。</p>
         </div>
         <div class="row-media"><img src="img/home.jpg" width="1920" height="1080" alt="HLine TV 首页：时钟、天气与底部的常用 App" loading="lazy"></div>
@@ -329,16 +330,16 @@
       <div class="row flip reveal">
         <div>
           <span class="row-index">02 · 壁纸</span>
-          <h3>动静之间，皆是风景。</h3>
+          <h3>动静之间，皆是风景</h3>
           <p>航拍视界、精选壁纸、私人相册。随心而动，每一眼都如初见。</p>
         </div>
-        <div class="row-media"><img src="img/w-stack.jpg" width="1600" height="1000" alt="内置静态壁纸层叠展示：海浪、城市夜色、天际线与沙丘" loading="lazy"></div>
+        <div class="row-media"><img src="img/w-stack.jpg" width="1600" height="1040" alt="内置静态壁纸层叠展示：海浪、城市夜色、天际线与沙丘" loading="lazy"></div>
       </div>
 
       <div class="row reveal">
         <div>
           <span class="row-index">03 · 屏保</span>
-          <h3>空闲时，它很美。</h3>
+          <h3>空闲时，它很美</h3>
           <p>航拍影片、壁纸轮换，或者只留一枚时钟。闲置的电视，一样体面。</p>
         </div>
         <div class="row-media"><img src="img/screensaver.jpg" width="1920" height="1080" alt="真机屏保效果：城市天际线壁纸、时钟与天气、底部的常用 App" loading="lazy"></div>
@@ -347,7 +348,7 @@
       <div class="row flip reveal">
         <div>
           <span class="row-index">04 · 整理</span>
-          <h3>整理，随手完成。</h3>
+          <h3>整理，随手完成</h3>
           <p>长按移动、建文件夹、隐藏、卸载；手机上打开一个地址，连壁纸和城市都能改。遥控器终于可以歇歇了。</p>
         </div>
         <div class="row-media"><img src="img/apps.jpg" width="1920" height="1080" alt="全部 App 网格：三行横版磁贴" loading="lazy"></div>
@@ -355,14 +356,14 @@
     </div>
 
     <div class="statement reveal">
-      <h3>更新，悄悄完成。</h3>
+      <h3>更新，悄悄完成</h3>
       <p>控制中心提示新版本，点一下就好。App、排列、壁纸、设置，一切原样。</p>
     </div>
   </section>
 
   <section class="wrap">
     <span class="eyebrow reveal">In use</span>
-    <h2 class="reveal">真机实拍。</h2>
+    <h2 class="reveal">在客厅，眼见为实</h2>
     <div class="gallery-wide reveal">
       <figure>
         <img src="img/home-en.jpg" width="1920" height="1080" alt="英文界面：海浪壁纸，日期与 Hangzhou 天气" loading="lazy">
@@ -371,9 +372,9 @@
     </div>
   </section>
 
-  <section class="wrap">
+  <section class="wrap section-far">
     <span class="eyebrow reveal">Languages</span>
-    <h2 class="reveal">通晓你的母语。</h2>
+    <h2 class="reveal">通晓你的母语</h2>
     <p class="section-sub reveal">无论你的系统设置为何种语言，它都能无缝匹配，一见如故。</p>
     <div class="langs reveal">
       <span>简体中文</span><span>繁體中文</span><span>English</span><span>日本語</span><span>한국어</span>
@@ -384,7 +385,7 @@
 
   <section id="install" class="wrap">
     <span class="eyebrow reveal">Install</span>
-    <h2 class="reveal">一分钟，装好。</h2>
+    <h2 class="reveal">顷刻间，大功告成</h2>
     <p class="section-sub reveal">不用 root，不动系统应用。不喜欢？卸载即回原样。</p>
     <div class="steps">
       <div class="term reveal">
