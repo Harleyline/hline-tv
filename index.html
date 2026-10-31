@@ -55,13 +55,13 @@
     --bg:#06070a;
     --panel:#0b0d12;
     --ink:#eef1f4;
-    --sub:#8d95a1;
+    --sub:#98a0ac;
     --faint:#5b6270;
     --line:rgba(255,255,255,.09);
     --line-soft:rgba(255,255,255,.055);
     --cyan:#6ee7ff;
     --violet:#9a8bff;
-    --radius:20px;
+    --radius:22px;
     --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
   }
   *{box-sizing:border-box}
@@ -75,25 +75,21 @@
   body::before{
     content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
     background:
-      radial-gradient(70% 52% at 50% -6%,rgba(110,231,255,.16),transparent 62%),
-      radial-gradient(52% 40% at 92% 22%,rgba(154,139,255,.10),transparent 70%),
-      radial-gradient(46% 36% at 4% 40%,rgba(110,231,255,.06),transparent 70%);
-  }
-  body::after{
-    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.035;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+      radial-gradient(70% 52% at 50% -6%,rgba(110,231,255,.13),transparent 62%),
+      radial-gradient(52% 40% at 92% 22%,rgba(154,139,255,.08),transparent 70%);
   }
   main,header,footer{position:relative;z-index:1}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px}
   a{color:inherit;text-decoration:none}
   .mono{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+  section[id],div[id]{scroll-margin-top:84px}
 
   header{position:sticky;top:0;z-index:30;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(6,7,10,0);border-bottom:1px solid transparent;transition:background .35s ease,border-color .35s ease}
   header.solid{background:rgba(6,7,10,.74);border-bottom-color:var(--line-soft)}
-  header .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
   .brand{display:flex;align-items:center;gap:10px;font-weight:650;letter-spacing:-.01em}
   .brand svg{width:22px;height:22px}
-  nav{display:flex;gap:26px;align-items:center}
+  nav{display:flex;gap:28px;align-items:center}
   nav a{font-size:14px;color:var(--sub);transition:color .18s}
   nav a:hover{color:var(--ink)}
   nav a.cta{color:var(--ink);border:1px solid var(--line);padding:7px 14px;border-radius:999px}
@@ -101,126 +97,132 @@
   @media(max-width:760px){nav a:not(.cta){display:none}}
 
   /* hero — full-bleed background + scroll parallax */
-  .hero{position:relative;isolation:isolate;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding:124px 0 96px;text-align:center}
+  .hero{position:relative;isolation:isolate;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding:124px 0 110px;text-align:center}
   .hero-bg{position:absolute;inset:-16% 0;z-index:-2;will-change:transform;transform:translate3d(0,0,0)}
-  .hero-bg img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 46%;transform:scale(1.03)}
+  .hero-bg img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 46%;transform:scale(1.03);filter:brightness(.8) saturate(1.04)}
   .hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:
-    radial-gradient(64% 52% at 50% 42%,rgba(6,7,10,.02),rgba(6,7,10,.52) 64%,rgba(6,7,10,.88) 100%),
-    linear-gradient(180deg,rgba(6,7,10,.92) 0%,rgba(6,7,10,.26) 24%,rgba(6,7,10,.34) 58%,rgba(6,7,10,.86) 88%,var(--bg) 100%)}
-  .hero-inner{position:relative;z-index:1;width:100%;max-width:1080px;margin:0 auto;padding:0 28px}
-  .chip{display:inline-flex;align-items:center;gap:9px;padding:6px 13px;border:1px solid rgba(255,255,255,.16);border-radius:999px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#c6cfd8;background:rgba(8,10,14,.34);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+    radial-gradient(58% 46% at 50% 42%,rgba(6,7,10,.34),rgba(6,7,10,.66) 70%,rgba(6,7,10,.92) 100%),
+    linear-gradient(180deg,rgba(6,7,10,.9) 0%,rgba(6,7,10,.32) 26%,rgba(6,7,10,.4) 60%,rgba(6,7,10,.88) 88%,var(--bg) 100%)}
+  .hero-inner{position:relative;z-index:1;width:100%;max-width:1140px;margin:0 auto;padding:0 28px}
+  .chip{display:inline-flex;align-items:center;gap:9px;padding:7px 15px;border:1px solid rgba(255,255,255,.18);border-radius:999px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#d3dbe3;background:rgba(6,8,12,.48);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
   .chip i{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
-  .hero h1{margin:26px 0 0;font-size:inherit;font-weight:700;letter-spacing:0}
-  .hero h1 .brandmark{display:block;font-family:var(--mono);font-size:12.5px;letter-spacing:.42em;text-indent:.42em;text-transform:uppercase;color:rgba(255,255,255,.74)}
-  .hero h1 .slogan{display:block;margin-top:20px;font-size:clamp(42px,7.6vw,84px);line-height:1.05;letter-spacing:-.045em;
-    background:linear-gradient(98deg,#ffffff 8%,#d8f4ff 46%,#cbc2ff 94%);-webkit-background-clip:text;background-clip:text;color:transparent;
-    filter:drop-shadow(0 14px 42px rgba(0,0,0,.5))}
-  .hero .lead{margin:28px auto 0;max-width:660px;font-size:clamp(16px,1.9vw,19.5px);color:rgba(233,240,246,.84);line-height:1.8;text-shadow:0 2px 20px rgba(0,0,0,.55)}
-  .hero .closer{margin:40px 0 0;font-size:clamp(21px,3vw,32px);font-weight:600;letter-spacing:-.03em;color:#fff;text-shadow:0 3px 26px rgba(0,0,0,.6)}
-  .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:40px 0 0}
-  .btn{display:inline-flex;align-items:center;gap:9px;padding:14px 26px;border-radius:999px;font-size:15.5px;font-weight:600;transition:transform .16s ease,border-color .18s,background .18s}
+  .hero h1{margin:30px 0 0;font-size:inherit;font-weight:700;letter-spacing:0}
+  .hero h1 .brandmark{display:block;font-family:var(--mono);font-size:13px;letter-spacing:.46em;text-indent:.46em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+  .hero h1 .slogan{display:block;margin-top:26px;font-size:clamp(58px,11.5vw,164px);line-height:1.04;letter-spacing:-.042em;font-weight:700;
+    background:linear-gradient(98deg,#ffffff 6%,#e4f5ff 40%,#d3caff 96%);-webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 18px 50px rgba(0,0,0,.55))}
+  .hero h1 .slogan span{display:block}
+  .hero .lead{margin:34px auto 0;max-width:660px;font-size:clamp(17px,2vw,21px);color:rgba(240,246,251,.92);line-height:1.8;text-shadow:0 2px 22px rgba(0,0,0,.65);text-wrap:balance}
+  .hero .closer{margin:44px 0 0;font-size:clamp(23px,3.2vw,36px);font-weight:650;letter-spacing:-.03em;color:#fff;text-shadow:0 3px 28px rgba(0,0,0,.65)}
+  .actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:44px 0 0}
+  .btn{display:inline-flex;align-items:center;gap:9px;padding:15px 30px;border-radius:999px;font-size:16px;font-weight:600;transition:transform .16s ease,border-color .18s,background .18s}
   .btn:hover{transform:translateY(-1px)}
-  .btn.primary{background:#f4f7f9;color:#07080a;box-shadow:0 10px 30px rgba(110,231,255,.18)}
-  .btn.ghost{border:1px solid rgba(255,255,255,.22);color:#eaf0f6;background:rgba(8,10,14,.3);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-  .btn.ghost:hover{border-color:rgba(110,231,255,.5)}
-  .hero-meta{margin-top:20px;font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.46)}
-  .hero-meta span+span::before{content:"·";margin:0 10px;color:rgba(255,255,255,.28)}
-  .scroll-hint{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,.5);font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase}
+  .btn.primary{background:#f4f7f9;color:#07080a;box-shadow:0 10px 34px rgba(110,231,255,.2)}
+  .btn.ghost{border:1px solid rgba(255,255,255,.26);color:#eef3f8;background:rgba(6,8,12,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  .btn.ghost:hover{border-color:rgba(110,231,255,.55)}
+  .hero-meta{margin-top:24px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.66);text-shadow:0 1px 12px rgba(0,0,0,.7)}
+  .hero-meta span+span::before{content:"·";margin:0 12px;color:rgba(255,255,255,.34)}
+  .scroll-hint{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,.62);font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase}
   .scroll-hint svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6;animation:hint 2.4s ease-in-out infinite}
   @keyframes hint{0%,100%{transform:translateY(0);opacity:.45}50%{transform:translateY(5px);opacity:1}}
-  @media(max-width:760px){.hero{padding:104px 0 84px;min-height:92vh}.scroll-hint{display:none}}
+  @media(max-width:760px){.hero{padding:104px 0 96px;min-height:94vh}.scroll-hint{display:none}}
   @media(prefers-reduced-motion:reduce){.scroll-hint svg{animation:none}}
 
   /* the tv */
-  .tv{position:relative;margin:96px auto 0;max-width:1000px}
-  .tv::before{content:"";position:absolute;inset:-14% -6% -18%;background:radial-gradient(50% 50% at 50% 50%,rgba(110,231,255,.20),transparent 70%);filter:blur(24px);z-index:-1}
-  .screen{position:relative;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.14);box-shadow:0 40px 120px rgba(0,0,0,.75),0 0 0 1px rgba(0,0,0,.6) inset;background:#000}
+  .tv{position:relative;margin:clamp(80px,12vh,140px) auto 0;max-width:1040px}
+  .screen{position:relative;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.14);box-shadow:0 40px 120px rgba(0,0,0,.75),0 0 0 1px rgba(0,0,0,.6) inset;background:#000}
   .screen img{display:block;width:100%;height:auto}
-  .screen::after{content:"";position:absolute;inset:0;border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.10),transparent 18%,transparent 82%,rgba(0,0,0,.35));pointer-events:none}
-  .tv-note{margin:16px 0 0;font-size:13px;color:var(--faint);text-align:center}
+  .screen::after{content:"";position:absolute;inset:0;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.10),transparent 18%,transparent 82%,rgba(0,0,0,.35));pointer-events:none}
+  .tv-note{margin:18px 0 0;font-size:13.5px;color:var(--faint);text-align:center}
 
   /* stats */
-  .stats{margin:78px 0 0;border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);display:grid;grid-template-columns:repeat(4,1fr)}
-  .stat{padding:26px 22px;text-align:center;border-left:1px solid var(--line-soft)}
+  .stats{margin:clamp(90px,13vh,150px) 0 0;border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);display:grid;grid-template-columns:repeat(4,1fr)}
+  .stat{padding:30px 22px;text-align:center;border-left:1px solid var(--line-soft)}
   .stat:first-child{border-left:0}
-  .stat b{display:block;font-family:var(--mono);font-size:22px;letter-spacing:-.01em;color:#eaf3f8}
-  .stat span{display:block;margin-top:6px;font-size:12.5px;color:var(--faint);letter-spacing:.04em}
+  .stat b{display:block;font-family:var(--mono);font-size:24px;letter-spacing:-.01em;color:#eaf3f8}
+  .stat span{display:block;margin-top:7px;font-size:12.5px;color:var(--faint);letter-spacing:.04em}
   @media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}.stat:nth-child(3){border-left:0}.stat:nth-child(n+3){border-top:1px solid var(--line-soft)}}
 
-  section{padding:96px 0 0}
-  .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);opacity:.85}
-  h2{margin:14px 0 0;font-size:clamp(26px,4vw,40px);line-height:1.15;letter-spacing:-.03em;font-weight:700;max-width:680px}
-  .section-sub{margin:16px 0 0;color:var(--sub);max-width:620px}
+  section{padding:clamp(130px,18vh,210px) 0 0}
+  .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);opacity:.85}
+  h2{margin:16px 0 0;font-size:clamp(34px,5vw,58px);line-height:1.12;letter-spacing:-.035em;font-weight:700;max-width:760px}
+  .section-sub{margin:20px 0 0;color:var(--sub);max-width:640px;font-size:clamp(16px,1.7vw,19px);line-height:1.75}
 
   /* compare */
-  .compare{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:40px}
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:56px}
   @media(max-width:760px){.compare{grid-template-columns:1fr}}
-  .panel{position:relative;border:1px solid var(--line-soft);border-radius:var(--radius);padding:26px 24px;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012))}
+  .panel{position:relative;border:1px solid var(--line-soft);border-radius:var(--radius);padding:32px 30px;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012))}
   .panel.now{border-color:rgba(255,255,255,.16)}
   .panel.good{border-color:rgba(110,231,255,.32);background:linear-gradient(180deg,rgba(110,231,255,.075),rgba(255,255,255,.012))}
-  .panel h3{margin:0 0 4px;font-size:16px;font-weight:650;letter-spacing:-.01em}
+  .panel h3{margin:0 0 4px;font-size:17px;font-weight:650;letter-spacing:-.01em}
   .panel .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
   .panel.good .tag{color:rgba(110,231,255,.85)}
-  .panel ul{list-style:none;margin:18px 0 0;padding:0}
-  .panel li{position:relative;padding-left:22px;margin-bottom:12px;font-size:14.5px;color:#aeb6c0;line-height:1.55}
-  .panel li::before{content:"";position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:2px;background:#3d444d}
+  .panel ul{list-style:none;margin:20px 0 0;padding:0}
+  .panel li{position:relative;padding-left:24px;margin-bottom:13px;font-size:15px;color:#aeb6c0;line-height:1.6}
+  .panel li::before{content:"";position:absolute;left:0;top:10px;width:7px;height:7px;border-radius:2px;background:#3d444d}
   .panel.good li::before{background:var(--cyan);box-shadow:0 0 10px rgba(110,231,255,.6)}
   .panel.good li{color:#cfd8e1}
 
-  /* features */
-  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
-  @media(max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:600px){.cards{grid-template-columns:1fr}}
-  .card{position:relative;border:1px solid var(--line-soft);border-radius:16px;padding:24px 22px;background:linear-gradient(180deg,rgba(255,255,255,.032),rgba(255,255,255,.008));transition:border-color .2s,transform .2s}
-  .card:hover{border-color:rgba(110,231,255,.28);transform:translateY(-2px)}
-  .card svg{width:22px;height:22px;stroke:var(--cyan);fill:none;stroke-width:1.5;opacity:.9}
-  .card h3{margin:16px 0 8px;font-size:15.5px;font-weight:650;letter-spacing:-.01em}
-  .card p{margin:0;font-size:14px;color:var(--sub);line-height:1.62}
+  /* showcase rows */
+  .rows{margin-top:80px;display:flex;flex-direction:column;gap:clamp(96px,14vh,170px)}
+  .row{display:grid;grid-template-columns:5fr 7fr;gap:clamp(34px,5vw,76px);align-items:center}
+  .row.flip .row-media{order:-1}
+  .row h3{margin:0;font-size:clamp(28px,3.6vw,44px);line-height:1.15;letter-spacing:-.032em;font-weight:700}
+  .row p{margin:18px 0 0;color:var(--sub);font-size:16.5px;line-height:1.8;max-width:460px}
+  .row .row-index{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:14px}
+  .row-media{border-radius:var(--radius);overflow:hidden;border:1px solid rgba(255,255,255,.1);box-shadow:0 30px 90px rgba(0,0,0,.55)}
+  .row-media img{display:block;width:100%;height:auto;transform:scale(1.045);transition:transform 1.4s cubic-bezier(.2,.7,.2,1)}
+  .row.in .row-media img{transform:scale(1)}
+  @media(max-width:860px){.row{grid-template-columns:1fr;gap:26px}.row.flip .row-media{order:0}.row p{max-width:none}}
+
+  /* statement */
+  .statement{margin-top:clamp(96px,14vh,170px);text-align:center}
+  .statement h3{margin:0;font-size:clamp(30px,4.6vw,54px);line-height:1.15;letter-spacing:-.035em;font-weight:700}
+  .statement p{margin:18px auto 0;color:var(--sub);max-width:560px;font-size:16.5px;line-height:1.8}
 
   /* gallery */
-  .gallery{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:38px}
-  @media(max-width:760px){.gallery{grid-template-columns:1fr}}
-  .gallery figure{margin:0}
-  .gallery img{display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--line-soft);box-shadow:0 20px 50px rgba(0,0,0,.5)}
-  .gallery figcaption{margin-top:11px;font-size:13px;color:var(--faint)}
+  .gallery-wide{margin-top:64px}
+  .gallery-wide figure{margin:0}
+  .gallery-wide img{display:block;width:100%;height:auto;border-radius:var(--radius);border:1px solid var(--line-soft);box-shadow:0 24px 70px rgba(0,0,0,.55)}
+  .gallery-wide figcaption{margin-top:14px;font-size:13.5px;color:var(--faint);text-align:center}
 
   /* languages */
-  .langs{display:flex;flex-wrap:wrap;gap:9px;margin-top:34px}
-  .langs span{border:1px solid var(--line-soft);border-radius:999px;padding:8px 15px;font-size:13.5px;color:#c3cbd4;background:rgba(255,255,255,.022)}
+  .langs{display:flex;flex-wrap:wrap;gap:10px;margin-top:44px}
+  .langs span{border:1px solid var(--line-soft);border-radius:999px;padding:9px 17px;font-size:14px;color:#c3cbd4;background:rgba(255,255,255,.022)}
 
   /* install */
-  .steps{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:38px}
+  .steps{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:52px}
   @media(max-width:860px){.steps{grid-template-columns:1fr}}
-  .term{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#0a0c11}
-  .term-bar{display:flex;align-items:center;gap:7px;padding:11px 14px;border-bottom:1px solid var(--line-soft);background:rgba(255,255,255,.022)}
+  .term{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#0a0c11}
+  .term-bar{display:flex;align-items:center;gap:7px;padding:12px 15px;border-bottom:1px solid var(--line-soft);background:rgba(255,255,255,.022)}
   .term-bar i{width:9px;height:9px;border-radius:50%;background:#2b3138}
   .term-bar i:nth-child(1){background:#3a2a2f}
   .term-bar span{margin-left:8px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--faint);text-transform:uppercase}
-  .term pre{margin:0;padding:18px;font-family:var(--mono);font-size:12.8px;line-height:1.75;color:#c8e6f2;overflow-x:auto;white-space:pre}
+  .term pre{margin:0;padding:20px;font-family:var(--mono);font-size:12.8px;line-height:1.75;color:#c8e6f2;overflow-x:auto;white-space:pre}
   .term pre .c{color:#5f6a76}
-  .step-copy{border:1px solid var(--line-soft);border-radius:16px;padding:24px 22px;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent)}
-  .step-copy h3{margin:0 0 8px;font-size:15.5px;font-weight:650}
-  .step-copy p{margin:0;color:var(--sub);font-size:14px;line-height:1.65}
+  .step-copy{border:1px solid var(--line-soft);border-radius:var(--radius);padding:28px 26px;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent)}
+  .step-copy h3{margin:0 0 9px;font-size:16.5px;font-weight:650}
+  .step-copy p{margin:0;color:var(--sub);font-size:14.5px;line-height:1.7}
   .step-copy code{font-family:var(--mono);font-size:12.8px;background:rgba(255,255,255,.06);padding:2px 6px;border-radius:5px;color:#d5ecf7}
 
   /* faq */
-  .faq{margin-top:32px;border-top:1px solid var(--line-soft)}
-  details{border-bottom:1px solid var(--line-soft);padding:20px 0}
-  summary{cursor:pointer;font-size:16px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:20px;align-items:center;letter-spacing:-.01em}
+  .faq{margin-top:44px;border-top:1px solid var(--line-soft)}
+  details{border-bottom:1px solid var(--line-soft);padding:24px 0}
+  summary{cursor:pointer;font-size:16.5px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:20px;align-items:center;letter-spacing:-.01em}
   summary::-webkit-details-marker{display:none}
   summary::after{content:"+";font-family:var(--mono);color:var(--faint);font-size:18px;transition:transform .2s}
   details[open] summary::after{content:"–";color:var(--cyan)}
-  details p{margin:12px 0 0;color:var(--sub);font-size:14.5px;max-width:760px}
+  details p{margin:13px 0 0;color:var(--sub);font-size:14.5px;max-width:760px}
   details a{color:#bfe9fb;border-bottom:1px solid rgba(191,233,251,.35)}
 
-  footer{margin-top:96px;border-top:1px solid var(--line-soft);padding:40px 0 64px;color:var(--faint);font-size:13px}
+  footer{margin-top:clamp(130px,18vh,200px);border-top:1px solid var(--line-soft);padding:44px 0 68px;color:var(--faint);font-size:13px}
   footer .row{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
   footer a{color:#9fb0bd}
   footer a:hover{color:#dff2fb}
 
-  .reveal{opacity:0;transform:translateY(16px)}
-  .reveal.in{opacity:1;transform:none;transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
-  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none} html{scroll-behavior:auto}}
+  .reveal{opacity:0;transform:translateY(26px)}
+  .reveal.in{opacity:1;transform:none;transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none} .row-media img{transform:none} html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
@@ -249,7 +251,7 @@
       <span class="chip"><i></i>Android TV · MIT 开源</span>
       <h1>
         <span class="brandmark">HLine TV</span>
-        <span class="slogan">大屏之上，留白。</span>
+        <span class="slogan"><span>大屏之上，</span><span>留白。</span></span>
       </h1>
       <p class="lead">抛弃喧嚣的浮华。开机的每一眼，只有时间、天气，和专属于你的视界。</p>
       <p class="closer">电视，终属于你</p>
@@ -266,15 +268,13 @@
   </section>
 
   <div class="wrap">
-    <div class="tv">
+    <div class="tv reveal">
       <div class="screen">
         <img src="img/home.jpg" width="1920" height="1080" alt="HLine TV 首页：沙丘壁纸、时间与天气、底部一排常用 App">
       </div>
       <p class="tv-note">装在一台普通的安卓电视上，看起来像 Apple TV。</p>
     </div>
-  </div>
 
-  <div class="wrap">
     <div class="stats reveal">
       <div class="stat"><b>0</b><span>广告与推荐位</span></div>
       <div class="stat"><b>12</b><span>种界面语言</span></div>
@@ -284,9 +284,9 @@
   </div>
 
   <section id="why" class="wrap reveal">
-    <span class="eyebrow">The point</span>
-    <h2>电视只做电视该做的事</h2>
-    <p class="section-sub">买回来的电视，开机第一眼不该是别人的广告位。HLine TV 把这一屏还给你。</p>
+    <span class="eyebrow">Why HLine TV</span>
+    <h2>开机，只为你。</h2>
+    <p class="section-sub">默认桌面的每一屏，都在替别人挣钱。HLine TV 把这一屏，还给你。</p>
     <div class="compare">
       <div class="panel now">
         <span class="tag">Before</span>
@@ -311,82 +311,89 @@
     </div>
   </section>
 
-  <section id="features" class="wrap reveal">
-    <span class="eyebrow">What it does</span>
-    <h2>安静，但不是简陋</h2>
-    <p class="section-sub">该有的都有：壁纸、屏保、天气、多语言、手机远程改设置。</p>
-    <div class="cards">
-      <div class="card">
-        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 15h18"/></svg>
-        <h3>没有广告的首页</h3>
-        <p>常用的一排 App 放在屏幕底部的玻璃底板上，往下是全部 App。长按可以移动、建文件夹、隐藏、卸载。</p>
+  <section id="features" class="wrap">
+    <span class="eyebrow reveal">Experience</span>
+    <h2 class="reveal">安静，而丰富。</h2>
+    <p class="section-sub reveal">该有的都有，不该有的一样没有。</p>
+
+    <div class="rows">
+      <div class="row reveal">
+        <div>
+          <span class="row-index">01 · 首页</span>
+          <h3>一眼，就是全部。</h3>
+          <p>时间、天气、你的 App。开机第一眼，干净得像什么都没发生——这正是重点。</p>
+        </div>
+        <div class="row-media"><img src="img/home.jpg" width="1920" height="1080" alt="HLine TV 首页：时钟、天气与底部的常用 App" loading="lazy"></div>
       </div>
-      <div class="card">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.6"/><path d="M4 17l5-5 4 4 3-3 4 4"/></svg>
-        <h3>壁纸跟着 App 变</h3>
-        <p>五张内置照片壁纸，也能用自己的照片、每日一图，或者跟随当前 App 的配色。</p>
+
+      <div class="row flip reveal">
+        <div>
+          <span class="row-index">02 · 壁纸</span>
+          <h3>壁纸，会呼吸。</h3>
+          <p>五张内置壁纸随手换，也可以用你自己的照片。每一眼，都像新的。</p>
+        </div>
+        <div class="row-media"><img src="img/w-dunes.jpg" width="1600" height="900" alt="金色沙丘壁纸" loading="lazy"></div>
       </div>
-      <div class="card">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>
-        <h3>三种屏保</h3>
-        <p>航拍影片、壁纸轮换，或者只留一个纯时钟。闲置多久开始、返回键要不要触发，都能调。</p>
+
+      <div class="row reveal">
+        <div>
+          <span class="row-index">03 · 屏保</span>
+          <h3>空闲时，它也很美。</h3>
+          <p>航拍影片、壁纸轮换，或者只留一枚时钟。闲置的电视，一样体面。</p>
+        </div>
+        <div class="row-media"><img src="img/w-city.jpg" width="1600" height="900" alt="城市夜色壁纸" loading="lazy"></div>
       </div>
-      <div class="card">
-        <svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>
-        <h3>用手机改设置</h3>
-        <p>电视上打开一个局域网地址，手机上就能改壁纸、城市、屏保、语言和布局，还能给单个 App 换图。</p>
+
+      <div class="row flip reveal">
+        <div>
+          <span class="row-index">04 · 整理</span>
+          <h3>整理，随手完成。</h3>
+          <p>长按移动、建文件夹、隐藏、卸载；手机上打开一个地址，连壁纸和城市都能改。遥控器终于可以歇歇了。</p>
+        </div>
+        <div class="row-media"><img src="img/apps.jpg" width="1920" height="1080" alt="全部 App 网格：三行横版磁贴" loading="lazy"></div>
       </div>
-      <div class="card">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg>
-        <h3>12 种语言</h3>
-        <p>中、繁、英、日、韩、俄、乌克兰语、哈萨克语、法语、蒙古语、藏语、维吾尔语。藏文与维吾尔文自带字体。</p>
-      </div>
-      <div class="card">
-        <svg viewBox="0 0 24 24"><path d="M12 3v10"/><path d="M8 11l4 4 4-4"/><path d="M4 19h16"/></svg>
-        <h3>装完还能自己更新</h3>
-        <p>控制中心提示新版本，点一下下载安装，App、排列、壁纸和设置都保留。</p>
-      </div>
+    </div>
+
+    <div class="statement reveal">
+      <h3>更新，悄悄完成。</h3>
+      <p>控制中心提示新版本，点一下就好。App、排列、壁纸、设置，一切原样。</p>
     </div>
   </section>
 
-  <section class="wrap reveal">
-    <span class="eyebrow">In use</span>
-    <h2>真机拍下来的样子</h2>
-    <div class="gallery">
+  <section class="wrap">
+    <span class="eyebrow reveal">In use</span>
+    <h2 class="reveal">真机实拍。</h2>
+    <div class="gallery-wide reveal">
       <figure>
         <img src="img/home-en.jpg" width="1920" height="1080" alt="英文界面：海浪壁纸，日期与 Hangzhou 天气" loading="lazy">
-        <figcaption>英文界面，城市名跟着语言走（Hangzhou）</figcaption>
-      </figure>
-      <figure>
-        <img src="img/apps.jpg" width="1920" height="1080" alt="全部 App 网格：三行横版磁贴，其中一张处于选中状态" loading="lazy">
-        <figcaption>全部 App：三行横版磁贴，应用自带 banner 优先</figcaption>
+        <figcaption>界面语言跟着系统走——English 之下，城市也成了 Hangzhou</figcaption>
       </figure>
     </div>
   </section>
 
-  <section class="wrap reveal">
-    <span class="eyebrow">Languages</span>
-    <h2>通晓你的母语。</h2>
-    <p class="section-sub">无论你的系统设置为何种语言，它都能无缝匹配，一见如故。</p>
-    <div class="langs">
+  <section class="wrap">
+    <span class="eyebrow reveal">Languages</span>
+    <h2 class="reveal">通晓你的母语。</h2>
+    <p class="section-sub reveal">无论你的系统设置为何种语言，它都能无缝匹配，一见如故。</p>
+    <div class="langs reveal">
       <span>简体中文</span><span>繁體中文</span><span>English</span><span>日本語</span><span>한국어</span>
       <span>Русский</span><span>Українська</span><span>Қазақша</span><span>Français</span>
       <span>Монгол</span><span>བོད་སྐད</span><span>ئۇيغۇرچە</span>
     </div>
   </section>
 
-  <section id="install" class="wrap reveal">
-    <span class="eyebrow">Install</span>
-    <h2>三种装法，任选一种</h2>
-    <p class="section-sub">不用 root，不动系统应用。装错了，卸载就回到原来的桌面。</p>
+  <section id="install" class="wrap">
+    <span class="eyebrow reveal">Install</span>
+    <h2 class="reveal">一分钟，装好。</h2>
+    <p class="section-sub reveal">不用 root，不动系统应用。不喜欢？卸载即回原样。</p>
     <div class="steps">
-      <div class="term">
+      <div class="term reveal">
         <div class="term-bar"><i></i><i></i><i></i><span>terminal</span></div>
 <pre><span class="c"># 电视和电脑连同一个网络，先在电视上打开 ADB 调试</span>
 curl -fsSL https://raw.githubusercontent.com/Harleyline/hline-tv/main/tools/install.sh \
   | TV=192.168.1.20 bash</pre>
       </div>
-      <div class="term">
+      <div class="term reveal">
         <div class="term-bar"><i></i><i></i><i></i><span>adb</span></div>
 <pre><span class="c"># 已经会用 adb 的话</span>
 adb connect 电视IP:5555
@@ -394,21 +401,21 @@ adb install HLine-TV.apk</pre>
       </div>
     </div>
     <div class="steps">
-      <div class="step-copy">
+      <div class="step-copy reveal">
         <h3>U 盘最省事</h3>
         <p>把 <code>HLine-TV.apk</code> 拷进 U 盘，用电视上的文件管理器打开安装，装好在系统提示里选 HLine TV 作桌面。</p>
       </div>
-      <div class="step-copy">
+      <div class="step-copy reveal">
         <h3>装不上怎么办</h3>
         <p>少数电视禁止安装「桌面类」应用，换 <code>HLine-TV-Guard.apk</code>：它不声明桌面，靠无障碍服务接管 Home 键。各品牌开 ADB 的位置见 <a href="https://github.com/Harleyline/hline-tv#打开电视的-adb-调试" style="color:#bfe9fb">README</a>。</p>
       </div>
     </div>
   </section>
 
-  <section id="faq" class="wrap reveal">
-    <span class="eyebrow">FAQ</span>
-    <h2>常被问到的几件事</h2>
-    <div class="faq">
+  <section id="faq" class="wrap">
+    <span class="eyebrow reveal">FAQ</span>
+    <h2 class="reveal">常被问到的几件事</h2>
+    <div class="faq reveal">
       <details><summary>会不会影响保修？能还原吗？</summary><p>不 root、不刷机、不卸载系统应用，只是把 HLine TV 设为默认桌面。想还原：在电视设置里把默认桌面换回原来的，或者直接卸载 HLine TV。</p></details>
       <details><summary>支持哪些电视？</summary><p>Android 5.0 及以上的安卓电视、盒子和投影仪，小米、Redmi、TCL、雷鸟、创维、索尼、海尔、OPPO 等常见机型都试过。三星（Tizen）和 LG（webOS）不是安卓系统，装不了。</p></details>
       <details><summary>为什么有的电视装不上？</summary><p>部分固件不允许安装声明了桌面类别的应用。用 <code>HLine-TV-Guard.apk</code>，它不声明桌面，装好后由它接管 Home 键。</p></details>
@@ -434,10 +441,14 @@ adb install HLine-TV.apk</pre>
 </footer>
 
 <script>
+  // 淡入 + 子元素错峰
   const io = new IntersectionObserver((entries) => {
     for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-  }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
-  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+  }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = (i % 3) * 60 + 'ms';
+    io.observe(el);
+  });
 
   // 首屏背景视差 + 顶栏渐显
   const heroBg = document.querySelector('.hero-bg');
