@@ -69,6 +69,7 @@ import app.orchard.tv.wallpaper.Wallpapers
 import app.orchard.tv.system.BootOpen
 import app.orchard.tv.system.DiagLog
 import app.orchard.tv.system.FrameStats
+import app.orchard.tv.system.Shots
 import app.orchard.tv.wallpaper.AerialFormats
 import app.orchard.tv.wallpaper.ScreensaverMode
 import app.orchard.tv.system.SystemScreensaver
@@ -286,6 +287,8 @@ class MainActivity : ComponentActivity() {
         } else {
             setContent(content = home)
         }
+        // For screenshots on firmware that returns a black frame to screencap (system/Shots.kt).
+        Shots.attach(window)
 
         ContextCompat.registerReceiver(
             this, screenOnReceiver,

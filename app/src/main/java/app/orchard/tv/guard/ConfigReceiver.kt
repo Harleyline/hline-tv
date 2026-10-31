@@ -11,6 +11,7 @@ import app.orchard.tv.settings.UiSounds
 import app.orchard.tv.system.DeviceProfile
 import app.orchard.tv.system.DiagLog
 import app.orchard.tv.system.HisenseSources
+import app.orchard.tv.system.Shots
 import app.orchard.tv.system.SystemProbe
 import app.orchard.tv.system.TvLight
 import app.orchard.tv.update.Updates
@@ -225,6 +226,11 @@ class ConfigReceiver : BroadcastReceiver() {
         if (intent.getBooleanExtra("check_update", false)) {
             Updates.init(context)
             Updates.checkIfStale(force = true)
+        }
+        // ... --es shot <name>            (save what Home is drawing to files/shots/<name>.png, for
+        //                                 firmware that hands screencap a black frame; system/Shots.kt)
+        if (intent.hasExtra("shot")) {
+            Shots.capture(context, intent.getStringExtra("shot").orEmpty().ifBlank { "home" })
         }
         if (intent.hasExtra("keep_adb")) GuardSetup.setKeepAdb(context, intent.getBooleanExtra("keep_adb", false))
         // ... --ei adb_probe_port <port>   (verify the keep_adb toggle without closing a working
