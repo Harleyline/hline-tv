@@ -14,7 +14,10 @@
 ![Android TV 5.0+](https://img.shields.io/badge/Android%20TV-5.0%2B-3ddc84?style=flat-square&logo=android&logoColor=white)
 [![许可证 MIT](https://img.shields.io/badge/%E8%AE%B8%E5%8F%AF%E8%AF%81-MIT-555555?style=flat-square)](LICENSE)
 
-![运行中的桌面：地球壁纸、时间天气、底下是常用 App](docs/img/home.jpg)
+![HLine TV 首页：沙丘壁纸、时间与天气、底部是常用 App](docs/img/home.jpg)
+
+<img src="docs/img/home-en.jpg" width="49%" alt="English interface: ocean wallpaper, date, Hangzhou weather">
+<img src="docs/img/apps.jpg" width="49%" alt="All apps, three rows of banner tiles with the focus on one">
 
 </div>
 
