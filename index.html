@@ -21,11 +21,10 @@
 <meta name="twitter:title" content="HLine TV — 干净的安卓电视桌面">
 <meta name="twitter:description" content="开机没有广告，没有推荐位，没有会员角标。免费开源的 Android TV 桌面。">
 <meta name="twitter:image" content="https://harleyline.github.io/hline-tv/img/og.jpg">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#06070a">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230b0b0c'/><rect x='20' y='30' width='60' height='40' rx='6' fill='none' stroke='%236ee7ff' stroke-width='6'/><rect x='42' y='76' width='16' height='6' rx='3' fill='%236ee7ff'/></svg>">
 <!-- Google Search Console -->
 <meta name="google-site-verification" content="Atfvl_KuZoUormidPYxxrKduf0vk6l_tNLPkpNVUrA0">
-
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230b0b0c'/><rect x='20' y='30' width='60' height='40' rx='6' fill='none' stroke='%23fff' stroke-width='6'/><rect x='42' y='76' width='16' height='6' rx='3' fill='%23fff'/></svg>">
 
 <script type="application/ld+json">
 {
@@ -37,7 +36,7 @@
   "applicationSubCategory": "Android TV launcher",
   "operatingSystem": "Android 5.0 及以上",
   "softwareVersion": "1.0",
-  "inLanguage": ["zh-CN","zh-TW","en","ja","ko","ru"],
+  "inLanguage": ["zh-CN","zh-TW","en","ja","ko","ru","uk","kk","fr","mn","bo","ug"],
   "url": "https://harleyline.github.io/hline-tv/",
   "downloadUrl": "https://github.com/Harleyline/hline-tv/releases/latest/download/HLine-TV.apk",
   "installUrl": "https://github.com/Harleyline/hline-tv/releases/latest",
@@ -53,201 +52,365 @@
 
 <style>
   :root{
-    --ink:#0b0b0c; --sub:#5f6368; --line:#e7e7ea; --bg:#ffffff; --soft:#f6f6f8;
-    --accent:#111; --radius:18px;
+    --bg:#06070a;
+    --panel:#0b0d12;
+    --ink:#eef1f4;
+    --sub:#8d95a1;
+    --faint:#5b6270;
+    --line:rgba(255,255,255,.09);
+    --line-soft:rgba(255,255,255,.055);
+    --cyan:#6ee7ff;
+    --violet:#9a8bff;
+    --radius:20px;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
   }
   *{box-sizing:border-box}
-  html{-webkit-text-size-adjust:100%}
+  html{scroll-behavior:smooth}
   body{
-    margin:0; background:var(--bg); color:var(--ink);
+    margin:0;background:var(--bg);color:var(--ink);
     font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
-    line-height:1.65; font-size:17px; letter-spacing:.005em;
+    font-size:17px;line-height:1.65;letter-spacing:.004em;
+    -webkit-font-smoothing:antialiased;
   }
-  a{color:inherit}
-  .wrap{max-width:960px;margin:0 auto;padding:0 24px}
-  header{border-bottom:1px solid var(--line)}
-  header .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
-  .brand{display:flex;align-items:center;gap:10px;font-weight:650;letter-spacing:-.01em;text-decoration:none}
-  .brand svg{width:24px;height:24px}
-  nav a{margin-left:22px;font-size:14.5px;color:var(--sub);text-decoration:none}
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(70% 52% at 50% -6%,rgba(110,231,255,.16),transparent 62%),
+      radial-gradient(52% 40% at 92% 22%,rgba(154,139,255,.10),transparent 70%),
+      radial-gradient(46% 36% at 4% 40%,rgba(110,231,255,.06),transparent 70%);
+  }
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.035;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  main,header,footer{position:relative;z-index:1}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+  a{color:inherit;text-decoration:none}
+  .mono{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+
+  header{position:sticky;top:0;z-index:30;backdrop-filter:blur(14px);background:rgba(6,7,10,.72);border-bottom:1px solid var(--line-soft)}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:650;letter-spacing:-.01em}
+  .brand svg{width:22px;height:22px}
+  nav{display:flex;gap:26px;align-items:center}
+  nav a{font-size:14px;color:var(--sub);transition:color .18s}
   nav a:hover{color:var(--ink)}
-  @media (max-width:640px){ nav{display:none} }
+  nav a.cta{color:var(--ink);border:1px solid var(--line);padding:7px 14px;border-radius:999px}
+  nav a.cta:hover{border-color:rgba(110,231,255,.5)}
+  @media(max-width:760px){nav a:not(.cta){display:none}}
 
-  .hero{padding:72px 0 8px;text-align:center}
-  .eyebrow{display:inline-block;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--sub);margin-bottom:18px}
-  h1{font-size:clamp(38px,7vw,64px);line-height:1.05;letter-spacing:-.035em;margin:0 0 22px;font-weight:700}
-  h1 .h1sub{display:block;font-size:.46em;letter-spacing:-.02em;font-weight:600;color:#33363b;margin-top:10px}
-  .lead{font-size:clamp(17px,2.4vw,21px);color:#33363b;max-width:640px;margin:0 auto 32px}
-  .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:18px}
-  .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:999px;font-weight:600;font-size:16px;text-decoration:none;transition:transform .15s ease,opacity .15s ease}
+  /* hero */
+  .hero{padding:86px 0 0;text-align:center}
+  .chip{display:inline-flex;align-items:center;gap:9px;padding:6px 13px;border:1px solid var(--line);border-radius:999px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#b9c2cc;background:rgba(255,255,255,.03)}
+  .chip i{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
+  h1{margin:26px 0 0;font-size:clamp(40px,7.4vw,78px);line-height:.98;letter-spacing:-.045em;font-weight:700}
+  h1 .brandline{display:block;background:linear-gradient(96deg,#ffffff 12%,#a9e9ff 52%,#b8adff 92%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  h1 .subline{display:block;margin-top:16px;font-size:.44em;letter-spacing:-.02em;font-weight:600;color:#c8d0d9}
+  .lead{margin:26px auto 0;max-width:620px;font-size:clamp(16px,2vw,19px);color:var(--sub);line-height:1.72}
+  .lead b{color:#dbe2e9;font-weight:600}
+  .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:34px 0 0}
+  .btn{display:inline-flex;align-items:center;gap:9px;padding:14px 26px;border-radius:999px;font-size:15.5px;font-weight:600;transition:transform .16s ease,border-color .18s,background .18s}
   .btn:hover{transform:translateY(-1px)}
-  .btn.primary{background:var(--ink);color:#fff}
-  .btn.ghost{background:var(--soft);color:var(--ink)}
-  .note{font-size:13.5px;color:var(--sub)}
-  .shot{margin:44px 0 0}
-  .shot img{width:100%;border-radius:var(--radius);display:block;box-shadow:0 24px 60px rgba(0,0,0,.16)}
-  .caption{font-size:13.5px;color:var(--sub);margin-top:14px}
-  .gallery{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:30px;text-align:left}
+  .btn.primary{background:#f4f7f9;color:#07080a;box-shadow:0 10px 30px rgba(110,231,255,.18)}
+  .btn.ghost{border:1px solid var(--line);color:#dfe5ec}
+  .btn.ghost:hover{border-color:rgba(110,231,255,.45)}
+  .hero-meta{margin-top:18px;font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+  .hero-meta span+span::before{content:"·";margin:0 10px;color:#3a4048}
+
+  /* the tv */
+  .tv{position:relative;margin:58px auto 0;max-width:1000px}
+  .tv::before{content:"";position:absolute;inset:-14% -6% -18%;background:radial-gradient(50% 50% at 50% 50%,rgba(110,231,255,.20),transparent 70%);filter:blur(24px);z-index:-1}
+  .screen{position:relative;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.14);box-shadow:0 40px 120px rgba(0,0,0,.75),0 0 0 1px rgba(0,0,0,.6) inset;background:#000}
+  .screen img{display:block;width:100%;height:auto}
+  .screen::after{content:"";position:absolute;inset:0;border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.10),transparent 18%,transparent 82%,rgba(0,0,0,.35));pointer-events:none}
+  .tv-note{margin:16px 0 0;font-size:13px;color:var(--faint);text-align:center}
+
+  /* stats */
+  .stats{margin:78px 0 0;border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);display:grid;grid-template-columns:repeat(4,1fr)}
+  .stat{padding:26px 22px;text-align:center;border-left:1px solid var(--line-soft)}
+  .stat:first-child{border-left:0}
+  .stat b{display:block;font-family:var(--mono);font-size:22px;letter-spacing:-.01em;color:#eaf3f8}
+  .stat span{display:block;margin-top:6px;font-size:12.5px;color:var(--faint);letter-spacing:.04em}
+  @media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}.stat:nth-child(3){border-left:0}.stat:nth-child(n+3){border-top:1px solid var(--line-soft)}}
+
+  section{padding:96px 0 0}
+  .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);opacity:.85}
+  h2{margin:14px 0 0;font-size:clamp(26px,4vw,40px);line-height:1.15;letter-spacing:-.03em;font-weight:700;max-width:680px}
+  .section-sub{margin:16px 0 0;color:var(--sub);max-width:620px}
+
+  /* compare */
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:40px}
+  @media(max-width:760px){.compare{grid-template-columns:1fr}}
+  .panel{position:relative;border:1px solid var(--line-soft);border-radius:var(--radius);padding:26px 24px;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012))}
+  .panel.now{border-color:rgba(255,255,255,.16)}
+  .panel.good{border-color:rgba(110,231,255,.32);background:linear-gradient(180deg,rgba(110,231,255,.075),rgba(255,255,255,.012))}
+  .panel h3{margin:0 0 4px;font-size:16px;font-weight:650;letter-spacing:-.01em}
+  .panel .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+  .panel.good .tag{color:rgba(110,231,255,.85)}
+  .panel ul{list-style:none;margin:18px 0 0;padding:0}
+  .panel li{position:relative;padding-left:22px;margin-bottom:12px;font-size:14.5px;color:#aeb6c0;line-height:1.55}
+  .panel li::before{content:"";position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:2px;background:#3d444d}
+  .panel.good li::before{background:var(--cyan);box-shadow:0 0 10px rgba(110,231,255,.6)}
+  .panel.good li{color:#cfd8e1}
+
+  /* features */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+  @media(max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:600px){.cards{grid-template-columns:1fr}}
+  .card{position:relative;border:1px solid var(--line-soft);border-radius:16px;padding:24px 22px;background:linear-gradient(180deg,rgba(255,255,255,.032),rgba(255,255,255,.008));transition:border-color .2s,transform .2s}
+  .card:hover{border-color:rgba(110,231,255,.28);transform:translateY(-2px)}
+  .card svg{width:22px;height:22px;stroke:var(--cyan);fill:none;stroke-width:1.5;opacity:.9}
+  .card h3{margin:16px 0 8px;font-size:15.5px;font-weight:650;letter-spacing:-.01em}
+  .card p{margin:0;font-size:14px;color:var(--sub);line-height:1.62}
+
+  /* gallery */
+  .gallery{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:38px}
+  @media(max-width:760px){.gallery{grid-template-columns:1fr}}
   .gallery figure{margin:0}
-  .gallery img{width:100%;border-radius:14px;display:block;box-shadow:0 10px 30px rgba(0,0,0,.12)}
-  .gallery figcaption{font-size:13px;color:var(--sub);margin-top:9px}
-  @media (max-width:700px){ .gallery{grid-template-columns:1fr} }
+  .gallery img{display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--line-soft);box-shadow:0 20px 50px rgba(0,0,0,.5)}
+  .gallery figcaption{margin-top:11px;font-size:13px;color:var(--faint)}
 
-  section{padding:76px 0;border-top:1px solid var(--line)}
-  h2{font-size:clamp(24px,3.6vw,32px);letter-spacing:-.02em;margin:0 0 12px;font-weight:680}
-  .sub{color:var(--sub);margin:0 0 34px;max-width:640px}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:22px}
-  .card{border:1px solid var(--line);border-radius:16px;padding:24px 22px}
-  .card h3{font-size:17px;margin:0 0 8px;font-weight:650}
-  .card p{margin:0;color:var(--sub);font-size:15px;line-height:1.6}
+  /* languages */
+  .langs{display:flex;flex-wrap:wrap;gap:9px;margin-top:34px}
+  .langs span{border:1px solid var(--line-soft);border-radius:999px;padding:8px 15px;font-size:13.5px;color:#c3cbd4;background:rgba(255,255,255,.022)}
 
-  .langs p{margin:0 0 26px;max-width:720px}
-  .langs strong{display:block;font-size:14px;letter-spacing:.04em;color:var(--sub);text-transform:uppercase;margin-bottom:6px}
+  /* install */
+  .steps{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:38px}
+  @media(max-width:860px){.steps{grid-template-columns:1fr}}
+  .term{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#0a0c11}
+  .term-bar{display:flex;align-items:center;gap:7px;padding:11px 14px;border-bottom:1px solid var(--line-soft);background:rgba(255,255,255,.022)}
+  .term-bar i{width:9px;height:9px;border-radius:50%;background:#2b3138}
+  .term-bar i:nth-child(1){background:#3a2a2f}
+  .term-bar span{margin-left:8px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--faint);text-transform:uppercase}
+  .term pre{margin:0;padding:18px;font-family:var(--mono);font-size:12.8px;line-height:1.75;color:#c8e6f2;overflow-x:auto;white-space:pre}
+  .term pre .c{color:#5f6a76}
+  .step-copy{border:1px solid var(--line-soft);border-radius:16px;padding:24px 22px;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent)}
+  .step-copy h3{margin:0 0 8px;font-size:15.5px;font-weight:650}
+  .step-copy p{margin:0;color:var(--sub);font-size:14px;line-height:1.65}
+  .step-copy code{font-family:var(--mono);font-size:12.8px;background:rgba(255,255,255,.06);padding:2px 6px;border-radius:5px;color:#d5ecf7}
 
-  ol.steps{list-style:none;counter-reset:s;padding:0;margin:0}
-  ol.steps li{counter-increment:s;position:relative;padding-left:52px;margin-bottom:26px}
-  ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600}
-  code{background:var(--soft);padding:3px 7px;border-radius:6px;font-size:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-  pre{background:#0b0b0c;color:#eaeaea;padding:16px 18px;border-radius:12px;overflow:auto;font-size:14px}
+  /* faq */
+  .faq{margin-top:32px;border-top:1px solid var(--line-soft)}
+  details{border-bottom:1px solid var(--line-soft);padding:20px 0}
+  summary{cursor:pointer;font-size:16px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:20px;align-items:center;letter-spacing:-.01em}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";font-family:var(--mono);color:var(--faint);font-size:18px;transition:transform .2s}
+  details[open] summary::after{content:"–";color:var(--cyan)}
+  details p{margin:12px 0 0;color:var(--sub);font-size:14.5px;max-width:760px}
+  details a{color:#bfe9fb;border-bottom:1px solid rgba(191,233,251,.35)}
 
-  details{border-top:1px solid var(--line);padding:18px 0}
-  details:last-of-type{border-bottom:1px solid var(--line)}
-  summary{cursor:pointer;font-weight:600;font-size:16.5px}
-  details p{color:var(--sub);margin:12px 0 0;font-size:15px}
+  footer{margin-top:96px;border-top:1px solid var(--line-soft);padding:40px 0 64px;color:var(--faint);font-size:13px}
+  footer .row{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  footer a{color:#9fb0bd}
+  footer a:hover{color:#dff2fb}
 
-  footer{padding:44px 0 64px;color:var(--sub);font-size:14px}
-  footer a{color:var(--sub)}
+  .reveal{opacity:0;transform:translateY(16px)}
+  .reveal.in{opacity:1;transform:none;transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none} html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
 <header>
   <div class="wrap">
     <a class="brand" href="/hline-tv/">
-      <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#0b0b0c"/><rect x="20" y="30" width="60" height="40" rx="6" fill="none" stroke="#fff" stroke-width="6"/><rect x="42" y="76" width="16" height="6" rx="3" fill="#fff"/></svg>
+      <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#0b0d12"/><rect x="20" y="30" width="60" height="40" rx="6" fill="none" stroke="#6ee7ff" stroke-width="6"/><rect x="42" y="76" width="16" height="6" rx="3" fill="#6ee7ff"/></svg>
       HLine TV
     </a>
     <nav>
+      <a href="#why">为什么</a>
       <a href="#features">功能</a>
-      <a href="#languages">其他语言</a>
       <a href="#install">安装</a>
-      <a href="#faq">常见问题</a>
-      <a href="https://github.com/Harleyline/hline-tv">GitHub</a>
+      <a href="#faq">问答</a>
+      <a class="cta" href="https://github.com/Harleyline/hline-tv/releases/latest/download/HLine-TV.apk">下载</a>
     </nav>
   </div>
 </header>
 
 <main>
   <div class="hero wrap">
-    <span class="eyebrow">Android TV 桌面 · 免费开源</span>
-    <h1>HLine TV<br><span class="h1sub">干干净净的安卓电视桌面</span></h1>
-    <p class="lead">开机看到的第一眼，没有广告，没有推荐位，没有会员角标。<br>只有时间、天气、你的 App，和一张会动的壁纸。</p>
-    <div class="cta">
+    <span class="chip"><i></i>Android TV · MIT 开源</span>
+    <h1>
+      <span class="brandline">HLine TV</span>
+      <span class="subline">干干净净的安卓电视桌面</span>
+    </h1>
+    <p class="lead">开机看到的第一眼，<b>没有广告，没有推荐位，没有会员角标</b>。<br>只有时间、天气、你的 App，和一张会动的壁纸。</p>
+    <div class="actions">
       <a class="btn primary" href="https://github.com/Harleyline/hline-tv/releases/latest/download/HLine-TV.apk">下载 HLine TV</a>
-      <a class="btn ghost" href="https://github.com/Harleyline/hline-tv">在 GitHub 上看源码</a>
+      <a class="btn ghost" href="https://github.com/Harleyline/hline-tv">查看源码</a>
     </div>
-    <p class="note">Android 5.0 及以上 · 不用 root · 随时能还原</p>
-    <div class="shot">
-      <img src="img/home.jpg" width="1920" height="1080" alt="HLine TV 首页：沙丘壁纸、时间与天气、底部一排常用 App">
-      <p class="caption">装在一台普通的安卓电视上，看起来像 Apple TV。</p>
-    </div>
-    <div class="gallery">
-      <figure>
-        <img src="img/home-en.jpg" width="1920" height="1080" alt="English interface: ocean wallpaper, the date, Hangzhou weather and the dock">
-        <figcaption>英文界面，城市名跟着语言走（Hangzhou）</figcaption>
-      </figure>
-      <figure>
-        <img src="img/apps.jpg" width="1920" height="1080" alt="All installed apps on three rows of banner tiles, the focused one in white">
-        <figcaption>全部 App：三行横版磁贴，应用自带 banner 优先</figcaption>
-      </figure>
+    <p class="hero-meta"><span>Android 5.0+</span><span>不用 root</span><span>随时能还原</span></p>
+
+    <div class="tv">
+      <div class="screen">
+        <img src="img/home.jpg" width="1920" height="1080" alt="HLine TV 首页：沙丘壁纸、时间与天气、底部一排常用 App">
+      </div>
+      <p class="tv-note">装在一台普通的安卓电视上，看起来像 Apple TV。</p>
     </div>
   </div>
 
-  <section id="features">
-    <div class="wrap">
-      <h2>电视只做电视该做的事</h2>
-      <p class="sub">不推内容，不卖位置，不收集观看记录。桌面上只有你自己放的东西。</p>
-      <div class="grid">
-        <div class="card">
-          <h3>没有广告的首页</h3>
-          <p>常用的一排 App 放在屏幕下方的玻璃底板上，往下是全部 App。长按可以移动、建文件夹、隐藏、卸载。</p>
-        </div>
-        <div class="card">
-          <h3>壁纸会跟着 App 变</h3>
-          <p>内置五张照片壁纸（沙丘两张、浪一张、城市两张），也能用自己的照片、每日一图，或跟随当前 App 的配色。</p>
-        </div>
-        <div class="card">
-          <h3>航拍屏保</h3>
-          <p>闲置后自动播放航拍影片，画面留有时钟和地名；也可以选「壁纸」轮换，或者只留一个纯时钟。</p>
-        </div>
-        <div class="card">
-          <h3>用手机改设置</h3>
-          <p>电视上打开一个局域网地址，手机上就能改壁纸、天气城市、屏保、语言和布局，也能给单个 App 换图。</p>
-        </div>
-        <div class="card">
-          <h3>11 种语言</h3>
-          <p>中、繁、英、日、韩、俄、乌克兰语、哈萨克语、法语、蒙古语、藏语、维吾尔语。藏文与维吾尔文自带字体，不靠电视字库。</p>
-        </div>
-        <div class="card">
-          <h3>装完还能自己更新</h3>
-          <p>控制中心会提示新版本，点一下下载安装，App、排列、壁纸和设置都保留。</p>
-        </div>
+  <div class="wrap">
+    <div class="stats reveal">
+      <div class="stat"><b>0</b><span>广告与推荐位</span></div>
+      <div class="stat"><b>12</b><span>种界面语言</span></div>
+      <div class="stat"><b>5.0+</b><span>Android 版本</span></div>
+      <div class="stat"><b>MIT</b><span>开源许可</span></div>
+    </div>
+  </div>
+
+  <section id="why" class="wrap reveal">
+    <span class="eyebrow">The point</span>
+    <h2>电视只做电视该做的事</h2>
+    <p class="section-sub">买回来的电视，开机第一眼不该是别人的广告位。HLine TV 把这一屏还给你。</p>
+    <div class="compare">
+      <div class="panel now">
+        <span class="tag">Before</span>
+        <h3>系统默认桌面</h3>
+        <ul>
+          <li>开机先过一屏广告或影视推荐</li>
+          <li>首页塞满会员角标、热播榜、活动入口</li>
+          <li>想找自己的 App，要在推荐流里翻</li>
+          <li>预装应用删不掉，也关不干净</li>
+        </ul>
+      </div>
+      <div class="panel good">
+        <span class="tag">After</span>
+        <h3>HLine TV</h3>
+        <ul>
+          <li>开机就是时钟、天气和你的 App</li>
+          <li>整屏没有一块是拿来卖的</li>
+          <li>常用 App 固定在底部，长按就能整理</li>
+          <li>不 root、不卸载系统应用，随时能换回去</li>
+        </ul>
       </div>
     </div>
   </section>
 
-  <section id="languages" class="langs">
-    <div class="wrap">
-      <h2>其他语言</h2>
-      <p class="sub">HLine TV 是一个 Android TV 桌面，面向所有用安卓电视的人。</p>
-      <p><strong>English</strong>A home screen with nothing to sell you. The first thing you see when the TV comes on: no ads, no sponsored rows, no membership badges — just the time, the weather, your apps, and a wallpaper that moves. Installed on a plain Android TV, it looks like an Apple TV.</p>
-      <p><strong>日本語</strong>売り込みのないホーム画面。電源を入れて最初に見えるのは、広告でも、おすすめ欄でも、会員バッジでもありません。時刻と天気、自分のアプリ、そして動く壁紙だけ。ごく普通の Android テレビが、Apple TV のように見えます。</p>
-      <p><strong>한국어</strong>광고가 없는 홈 화면. TV를 켜면 가장 먼저 보이는 것은 광고도, 추천 목록도, 멤버십 배지도 아닙니다. 시계와 날씨, 내 앱, 그리고 움직이는 배경화면뿐입니다. 평범한 Android TV에서도 Apple TV처럼 보입니다.</p>
-      <p><strong>Русский</strong>Главный экран, на котором ничего не продают. При включении телевизора вы не увидите ни рекламы, ни рекомендаций, ни значков подписки. Только время, погода, ваши приложения и живой фон. На обычном Android-телевизоре он выглядит как Apple TV.</p>
+  <section id="features" class="wrap reveal">
+    <span class="eyebrow">What it does</span>
+    <h2>安静，但不是简陋</h2>
+    <p class="section-sub">该有的都有：壁纸、屏保、天气、多语言、手机远程改设置。</p>
+    <div class="cards">
+      <div class="card">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 15h18"/></svg>
+        <h3>没有广告的首页</h3>
+        <p>常用的一排 App 放在屏幕底部的玻璃底板上，往下是全部 App。长按可以移动、建文件夹、隐藏、卸载。</p>
+      </div>
+      <div class="card">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.6"/><path d="M4 17l5-5 4 4 3-3 4 4"/></svg>
+        <h3>壁纸跟着 App 变</h3>
+        <p>五张内置照片壁纸，也能用自己的照片、每日一图，或者跟随当前 App 的配色。</p>
+      </div>
+      <div class="card">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>
+        <h3>三种屏保</h3>
+        <p>航拍影片、壁纸轮换，或者只留一个纯时钟。闲置多久开始、返回键要不要触发，都能调。</p>
+      </div>
+      <div class="card">
+        <svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>
+        <h3>用手机改设置</h3>
+        <p>电视上打开一个局域网地址，手机上就能改壁纸、城市、屏保、语言和布局，还能给单个 App 换图。</p>
+      </div>
+      <div class="card">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg>
+        <h3>12 种语言</h3>
+        <p>中、繁、英、日、韩、俄、乌克兰语、哈萨克语、法语、蒙古语、藏语、维吾尔语。藏文与维吾尔文自带字体。</p>
+      </div>
+      <div class="card">
+        <svg viewBox="0 0 24 24"><path d="M12 3v10"/><path d="M8 11l4 4 4-4"/><path d="M4 19h16"/></svg>
+        <h3>装完还能自己更新</h3>
+        <p>控制中心提示新版本，点一下下载安装，App、排列、壁纸和设置都保留。</p>
+      </div>
     </div>
   </section>
 
-  <section id="install">
-    <div class="wrap">
-      <h2>安装：三种方式，任选一种</h2>
-      <p class="sub">不用 root，不动系统应用，装错了随时能还原成原来的桌面。</p>
-      <ol class="steps">
-        <li>
-          <h3 style="margin:0 0 6px;font-size:17px">U 盘</h3>
-          <p style="margin:0;color:var(--sub)">把 <code>HLine-TV.apk</code> 拷进 U 盘，用电视上的文件管理器打开安装。装好在系统提示里选 HLine TV 作桌面。</p>
-        </li>
-        <li>
-          <h3 style="margin:0 0 6px;font-size:17px">一行命令（同一网络）</h3>
-          <p style="margin:0 0 10px;color:var(--sub)">先在电视上打开 ADB 调试，然后在这台电脑上执行，<code>TV</code> 换成电视的 IP：</p>
-          <pre>curl -fsSL https://raw.githubusercontent.com/Harleyline/hline-tv/main/tools/install.sh | TV=192.168.1.20 bash</pre>
-        </li>
-        <li>
-          <h3 style="margin:0 0 6px;font-size:17px">手动 ADB</h3>
-          <p style="margin:0;color:var(--sub)">已经会用 adb 的话：</p>
-          <pre>adb connect 电视IP:5555
+  <section class="wrap reveal">
+    <span class="eyebrow">In use</span>
+    <h2>真机拍下来的样子</h2>
+    <div class="gallery">
+      <figure>
+        <img src="img/home-en.jpg" width="1920" height="1080" alt="英文界面：海浪壁纸，日期与 Hangzhou 天气" loading="lazy">
+        <figcaption>英文界面，城市名跟着语言走（Hangzhou）</figcaption>
+      </figure>
+      <figure>
+        <img src="img/apps.jpg" width="1920" height="1080" alt="全部 App 网格：三行横版磁贴，其中一张处于选中状态" loading="lazy">
+        <figcaption>全部 App：三行横版磁贴，应用自带 banner 优先</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="wrap reveal">
+    <span class="eyebrow">Languages</span>
+    <h2>你家的电视说什么话，它就说什么话</h2>
+    <div class="langs">
+      <span>简体中文</span><span>繁體中文</span><span>English</span><span>日本語</span><span>한국어</span>
+      <span>Русский</span><span>Українська</span><span>Қазақша</span><span>Français</span>
+      <span>Монгол</span><span>བོད་སྐད</span><span>ئۇيغۇرچە</span>
+    </div>
+  </section>
+
+  <section id="install" class="wrap reveal">
+    <span class="eyebrow">Install</span>
+    <h2>三种装法，任选一种</h2>
+    <p class="section-sub">不用 root，不动系统应用。装错了，卸载就回到原来的桌面。</p>
+    <div class="steps">
+      <div class="term">
+        <div class="term-bar"><i></i><i></i><i></i><span>terminal</span></div>
+<pre><span class="c"># 电视和电脑连同一个网络，先在电视上打开 ADB 调试</span>
+curl -fsSL https://raw.githubusercontent.com/Harleyline/hline-tv/main/tools/install.sh \
+  | TV=192.168.1.20 bash</pre>
+      </div>
+      <div class="term">
+        <div class="term-bar"><i></i><i></i><i></i><span>adb</span></div>
+<pre><span class="c"># 已经会用 adb 的话</span>
+adb connect 电视IP:5555
 adb install HLine-TV.apk</pre>
-        </li>
-      </ol>
-      <p class="note">完整步骤、各品牌电视开 ADB 的位置，见 <a href="https://github.com/Harleyline/hline-tv#打开电视的-adb-调试">README</a>。</p>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step-copy">
+        <h3>U 盘最省事</h3>
+        <p>把 <code>HLine-TV.apk</code> 拷进 U 盘，用电视上的文件管理器打开安装，装好在系统提示里选 HLine TV 作桌面。</p>
+      </div>
+      <div class="step-copy">
+        <h3>装不上怎么办</h3>
+        <p>少数电视禁止安装「桌面类」应用，换 <code>HLine-TV-Guard.apk</code>：它不声明桌面，靠无障碍服务接管 Home 键。各品牌开 ADB 的位置见 <a href="https://github.com/Harleyline/hline-tv#打开电视的-adb-调试" style="color:#bfe9fb">README</a>。</p>
+      </div>
     </div>
   </section>
 
-  <section id="faq">
-    <div class="wrap">
-      <h2>常见问题</h2>
-      <details><summary>会不会影响电视保修？能还原吗？</summary><p>不 root、不刷机、不卸载系统应用，只是把 HLine TV 设为默认桌面。想还原：在电视设置里把默认桌面换回原来的，或卸载 HLine TV 即可。</p></details>
-      <details><summary>支持哪些电视？</summary><p>Android 5.0 及以上的安卓电视、电视盒子和投影仪，包括小米、Redmi、TCL、雷鸟、创维、索尼、海尔、OPPO 等常见机型。三星（Tizen）和 LG（webOS）不是安卓系统，装不了。</p></details>
-      <details><summary>为什么有些固件装不上？</summary><p>少数电视禁止安装「桌面类」应用。这种情况用不带桌面声明的那一版（<code>HLine-TV-Guard.apk</code>），装完由它接管 Home 键。</p></details>
-      <details><summary>以后怎么更新？</summary><p>控制中心提示「新版本」时点「下载并安装」，系统安装器会覆盖安装，设置和排列都保留。</p></details>
-      <details><summary>收费吗？</summary><p>免费，MIT 许可，源码在 <a href="https://github.com/Harleyline/hline-tv">GitHub</a>。没有账号、没有内购、桌面本身不联网。</p></details>
+  <section id="faq" class="wrap reveal">
+    <span class="eyebrow">FAQ</span>
+    <h2>常被问到的几件事</h2>
+    <div class="faq">
+      <details><summary>会不会影响保修？能还原吗？</summary><p>不 root、不刷机、不卸载系统应用，只是把 HLine TV 设为默认桌面。想还原：在电视设置里把默认桌面换回原来的，或者直接卸载 HLine TV。</p></details>
+      <details><summary>支持哪些电视？</summary><p>Android 5.0 及以上的安卓电视、盒子和投影仪，小米、Redmi、TCL、雷鸟、创维、索尼、海尔、OPPO 等常见机型都试过。三星（Tizen）和 LG（webOS）不是安卓系统，装不了。</p></details>
+      <details><summary>为什么有的电视装不上？</summary><p>部分固件不允许安装声明了桌面类别的应用。用 <code>HLine-TV-Guard.apk</code>，它不声明桌面，装好后由它接管 Home 键。</p></details>
+      <details><summary>桌面会联网吗？有广告吗？</summary><p>桌面本身不收集观看记录，也没有任何广告位。天气、壁纸这类需要联网的功能才会请求网络。</p></details>
+      <details><summary>以后怎么更新？</summary><p>控制中心提示「新版本」时点「下载并安装」，系统安装器覆盖安装，设置和排列都保留。</p></details>
+      <details><summary>收费吗？</summary><p>免费，MIT 许可，源码在 <a href="https://github.com/Harleyline/hline-tv">GitHub</a>。没有账号、没有内购。</p></details>
     </div>
   </section>
 </main>
 
 <footer>
-  <div class="wrap">
-    <p><strong>HLine TV</strong> · 干净的安卓电视桌面 · <a href="https://github.com/Harleyline/hline-tv">GitHub</a> · <a href="https://github.com/Harleyline/hline-tv/releases/latest">版本与更新记录</a></p>
-    <p>基于 Aerial（MIT）构建，第三方素材与许可见仓库的 CREDITS。与 Apple、小米、索尼等公司无关。</p>
+  <div class="wrap row">
+    <div>
+      <strong style="color:#cbd4dd">HLine TV</strong> · 干净的安卓电视桌面<br>
+      基于 Aerial（MIT）构建，第三方素材见仓库 CREDITS。与 Apple、小米、索尼等公司无关。
+    </div>
+    <div style="text-align:right">
+      <a href="https://github.com/Harleyline/hline-tv">GitHub</a> ·
+      <a href="https://github.com/Harleyline/hline-tv/releases/latest">版本与更新</a> ·
+      <a href="https://github.com/Harleyline/hline-tv/blob/main/CHANGELOG.md">更新说明</a>
+    </div>
   </div>
 </footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+</script>
 </body>
 </html>
