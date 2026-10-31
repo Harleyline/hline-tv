@@ -487,6 +487,11 @@ object AerialSettings {
     fun chooseLanguage(language: AppLanguage) {
         this.language = language
         app.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit { putString(LANGUAGE_KEY, language.tag) }
+        // The test hook in [localized] overrides this setting, so a leftover
+        // `settings put global aerial_locale_preview xx-XX` (a screenshot session, a report) would
+        // keep the old language on screen and make choosing one here look broken. Choosing is the
+        // owner speaking: the hook goes.
+        runCatching { Settings.Global.putString(app.contentResolver, "aerial_locale_preview", null) }
     }
 
     private const val LANGUAGE_KEY = "language"
