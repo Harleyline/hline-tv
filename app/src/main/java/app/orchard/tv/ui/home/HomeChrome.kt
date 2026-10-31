@@ -942,7 +942,9 @@ fun ClockModule(
                 text = timeText(now),
                 style = Type.ModuleNumber,
                 fontSize = Type.ModuleNumber.fontSize,
-                modifier = Modifier.padding(top = if (onPillLine) 8.dp else 4.dp)
+                // Cap boxes make the digits' top the box's top; 4 dp read as the date sitting on
+                // the digits (both clock sides, owner report 1.0). 14 dp gives the big time air.
+                modifier = Modifier.padding(top = if (onPillLine) 12.dp else 14.dp)
                     .toSaverClock(toSaver, Type.ModuleNumber.fontSize, 0.dp, drift),
             )
         }
