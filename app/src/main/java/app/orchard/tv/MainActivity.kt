@@ -309,6 +309,7 @@ class MainActivity : ComponentActivity() {
         }
         if (fresh && firstStartSinceBoot()) openBootSource("boot")
         if (intent.getBooleanExtra(EXTRA_WOKE, false)) openBootSource("brought back on wake")
+        if (intent.getBooleanExtra(EXTRA_REOPEN_BOOT, false)) openBootSource("covered by the stock launcher", again = true)
         if (fromLocked) {
             // This window already went through onStart and onResume while locked (both returned
             // early) and the system will not call them again unless it stops and starts the
@@ -382,12 +383,12 @@ class MainActivity : ComponentActivity() {
      * Opens the input or app the owner wants the TV to start on, if any. Both list with the apps,
      * so wait for them a moment. Several routes may fire for one wake; the first wins.
      */
-    private fun openBootSource(reason: String) {
+    private fun openBootSource(reason: String, again: Boolean = false) {
         val id = AerialSettings.bootSource
         val pkg = AerialSettings.bootApp
         if (id == null && pkg == null) return
-        if (SystemClock.elapsedRealtime() - bootSourceOpenedAt < 15_000) return
-        if (!BootOpen.due(this)) {
+        if (!again && SystemClock.elapsedRealtime() - bootSourceOpenedAt < 15_000) return
+        if (!again && !BootOpen.due(this)) {
             android.util.Log.i("Aerial", "$reason: already opened ${id ?: pkg} since the TV came on")
             return
         }
@@ -733,6 +734,7 @@ class MainActivity : ComponentActivity() {
         if (locked) return
         DiagLog.i("onNewIntent ${intent.action}")
         if (intent.getBooleanExtra(EXTRA_WOKE, false)) openBootSource("brought back on wake")
+        if (intent.getBooleanExtra(EXTRA_REOPEN_BOOT, false)) openBootSource("covered by the stock launcher", again = true)
         if (intent.action == ACTION_PREVIEW_SCREENSAVER) {
             idleHandler.post { startScreensaver(asked = true) }
             return
@@ -943,6 +945,9 @@ class MainActivity : ComponentActivity() {
 
         /** Set by Home Guard when it brings Aerial back after standby or a boot. */
         const val EXTRA_WOKE = "app.orchard.tv.WOKE"
+
+        /** Set by Home Guard when the stock launcher came down over what the TV starts on. */
+        const val EXTRA_REOPEN_BOOT = "app.orchard.tv.REOPEN_BOOT"
 
         /** How long after the key that woke a screensaver other keys are still taken as waking it. */
         const val WAKE_QUIET_MS = 400L

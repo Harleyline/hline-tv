@@ -56,6 +56,8 @@ object GuardSetup {
 
     private const val KEY_OWN_SCREENSAVER = "own_screensaver"
     private const val KEY_HOME_IN_FRONT = "home_in_front"
+    private const val KEY_HOME_IN_FRONT_AT = "home_in_front_at"
+    private const val KEY_HOME_IN_FRONT_BOOT = "home_in_front_boot"
     private const val KEY_INSTALLER_OPENED = "installer_opened_at"
     private const val KEY_SCREENSAVER_SWITCHED_OFF = "screensaver_switched_off"
     private const val KEY_SCREENSAVER_ENABLED = "screensaver_enabled"
@@ -130,7 +132,23 @@ object GuardSetup {
      * and whatever the viewer sees now was uncovered rather than chosen.
      */
     fun setHomeInFront(context: Context, inFront: Boolean) =
-        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putBoolean(KEY_HOME_IN_FRONT, inFront).apply()
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putBoolean(KEY_HOME_IN_FRONT, inFront)
+            .putLong(KEY_HOME_IN_FRONT_AT, SystemClock.elapsedRealtime())
+            .putLong(KEY_HOME_IN_FRONT_BOOT, System.currentTimeMillis() - SystemClock.elapsedRealtime()).apply()
+
+    /**
+     * [wasHomeInFront], when it was written in this boot; null when it was not (a power-on, or a
+     * clock set since then). Tells a guard bound at boot from one bound after the firmware killed
+     * Aerial while the viewer was in an app.
+     */
+    fun homeInFrontThisBoot(context: Context): Boolean? {
+        val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val at = prefs.getLong(KEY_HOME_IN_FRONT_AT, -1L)
+        val boot = prefs.getLong(KEY_HOME_IN_FRONT_BOOT, 0L)
+        val bootNow = System.currentTimeMillis() - SystemClock.elapsedRealtime()
+        if (at !in 0..SystemClock.elapsedRealtime() || kotlin.math.abs(boot - bootNow) > 2 * 60 * 1000L) return null
+        return prefs.getBoolean(KEY_HOME_IN_FRONT, false)
+    }
 
     fun wasHomeInFront(context: Context): Boolean =
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getBoolean(KEY_HOME_IN_FRONT, false)
