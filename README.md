@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="docs/brand/banner.png" width="880" alt="HLine TV">
-
 # HLine TV
 
 **给电视的一块干净桌面。**
@@ -14,7 +12,7 @@
 ![Android TV 5.0+](https://img.shields.io/badge/Android%20TV-5.0%2B-3ddc84?style=flat-square&logo=android&logoColor=white)
 [![许可证 MIT](https://img.shields.io/badge/%E8%AE%B8%E5%8F%AF%E8%AF%81-MIT-555555?style=flat-square)](LICENSE)
 
-![桌面](site/img/home.jpg)
+![运行中的桌面：地球壁纸、时间天气、底下是常用 App](docs/img/home.jpg)
 
 </div>
 
@@ -26,11 +24,6 @@
 - **航拍屏保**：闲置后自动播放航拍影片，画面上有时钟和地名，电视支持时播 4K 或 4K 杜比视界；也可以选「壁纸」或纯「时钟」。
 - **信号源**：HDMI 输入可以固定到桌面，开机直接进机顶盒或游戏机，图标和名字都能改。
 - **贴心的小事**：控制中心（信号源、网络、音量、亮度、个性化）、焦点音、家长密码、自动睡眠、多语言（中/繁/英/日/韩/俄/乌/哈萨克/法/蒙等）。
-
-<p align="center">
-  <img src="site/img/screensaver-aerial.jpg" width="49%" alt="航拍屏保">
-  <img src="site/img/control-center.jpg" width="49%" alt="控制中心">
-</p>
 
 ## 下载安装
 
