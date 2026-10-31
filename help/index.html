@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#08090b">
+<title>HLine TV · 安装与帮助</title>
+<style>
+  :root{
+    --bg:#08090b; --panel:#14161a; --line:rgba(255,255,255,.09);
+    --fg:#f2f5f8; --dim:#9aa3ad; --accent:#5ac8fa;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--fg);
+    font:400 16px/1.65 -apple-system,BlinkMacSystemFont,"SF Pro SC","PingFang SC","Helvetica Neue",Arial,sans-serif;
+    -webkit-font-smoothing:antialiased; padding:0 20px 56px;
+  }
+  .wrap{max-width:680px;margin:0 auto}
+  header{padding:44px 0 8px}
+  .eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+  h1{font-size:34px;line-height:1.2;letter-spacing:-.02em;margin:10px 0 8px;font-weight:700}
+  .lead{color:var(--dim);margin:0 0 26px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;margin:0 0 16px}
+  .card h2{font-size:18px;margin:0 0 10px;letter-spacing:-.01em}
+  .card p{margin:0 0 10px;color:var(--dim)}
+  .card p:last-child{margin-bottom:0}
+  .ver{display:flex;align-items:baseline;gap:10px;margin:0 0 14px}
+  .ver b{font-size:30px;letter-spacing:-.02em}
+  .ver span{color:var(--dim);font-size:14px}
+  .btn{display:block;text-align:center;text-decoration:none;border-radius:12px;padding:14px 18px;font-weight:600;margin:8px 0}
+  .btn.primary{background:var(--fg);color:#08090b}
+  .btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+  ol,ul{margin:0;padding-left:20px;color:var(--dim)}
+  li{margin:6px 0}
+  code{font:500 14px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;background:rgba(255,255,255,.07);
+       padding:2px 6px;border-radius:6px;color:#dfe6ec;word-break:break-all}
+  a{color:var(--accent)}
+  footer{margin-top:28px;color:#6d757e;font-size:13px;line-height:1.7}
+  .hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">HLine TV</div>
+    <h1 id="title">安装与帮助</h1>
+    <p class="lead" id="lead">手机上照着做就行，全流程不需要电脑。</p>
+  </header>
+
+  <section class="card" id="deploy">
+    <div class="ver"><b id="cur">1.11</b><span id="curNote">当前版本</span></div>
+    <a class="btn primary" href="https://github.com/Harleyline/hline-tv/releases/latest/download/HLine-TV.apk">下载 HLine TV</a>
+    <a class="btn ghost" href="https://github.com/Harleyline/hline-tv/releases/latest">查看更新说明</a>
+    <p style="margin-top:12px">极少数电视禁止安装「桌面类」应用，改用 <code>HLine-TV-Guard.apk</code>：它不声明桌面，靠无障碍服务接管 Home 键。</p>
+  </section>
+
+  <section class="card" id="setup">
+    <h2>让 Home 键回到 HLine TV</h2>
+    <ol>
+      <li>电视上打开 <b>设置 → 无障碍（辅助功能）</b></li>
+      <li>找到 <b>HLine TV · Home 守护</b>，打开开关</li>
+      <li>回到 HLine TV，按一下 Home 键试试；能回来就配置好了</li>
+      <li>更好再打开 <b>使用情况访问</b>（设置 → 应用 → 特殊权限），原桌面偷偷顶上来时也能拉回</li>
+    </ol>
+    <p style="margin-top:12px">部分品牌（当贝、TCL、海信、创维）的原桌面会自己抢前台，守护开着才压得住。</p>
+  </section>
+
+  <section class="card">
+    <h2>装不上怎么办</h2>
+    <ul>
+      <li>电视提示「禁止安装」：在设置里打开「允许安装未知来源应用」，或先用电视自带的应用市场装任意一个第三方市场再试。</li>
+      <li>装完没有图标：到「我的应用」里找 HLine TV，长按可以置顶。</li>
+      <li>想换回原来的桌面：设置 → 应用 → 默认应用 → 主屏幕，选回电视原来的桌面即可。</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>还有问题</h2>
+    <p>把电视型号和现象发到项目的问题页，附上截图更快：</p>
+    <a class="btn ghost" href="https://github.com/Harleyline/hline-tv/issues">反馈问题</a>
+  </section>
+
+  <footer>
+    HLine TV 基于 Aerial（MIT）与 ClearYourTV 的思路构建。与 Apple、小米、索尼等公司无关。<br>
+    <a href="https://harleyline.github.io/hline-tv/">返回官网</a>
+  </footer>
+</div>
+<script>
+  (function () {
+    var h = new URLSearchParams(location.hash.replace(/^#/, ''));
+    var v = h.get('v');
+    if (v) document.getElementById('cur').textContent = v.replace(/-guard$/, '');
+    if (h.get('f') === 'guard') document.getElementById('curNote').textContent = '守护版（Guard）';
+    if (h.get('setup') === '1') {
+      document.getElementById('title').textContent = '让 Home 键回到 HLine TV';
+      document.getElementById('lead').textContent = '下面四步在电视上完成，大约一分钟。';
+      document.getElementById('deploy').classList.add('hide');
+      document.getElementById('setup').scrollIntoView({ block: 'start' });
+    }
+  })();
+</script>
+</body>
+</html>
