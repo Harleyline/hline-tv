@@ -97,6 +97,7 @@ import app.orchard.tv.system.LaunchFallback
 import app.orchard.tv.system.NetKind
 import app.orchard.tv.system.SourceKind
 import app.orchard.tv.system.Sounds
+import app.orchard.tv.system.Standby
 import app.orchard.tv.system.SystemProbe
 import app.orchard.tv.system.WifiNetworks
 import app.orchard.tv.ui.components.Pressable
@@ -445,6 +446,7 @@ private fun SetupPage(vm: HomeViewModel, takeFocus: Boolean, onOpen: (android.co
         guard?.let { MenuRow(Glyph.Shield, stringResource(R.string.cc_setup_guard), onClick = { vm.whenUnlocked { onOpen(it) } }, trailing = stringResource(R.string.cc_setup_guard_where) + " ›") }
         home?.let { MenuRow(Glyph.Check, stringResource(R.string.cc_setup_home), onClick = { vm.whenUnlocked { onOpen(it) } }, trailing = "›") }
         revival?.let { MenuRow(Glyph.Moon, stringResource(R.string.cc_setup_revival), onClick = { vm.whenUnlocked { onOpen(it) } }, trailing = stringResource(R.string.cc_setup_revival_where) + " ›") }
+        StandbyRow(vm, context)
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 14.dp, end = 14.dp, top = 14.dp)) {
             Box(Modifier.size(104.dp).clip(RoundedCornerShape(12.dp)).background(Color.White).padding(8.dp)) {
                 qr?.let { Image(it, contentDescription = null, contentScale = ContentScale.Fit, filterQuality = FilterQuality.None, modifier = Modifier.fillMaxSize()) }
@@ -457,6 +459,37 @@ private fun SetupPage(vm: HomeViewModel, takeFocus: Boolean, onOpen: (android.co
             }
         }
     }
+}
+
+/** Standby that keeps the network up (快速待机), the viewer's choice; see system/Standby.kt. */
+@Composable
+private fun StandbyRow(vm: HomeViewModel, context: android.content.Context) {
+    var chosen by remember { mutableStateOf(Standby.isChosen(context)) }
+    var canWrite by remember { mutableStateOf(Standby.canWrite(context)) }
+    MenuRow(
+        Glyph.Moon, stringResource(R.string.cc_standby_title),
+        onClick = {
+            vm.whenUnlocked {
+                if (!Standby.canWrite(context)) {
+                    canWrite = false
+                } else {
+                    chosen = !chosen
+                    if (!Standby.setChosen(context, chosen)) { chosen = !chosen; canWrite = false }
+                }
+            }
+        },
+        trailing = stringResource(
+            when {
+                !canWrite -> R.string.cc_standby_needs
+                chosen -> R.string.cc_standby_on
+                else -> R.string.cc_standby_off
+            },
+        ) + " ›",
+    )
+    BasicText(
+        stringResource(if (canWrite) R.string.cc_standby_hint else R.string.cc_standby_needs_hint),
+        style = Type.Caption, modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
+    )
 }
 
 /** A round Control Center button: frosted at rest, white when focused. */

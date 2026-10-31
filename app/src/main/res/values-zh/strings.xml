@@ -305,4 +305,10 @@
     <string name="wp_auto_follow">跟随 App</string>
     <string name="wp_name_city_skyline">城市 · 天际线</string>
     <string name="wp_name_city_lights">城市 · 灯火</string>
+    <string name="cc_standby_title">待机保持联网（快速待机）</string>
+    <string name="cc_standby_on">已开启</string>
+    <string name="cc_standby_off">已关闭</string>
+    <string name="cc_standby_needs">需电脑授权</string>
+    <string name="cc_standby_hint">把电视待机写成「快速待机」：关机后米家仍可遥控、唤醒更快。待机耗电略增（约几瓦）。个别品牌不认此设置时，请在电视自身的设置里选择快速待机。</string>
+    <string name="cc_standby_needs_hint">开启需要「写入安全设置」权限：用电脑执行一次 tools/install.sh（见 README）即可。</string>
 </resources>

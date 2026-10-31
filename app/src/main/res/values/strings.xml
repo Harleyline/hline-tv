@@ -306,4 +306,10 @@
     <string name="wp_auto_follow">Follow App</string>
     <string name="wp_name_city_skyline">City, Skyline</string>
     <string name="wp_name_city_lights">City, Lights</string>
+    <string name="cc_standby_title">Standby keeps the network on</string>
+    <string name="cc_standby_on">On</string>
+    <string name="cc_standby_off">Off</string>
+    <string name="cc_standby_needs">Needs ADB grant</string>
+    <string name="cc_standby_hint">Writes the TV\&#8217;s quick-standby mode so Mi Home keeps working and wake is instant while the TV is off. Standby draws a little more power. On TVs that ignore the setting, pick it in the TV\&#8217;s own settings.</string>
+    <string name="cc_standby_needs_hint">Turning this on needs the write-secure-settings permission: run tools/install.sh once over ADB (see README).</string>
 </resources>

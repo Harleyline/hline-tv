@@ -108,7 +108,7 @@ adb install HLine-TV.apk
 
 ## 致谢与许可
 
-HLine TV 的界面与守护思路建立在两个开源项目之上：**Aerial**（MIT 许可，本项目由其 1.75 版本构建而来）与 **ClearYourTV**（界面设计上的参考），感谢原作者与所有贡献者。第三方素材与许可见 [CREDITS.md](CREDITS.md)：字体（SIL OFL）、城市数据（GeoNames, CC BY 4.0）、两张城市壁纸（Unsplash License）、必应每日一图，以及 Apple 的公开航拍影片（仅在线播放，不随应用分发）。
+HLine TV 基于 Aerial（MIT）与 ClearYourTV 的思路构建，感谢原作者与贡献者。第三方素材与许可见 [CREDITS.md](CREDITS.md)。
 
 ## 免责声明
 

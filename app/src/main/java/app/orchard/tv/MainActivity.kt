@@ -77,6 +77,7 @@ import app.orchard.tv.system.Diagnostics
 import app.orchard.tv.system.MissingClipboard
 import app.orchard.tv.system.Sounds
 import app.orchard.tv.system.NetKind
+import app.orchard.tv.system.Standby
 import app.orchard.tv.system.SystemProbe
 import app.orchard.tv.system.HisenseSources
 import app.orchard.tv.system.IdlePower
@@ -227,6 +228,7 @@ class MainActivity : ComponentActivity() {
         Wallpapers.init(this)
         Weather.init(this)
         Updates.init(this)
+        Standby.apply(this)
         CustomIcons.init(this)
         IconLibrary.init(this)
         SourceLooks.init(this)
