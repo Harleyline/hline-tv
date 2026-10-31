@@ -79,8 +79,8 @@ adb install aerial-standard.apk
 
 1. 改 `app/build.gradle.kts` 里的 `versionCode` / `versionName`；
 2. `./gradlew :app:assembleStandardRelease`（需要 `local/signing.properties` 里的签名密钥）；
-3. 把 `app/build/outputs/apk/standard/release/app-standard-release.apk` 改名为 `aerial-standard.apk`，再写一个只有版本号的 `version.txt`（如 `2.20`）；
-4. 在 GitHub 发布 Release（tag 如 `v2.20`），附上这两个文件。已装的电视最多三天内会看到「新版本」。
+3. 把 `app/build/outputs/apk/standard/release/app-standard-release.apk` 改名为 `aerial-standard.apk`，再写一个只有版本号的 `version.txt`（如 `1.1`）；
+4. 在 GitHub 发布 Release（tag 如 `v1.1`），附上这两个文件。已装的电视几小时内会看到「新版本」。
 
 ## 构建
 
