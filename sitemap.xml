@@ -8,7 +8,15 @@
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://harleyline.github.io/hline-tv/img/home.jpg</image:loc>
-      <image:title>HLine TV 干净的安卓电视桌面</image:title>
+      <image:title>HLine TV 首页：沙丘壁纸、时间与天气</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://harleyline.github.io/hline-tv/img/home-en.jpg</image:loc>
+      <image:title>HLine TV 英文界面</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://harleyline.github.io/hline-tv/img/apps.jpg</image:loc>
+      <image:title>HLine TV 全部 App 网格</image:title>
     </image:image>
   </url>
 </urlset>

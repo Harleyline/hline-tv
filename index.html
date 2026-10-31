@@ -41,7 +41,9 @@
   "url": "https://harleyline.github.io/hline-tv/",
   "downloadUrl": "https://github.com/Harleyline/hline-tv/releases/latest/download/HLine-TV.apk",
   "installUrl": "https://github.com/Harleyline/hline-tv/releases/latest",
-  "screenshot": "https://harleyline.github.io/hline-tv/img/home.jpg",
+  "screenshot": ["https://harleyline.github.io/hline-tv/img/home.jpg",
+                 "https://harleyline.github.io/hline-tv/img/home-en.jpg",
+                 "https://harleyline.github.io/hline-tv/img/apps.jpg"],
   "description": "HLine TV 是一个干净的安卓电视桌面：没有广告、推荐位和会员角标，只有时间、天气、你自己的 App 和会动的壁纸。",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
   "license": "https://github.com/Harleyline/hline-tv/blob/main/LICENSE",
@@ -85,6 +87,11 @@
   .shot{margin:44px 0 0}
   .shot img{width:100%;border-radius:var(--radius);display:block;box-shadow:0 24px 60px rgba(0,0,0,.16)}
   .caption{font-size:13.5px;color:var(--sub);margin-top:14px}
+  .gallery{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:30px;text-align:left}
+  .gallery figure{margin:0}
+  .gallery img{width:100%;border-radius:14px;display:block;box-shadow:0 10px 30px rgba(0,0,0,.12)}
+  .gallery figcaption{font-size:13px;color:var(--sub);margin-top:9px}
+  @media (max-width:700px){ .gallery{grid-template-columns:1fr} }
 
   section{padding:76px 0;border-top:1px solid var(--line)}
   h2{font-size:clamp(24px,3.6vw,32px);letter-spacing:-.02em;margin:0 0 12px;font-weight:680}
@@ -140,8 +147,18 @@
     </div>
     <p class="note">Android 5.0 及以上 · 不用 root · 随时能还原</p>
     <div class="shot">
-      <img src="img/home.jpg" width="1000" height="750" alt="HLine TV 装在一台安卓电视上：地球壁纸、时间与天气、底部是常用 App">
+      <img src="img/home.jpg" width="1920" height="1080" alt="HLine TV 首页：沙丘壁纸、时间与天气、底部一排常用 App">
       <p class="caption">装在一台普通的安卓电视上，看起来像 Apple TV。</p>
+    </div>
+    <div class="gallery">
+      <figure>
+        <img src="img/home-en.jpg" width="1920" height="1080" alt="English interface: ocean wallpaper, the date, Hangzhou weather and the dock">
+        <figcaption>英文界面，城市名跟着语言走（Hangzhou）</figcaption>
+      </figure>
+      <figure>
+        <img src="img/apps.jpg" width="1920" height="1080" alt="All installed apps on three rows of banner tiles, the focused one in white">
+        <figcaption>全部 App：三行横版磁贴，应用自带 banner 优先</figcaption>
+      </figure>
     </div>
   </div>
 
