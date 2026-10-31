@@ -2,10 +2,11 @@
 
 # HLine TV
 
-**给电视的一块干净桌面。**
+**干干净净的电视桌面**
 
-参照 Apple TV 做的 Android TV 桌面：没有广告，没有推荐流，只有你的 App、壁纸和航拍屏保。<br>
-适配小米、TCL、创维、索尼等常见电视，也能装在盒子和投影仪上。开机自动进入，待机也不会被清理。
+开机看到的第一眼，没有广告，没有推荐位，没有会员角标。<br>
+只有时间、天气、你的 App，和一张会动的壁纸。<br>
+装在普通的安卓电视上，看起来像 Apple TV。
 
 [![下载 APK](https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD%20APK-34a853?style=for-the-badge&logo=android&logoColor=white)](https://github.com/Harleyline/hline-tv/releases/latest)
 [![版本](https://img.shields.io/github/v/release/Harleyline/hline-tv?style=flat-square&label=%E7%89%88%E6%9C%AC&color=2997ff)](https://github.com/Harleyline/hline-tv/releases/latest)
@@ -24,6 +25,24 @@
 - **航拍屏保**：闲置后自动播放航拍影片，画面上有时钟和地名，电视支持时播 4K 或 4K 杜比视界；也可以选「壁纸」或纯「时钟」。
 - **信号源**：HDMI 输入可以固定到桌面，开机直接进机顶盒或游戏机，图标和名字都能改。
 - **贴心的小事**：控制中心（信号源、网络、音量、亮度、个性化）、焦点音、家长密码、自动睡眠、多语言（中/繁/英/日/韩/俄/乌/哈萨克/法/蒙等）。
+
+## 其他语言
+
+**English**　A home screen with nothing to sell you.<br>
+The first thing you see when the TV comes on: no ads, no sponsored rows, no membership badges. Just the time, the weather, your apps, and a wallpaper that moves.<br>
+Installed on a plain Android TV, it looks like an Apple TV.
+
+**日本語**　売り込みのないホーム画面。<br>
+電源を入れて最初に見えるのは、広告でも、おすすめ欄でも、会員バッジでもありません。時刻と天気、自分のアプリ、そして動く壁紙だけ。<br>
+ごく普通の Android テレビが、Apple TV のように見えます。
+
+**한국어**　광고가 없는 홈 화면.<br>
+TV를 켜면 가장 먼저 보이는 것은 광고도, 추천 목록도, 멤버십 배지도 아닙니다. 시계와 날씨, 내 앱, 그리고 움직이는 배경화면뿐입니다.<br>
+평범한 Android TV에서도 Apple TV처럼 보입니다.
+
+**Русский**　Главный экран, на котором ничего не продают.<br>
+При включении телевизора вы не увидите ни рекламы, ни рекомендаций, ни значков подписки. Только время, погода, ваши приложения и живой фон.<br>
+На обычном Android-телевизоре он выглядит как Apple TV.
 
 ## 下载安装
 
