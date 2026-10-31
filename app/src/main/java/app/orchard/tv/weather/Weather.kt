@@ -1,5 +1,6 @@
 package app.orchard.tv.weather
 
+import app.orchard.tv.BuildConfig
 import app.orchard.tv.system.DiagLog
 
 import android.content.Context
@@ -444,10 +445,11 @@ object Weather {
 
     /**
      * 在意空气's own source (aqicn.org, the WAQI feed), by coordinates so no town needs naming.
-     * The token is free and immediate at aqicn.org/data-platform/token — paste it into
-     * [WAQI_TOKEN] and rebuild; "demo" answers Shanghai for every point, so it is refused.
+     * The token is free and immediate at aqicn.org/data-platform/token — put it in
+     * `local/waqi.token` (not in version control) and rebuild; "demo" answers Shanghai for every
+     * point, so it is refused.
      */
-    private const val WAQI_TOKEN = "8f7a79b4e939cc6110044cf75c8394278783d2c0"
+    private val WAQI_TOKEN = BuildConfig.WAQI_TOKEN
 
     private fun waqiAqi(lat: Float, lon: Float): Int? = runCatching {
         if (WAQI_TOKEN == "demo") return null

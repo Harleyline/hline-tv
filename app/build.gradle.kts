@@ -18,6 +18,11 @@ android {
         targetSdk = 34
         versionCode = 137
         versionName = "1.0"
+        // The free air-quality token from aqicn.org/data-platform/token (weather/Weather.kt). Kept out
+        // of version control like the signing key; without one the weather falls back to Open-Meteo.
+        val waqi = rootProject.file("local/waqi.token").takeIf { it.isFile }?.readText()?.trim()
+            ?.takeIf { it.isNotEmpty() } ?: "demo"
+        buildConfigField("String", "WAQI_TOKEN", "\"$waqi\"")
         // `./gradlew -Pdiag ...`: a build for one reporter's TV whose logcat shows no app lines;
         // see system/DiagLog.kt.
         val diag = project.hasProperty("diag")
