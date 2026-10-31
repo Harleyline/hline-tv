@@ -20,4 +20,4 @@
 
 ## 与另一条极米适配路径的区别
 
-[PR #437](https://github.com/pengchujin/aerial-tv/pull/437) 面向 Z7X / GMUI Android 9：系统能列出输入，但标准 passthrough Intent 无处理器，因此改为通过 `com.xgimi.newsettings.SettingService` 打开极米信号源页。本机 XK03U / Android 8 没有 TV 输入服务，使用产品配置生成端口并直接启动原生播放器；两条路径针对不同固件，不能互相替代。
+[PR #437](https://github.com/Harleyline/hline-tv/pull/437) 面向 Z7X / GMUI Android 9：系统能列出输入，但标准 passthrough Intent 无处理器，因此改为通过 `com.xgimi.newsettings.SettingService` 打开极米信号源页。本机 XK03U / Android 8 没有 TV 输入服务，使用产品配置生成端口并直接启动原生播放器；两条路径针对不同固件，不能互相替代。

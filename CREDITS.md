@@ -1,6 +1,6 @@
 # CREDITS · 素材来源与许可
 
-HLine TV 在 [Aerial](https://github.com/pengchujin/aerial-tv)（MIT License, © pengchujin and contributors）的基础上构建。上游的完整说明见 [docs/AERIAL-README.md](docs/AERIAL-README.md)（[英文](docs/AERIAL-README-en.md)）。本项目沿用 MIT 许可证，见 [LICENSE](LICENSE)。
+HLine TV 在 Aerial（MIT License, © pengchujin and contributors）与 ClearYourTV 的思路上构建。本项目沿用 MIT 许可证，见 [LICENSE](LICENSE)。
 
 ## 字体（SIL Open Font License 1.1）
 

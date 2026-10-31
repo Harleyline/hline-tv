@@ -1,7 +1,7 @@
 # 各品牌电视怎么打开 ADB
 
 安装 Aerial 之前要先在电视上打开 ADB 调试。各品牌的入口不一样，下面按品牌列出。
-路径和说法来自用户反馈、[issue #32](https://github.com/pengchujin/aerial-tv/issues/32) 的评论，
+路径和说法来自用户反馈、[issue #32](https://github.com/Harleyline/hline-tv/issues/32) 的评论，
 以及同目录下的机型笔记；没有单独注明的都还没有在本仓库的真机上验证过。
 
 ## 小米 / Redmi
@@ -48,7 +48,7 @@ adb connect <电视IP>:<无线调试主页上的端口>   # 和上面不是同�
 
 连上后照常 `adb install`、授权。想以后直接用 `<电视IP>:5555`，连上时运行一次 `adb tcpip 5555`；
 这台电脑已经配对过，不用再配对。`install.sh` 和 `site/agent.md` 会引导这一步。
-部分同平台的 TCL 固件没有配对码入口：Q10M（[#31](https://github.com/pengchujin/aerial-tv/issues/31)
+部分同平台的 TCL 固件没有配对码入口：Q10M（[#31](https://github.com/Harleyline/hline-tv/issues/31)
 的实机反馈，只有动态端口，没有无线调试详情页）。鹤 6 Ultra（Android 14）上有用户用 USB A 对 A 线
 把电视连到电脑，先走有线 adb 授权，再执行一次 `adb tcpip 5555`，见 [tcl-mt9655-cn.md](tcl-mt9655-cn.md)。
 

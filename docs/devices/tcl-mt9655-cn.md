@@ -41,7 +41,7 @@
 ⚠ **与 MT5879 的做法不同**：MT5879 文档用 `adb reverse tcp:8765 tcp:8765` + `http://127.0.0.1:8765/Aerial.apk`。
 本机没有 ADB，**做不了 reverse**。实测电视**不接受局域网 `http://<Mac IP>:<非标端口>/...` 的 URL**——
 HTTP 服务日志里完全没有来自电视的请求（本机 macOS 防火墙为 disabled，已排除）。
-改用**公网可访问 URL** 即可成功，例如 `https://gh-proxy.com/https://github.com/pengchujin/aerial-tv/releases/download/v1.14/aerial-guard.apk`。
+改用**公网可访问 URL** 即可成功，例如 `https://gh-proxy.com/https://github.com/Harleyline/hline-tv/releases/download/v1.14/aerial-guard.apk`。
 
 ⇒ 建议 `install.sh` 在**没有 ADB 授权**的场景下，把下载地址参数改成可配置的外网 URL，而不是默认走 `adb reverse`。
 

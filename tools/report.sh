@@ -3,7 +3,7 @@
 # a GitHub issue (the "机型适配 / Device support" form).
 #
 #   TV=<tv-ip> tools/report.sh
-#   curl -fsSL https://aerial.qust.me/tools/report.sh | TV=<tv-ip> bash
+#   curl -fsSL https://harleyline.github.io/hline-tv/report.sh | TV=<tv-ip> bash
 #
 # Writes aerial-report-<model>.md in the current folder and prints it (on macOS also copies it).
 # Reads only: nothing on the TV is changed, except that Aerial is started if it was not running,
@@ -139,4 +139,4 @@ set +e
 cat "$OUT"
 echo
 command -v pbcopy >/dev/null && pbcopy < "$OUT" && echo "Copied to the clipboard." >&2
-echo "Saved to $OUT. Read it, then paste it into https://github.com/pengchujin/aerial-tv/issues/new?template=device.yml" >&2
+echo "Saved to $OUT. Read it, then paste it into https://github.com/Harleyline/hline-tv/issues" >&2

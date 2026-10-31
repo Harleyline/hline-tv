@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        先在 [Issues](https://github.com/pengchujin/aerial-tv/issues?q=is%3Aissue+label%3Aenhancement) 搜一下，已经有人提过的话点个 👍、在下面补充你的用法，比开新帖更有用。
+        先在 [Issues](https://github.com/Harleyline/hline-tv/issues) 搜一下，已经有人提过的话点个 👍、在下面补充你的用法，比开新帖更有用。
         Search first; a 👍 and your use case on an existing request helps more than a new one.
   - type: textarea
     id: idea

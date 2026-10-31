@@ -353,7 +353,7 @@
   <pre class="diag" id="diag" hidden></pre>
   <div class="row" id="diagActions" hidden>
     <button class="btn" id="diagCopy" data-i18n="diag_copy"></button>
-    <a class="btn plain" id="diagGithub" href="https://github.com/pengchujin/aerial-tv/issues/new?template=device.yml" target="_blank" rel="noopener" data-i18n="diag_github"></a>
+    <a class="btn plain" id="diagGithub" href="https://github.com/Harleyline/hline-tv/issues" target="_blank" rel="noopener" data-i18n="diag_github"></a>
   </div>
   <p class="foot" data-i18n="feedback_hint"></p>
 </section>
@@ -2013,7 +2013,7 @@ $('#diagGithub').onclick = (e) => {
   if (model) { q.set('title', '[机型] ' + model); q.set('model', model); }
   if (version) q.set('version', 'Aerial ' + version);
   if (profile) q.set('profile', profile);
-  e.currentTarget.href = 'https://github.com/pengchujin/aerial-tv/issues/new?' + q;
+  e.currentTarget.href = 'https://github.com/Harleyline/hline-tv/issues/new?' + q;
   toast(t(copyDiag() ? 'toast_diag_paste' : 'toast_copy_manual'));
 };
 function copyDiag() {

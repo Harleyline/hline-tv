@@ -172,7 +172,7 @@ adb shell input keyevent KEYCODE_POWER   # 唤醒
 
 ```bash
 adb connect <电视IP>:5555
-curl -fsSL https://aerial.qust.me/install.sh | KEEP_ADB=1 TV=<电视IP> bash
+curl -fsSL https://raw.githubusercontent.com/Harleyline/hline-tv/main/tools/get.sh | KEEP_ADB=1 TV=<电视IP> bash
 ```
 
 输出：

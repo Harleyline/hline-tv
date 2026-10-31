@@ -8,7 +8,7 @@
 #   TV=<tv-ip> tools/install.sh lite          # Aerial Lite; chosen by itself on Android 4.0-4.4,
 #                                             # refused on 5.0+ (FORCE_LITE=1 to try it there)
 #
-# The APK comes from the latest release (aerial.qust.me's copy, else GitHub), so only adb is needed
+# The APK comes from the latest release on GitHub, so only adb is needed
 # (and python3 on TCL TVs).
 #   BUILD=1        build it from this checkout instead (JDK 17 + Android SDK)
 #   APK_FILE=<apk> install this file instead
@@ -181,7 +181,7 @@ if [ "$FLAVOR" = lite ] || [ "$OLD_ANDROID" = 1 ]; then
   echo "Installing $APK"
   OUT=$(adb install -r "$APK" 2>&1 | tr -d '\r') || true
   echo "$OUT" | tail -n 2
-  echo "$OUT" | grep -q Success || { echo "Installing failed. Copy the APK to a USB drive and open it with the TV's file manager, or see https://aerial.qust.me/agent.md" >&2; exit 1; }
+  echo "$OUT" | grep -q Success || { echo "Installing failed. Copy the APK to a USB drive and open it with the TV's file manager, or see https://harleyline.github.io/hline-tv/" >&2; exit 1; }
   # Brightness on TVs that keep it in a secure or global setting (Xiaomi picture_backlight).
   # Android 4.0 cannot grant it from the shell; the slider then opens the TV's picture settings.
   adb shell pm grant "$LITE" android.permission.WRITE_SECURE_SETTINGS >/dev/null 2>&1 || true

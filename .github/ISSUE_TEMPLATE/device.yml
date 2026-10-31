@@ -9,14 +9,14 @@ body:
         The maintainer has only two TVs (Xiaomi MiTV-MFTR0, TCL MT5879); other brands depend on the diagnostics you paste.
 
         **最省事：交给 AI Agent / Easiest: hand it to an AI agent.** 对电脑版 Agent（Claude Code、Codex、Trae、WorkBuddy 等）说：
-        「读 https://aerial.qust.me/adapt.md ，给我的电视（IP 是 <电视IP>）做 Aerial 适配」。它会自检、能改的当场改好，再整理成一份报告给你提交。
-        Tell a desktop agent: "Read https://aerial.qust.me/adapt.md and adapt Aerial to my TV at <TV IP>". It tests, fixes what it can on the TV, and writes the report for you to post.
+        「读 https://harleyline.github.io/hline-tv/ ，给我的电视（IP 是 <电视IP>）做 Aerial 适配」。它会自检、能改的当场改好，再整理成一份报告给你提交。
+        Tell a desktop agent: "Read https://harleyline.github.io/hline-tv/ and adapt Aerial to my TV at <TV IP>". It tests, fixes what it can on the TV, and writes the report for you to post.
 
         **自己取诊断信息（任选一种）/ Getting the diagnostics yourself (either way):**
         1. 电脑（macOS / Linux，电视已开 ADB）/ Computer with ADB:
-           `curl -fsSL https://aerial.qust.me/tools/report.sh | TV=<电视IP> bash`
+           `curl -fsSL https://raw.githubusercontent.com/Harleyline/hline-tv/main/tools/report.sh | TV=<电视IP> bash`
            再跑自检（按主页键等，看 Aerial 能不能回来）/ then the self-test:
-           `curl -fsSL https://aerial.qust.me/tools/selftest.sh | TV=<电视IP> bash`
+           `curl -fsSL https://raw.githubusercontent.com/Harleyline/hline-tv/main/tools/selftest.sh | TV=<电视IP> bash`
         2. 手机 / Phone：电视上「控制中心 → 个性化」扫二维码，手机页最下面「反馈问题 → 显示诊断信息 → 去 GitHub 反馈」，诊断信息会自动复制，粘贴到最下面一栏。
            On the TV, Control Center → Personalize, scan the QR code; at the bottom of the phone page, Report a Problem → Show Diagnostics → Report on GitHub copies them; paste them into the last field.
 

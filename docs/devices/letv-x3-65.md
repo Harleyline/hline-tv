@@ -46,7 +46,7 @@ standard/guard 版、改不改包名都一样；强杀还会清空无障碍绑�
 
 ## 和超4 X55 的对照
 
-同品牌较新的超4 X55（Android 6.0，[issue #510](https://github.com/pengchujin/aerial-tv/issues/510) 第一条评论）
+同品牌较新的超4 X55（Android 6.0，[issue #510](https://github.com/Harleyline/hline-tv/issues/510) 第一条评论）
 改包名后完全稳定——两代 EUI 的内存管理器放行规则不同。
 
 卸载还原：`pm uninstall com.stv.tvhome`

@@ -9,7 +9,7 @@ body:
         装不上、按主页键回不到 Aerial、开机或待机后回到原桌面、信号源不对：请用「机型适配」模板，那些要看诊断信息。
         Can't install, Home doesn't come back to Aerial, the old launcher returns after boot or standby, inputs are wrong: use the Device support form instead.
 
-        提交前先在 [Issues](https://github.com/pengchujin/aerial-tv/issues?q=is%3Aissue) 搜一下，同样的问题在已有的帖子下面补充就好。
+        提交前先在 [Issues](https://github.com/Harleyline/hline-tv/issues?q=is%3Aissue) 搜一下，同样的问题在已有的帖子下面补充就好。
         Search the existing issues first; if yours is there, add to it.
   - type: input
     id: version
@@ -67,7 +67,7 @@ body:
     id: diagnostics
     attributes:
       label: 诊断信息（可选）/ Diagnostics (optional)
-      description: 手机配置页最下面「反馈问题 → 显示诊断信息 → 复制」，或电脑上运行 `curl -fsSL https://aerial.qust.me/tools/report.sh | TV=<电视IP> bash` / From the phone page's 反馈问题, or report.sh
+      description: 手机配置页最下面「反馈问题 → 显示诊断信息 → 复制」，或电脑上运行 `curl -fsSL https://raw.githubusercontent.com/Harleyline/hline-tv/main/tools/report.sh | TV=<电视IP> bash` / From the phone page's 反馈问题, or report.sh
       render: markdown
   - type: checkboxes
     id: checks

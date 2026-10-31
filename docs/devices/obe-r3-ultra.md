@@ -12,7 +12,7 @@
   也就是说这台**支持**"由固件在开机时启动指定组件"这条路（[FFALCON 笔记](ffalcon-t966d5.md) 用的就是它），
   需要时可以拿它做兜底。
 - `cmd role add-role-holder` 生效，但 `cmd role get-role-holders` 这个构建不支持
-  （`Unknown command: get-role-holders`）——和[#551](https://github.com/pengchujin/aerial-tv/issues/551) 里 XGIMI 的 Android 11 是同一种情况，
+  （`Unknown command: get-role-holders`）——和[#551](https://github.com/Harleyline/hline-tv/issues/551) 里 XGIMI 的 Android 11 是同一种情况，
   `tools/report.sh` 已经在处理了，只是提醒一句别把 `role holder: Unknown command` 当成失败。
 - 日志里有 `COMPAT FOR PKG app.orchard.tv: {213dpi always-compat}`：Aerial 在这台上走的是 213dpi 的兼容缩放。
 - 装的 flavor：`standard`（1.65）。`adb install` 直接可用，没有被系统校验拦。
