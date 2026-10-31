@@ -8,6 +8,7 @@
 <meta name="keywords" content="HLine TV,安卓电视桌面,Android TV 启动器,电视桌面,去广告桌面,电视 launcher,Apple TV 风格桌面,小米电视桌面">
 <meta name="author" content="HLine TV">
 <link rel="canonical" href="https://harleyline.github.io/hline-tv/">
+<link rel="preload" as="image" href="img/hero.webp" type="image/webp" fetchpriority="high">
 <meta name="robots" content="index,follow">
 
 <meta property="og:type" content="website">
@@ -65,6 +66,7 @@
     --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
   }
   *{box-sizing:border-box}
+  picture{display:contents}
   html{scroll-behavior:smooth}
   body{
     margin:0;background:var(--bg);color:var(--ink);
@@ -127,6 +129,14 @@
   .scroll-hint svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6;animation:hint 2.4s ease-in-out infinite}
   @keyframes hint{0%,100%{transform:translateY(0);opacity:.45}50%{transform:translateY(5px);opacity:1}}
   @media(max-width:760px){.hero{padding:104px 0 96px;min-height:94vh}.scroll-hint{display:none}}
+  @media(max-height:1000px) and (min-width:761px){
+    .hero{padding:96px 0 76px}
+    .hero h1 .slogan{margin-top:16px;font-size:clamp(44px,8.6vw,124px)}
+    .hero .lead{margin-top:22px;font-size:clamp(15px,1.7vw,18px)}
+    .hero .closer{margin-top:26px;font-size:clamp(19px,2.6vw,28px)}
+    .actions{margin-top:28px}
+    .hero-meta{margin-top:16px}
+  }
   @media(prefers-reduced-motion:reduce){.scroll-hint svg{animation:none}}
 
   /* the tv */
@@ -253,7 +263,10 @@
 <main>
   <section class="hero">
     <div class="hero-bg" aria-hidden="true">
-      <img src="img/hero.jpg" width="1920" height="1080" alt="">
+      <picture>
+        <source srcset="img/hero.webp" type="image/webp">
+        <img src="img/hero.jpg" width="1600" height="900" alt="" fetchpriority="high" decoding="async">
+      </picture>
     </div>
     <div class="hero-inner">
       <span class="chip"><i></i>Android TV · MIT 开源</span>
@@ -278,7 +291,10 @@
   <div class="wrap">
     <div class="tv reveal">
       <div class="screen">
-        <img src="img/home.jpg" width="1920" height="1080" alt="HLine TV 首页：沙丘壁纸、时间与天气、底部一排常用 App">
+        <picture>
+          <source srcset="img/home.webp" type="image/webp">
+          <img src="img/home.jpg" width="1400" height="788" alt="HLine TV 首页：沙丘壁纸、时间与天气、底部一排常用 App" decoding="async">
+        </picture>
       </div>
       <p class="tv-note">把 Apple TV 的优雅，带给你的安卓电视。</p>
     </div>
@@ -343,7 +359,10 @@
           <h3>一眼，就是全部</h3>
           <p>时间、天气、你的 App。开机第一眼，干净得像什么都没发生——这正是重点。</p>
         </div>
-        <div class="row-media"><img src="img/home.jpg" width="1920" height="1080" alt="HLine TV 首页：时钟、天气与底部的常用 App" loading="lazy"></div>
+        <div class="row-media"><picture>
+          <source srcset="img/home.webp" type="image/webp">
+          <img src="img/home.jpg" width="1400" height="788" alt="HLine TV 首页：时钟、天气与底部的常用 App" loading="lazy" decoding="async">
+        </picture></div>
       </div>
 
       <div class="row flip reveal">
@@ -352,7 +371,10 @@
           <h3>动静之间，皆是风景</h3>
           <p>航拍视界、精选壁纸、私人相册。随心而动，每一眼都如初见。</p>
         </div>
-        <div class="row-media"><img src="img/w-stack.jpg" width="1600" height="1040" alt="内置静态壁纸层叠展示：海浪、城市夜色、天际线与沙丘" loading="lazy"></div>
+        <div class="row-media"><picture>
+          <source srcset="img/w-stack.webp" type="image/webp">
+          <img src="img/w-stack.jpg" width="1400" height="910" alt="内置静态壁纸层叠展示：海浪、城市夜色、天际线与沙丘" loading="lazy" decoding="async">
+        </picture></div>
       </div>
 
       <div class="row reveal">
@@ -361,7 +383,10 @@
           <h3>空闲时，它很美</h3>
           <p>航拍影片、壁纸轮换，或者只留一枚时钟。闲置的电视，一样体面。</p>
         </div>
-        <div class="row-media"><img src="img/screensaver.jpg" width="1920" height="1080" alt="真机屏保效果：城市天际线壁纸、时钟与天气、底部的常用 App" loading="lazy"></div>
+        <div class="row-media"><picture>
+          <source srcset="img/screensaver.webp" type="image/webp">
+          <img src="img/screensaver.jpg" width="1400" height="788" alt="真机屏保效果：城市天际线壁纸、时钟与天气、底部的常用 App" loading="lazy" decoding="async">
+        </picture></div>
       </div>
 
       <div class="row flip reveal">
@@ -370,7 +395,10 @@
           <h3>整理，随手完成</h3>
           <p>长按移动、建文件夹、隐藏、卸载；手机上打开一个地址，连壁纸和城市都能改。遥控器终于可以歇歇了。</p>
         </div>
-        <div class="row-media"><img src="img/apps.jpg" width="1920" height="1080" alt="全部 App 网格：三行横版磁贴" loading="lazy"></div>
+        <div class="row-media"><picture>
+          <source srcset="img/apps.webp" type="image/webp">
+          <img src="img/apps.jpg" width="1400" height="788" alt="全部 App 网格：三行横版磁贴" loading="lazy" decoding="async">
+        </picture></div>
       </div>
     </div>
 
@@ -385,7 +413,10 @@
     <h2 class="reveal">在客厅，眼见为实</h2>
     <div class="gallery-wide reveal">
       <figure>
-        <img src="img/home-en.jpg" width="1920" height="1080" alt="英文界面：海浪壁纸，日期与 Hangzhou 天气" loading="lazy">
+        <picture>
+          <source srcset="img/home-en.webp" type="image/webp">
+          <img src="img/home-en.jpg" width="1400" height="788" alt="英文界面：海浪壁纸，日期与 Hangzhou 天气" loading="lazy" decoding="async">
+        </picture>
         <figcaption>界面语言跟着系统走——English 之下，城市也成了 Hangzhou</figcaption>
       </figure>
     </div>
