@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HLine TV — 干净的安卓电视桌面｜Android TV 启动器下载</title>
+<meta name="description" content="HLine TV 是一个干净的安卓电视桌面（Android TV 启动器）：开机没有广告、没有推荐位、没有会员角标，只有时间、天气、你的 App 和会动的壁纸。支持 Android 5.0 以上电视、盒子与投影，免费开源。">
+<meta name="keywords" content="HLine TV,安卓电视桌面,Android TV 启动器,电视桌面,去广告桌面,电视 launcher,Apple TV 风格桌面,小米电视桌面">
+<meta name="author" content="HLine TV">
+<link rel="canonical" href="https://harleyline.github.io/hline-tv/">
+<meta name="robots" content="index,follow">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="HLine TV">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:title" content="HLine TV — 干净的安卓电视桌面">
+<meta property="og:description" content="开机没有广告，没有推荐位，没有会员角标：只有时间、天气、你的 App 和一张会动的壁纸。">
+<meta property="og:url" content="https://harleyline.github.io/hline-tv/">
+<meta property="og:image" content="https://harleyline.github.io/hline-tv/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="HLine TV — 干净的安卓电视桌面">
+<meta name="twitter:description" content="开机没有广告，没有推荐位，没有会员角标。免费开源的 Android TV 桌面。">
+<meta name="twitter:image" content="https://harleyline.github.io/hline-tv/img/og.jpg">
+<meta name="theme-color" content="#ffffff">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230b0b0c'/><rect x='20' y='30' width='60' height='40' rx='6' fill='none' stroke='%23fff' stroke-width='6'/><rect x='42' y='76' width='16' height='6' rx='3' fill='%23fff'/></svg>">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "HLine TV",
+  "alternateName": ["HLine", "HLine TV 安卓电视桌面"],
+  "applicationCategory": "UtilitiesApplication",
+  "applicationSubCategory": "Android TV launcher",
+  "operatingSystem": "Android 5.0 及以上",
+  "softwareVersion": "1.0",
+  "inLanguage": ["zh-CN","zh-TW","en","ja","ko","ru"],
+  "url": "https://harleyline.github.io/hline-tv/",
+  "downloadUrl": "https://github.com/Harleyline/hline-tv/releases/latest/download/HLine-TV.apk",
+  "installUrl": "https://github.com/Harleyline/hline-tv/releases/latest",
+  "screenshot": "https://harleyline.github.io/hline-tv/img/home.jpg",
+  "description": "HLine TV 是一个干净的安卓电视桌面：没有广告、推荐位和会员角标，只有时间、天气、你自己的 App 和会动的壁纸。",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+  "license": "https://github.com/Harleyline/hline-tv/blob/main/LICENSE",
+  "sameAs": ["https://github.com/Harleyline/hline-tv"]
+}
+</script>
+
+<style>
+  :root{
+    --ink:#0b0b0c; --sub:#5f6368; --line:#e7e7ea; --bg:#ffffff; --soft:#f6f6f8;
+    --accent:#111; --radius:18px;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+    line-height:1.65; font-size:17px; letter-spacing:.005em;
+  }
+  a{color:inherit}
+  .wrap{max-width:960px;margin:0 auto;padding:0 24px}
+  header{border-bottom:1px solid var(--line)}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:650;letter-spacing:-.01em;text-decoration:none}
+  .brand svg{width:24px;height:24px}
+  nav a{margin-left:22px;font-size:14.5px;color:var(--sub);text-decoration:none}
+  nav a:hover{color:var(--ink)}
+  @media (max-width:640px){ nav{display:none} }
+
+  .hero{padding:72px 0 8px;text-align:center}
+  .eyebrow{display:inline-block;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--sub);margin-bottom:18px}
+  h1{font-size:clamp(34px,6vw,56px);line-height:1.12;letter-spacing:-.03em;margin:0 0 20px;font-weight:700}
+  .lead{font-size:clamp(17px,2.4vw,21px);color:#33363b;max-width:640px;margin:0 auto 32px}
+  .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:18px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:999px;font-weight:600;font-size:16px;text-decoration:none;transition:transform .15s ease,opacity .15s ease}
+  .btn:hover{transform:translateY(-1px)}
+  .btn.primary{background:var(--ink);color:#fff}
+  .btn.ghost{background:var(--soft);color:var(--ink)}
+  .note{font-size:13.5px;color:var(--sub)}
+  .shot{margin:44px 0 0}
+  .shot img{width:100%;border-radius:var(--radius);display:block;box-shadow:0 24px 60px rgba(0,0,0,.16)}
+  .caption{font-size:13.5px;color:var(--sub);margin-top:14px}
+
+  section{padding:76px 0;border-top:1px solid var(--line)}
+  h2{font-size:clamp(24px,3.6vw,32px);letter-spacing:-.02em;margin:0 0 12px;font-weight:680}
+  .sub{color:var(--sub);margin:0 0 34px;max-width:640px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:22px}
+  .card{border:1px solid var(--line);border-radius:16px;padding:24px 22px}
+  .card h3{font-size:17px;margin:0 0 8px;font-weight:650}
+  .card p{margin:0;color:var(--sub);font-size:15px;line-height:1.6}
+
+  .langs p{margin:0 0 26px;max-width:720px}
+  .langs strong{display:block;font-size:14px;letter-spacing:.04em;color:var(--sub);text-transform:uppercase;margin-bottom:6px}
+
+  ol.steps{list-style:none;counter-reset:s;padding:0;margin:0}
+  ol.steps li{counter-increment:s;position:relative;padding-left:52px;margin-bottom:26px}
+  ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600}
+  code{background:var(--soft);padding:3px 7px;border-radius:6px;font-size:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  pre{background:#0b0b0c;color:#eaeaea;padding:16px 18px;border-radius:12px;overflow:auto;font-size:14px}
+
+  details{border-top:1px solid var(--line);padding:18px 0}
+  details:last-of-type{border-bottom:1px solid var(--line)}
+  summary{cursor:pointer;font-weight:600;font-size:16.5px}
+  details p{color:var(--sub);margin:12px 0 0;font-size:15px}
+
+  footer{padding:44px 0 64px;color:var(--sub);font-size:14px}
+  footer a{color:var(--sub)}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="brand" href="/hline-tv/">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#0b0b0c"/><rect x="20" y="30" width="60" height="40" rx="6" fill="none" stroke="#fff" stroke-width="6"/><rect x="42" y="76" width="16" height="6" rx="3" fill="#fff"/></svg>
+      HLine TV
+    </a>
+    <nav>
+      <a href="#features">功能</a>
+      <a href="#languages">其他语言</a>
+      <a href="#install">安装</a>
+      <a href="#faq">常见问题</a>
+      <a href="https://github.com/Harleyline/hline-tv">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero wrap">
+    <span class="eyebrow">Android TV 桌面 · 免费开源</span>
+    <h1>干干净净的<br>安卓电视桌面</h1>
+    <p class="lead">开机看到的第一眼，没有广告，没有推荐位，没有会员角标。<br>只有时间、天气、你的 App，和一张会动的壁纸。</p>
+    <div class="cta">
+      <a class="btn primary" href="https://github.com/Harleyline/hline-tv/releases/latest/download/HLine-TV.apk">下载 HLine TV</a>
+      <a class="btn ghost" href="https://github.com/Harleyline/hline-tv">在 GitHub 上看源码</a>
+    </div>
+    <p class="note">Android 5.0 及以上 · 不用 root · 随时能还原</p>
+    <div class="shot">
+      <img src="img/home.jpg" width="1000" height="750" alt="HLine TV 装在一台安卓电视上：地球壁纸、时间与天气、底部是常用 App">
+      <p class="caption">装在一台普通的安卓电视上，看起来像 Apple TV。</p>
+    </div>
+  </div>
+
+  <section id="features">
+    <div class="wrap">
+      <h2>电视只做电视该做的事</h2>
+      <p class="sub">不推内容，不卖位置，不收集观看记录。桌面上只有你自己放的东西。</p>
+      <div class="grid">
+        <div class="card">
+          <h3>没有广告的首页</h3>
+          <p>常用的一排 App 放在屏幕下方的玻璃底板上，往下是全部 App。长按可以移动、建文件夹、隐藏、卸载。</p>
+        </div>
+        <div class="card">
+          <h3>壁纸会跟着 App 变</h3>
+          <p>内置五张照片壁纸（沙丘两张、浪一张、城市两张），也能用自己的照片、每日一图，或跟随当前 App 的配色。</p>
+        </div>
+        <div class="card">
+          <h3>航拍屏保</h3>
+          <p>闲置后自动播放航拍影片，画面留有时钟和地名；也可以选「壁纸」轮换，或者只留一个纯时钟。</p>
+        </div>
+        <div class="card">
+          <h3>用手机改设置</h3>
+          <p>电视上打开一个局域网地址，手机上就能改壁纸、天气城市、屏保、语言和布局，也能给单个 App 换图。</p>
+        </div>
+        <div class="card">
+          <h3>11 种语言</h3>
+          <p>中、繁、英、日、韩、俄、乌克兰语、哈萨克语、法语、蒙古语、藏语、维吾尔语。藏文与维吾尔文自带字体，不靠电视字库。</p>
+        </div>
+        <div class="card">
+          <h3>装完还能自己更新</h3>
+          <p>控制中心会提示新版本，点一下下载安装，App、排列、壁纸和设置都保留。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="languages" class="langs">
+    <div class="wrap">
+      <h2>其他语言</h2>
+      <p class="sub">HLine TV 是一个 Android TV 桌面，面向所有用安卓电视的人。</p>
+      <p><strong>English</strong>A home screen with nothing to sell you. The first thing you see when the TV comes on: no ads, no sponsored rows, no membership badges — just the time, the weather, your apps, and a wallpaper that moves. Installed on a plain Android TV, it looks like an Apple TV.</p>
+      <p><strong>日本語</strong>売り込みのないホーム画面。電源を入れて最初に見えるのは、広告でも、おすすめ欄でも、会員バッジでもありません。時刻と天気、自分のアプリ、そして動く壁紙だけ。ごく普通の Android テレビが、Apple TV のように見えます。</p>
+      <p><strong>한국어</strong>광고가 없는 홈 화면. TV를 켜면 가장 먼저 보이는 것은 광고도, 추천 목록도, 멤버십 배지도 아닙니다. 시계와 날씨, 내 앱, 그리고 움직이는 배경화면뿐입니다. 평범한 Android TV에서도 Apple TV처럼 보입니다.</p>
+      <p><strong>Русский</strong>Главный экран, на котором ничего не продают. При включении телевизора вы не увидите ни рекламы, ни рекомендаций, ни значков подписки. Только время, погода, ваши приложения и живой фон. На обычном Android-телевизоре он выглядит как Apple TV.</p>
+    </div>
+  </section>
+
+  <section id="install">
+    <div class="wrap">
+      <h2>安装：三种方式，任选一种</h2>
+      <p class="sub">不用 root，不动系统应用，装错了随时能还原成原来的桌面。</p>
+      <ol class="steps">
+        <li>
+          <h3 style="margin:0 0 6px;font-size:17px">U 盘</h3>
+          <p style="margin:0;color:var(--sub)">把 <code>HLine-TV.apk</code> 拷进 U 盘，用电视上的文件管理器打开安装。装好在系统提示里选 HLine TV 作桌面。</p>
+        </li>
+        <li>
+          <h3 style="margin:0 0 6px;font-size:17px">一行命令（同一网络）</h3>
+          <p style="margin:0 0 10px;color:var(--sub)">先在电视上打开 ADB 调试，然后在这台电脑上执行，<code>TV</code> 换成电视的 IP：</p>
+          <pre>curl -fsSL https://raw.githubusercontent.com/Harleyline/hline-tv/main/tools/install.sh | TV=192.168.1.20 bash</pre>
+        </li>
+        <li>
+          <h3 style="margin:0 0 6px;font-size:17px">手动 ADB</h3>
+          <p style="margin:0;color:var(--sub)">已经会用 adb 的话：</p>
+          <pre>adb connect 电视IP:5555
+adb install HLine-TV.apk</pre>
+        </li>
+      </ol>
+      <p class="note">完整步骤、各品牌电视开 ADB 的位置，见 <a href="https://github.com/Harleyline/hline-tv#打开电视的-adb-调试">README</a>。</p>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap">
+      <h2>常见问题</h2>
+      <details><summary>会不会影响电视保修？能还原吗？</summary><p>不 root、不刷机、不卸载系统应用，只是把 HLine TV 设为默认桌面。想还原：在电视设置里把默认桌面换回原来的，或卸载 HLine TV 即可。</p></details>
+      <details><summary>支持哪些电视？</summary><p>Android 5.0 及以上的安卓电视、电视盒子和投影仪，包括小米、Redmi、TCL、雷鸟、创维、索尼、海尔、OPPO 等常见机型。三星（Tizen）和 LG（webOS）不是安卓系统，装不了。</p></details>
+      <details><summary>为什么有些固件装不上？</summary><p>少数电视禁止安装「桌面类」应用。这种情况用不带桌面声明的那一版（<code>HLine-TV-Guard.apk</code>），装完由它接管 Home 键。</p></details>
+      <details><summary>以后怎么更新？</summary><p>控制中心提示「新版本」时点「下载并安装」，系统安装器会覆盖安装，设置和排列都保留。</p></details>
+      <details><summary>收费吗？</summary><p>免费，MIT 许可，源码在 <a href="https://github.com/Harleyline/hline-tv">GitHub</a>。没有账号、没有内购、桌面本身不联网。</p></details>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>HLine TV</strong> · 干净的安卓电视桌面 · <a href="https://github.com/Harleyline/hline-tv">GitHub</a> · <a href="https://github.com/Harleyline/hline-tv/releases/latest">版本与更新记录</a></p>
+    <p>基于 Aerial（MIT）构建，第三方素材与许可见仓库的 CREDITS。与 Apple、小米、索尼等公司无关。</p>
+  </div>
+</footer>
+</body>
+</html>
