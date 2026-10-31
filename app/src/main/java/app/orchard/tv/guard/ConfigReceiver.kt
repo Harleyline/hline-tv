@@ -232,6 +232,20 @@ class ConfigReceiver : BroadcastReceiver() {
         if (intent.hasExtra("shot")) {
             Shots.capture(context, intent.getStringExtra("shot").orEmpty().ifBlank { "home" })
         }
+        // ... --es wallpaper <id>         (pick a wallpaper without the remote; "show" logs the one
+        //                                 in use, for screenshots and for putting it back)
+        if (intent.hasExtra("wallpaper")) {
+            Wallpapers.init(context)
+            val id = intent.getStringExtra("wallpaper").orEmpty()
+            when {
+                id.isBlank() -> Unit
+                id == "show" -> DiagLog.i("wallpaper is ${Wallpapers.selectedId}")
+                else -> {
+                    Wallpapers.select(id)
+                    DiagLog.i("wallpaper set to ${Wallpapers.selectedId}")
+                }
+            }
+        }
         if (intent.hasExtra("keep_adb")) GuardSetup.setKeepAdb(context, intent.getBooleanExtra("keep_adb", false))
         // ... --ei adb_probe_port <port>   (verify the keep_adb toggle without closing a working
         //                                 link, until Aerial restarts; issue #454)
