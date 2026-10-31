@@ -9,6 +9,7 @@
 装在普通的安卓电视上，看起来像 Apple TV。
 
 [![下载 APK](https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD%20APK-34a853?style=for-the-badge&logo=android&logoColor=white)](https://github.com/Harleyline/hline-tv/releases/latest)
+[![官网](https://img.shields.io/badge/%E5%AE%98%E7%BD%91-hline--tv-111111?style=for-the-badge)](https://harleyline.github.io/hline-tv/)
 [![版本](https://img.shields.io/github/v/release/Harleyline/hline-tv?style=flat-square&label=%E7%89%88%E6%9C%AC&color=2997ff)](https://github.com/Harleyline/hline-tv/releases/latest)
 ![Android TV 5.0+](https://img.shields.io/badge/Android%20TV-5.0%2B-3ddc84?style=flat-square&logo=android&logoColor=white)
 [![许可证 MIT](https://img.shields.io/badge/%E8%AE%B8%E5%8F%AF%E8%AF%81-MIT-555555?style=flat-square)](LICENSE)
