@@ -50,8 +50,8 @@ TV를 켜면 가장 먼저 보이는 것은 광고도, 추천 목록도, 멤버�
 
 | 文件（在 [Releases](https://github.com/Harleyline/hline-tv/releases/latest) 页面） | 说明 |
 |---|---|
-| `aerial-standard.apk` | 标准版，Android 5.0 及以上，先试这个 |
-| `aerial-guard.apk` | 标准版装不上时用（部分电视不允许安装桌面类应用） |
+| `HLine-TV.apk` | 标准版，Android 5.0 及以上，先试这个 |
+| `HLine-TV-Guard.apk` | 标准版装不上时用（部分电视不允许安装桌面类应用） |
 | `version.txt` | 最新版本号，供应用内「检查更新」读取，不用手动下载 |
 
 每个版本改了什么，见 [CHANGELOG.md](CHANGELOG.md)。
@@ -66,7 +66,7 @@ curl -fsSL https://raw.githubusercontent.com/Harleyline/hline-tv/main/tools/inst
 
 ```bash
 adb connect 电视IP:5555
-adb install aerial-standard.apk
+adb install HLine-TV.apk
 ```
 
 装好后按系统提示把 HLine TV 设为默认桌面即可。
@@ -91,7 +91,7 @@ adb install aerial-standard.apk
 
 1. 改 `app/build.gradle.kts` 里的 `versionCode` / `versionName`；
 2. `./gradlew :app:assembleStandardRelease`（需要 `local/signing.properties` 里的签名密钥）；
-3. 把 `app/build/outputs/apk/standard/release/app-standard-release.apk` 改名为 `aerial-standard.apk`，再写一个只有版本号的 `version.txt`（如 `1.1`）；
+3. 把 `app/build/outputs/apk/standard/release/app-standard-release.apk` 改名为 `HLine-TV.apk`，再写一个只有版本号的 `version.txt`（如 `1.1`）；
 4. 在 GitHub 发布 Release（tag 如 `v1.1`），附上这两个文件。已装的电视几小时内会看到「新版本」。
 
 ## 构建

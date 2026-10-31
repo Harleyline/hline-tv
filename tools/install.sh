@@ -172,7 +172,7 @@ if [ "$FLAVOR" = lite ] || [ "$OLD_ANDROID" = 1 ]; then
   elif [ "${BUILD:-0}" = 1 ]; then ./gradlew -q --console=plain :lite:assembleRelease; APK=lite/build/outputs/apk/release/lite-release.apk
   else
     APK="${TMPDIR:-/tmp}/aerial-lite.apk"
-    for url in "https://aerial.qust.me/download/aerial-lite.apk" "https://github.com/$REPO/releases/latest/download/aerial-lite.apk" ""; do
+    for url in "https://github.com/$REPO/releases/latest/download/aerial-lite.apk" ""; do
       [ -n "$url" ] || { echo "Could not download aerial-lite.apk" >&2; exit 1; }
       echo "Downloading $url" >&2
       curl -fL --progress-bar --connect-timeout 10 -o "$APK" "$url" && break
@@ -212,13 +212,15 @@ build() {
     ./gradlew -q --console=plain "$task"
     echo "app/build/outputs/apk/$flavor/release/app-$flavor-release.apk"
   else
-    local out="${TMPDIR:-/tmp}/aerial-$flavor.apk" url
-    for url in "https://aerial.qust.me/download/aerial-$flavor.apk" \
-               "https://github.com/$REPO/releases/latest/download/aerial-$flavor.apk"; do
+    local asset="HLine-TV.apk"
+    [ "$flavor" = guard ] && asset="HLine-TV-Guard.apk"
+    local out="${TMPDIR:-/tmp}/$asset" url
+    for url in "https://github.com/$REPO/releases/latest/download/$asset" \
+               "https://ghfast.top/https://github.com/$REPO/releases/latest/download/$asset"; do
       echo "Downloading $url" >&2
       if curl -fL --progress-bar --connect-timeout 10 -o "$out" "$url"; then echo "$out"; return; fi
     done
-    echo "Could not download aerial-$flavor.apk" >&2
+    echo "Could not download $asset" >&2
     return 1
   fi
 }
@@ -249,12 +251,12 @@ tcast_install() {
   local apk=$1 want=$2 dir srv rc=0
   nc -z -G 3 "${SERIAL%%:*}" 6553 >/dev/null 2>&1 || return 1
   dir=$(mktemp -d)
-  cp "$apk" "$dir/Aerial.apk"
+  cp "$apk" "$dir/HLine-TV.apk"
   python3 -m http.server 8765 --bind 127.0.0.1 --directory "$dir" >/dev/null 2>&1 &
   srv=$!
   adb reverse tcp:8765 tcp:8765 >/dev/null
   echo "Pushing Aerial through 多屏互动. On the TV, choose 同意 (Agree)."
-  python3 tools/tcast-push.py "${SERIAL%%:*}" http://127.0.0.1:8765/Aerial.apk "$PKG" Aerial "${want:-0}" 180 || rc=$?
+  python3 tools/tcast-push.py "${SERIAL%%:*}" http://127.0.0.1:8765/HLine-TV.apk "$PKG" "HLine TV" "${want:-0}" 180 || rc=$?
   adb reverse --remove tcp:8765 >/dev/null 2>&1 || true
   { kill "$srv" && wait "$srv"; } 2>/dev/null || true
   rm -rf "$dir"
@@ -278,10 +280,10 @@ if ! OUT=$(adb install -r "$APK" 2>&1); then
         TCAST_OK=1
       else
         # No 多屏互动: put the APK in Download and install it on the TV itself.
-        adb shell rm -f /sdcard/Download/Aerial.apk
-        adb push "$APK" /sdcard/Download/Aerial.apk >/dev/null
+        adb shell rm -f /sdcard/Download/HLine-TV.apk
+        adb push "$APK" /sdcard/Download/HLine-TV.apk >/dev/null
         adb shell content call --uri content://media --method scan_volume --arg external_primary >/dev/null 2>&1 || true
-        echo "This TV only installs apps from the TV itself. Aerial.apk is now in Download on the TV."
+        echo "This TV only installs apps from the TV itself. HLine-TV.apk is now in Download on the TV."
         if adb shell pm path com.dangbeimarket >/dev/null 2>&1; then
           adb shell am start -n com.dangbeimarket/.ui.apkmanager.ApkManagerActivity >/dev/null 2>&1 || true
           echo "Dangbei's package manager is open on the TV: choose Aerial, then Install (confirm on the TV)."

@@ -237,7 +237,7 @@ object Updates {
         val id = installer.createSession(params)
         installer.openSession(id).use { session ->
             file.inputStream().use { input ->
-                session.openWrite("aerial.apk", 0, file.length()).use { out ->
+                session.openWrite("HLine-TV.apk", 0, file.length()).use { out ->
                     input.copyTo(out)
                     session.fsync(out)
                 }
@@ -299,7 +299,7 @@ object Updates {
     private fun apkFile(context: Context): File {
         // Android 5 and 6 installers read a file:// URI, so there the APK sits where they can read it.
         val dir = if (Build.VERSION.SDK_INT >= 24) context.cacheDir else context.externalCacheDir ?: context.cacheDir
-        return File(File(dir, "updates"), "aerial.apk")
+        return File(File(dir, "updates"), "HLine-TV.apk")
     }
 
     /**
@@ -316,7 +316,7 @@ object Updates {
             if (Build.VERSION.SDK_INT < 24) file.setReadable(true, false)
             return verify(context, file)
         }
-        val name = "aerial-${BuildConfig.FLAVOR}.apk"
+        val name = if (BuildConfig.FLAVOR == "guard") "HLine-TV-Guard.apk" else "HLine-TV.apk"
         val release = "https://github.com/$REPO/releases/latest/download/$name"
         val sources = listOf(release, "https://ghfast.top/$release")
         for (url in sources) {
