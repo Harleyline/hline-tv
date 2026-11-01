@@ -380,7 +380,7 @@ object AppCatalog {
     }
 
     /** Raised when the way a tile is drawn changes: every tile is drawn anew (2.05). */
-    private const val ART_VERSION = 7L
+    private const val ART_VERSION = 8L
 
     /** The tile drawn from the app's own art: its recipe's glyph, its banner, or its icon. */
     private fun fromApp(pm: PackageManager, info: ActivityInfo, banner: android.graphics.drawable.Drawable?, recipe: TileRecipe?): TileArt = when {
@@ -434,9 +434,11 @@ object AppCatalog {
             val custom = CustomIcons.load(pkg)
             // The order a tile is looked for in, the same on every TV this APK is shared to (2.06):
             // a picture sent from the phone first — a hand-picked one is about that one app — then
-            // the artwork the app brought for a TV, then one picked out of the icon library, then
-            // Aerial's own tile for a firmware app, and last the app's own icon drawn as a tile.
-            val library = if (custom == null && (own == null || IconLibrary.pick(pkg) == IconLibrary.Pick.Library)) IconLibrary.load(pkg) else null
+            // the icon library when it is its turn (the phone page's 精选图/App 自带 pick; by
+            // default the library's picture stands over the app's banner, as the phone page's tick
+            // has always claimed), then the banner the app brought for a TV, then Aerial's own tile
+            // for a firmware app, and last the app's own icon drawn as a tile.
+            val library = if (custom == null && (own == null || IconLibrary.pick(pkg) == IconLibrary.Pick.Library) && IconLibrary.uses(pkg)) IconLibrary.load(pkg) else null
             val recipe = TileRecipes.of(pkg)
             // A tile that cannot be drawn used to drop the app from Home altogether, without a word
             // in the log (com.fongmi.androidtv on TCL MT5879, issue #415). Its icon then, or
@@ -446,8 +448,8 @@ object AppCatalog {
                     // A picture sent by hand is a word about that one app: it stands over the
                     // banner, which is only the app's own guess at art (2.08).
                     custom != null -> TileArtFactory.fromBanner(android.graphics.drawable.BitmapDrawable(android.content.res.Resources.getSystem(), custom))
-                    banner != null && recipe?.useIcon != true -> TileArtFactory.fromBanner(banner)
                     library != null -> TileArtFactory.fromBanner(android.graphics.drawable.BitmapDrawable(android.content.res.Resources.getSystem(), library))
+                    banner != null && recipe?.useIcon != true -> TileArtFactory.fromBanner(banner)
                     own != null -> TileArtFactory.forSystem(own)
                     else -> fromApp(pm, info, banner, recipe)
                 }
