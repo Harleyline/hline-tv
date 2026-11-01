@@ -415,7 +415,7 @@ let state = null, stateJson = '';
 
 // The language: ?lang=ru in the address, else the one picked under More (kept on the phone), else the
 // first of the phone's preferred languages that has a table, else English. Keys are in KEYS, one array of texts per language.
-const KEYS = ["screensaver", "screensaver_short", "ss_aerial", "ss_photos", "ss_clock", "focus", "focus_high", "focus_standard", "weather", "city_ph", "set", "upload_label", "feedback_h", "feedback_hint", "diag_show", "diag_copy", "diag_github", "hint_aerial", "hint_photos", "hint_clock", "g_live", "g_live_sub", "g_daily", "g_daily_sub", "g_photo", "g_builtin", "g_auto", "toast_wallpaper", "aria_delete", "confirm_delete", "wx_clear", "wx_partlycloudy", "wx_cloudy", "wx_fog", "wx_rain", "wx_snow", "wx_thunder", "wx_chosen", "wx_auto_btn", "toast_auto", "wx_guessed", "wx_none", "tag_source", "aria_rename", "toast_renamed", "toast_name_reset", "toast_rename_fail", "aria_reset_icon", "toast_icon_reset", "focus_hint_standard", "focus_hint_high", "daily_title", "daily_caption", "rotate_title", "rotate_caption", "empty_photos", "add_second", "toast_tv_updated", "sending_n", "toast_added", "toast_no_photos", "toast_send_fail", "toast_city_set", "toast_city_nf", "toast_set_fail", "toast_sending_icon", "toast_icon_set", "toast_icon_bad", "diag_collecting", "toast_diag_fail", "toast_copied", "toast_copy_manual", "language", "hint_follows", "ss_videos", "hint_videos", "videos_h", "videos_upload", "videos_hint", "videos_empty", "confirm_video_delete", "toast_videos_added", "toast_video_bad", "sending_video", "hint_system", "tab_home", "tab_more", "current_wp", "cancel", "save", "name_ph", "rename_hint", "change_icon", "this_tv", "folder_count", "folder_ph", "inputs_h", "inputs_hint", "rename_hint_app", "was_named", "arrange_hint", "arrange_unready", "hidden_h", "hidden_none", "hidden_locked", "show_app", "hide_app", "to_folder", "new_folder", "out_of_folder", "ungroup", "ungroup_confirm", "folder_hint", "toast_hidden", "toast_shown", "toast_in_folder", "toast_out_folder", "toast_ungrouped", "tab_looks", "looks_title", "show_on_home", "source_device", "source_plain", "source_device_hint", "tv_model", "sw_always", "sw_always_sub", "sw_weather", "sw_saver_time", "sw_saver_time_sub", "g_source_sub", "icon_h", "icon_library", "icon_own", "icon_custom", "toast_icon_picked", "drop_hint", "drop_sub", "drop_none", "toast_diag_paste", "wx_locate", "toast_locate_ok", "toast_locate_fail", "sw_aqi", "sw_humidity" , "crop_title_photo", "crop_title_icon", "crop_hint", "toast_crop_fail"];
+const KEYS = ["screensaver", "screensaver_short", "ss_aerial", "ss_photos", "ss_clock", "focus", "focus_high", "focus_standard", "weather", "city_ph", "set", "upload_label", "feedback_h", "feedback_hint", "diag_show", "diag_copy", "diag_github", "hint_aerial", "hint_photos", "hint_clock", "g_live", "g_live_sub", "g_daily", "g_daily_sub", "g_photo", "g_builtin", "g_auto", "toast_wallpaper", "aria_delete", "confirm_delete", "wx_clear", "wx_partlycloudy", "wx_cloudy", "wx_fog", "wx_rain", "wx_snow", "wx_thunder", "wx_chosen", "wx_auto_btn", "toast_auto", "wx_guessed", "wx_none", "tag_source", "aria_rename", "toast_renamed", "toast_name_reset", "toast_rename_fail", "aria_reset_icon", "toast_icon_reset", "focus_hint_standard", "focus_hint_high", "daily_title", "daily_caption", "rotate_title", "rotate_caption", "empty_photos", "add_second", "toast_tv_updated", "sending_n", "toast_added", "toast_no_photos", "toast_send_fail", "toast_city_set", "toast_city_nf", "toast_set_fail", "toast_sending_icon", "toast_icon_set", "toast_icon_bad", "diag_collecting", "toast_diag_fail", "toast_copied", "toast_copy_manual", "language", "hint_follows", "ss_videos", "hint_videos", "videos_h", "videos_upload", "videos_hint", "videos_empty", "confirm_video_delete", "toast_videos_added", "toast_video_bad", "sending_video", "hint_system", "tab_home", "tab_more", "current_wp", "cancel", "save", "name_ph", "rename_hint", "change_icon", "this_tv", "folder_count", "folder_ph", "inputs_h", "inputs_hint", "rename_hint_app", "was_named", "arrange_hint", "arrange_unready", "hidden_h", "hidden_none", "hidden_locked", "show_app", "hide_app", "to_folder", "new_folder", "out_of_folder", "ungroup", "ungroup_confirm", "folder_hint", "toast_hidden", "toast_shown", "toast_in_folder", "toast_out_folder", "toast_ungrouped", "tab_looks", "looks_title", "show_on_home", "source_device", "source_plain", "source_device_hint", "tv_model", "sw_always", "sw_always_sub", "sw_weather", "sw_saver_time", "sw_saver_time_sub", "g_source_sub", "icon_h", "icon_library", "icon_own", "icon_custom", "toast_icon_picked", "drop_hint", "drop_sub", "drop_none", "toast_diag_paste", "wx_locate", "toast_locate_ok", "toast_locate_fail", "sw_aqi", "sw_humidity" , "crop_title_photo", "crop_title_icon", "crop_hint", "toast_crop_fail", "icon_prev", "toast_icon_prev"];
 const TEXTS = {
  "zh": [
   "屏幕保护程序",
@@ -567,6 +567,8 @@ const TEXTS = {
   "裁剪图标",
   "拖动移动，滑杆缩放",
   "这张图片读不出来",
+  "换回上一张",
+  "已换回上一张",
  ],
  "zh-TW": [
   "螢幕保護程式",
@@ -718,6 +720,8 @@ const TEXTS = {
   "裁剪圖示",
   "拖曳移動，滑桿縮放",
   "這張圖片讀不出來",
+  "換回上一張",
+  "已換回上一張",
  ],
  "ja": [
   "スクリーンセーバー",
@@ -869,6 +873,8 @@ const TEXTS = {
   "アイコンを切り抜く",
   "ドラッグで移動、スライダーで拡大",
   "画像を読み込めません",
+  "前の画像に戻す",
+  "前の画像に戻しました",
  ],
  "ko": [
   "화면 보호기",
@@ -1020,6 +1026,8 @@ const TEXTS = {
   "아이콘 자르기",
   "끌어서 이동, 슬라이더로 확대",
   "사진을 읽을 수 없습니다",
+  "이전 사진으로",
+  "이전 사진으로 되돌렸습니다",
  ],
  "en": [
   "Screensaver",
@@ -1171,6 +1179,8 @@ const TEXTS = {
   "Crop the icon",
   "Drag to move · slide to zoom",
   "Couldn't read that picture",
+  "Put the last one back",
+  "The last picture is back",
  ],
  "ru": [
   "Заставка",
@@ -1322,6 +1332,8 @@ const TEXTS = {
   "Обрезать иконку",
   "Перетащите, чтобы сдвинуть · ползунок — масштаб",
   "Не удалось прочитать фото",
+  "Вернуть прошлую",
+  "Прошлая картинка вернулась",
  ],
  "uk": [
   "Заставка",
@@ -1473,6 +1485,8 @@ const TEXTS = {
   "Обрізати іконку",
   "Перетягніть, щоб зсунути · повзунок — масштаб",
   "Не вдалося прочитати фото",
+  "Повернути попередню",
+  "Попередню картинку повернено",
  ],
  "kk": [
   "Экран қорғаушы",
@@ -1624,6 +1638,8 @@ const TEXTS = {
   "Белгішені қию",
   "Жылжыту үшін сүйреңіз · масштаб сырғытпа",
   "Фото оқылмады",
+  "Алдыңғысын қайтару",
+  "Алдыңғы сурет қайтарылды",
  ]
 };
 const LANGS = Object.keys(TEXTS);
@@ -2399,6 +2415,13 @@ function tileSheet(e, inFolder, hidden) {
     if (a.custom) action(il, t('aria_reset_icon'), 'tint', async () => {
       closeSheet();
       try { take(await api('api/icon/reset', { app: a.key })); toast(t('toast_icon_reset')); } catch (err) { toast(t('toast_set_fail')); }
+    });
+    // The picture the last upload replaced is kept once: this puts it back, and swaps the two,
+    // so a picture one is not happy with is never a dead end.
+    if (a.custom && a.prev) action(il, t('icon_prev'), 'tint', async () => {
+      closeSheet();
+      try { const next = await api('api/icon/undo', { app: a.key }); if (!next.saved) throw new Error('not saved'); take(next); toast(t('toast_icon_prev')); }
+      catch (err) { toast(t('toast_set_fail')); }
     });
 
     // Place on Home.

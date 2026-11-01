@@ -179,6 +179,13 @@ class PhoneServer private constructor(private val context: Context, private val 
                     if (installed(pkg)) { CustomIcons.clear(pkg); onMain { CustomIcons.changed() } }
                     json(state())
                 }
+                session.method == Method.POST && path == "/api/icon/undo" -> {
+                    // The replaced picture comes back, the current one steps aside for it.
+                    val pkg = form(session)["app"].orEmpty()
+                    val ok = installed(pkg) && CustomIcons.undo(pkg)
+                    if (ok) onMain { CustomIcons.changed() }
+                    json(state().put("saved", ok))
+                }
                 session.method == Method.POST && path == "/api/weather/city" -> {
                     val name = form(session)["name"].orEmpty()
                     val found = name.isNotBlank() && runBlocking(Dispatchers.Main) { Weather.choose(name) }
@@ -265,7 +272,7 @@ class PhoneServer private constructor(private val context: Context, private val 
                     val look = SourceLooks.of(src.id)
                     val label = look?.let { it.name ?: it.device?.let { d -> context.getString(d.label) } } ?: src.label
                     // The stamp makes the phone fetch the tile again once its picture changes.
-                    put(JSONObject().put("key", a.key).put("label", label).put("default", src.label).put("custom", CustomIcons.has(a.key)).put("stamp", CustomIcons.stamp(a.key))
+                    put(JSONObject().put("key", a.key).put("label", label).put("default", src.label).put("custom", CustomIcons.has(a.key)).put("prev", CustomIcons.hasPrev(a.key)).put("stamp", CustomIcons.stamp(a.key))
                         .put("source", true).put("port", src.label).put("name", look?.name ?: "").put("device", look?.device?.key ?: "").put("look", look.hashCode()))
                 }
                 apps.forEach { (a, label) ->
@@ -277,7 +284,7 @@ class PhoneServer private constructor(private val context: Context, private val 
                         else -> "own"
                     }
                     put(JSONObject().put("key", a.key).put("label", label).put("default", a.label).put("name", AppNames.of(a.key) ?: "")
-                        .put("custom", CustomIcons.has(a.key)).put("library", IconLibrary.has(a.key)).put("icon", icon)
+                        .put("custom", CustomIcons.has(a.key)).put("prev", CustomIcons.hasPrev(a.key)).put("library", IconLibrary.has(a.key)).put("icon", icon)
                         .put("stamp", CustomIcons.stamp(a.key) + IconLibrary.stamp(a.key) + icon.hashCode()))
                 }
             })
@@ -312,9 +319,10 @@ class PhoneServer private constructor(private val context: Context, private val 
     private fun layoutState(): JSONObject {
         fun tile(e: AppEntry) = JSONObject().put("key", e.key).put("label", e.label)
             .put("kind", when { e.folder != null -> "folder"; e.source != null -> "source"; else -> "app" })
-            // Folder and input art changes without a picture from the phone (contents, chosen
-            // device), an app's with the icon library too.
-            .put("stamp", if (e.folder != null || e.source != null) e.art.hashCode().toLong() else CustomIcons.stamp(e.key) + IconLibrary.stamp(e.key))
+            // The hash of the picture as it is drawn now: any re-render — a pick on the phone, a
+            // picture sent, an update — changes it, so the phone fetches the tile anew instead of
+            // showing its cached one (the stamps of the files alone kept a changed tile hidden).
+            .put("stamp", e.art.hashCode().toLong())
             .apply { e.folder?.let { put("id", it.id) }; e.source?.let { put("port", it.label) } }
         val folders = JSONObject()
         AppCatalog.folderApps.forEach { (id, apps) -> folders.put(id, JSONArray().apply { apps.forEach { put(tile(it)) } }) }
@@ -448,7 +456,11 @@ class PhoneServer private constructor(private val context: Context, private val 
 
     private fun onMain(block: () -> Unit) = runBlocking(Dispatchers.Main) { block() }
 
-    private fun json(o: JSONObject) = newFixedLengthResponse(Response.Status.OK, "application/json; charset=utf-8", o.toString())
+    // The page polls; told nothing, a phone browser heuristically cached even these answers and
+    // showed a state that was minutes old (a tile changed on the TV stayed old on the phone).
+    private fun json(o: JSONObject) = newFixedLengthResponse(Response.Status.OK, "application/json; charset=utf-8", o.toString()).apply {
+        addHeader("Cache-Control", "no-cache")
+    }
 
     private fun text(status: Response.Status, msg: String) = newFixedLengthResponse(status, "text/plain; charset=utf-8", msg)
 
