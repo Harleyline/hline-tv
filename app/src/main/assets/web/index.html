@@ -1674,11 +1674,17 @@ function t(key, vars) {
 }
 function initLangSwitch() {
   const s = $('#lang');
+  s.textContent = ''; // it runs again when the language follows the TV's
   for (const l of LANGS) { const o = document.createElement('option'); o.value = l; o.textContent = NAMES[l] || l; s.appendChild(o); }
   s.value = LANG;
   $('#langName').textContent = NAMES[LANG] || LANG;
   s.onchange = () => {
-    try { localStorage.setItem('aerial-lang', s.value); } catch (e) {}
+    // Picked by hand in this session: that choice alone outranks the TV's language. A ?lang=
+    // left in the address from an earlier visit does not — the TV's word wins on the next scan.
+    try { localStorage.setItem('aerial-lang', s.value); sessionStorage.setItem('aerial-lang-hand', '1'); } catch (e) {}
+    const u = new URL(location.href); u.searchParams.set('lang', s.value); location.replace(u.toString());
+  };
+}
     const u = new URL(location.href); u.searchParams.set('lang', s.value); location.replace(u.toString());
   };
 }
@@ -1719,11 +1725,15 @@ async function api(path, body) {
 }
 function take(next) {
   state = next;
-  // Follow the TV's language (unless this page was opened with a hand-picked ?lang=). Not saved
-  // to the phone: the next scan follows whatever the TV says then.
-  if (state.lang && !askedLang) {
+  // Follow the TV's language, which every state carries, unless the language was picked by hand
+  // in this session (?lang= kept from an earlier visit does not count). Not written to the phone's
+  // own choice: the next scan follows whatever the TV says then. The static labels are re-read
+  // too, or the page would end up half in the old language.
+  let hand = null;
+  try { hand = sessionStorage.getItem('aerial-lang-hand'); } catch (e) {}
+  if (state.lang && !hand) {
     const tv = matchLang(state.lang);
-    if (tv && tv !== LANG) { LANG = tv; document.documentElement.lang = tv; initLangSwitch(); }
+    if (tv && tv !== LANG) { LANG = tv; document.documentElement.lang = tv; applyI18n(); initLangSwitch(); }
   }
   stateJson = ''; render();
 }
