@@ -804,6 +804,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
+        // Three minutes between weather readings while someone is in front (Weather, 1.14).
+        Weather.active = true
         if (locked) return
         resumeWork()
     }
@@ -832,6 +834,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onPause() {
         super.onPause()
+        // Half an hour while the screen is dark, kept going by Weather's own ticker (1.14).
+        Weather.active = false
         if (locked) return
         vm.resumed = false
         DiagLog.i("onPause")

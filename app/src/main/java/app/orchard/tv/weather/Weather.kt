@@ -13,6 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.core.content.edit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
@@ -73,11 +74,17 @@ object Weather {
     private const val TAG = "AerialWeather"
     private const val PREFS = "weather"
     /**
-     * Home's reading is fetched again this often while Home is in front: the owner asked for the
-     * air quality and the humidity to move with the hour, and five minutes is as slow as the
-     * numbers visibly move. Nothing runs while the TV is idle.
+     * The reading is fetched again this often, by whether anyone is in front of it (the owner,
+     * 1.14): three minutes while Home is up, half an hour while the screen is dark. The ticker
+     * below is what keeps the second beat going with nobody watching — ten minutes of staleness on
+     * the screen at dawn is what the owner saw otherwise.
      */
-    private const val REFRESH_MS = 5 * 60 * 1000L
+    private const val REFRESH_ACTIVE_MS = 3 * 60 * 1000L
+    private const val REFRESH_IDLE_MS = 30 * 60 * 1000L
+    private fun refreshInterval(): Long = if (active) REFRESH_ACTIVE_MS else REFRESH_IDLE_MS
+
+    /** Home in front of the owner (MainActivity, onResume and onPause). */
+    @Volatile var active = false
     private const val RETRY_MS = 10 * 60 * 1000L
     private const val RELOCATE_MS = 24 * 60 * 60 * 1000L
     /** A reading older than this is not shown at all. */
@@ -211,6 +218,12 @@ object Weather {
         }
         extras = readCities()
         cursor = 0
+        scope.launch {
+            while (true) {
+                delay(60_000L)
+                refreshIfStale()
+            }
+        }
         if (System.currentTimeMillis() - prefs.getLong("fetched_at", 0) < STALE_MS) {
             val kind = runCatching { WeatherKind.valueOf(prefs.getString("kind", null) ?: "") }.getOrNull()
             if (kind != null) now = WeatherNow(
@@ -230,10 +243,9 @@ object Weather {
         if (!started) return
         val since = System.currentTimeMillis() - lastAttempt
         // A reading saved before 1.70 has no humidity, one before 1.72 no air quality: fetch once so
-        // the weather block can show them. Every RETRY_MS at most, so a failed fetch is not repeated
-        // on each return to Home.
-        val missingDetail = (now?.humidity == null || now?.usAqi == null) && since >= RETRY_MS
-        if (since >= REFRESH_MS || missingDetail || (failed && (networkCameUp || since >= RETRY_MS))) refresh()
+        // the weather block can show them, on the same interval as any other fetch.
+        val missingDetail = (now?.humidity == null || now?.usAqi == null) && since >= refreshInterval()
+        if (since >= refreshInterval() || missingDetail || (failed && networkCameUp)) refresh()
     }
 
     private fun refresh() {

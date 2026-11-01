@@ -96,7 +96,7 @@ object Wallpapers {
 
     /** The built-ins Personalize offers; the rest stay for whoever chose them. */
     val FEATURED_BUILTINS = setOf(
-        "grad:dunes_gilded", "grad:dunes_edge", "grad:waves_tide", "grad:city_skyline", "grad:city_lights",
+        "grad:dunes_gilded", "grad:dunes_edge", "grad:waves_tide", "grad:city_lights",
     )
 
     /**
@@ -680,6 +680,10 @@ object Wallpapers {
                 films.map { Wallpaper(VIDEO_PREFIX + it.id, WallpaperKind.Video, it.name.substringBeforeLast('.').ifBlank { it.name }) }
         val inputs = sources.map { (id, name) -> Wallpaper(SOURCE_PREFIX + id, WallpaperKind.Source, name) }
         items = listOf(live) + videos + daily + builtins + photos + auto + inputs
+        // A preset this build no longer draws (the city skyline went in 1.14, the owner's call):
+        // the old choice would point at nothing and Home would open on a black screen. The dunes
+        // take over, and the picker shows them as the chosen one.
+        if (selectedId.startsWith("grad:") && items.none { it.id == selectedId }) select(DEFAULT_FALLBACK)
     }
 
     // ---- daily photos ----

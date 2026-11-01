@@ -43,8 +43,7 @@ object Gradients {
         GradientPreset("dunes_gilded", R.string.wp_name_dunes_gilded, "dunes_gilded") { w, h -> fillAll(w, h, 0xFFB97A46) },
         GradientPreset("dunes_edge", R.string.wp_name_dunes_edge, "dunes_edge") { w, h -> fillAll(w, h, 0xFF9C7A63) },
         GradientPreset("waves_tide", R.string.wp_name_waves_tide, "waves_tide") { w, h -> fillAll(w, h, 0xFF123A5C) },
-        GradientPreset("city_skyline", R.string.wp_name_city_skyline, "city_skyline") { w, h -> fillAll(w, h, 0xFF2C4A6E) },
-        GradientPreset("city_lights", R.string.wp_name_city_lights, "city_lights") { w, h -> fillAll(w, h, 0xFF0B1533) },
+            GradientPreset("city_lights", R.string.wp_name_city_lights, "city_lights") { w, h -> fillAll(w, h, 0xFF0B1533) },
     )
 
     /**
