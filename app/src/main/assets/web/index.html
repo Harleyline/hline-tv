@@ -1844,8 +1844,10 @@ function card(w) {
   b.setAttribute('aria-selected', w.id === state.selected ? 'true' : 'false');
   b.innerHTML = `<div class="pic"><img loading="lazy" alt=""><span class="check">${ICON.check}</span></div><div class="t"></div><div class="c"></div>`;
   b.querySelector('img').src = `${base}thumb/${encodeURIComponent(w.id)}`;
-  b.querySelector('.t').textContent = w.title;
-  b.querySelector('.c').textContent = w.caption || '';
+  // A card may have no caption to show (the daily photos' Bing captions exist only in Chinese and
+  // English): the rows come out entirely rather than as empty gaps.
+  if (w.title) b.querySelector('.t').textContent = w.title; else b.querySelector('.t').remove();
+  if (w.caption) b.querySelector('.c').textContent = w.caption; else b.querySelector('.c').remove();
   b.onclick = async () => {
     if (w.id === state.selected) return;
     try { take(await api('api/wallpaper', { id: w.id })); toast(t('toast_wallpaper')); } catch (e) { toast(t('toast_set_fail')); }
@@ -1880,7 +1882,12 @@ function renderWallpapers() {
     let list = state.wallpapers.filter(w => w.kind === kind || (kind === 'live' && w.kind === 'video'));
     // Each video on its own; the card that plays them in turn only for two or more (#762), as on the TV.
     if (kind === 'live' && list.filter(w => w.kind === 'video').length < 3 && state.selected !== 'videos:mine') list = list.filter(w => w.id !== 'videos:mine');
-    if (kind === 'daily' && list.length) list = [{ id: state.latestDaily, kind: 'daily', title: t('daily_title'), caption: t('daily_caption') }, ...list];
+    if (kind === 'daily' && list.length) {
+      // The only captioned card is the one this page names itself: the photos' own Bing captions
+      // come in two languages at best, and a language the owner never chose is worse than none.
+      list = [{ id: state.latestDaily, kind: 'daily', title: t('daily_title'), caption: t('daily_caption') },
+        ...list.map(w => ({ ...w, title: '', caption: '' }))];
+    }
     // Two or more photos: one a day, as on the TV (#27, #194).
     if (kind === 'photo' && list.length > 1) list = [{ id: state.rotatePhotos, kind: 'photos', title: t('rotate_title'), caption: t('rotate_caption') }, ...list];
     if (!list.length && kind !== 'photo') continue;

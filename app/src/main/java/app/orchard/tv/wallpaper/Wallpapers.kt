@@ -662,7 +662,13 @@ object Wallpapers {
     }
 
     private fun rebuildList() {
-        val daily = readDailyIndex().map { Wallpaper("daily:${it.first}", WallpaperKind.Daily, it.second, it.third) }
+        // Bing's captions exist only in Chinese and English, so a card named from them shows a
+        // language the owner never chose (Japanese on a Japanese pick, say). The date tells the
+        // eight apart in any of them.
+        val daily = readDailyIndex().map {
+            val d = it.first
+            Wallpaper("daily:$d", WallpaperKind.Daily, "${d.slice(0..3)}.${d.slice(4..5)}.${d.slice(6..7)}", it.third)
+        }
         // Every name is a string resource read in the language chosen in Personalize rather than
         // in the system's, so the picker says «Дюны · Золото» on a Russian TV (the owner, 2.17).
         val names = AerialSettings.localized(app)
