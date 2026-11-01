@@ -1842,6 +1842,9 @@ function renderWallpapers() {
   $('#heroImg').src = `${base}thumb/${encodeURIComponent(state.selected)}`;
   $('#heroTitle').textContent = titleOf(state.selected);
   const root = $('#sections'); root.replaceChildren();
+  // Sending a picture of one's own is what people come here for: a way in at the very top of the
+  // tab, not only further down under 我的照片. It doubles as the #upload anchor the TV's QR points at.
+  root.appendChild(uploadBtn());
   for (const [kind, title, sub] of groups) {
     // Moving: the aerial films and the owner's videos.
     let list = state.wallpapers.filter(w => w.kind === kind || (kind === 'live' && w.kind === 'video'));
@@ -1853,12 +1856,7 @@ function renderWallpapers() {
     if (!list.length && kind !== 'photo') continue;
     root.appendChild(el('h2', 'big', title));
     if (kind === 'photo') {
-      const up = el('label', 'btn add');
-      up.innerHTML = `${ICON.plus}<span id="uploadLabel"></span><input id="file" type="file" accept="image/*" multiple hidden>`;
-      up.querySelector('span').textContent = uploading ? t('sending_n', { n: uploading }) : t('upload_label');
-      if (uploading) up.setAttribute('disabled', '');
-      up.querySelector('input').onchange = uploadPhotos;
-      root.appendChild(up);
+      root.appendChild(uploadBtn());
       if (!list.length) { root.appendChild(el('p', 'empty', t('empty_photos'))); continue; }
     }
     const g = el('div', 'grid');
@@ -1892,6 +1890,15 @@ async function uploadPhotos(e) {
     return sendPhotos([cropped]);
   }
   sendPhotos(files);
+}
+/* The way in for sending a picture, used at the top of the wallpaper tab and under 我的照片. */
+function uploadBtn() {
+  const up = el('label', 'btn add');
+  up.innerHTML = `${ICON.plus}<span></span><input type="file" accept="image/*" multiple hidden>`;
+  up.querySelector('span').textContent = uploading ? t('sending_n', { n: uploading }) : t('upload_label');
+  if (uploading) up.setAttribute('disabled', '');
+  up.querySelector('input').onchange = uploadPhotos;
+  return up;
 }
 async function sendPhotos(files) {
   if (!files.length || uploading) return;
@@ -2396,9 +2403,10 @@ function tileSheet(e, inFolder, hidden) {
         const img = el('img', 'ithumb'); img.alt = ''; img.src = c.src;
         b.append(img, el('span', 'txt', c.label));
         b.insertAdjacentHTML('beforeend', ICON.tick);
-        if (c.pick !== 'custom') b.onclick = async () => {
+        b.onclick = async () => {
           // The tick moves only when the answer is back: closing first looked like "not
-          // switching" whenever the sheet was reopened before the round trip.
+          // switching" whenever the sheet was reopened before the round trip. "custom" puts a
+          // sent picture back in front; nothing here ever deletes it.
           if (a.icon === c.pick) { closeSheet(); return; }
           b.disabled = true;
           try {

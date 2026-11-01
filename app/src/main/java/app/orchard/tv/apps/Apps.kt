@@ -431,14 +431,16 @@ object AppCatalog {
             // default robot), so it is drawn as Aerial's own.
             val own = if (stockHome) SystemTile.Home
                 else if (system) SYSTEM_TILES[pkg] ?: byCategory[pkg] else null
-            val custom = CustomIcons.load(pkg)
             // The order a tile is looked for in, the same on every TV this APK is shared to (2.06):
             // a picture sent from the phone first — a hand-picked one is about that one app — then
             // the icon library when it is its turn (the phone page's 精选图/App 自带 pick; by
             // default the library's picture stands over the app's banner, as the phone page's tick
             // has always claimed), then the banner the app brought for a TV, then Aerial's own tile
-            // for a firmware app, and last the app's own icon drawn as a tile.
-            val library = if (custom == null && (own == null || IconLibrary.pick(pkg) == IconLibrary.Pick.Library) && IconLibrary.uses(pkg)) IconLibrary.load(pkg) else null
+            // for a firmware app, and last the app's own icon drawn as a tile. An explicit pick
+            // only reorders: a sent picture is kept either way, and "custom" puts it back.
+            val pick = IconLibrary.pick(pkg)
+            val custom = if (pick == null || (pick == IconLibrary.Pick.Library && !IconLibrary.has(pkg))) CustomIcons.load(pkg) else null
+            val library = if (custom == null && (own == null || pick == IconLibrary.Pick.Library) && IconLibrary.uses(pkg)) IconLibrary.load(pkg) else null
             val recipe = TileRecipes.of(pkg)
             // A tile that cannot be drawn used to drop the app from Home altogether, without a word
             // in the log (com.fongmi.androidtv on TCL MT5879, issue #415). Its icon then, or

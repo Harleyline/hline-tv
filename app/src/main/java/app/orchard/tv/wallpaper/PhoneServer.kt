@@ -156,27 +156,33 @@ class PhoneServer private constructor(private val context: Context, private val 
                     json(state().put("saved", known && name.isNotEmpty() && rename != null))
                 }
                 session.method == Method.POST && path == "/api/icon/pick" -> {
-                    // The library's picture or the app's own art for one app; either replaces a
-                    // picture sent from the phone.
+                    // The library's picture or the app's own art for one app; "custom" puts a sent
+                    // picture back in front. A pick only reorders what stands there — a sent
+                    // picture is never deleted by it (it was once, and the owner lost pictures
+                    // he had sent by tapping through the choices).
                     val f = form(session)
                     val pkg = f["app"].orEmpty()
-                    val pick = when (f["pick"]) {
+                    val asked = f["pick"].orEmpty()
+                    val pick = when (asked) {
                         "library" -> IconLibrary.Pick.Library
                         "own" -> IconLibrary.Pick.Own
                         else -> null
                     }
-                    val ok = installed(pkg) && pick != null && (pick != IconLibrary.Pick.Library || IconLibrary.has(pkg))
+                    val ok = installed(pkg) && asked in setOf("library", "own", "custom") &&
+                        (asked != "library" || IconLibrary.has(pkg))
                     if (ok) {
-                        CustomIcons.clear(pkg)
-                        // The library is what every app uses anyway: kept as no pick.
-                        IconLibrary.choose(pkg, pick.takeIf { it != IconLibrary.Pick.Library })
+                        IconLibrary.choose(pkg, pick)
                         runBlocking(Dispatchers.Main) { CustomIcons.changed(); IconLibrary.changed() }
                     }
                     json(state().put("saved", ok))
                 }
                 session.method == Method.POST && path == "/api/icon/reset" -> {
                     val pkg = form(session)["app"].orEmpty()
-                    if (installed(pkg)) { CustomIcons.clear(pkg); onMain { CustomIcons.changed() } }
+                    if (installed(pkg)) {
+                        CustomIcons.clear(pkg)
+                        IconLibrary.choose(pkg, null)
+                        onMain { CustomIcons.changed(); IconLibrary.changed() }
+                    }
                     json(state())
                 }
                 session.method == Method.POST && path == "/api/icon/undo" -> {
@@ -279,8 +285,10 @@ class PhoneServer private constructor(private val context: Context, private val 
                     // [icon] is where the tile's picture comes from now; [library] whether the icon
                     // library has one for this app, which the phone can pick instead.
                     val icon = when {
+                        IconLibrary.pick(a.key) == IconLibrary.Pick.Own -> "own"
+                        IconLibrary.pick(a.key) == IconLibrary.Pick.Library && IconLibrary.has(a.key) -> "library"
                         CustomIcons.has(a.key) -> "custom"
-                        IconLibrary.has(a.key) && IconLibrary.uses(a.key) -> "library"
+                        IconLibrary.has(a.key) -> "library"
                         else -> "own"
                     }
                     put(JSONObject().put("key", a.key).put("label", label).put("default", a.label).put("name", AppNames.of(a.key) ?: "")
