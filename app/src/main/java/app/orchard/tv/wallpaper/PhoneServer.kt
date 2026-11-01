@@ -264,6 +264,9 @@ class PhoneServer private constructor(private val context: Context, private val 
         }
         return JSONObject()
             .put("selected", selected)
+            // The page follows the language the TV speaks (the owner): the app's own choice, or,
+            // when that follows the TV, the TV system's language. An empty tag means System.
+            .put("lang", AerialSettings.language.tag.ifEmpty { java.util.Locale.getDefault().toLanguageTag() })
             .put("latestDaily", Wallpapers.LATEST_DAILY)
             .put("rotatePhotos", Wallpapers.ROTATE_PHOTOS)
             .put("screensaver", Wallpapers.screensaver.key)

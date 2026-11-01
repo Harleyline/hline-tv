@@ -141,11 +141,11 @@
     <string name="st_clock_size">시계 크기</string>
     <string name="st_clock_small">작게</string>
     <string name="st_clock_large">크게</string>
-    <string name="st_clock_size_hint">'크게'로 하면 날짜 아래에 큰 시계가 표시됩니다. 시계와 날씨 모두 '크게'일 때 좌우로 나뉩니다.</string>
+    <string name="st_clock_size_hint">\'크게\'로 하면 날짜 아래에 큰 시계가 표시됩니다. 시계와 날씨 모두 \'크게\'일 때 좌우로 나뉩니다.</string>
     <string name="st_weather_place">날씨 위치</string>
     <string name="st_weather_place_hint">날씨 아이콘·기온·습도를 놓는 쪽입니다.</string>
     <string name="st_weather_size">날씨 크기</string>
-    <string name="st_weather_size_hint">'크게'로 하면 위 줄에 오늘의 기온 범위가, 큰 기온 옆에 도시와 습도가 표시됩니다.</string>
+    <string name="st_weather_size_hint">\'크게\'로 하면 위 줄에 오늘의 기온 범위가, 큰 기온 옆에 도시와 습도가 표시됩니다.</string>
     <string name="st_weather_show">날씨 표시</string>
     <string name="st_names">앱 이름</string>
     <string name="st_names_focused">선택한 앱만</string>

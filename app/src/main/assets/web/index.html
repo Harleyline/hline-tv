@@ -1643,26 +1643,28 @@ const TEXTS = {
  ]
 };
 const LANGS = Object.keys(TEXTS);
-// A phone that scans the code opens the page in its own language: the system's languages are tried
-// in order, case-insensitively, so ja-JP finds the ja table and zh-TW (or zh-Hant/HK/MO) the
-// traditional one. A ?lang= in the address or a language picked under More wins over that.
+// The page follows the TV's language first (it arrives in every state), then the phone's system
+// languages, case-insensitively — ja-JP finds the ja table and zh-TW (or zh-Hant/HK/MO) the
+// traditional one. A ?lang= picked by hand under More still wins over the TV.
 const CANON = {}; for (const l of LANGS) CANON[l.toLowerCase()] = l;
-const LANG = (() => {
-  const asked = new URLSearchParams(location.search).get('lang');
+function matchLang(l) {
+  if (!l) return null;
+  const s = String(l).toLowerCase().replace(/_/g, '-');
+  if (CANON[s]) return CANON[s];
+  if (/^zh-(hant|tw|hk|mo)/.test(s)) return 'zh-TW';
+  return CANON[s.split('-')[0]] || null;
+}
+const askedLang = new URLSearchParams(location.search).get('lang');
+let LANG = (() => {
   let saved = null;
   try { saved = localStorage.getItem('aerial-lang'); } catch (e) {}
-  const prefs = [asked, saved, ...(navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ''])];
-  for (const l of prefs) {
-    if (!l) continue;
-    const s = String(l).toLowerCase().replace(/_/g, '-');
-    if (CANON[s]) return CANON[s];
-    if (/^zh-(hant|tw|hk|mo)/.test(s)) return 'zh-TW';
-    const c = s.split('-')[0];
-    if (CANON[c]) return c;
-  }
+  const prefs = [askedLang, saved, ...(navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ''])];
+  for (const l of prefs) { if (!l) continue; const m = matchLang(l); if (m) return m; }
   return 'en';
 })();
 const NAMES = { zh: '中文', 'zh-TW': '繁體中文', en: 'English', ja: '日本語', ko: '한국어', ru: 'Русский', uk: 'Українська', kk: 'Қазақша' };
+/** Apps whose picture was changed on this page since it opened, for the 换回上一张 row. */
+const changedIcons = new Set();
 const I18N = {};
 for (const l of LANGS) { I18N[l] = {}; KEYS.forEach((k, i) => I18N[l][k] = TEXTS[l][i]); }
 function t(key, vars) {
@@ -1715,7 +1717,16 @@ async function api(path, body) {
   if (!r.ok) throw new Error(r.status);
   return r.json();
 }
-function take(next) { state = next; stateJson = ''; render(); }
+function take(next) {
+  state = next;
+  // Follow the TV's language (unless this page was opened with a hand-picked ?lang=). Not saved
+  // to the phone: the next scan follows whatever the TV says then.
+  if (state.lang && !askedLang) {
+    const tv = matchLang(state.lang);
+    if (tv && tv !== LANG) { LANG = tv; document.documentElement.lang = tv; initLangSwitch(); }
+  }
+  stateJson = ''; render();
+}
 
 /* Tabs. The tab is kept in the address (#home) and on the phone, and each tab keeps its own scroll. */
 const TABS = ['home', 'looks', 'more'];
@@ -2180,6 +2191,7 @@ $('#iconFile').onchange = async e => {
     const r = await fetch(base + 'api/icon', { method: 'POST', body: fd });
     if (!r.ok) throw new Error(r.status);
     const next = await r.json(); take(next);
+    if (next.saved) changedIcons.add(a.key);
     toast(t(next.saved ? 'toast_icon_set' : 'toast_icon_bad'));
   } catch (err) { toast(t('toast_send_fail')); }
 };
@@ -2422,7 +2434,7 @@ function tileSheet(e, inFolder, hidden) {
           try {
             const next = await api('api/icon/pick', { app: a.key, pick: c.pick });
             if (!next.saved) throw new Error('not saved');
-            take(next); toast(t('toast_icon_picked')); closeSheet();
+            take(next); changedIcons.add(a.key); toast(t('toast_icon_picked')); closeSheet();
           } catch (err) { toast(t('toast_set_fail')); b.disabled = false; }
         };
         cl.appendChild(b);
@@ -2432,11 +2444,13 @@ function tileSheet(e, inFolder, hidden) {
     action(il, t('change_icon'), 'tint', () => { iconFor = a; $('#iconFile').click(); closeSheet(); });
     if (a.custom) action(il, t('aria_reset_icon'), 'tint', async () => {
       closeSheet();
-      try { take(await api('api/icon/reset', { app: a.key })); toast(t('toast_icon_reset')); } catch (err) { toast(t('toast_set_fail')); }
+      try { take(await api('api/icon/reset', { app: a.key })); changedIcons.add(a.key); toast(t('toast_icon_reset')); } catch (err) { toast(t('toast_set_fail')); }
     });
     // The picture the last change replaced is kept whatever it was — a sent picture, the
     // library's, the app's own — and this puts it back, so a choice is never a dead end.
-    if (a.prev) action(il, t('icon_prev'), 'tint', async () => {
+    // Only after a change made on this page: a record the TV kept from an earlier run is not
+    // something the owner asking for it now remembers making, and the row would look like a bug.
+    if (a.prev && changedIcons.has(a.key)) action(il, t('icon_prev'), 'tint', async () => {
       closeSheet();
       try { const next = await api('api/icon/undo', { app: a.key }); if (!next.saved) throw new Error('not saved'); take(next); toast(t('toast_icon_prev')); }
       catch (err) { toast(t('toast_set_fail')); }
