@@ -1685,9 +1685,6 @@ function initLangSwitch() {
     const u = new URL(location.href); u.searchParams.set('lang', s.value); location.replace(u.toString());
   };
 }
-    const u = new URL(location.href); u.searchParams.set('lang', s.value); location.replace(u.toString());
-  };
-}
 function applyI18n() {
   document.documentElement.lang = LANG;
   document.querySelectorAll('[data-i18n]').forEach(e => e.textContent = t(e.dataset.i18n));
@@ -2689,7 +2686,7 @@ function bootTab() {
   return null;
 }
 const fromQr = bootTab();
-async function refresh() { try { state = await api('api/state'); render(); } catch (e) {} }
+async function refresh() { try { take(await api('api/state')); } catch (e) {} }
 refresh().then(() => { if (fromQr) setTimeout(fromQr, 140); });
 setInterval(() => { if (!document.hidden && sheet.hidden && !arrDragging) refresh(); }, 6000);
 </script>
