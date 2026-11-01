@@ -110,8 +110,8 @@
     <string name="ss_aerial">空拍</string>
     <string name="ss_photos">壁紙</string>
     <string name="ss_clock">時鐘</string>
-    <string name="wp_phone_title">用手機或電腦設定</string>
-    <string name="wp_phone_body">掃碼，或在電腦瀏覽器開啟下面的網址，可以傳照片和影片、更換 App 圖示、設定天氣城市。需要和電視連上同一個網路。</string>
+    <string name="wp_phone_title">用手機或電腦，設定 HLine TV</string>
+    <string name="wp_phone_body">步驟 1：掃描 QR Code 或開啟網址（手機/電腦與電視連上同一個 Wi-Fi）\n步驟 2：隨心搭配，輕鬆自訂桌布、App 圖示與應用程式名稱</string>
     <string name="wp_phone_offline">電視連上網路後，就能用手機或電腦設定。</string>
     <string name="ss_start">立即開始</string>
     <string name="ss_delay">開始時間</string>
@@ -305,5 +305,10 @@
     <string name="wp_auto_follow">跟隨 App</string>
     <string name="wp_name_city_skyline">城市 · 天際線</string>
     <string name="wp_name_city_lights">城市 · 燈火</string>
+    <string name="menu_phone_set">自訂圖示 / 名稱</string>
+    <string name="phone_set_title">手機設定</string>
+    <string name="phone_set_hint">掃描開啟設定頁：傳自己的照片、換圖示、改名稱。</string>
+    <string name="phone_set_offline">沒有網路：請先把電視連上 Wi-Fi 或網路線。</string>
+    <string name="phone_set_waiting">正在產生 QR Code…</string>
 </resources>
 

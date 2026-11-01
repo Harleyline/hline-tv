@@ -109,8 +109,8 @@
     <string name="ss_aerial">བརྙན་ཐུང་།</string>
     <string name="ss_photos">པར་རིས།</string>
     <string name="ss_clock">ཆུ་ཚོད།</string>
-    <string name="wp_phone_title">ཁ་པར་རམ་གློག་ཀླད་ནས་སྒྲིག་འགོད།</string>
-    <string name="wp_phone_body">རྟགས་བརྟག་ནས་པར་རིས་དང་གྲོང་ཁྱེར་སྒྲིག་འགོད།</string>
+    <string name="wp_phone_title">ཁ་པར་རམ་གློག་ཀླད་ནས་HLine TV་སྒྲིག་འགོད།</string>
+    <string name="wp_phone_body">གོམ་རིམ་1：རྟགས་བཤེར་རམ་དྲ་གནས་ཀློག （ཁ་པར་/གློག་ཀླད་དང་བརྙན་འཕྲིན་Wi-Fi་གཅིག་པ།）\nགོམ་རིམ་2：པར་རིས་དང་མཚོན་རྟགས། མིང་བཅས་རང་མོས་སྒྲིག་འགོད།</string>
     <string name="wp_phone_offline">དྲ་བར་མ་འབྲེལ་ན་སྒྲིག་འགོད་མི་ཐུབ།</string>
     <string name="ss_start">ད་ལྟ་འགོ་འཛུགས།</string>
     <string name="ss_delay">རྗེས་མ་འགོ་འཛུགས།</string>
@@ -297,4 +297,9 @@
     <string name="st_aerial_cities">གྲོང་ཁྱེར།</string>
     <string name="st_aerial_landscapes">རང་བྱུང་ཡུལ།</string>
     <string name="st_aerial_underwater">ཆུ་འོག</string>
+    <string name="menu_phone_set">མཚོན་རྟགས་དང་མིང་རང་སྒྲིག</string>
+    <string name="phone_set_title">ཁ་པར་ནས་སྒྲིག་འགོད</string>
+    <string name="phone_set_hint">རྟགས་བཤེར་ནས་པར་སྐུར། མཚོན་རྟགས་དང་མིང་བསྒྱུར།</string>
+    <string name="phone_set_offline">དྲ་བ་མེད། སྔོན་ལ་བརྙན་འཕྲིན་Wi-Fi་ལ་སྦྲེལ།</string>
+    <string name="phone_set_waiting">QR་རྟགས་གྲ་སྒྲིག་བྱེད་བཞིན…</string>
 </resources>

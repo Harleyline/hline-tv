@@ -110,8 +110,8 @@
     <string name="ss_aerial">Films</string>
     <string name="ss_photos">Fond d\'écran</string>
     <string name="ss_clock">Horloge</string>
-    <string name="wp_phone_title">Régler depuis un téléphone ou un ordinateur</string>
-    <string name="wp_phone_body">Scannez le code, ou ouvrez l’adresse dans un navigateur, pour envoyer photos et vidéos, changer les icônes et régler la ville. Même réseau que le téléviseur.</string>
+    <string name="wp_phone_title">Personnalisez HLine TV depuis votre téléphone ou ordinateur</string>
+    <string name="wp_phone_body">Étape 1 : scannez le code ou ouvrez le lien (téléphone/ordinateur sur le même Wi-Fi que la TV)\nÉtape 2 : à vous de jouer — fond d\'écran, icônes et noms d\'applications</string>
     <string name="wp_phone_offline">Connectez le téléviseur au réseau pour le régler depuis un téléphone ou un ordinateur.</string>
     <string name="ss_start">Démarrer</string>
     <string name="ss_delay">Démarrer après</string>
@@ -305,4 +305,9 @@
     <string name="wp_auto_follow">Comme l’app</string>
     <string name="wp_name_city_skyline">Ville, panorama</string>
     <string name="wp_name_city_lights">Ville, lumières</string>
+    <string name="menu_phone_set">Personnaliser l\'icône et le nom</string>
+    <string name="phone_set_title">Personnalisation</string>
+    <string name="phone_set_hint">Scannez pour ouvrir la page : envoyez vos photos, changez l\'icône ou le nom.</string>
+    <string name="phone_set_offline">Pas de réseau : connectez d\'abord la TV au Wi-Fi ou à l\'Ethernet.</string>
+    <string name="phone_set_waiting">Préparation du QR code…</string>
 </resources>

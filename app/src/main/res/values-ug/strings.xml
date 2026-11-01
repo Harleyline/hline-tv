@@ -109,8 +109,8 @@
     <string name="ss_aerial">سىنلار</string>
     <string name="ss_photos">تام قەغىزى</string>
     <string name="ss_clock">سائەت</string>
-    <string name="wp_phone_title">تېلېفون ياكى كومپيۇتېردىن تەڭشەش</string>
-    <string name="wp_phone_body">كودنى سكاننەپ سۈرەت، بەلگە ۋە شەھەرنى تەڭشەڭ.</string>
+    <string name="wp_phone_title">تېلېفون ياكى كومپيۇتېردىن HLine TV نى تەڭشەش</string>
+    <string name="wp_phone_body">1-قەدەم: كودنى سكاننېرلاڭ ياكى ئادرېسنى ئېچىڭ (تېلېفون/كومپيۇتېر تېلېۋىزور بىلەن ئوخشاش Wi-Fi دا)\n2-قەدەم: تام قەغىزى، بەلگە ۋە ئىسىمنى خالىغانچە تەڭشەڭ</string>
     <string name="wp_phone_offline">تېلېفوندىن تەڭشەش ئۈچۈن تورغا ئۇلىنىڭ.</string>
     <string name="ss_start">ھازىر باشلاش</string>
     <string name="ss_delay">كېيىن باشلاش</string>
@@ -297,4 +297,9 @@
     <string name="st_aerial_cities">شەھەرلەر</string>
     <string name="st_aerial_landscapes">تەبىئەت</string>
     <string name="st_aerial_underwater">سۇ ئاستى</string>
+    <string name="menu_phone_set">بەلگە ۋە ئىسىمنى ئۆزگەرتىش</string>
+    <string name="phone_set_title">تېلېفوندىن تەڭشەش</string>
+    <string name="phone_set_hint">كودنى سكاننېرلىسىڭىز تەڭشەش بېتى ئېچىلىدۇ: سۈرەت يوللاپ، بەلگە ۋە ئىسىمنى ئۆزگەرتىڭ.</string>
+    <string name="phone_set_offline">تور يوق: ئاۋۋال تېلېۋىزورنى Wi-Fi ياكى كابېلغا ئۇلاڭ.</string>
+    <string name="phone_set_waiting">QR كود تەييارلىنىۋاتىدۇ…</string>
 </resources>

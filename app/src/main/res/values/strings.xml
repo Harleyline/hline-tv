@@ -112,7 +112,7 @@
     <string name="ss_photos">Wallpaper</string>
     <string name="ss_clock">Clock</string>
     <string name="wp_phone_title">Set up HLine TV from your phone or computer</string>
-    <string name="wp_phone_body">Step 1: scan the code or open the address below (phone/computer on the TV’s Wi-Fi)\nStep 2: make it yours — wallpaper, app icons and names, the easy way</string>
+    <string name="wp_phone_body">Step 1: scan the code or open the link (phone/computer on the TV’s Wi-Fi)\nStep 2: make it yours — wallpaper, app icons and names, the easy way</string>
     <string name="wp_phone_offline">Connect the TV to a network to set it up from a phone or computer.</string>
     <string name="ss_start">Start Now</string>
     <string name="ss_delay">Start After</string>

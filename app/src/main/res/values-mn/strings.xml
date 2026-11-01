@@ -109,8 +109,8 @@
     <string name="ss_aerial">Дүрс бичлэг</string>
     <string name="ss_photos">Арын дэвсгэр</string>
     <string name="ss_clock">Цаг</string>
-    <string name="wp_phone_title">Утас эсвэл компьютерээс тохируулах</string>
-    <string name="wp_phone_body">Кодыг уншуулаад зураг, дүрс, хотоо тохируулна уу.</string>
+    <string name="wp_phone_title">Утас, компьютерээс HLine TV тохируулах</string>
+    <string name="wp_phone_body">1-р алхам: QR код уншуулж эсвэл хаягаар нээнэ үү (утас/компьютер ТВ-той ижил Wi-Fi-д)\n2-р алхам: Ханын зураг, аппын дүрс, нэрийг хүссэнээр тохируул</string>
     <string name="wp_phone_offline">Утсаар тохируулахын тулд сүлжээнд холбогдоно уу.</string>
     <string name="ss_start">Одоо эхлэх</string>
     <string name="ss_delay">Хойш эхлэх</string>
@@ -304,4 +304,9 @@
     <string name="wp_auto_follow">Апп-ыг дагах</string>
     <string name="wp_name_city_skyline">Хот · Панорама</string>
     <string name="wp_name_city_lights">Хот · Гэрэл</string>
+    <string name="menu_phone_set">Дүрс, нэрийг өөрчлөх</string>
+    <string name="phone_set_title">Утсаар тохируулах</string>
+    <string name="phone_set_hint">QR уншуулбал тохиргооны хуудас нээгдэнэ: зураг илгээж, дүрс, нэрийг өөрчил.</string>
+    <string name="phone_set_offline">Сүлжээ байхгүй: эхэлж ТВ-г Wi-Fi эсвэл кабельд холбоно уу.</string>
+    <string name="phone_set_waiting">QR код бэлтгэж байна…</string>
 </resources>

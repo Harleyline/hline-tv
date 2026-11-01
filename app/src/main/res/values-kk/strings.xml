@@ -103,8 +103,8 @@
     <string name="ss_aerial">Аэрожиын</string>
     <string name="ss_photos">Тұсқағаз</string>
     <string name="ss_clock">Сағат</string>
-    <string name="wp_phone_title">Телефоннан немесе компьютерден баптау</string>
-    <string name="wp_phone_body">Фото мен бейнелерді жіберу, қолданба белгішелерін өзгерту және ауа райына арналған қаланы орнату үшін кодты сканерлеңіз немесе төмендегі мекенжайды компьютер браузерінде ашыңыз. Құрылғы мен теледидар бір желіде болуы керек.</string>
+    <string name="wp_phone_title">HLine TV-ді телефонмен немесе компьютерден баптаңыз</string>
+    <string name="wp_phone_body">1-қадам: QR кодты сканерлеңіз немесе сілтемені ашыңыз (телефон/компьютер теледидармен бір Wi-Fi желісінде)\n2-қадам: Тұсқағазды, қолданба белгішелерін мен атауларын қалауыңызша өзгертіңіз</string>
     <string name="wp_phone_offline">Телефоннан немесе компьютерден баптау үшін теледидарды желіге қосыңыз.</string>
     <string name="ss_start">Қазір бастау</string>
     <string name="ss_delay">Бастау уақыты</string>
@@ -298,5 +298,10 @@
     <string name="wp_auto_follow">Қолданбаға сәйкес</string>
     <string name="wp_name_city_skyline">Қала · Панорама</string>
     <string name="wp_name_city_lights">Қала · Шамдар</string>
+    <string name="menu_phone_set">Белгіше мен атауын өзгерту</string>
+    <string name="phone_set_title">Телефоннан баптау</string>
+    <string name="phone_set_hint">Сканерлесеңіз, баптау беті ашылады: өз фотоларыңызды жіберіп, белгішені немесе атауын өзгертіңіз.</string>
+    <string name="phone_set_offline">Желі жоқ: алдымен теледидарды Wi-Fi немесе кабельге қосыңыз.</string>
+    <string name="phone_set_waiting">QR код дайындалуда…</string>
 </resources>
 

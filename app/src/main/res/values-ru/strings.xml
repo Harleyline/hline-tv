@@ -103,8 +103,8 @@
     <string name="ss_aerial">Аэросъёмка</string>
     <string name="ss_photos">Обои</string>
     <string name="ss_clock">Часы</string>
-    <string name="wp_phone_title">Настройка с телефона или компьютера</string>
-    <string name="wp_phone_body">Отсканируйте код или откройте адрес ниже в браузере компьютера, чтобы отправлять фото и видео, менять значки приложений и выбирать город для погоды. Устройство и телевизор должны быть в одной сети.</string>
+    <string name="wp_phone_title">Настройте HLine TV с телефона или компьютера</string>
+    <string name="wp_phone_body">Шаг 1. Отсканируйте код или откройте ссылку (телефон или компьютер — в той же сети Wi-Fi, что и телевизор)\nШаг 2. Меняйте обои, значки и названия приложений — как вам нравится</string>
     <string name="wp_phone_offline">Подключите телевизор к сети, чтобы настроить его с телефона или компьютера.</string>
     <string name="ss_start">Запустить сейчас</string>
     <string name="ss_delay">Запускать через</string>
@@ -298,5 +298,10 @@
     <string name="wp_auto_follow">Как у приложения</string>
     <string name="wp_name_city_skyline">Город · Панорама</string>
     <string name="wp_name_city_lights">Город · Огни</string>
+    <string name="menu_phone_set">Свои значок и название</string>
+    <string name="phone_set_title">Настройка с телефона</string>
+    <string name="phone_set_hint">Отсканируйте, чтобы открыть страницу: пришлите свои фото, смените значок или название.</string>
+    <string name="phone_set_offline">Нет сети: сначала подключите телевизор к Wi-Fi или кабелю.</string>
+    <string name="phone_set_waiting">Готовим QR-код…</string>
 </resources>
 
