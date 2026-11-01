@@ -31,9 +31,13 @@ enum class WeatherKind { Clear, PartlyCloudy, Cloudy, Fog, Rain, Snow, Thunder }
 
 /**
  * [high] and [low] are today's, shown under the large clock; null in a reading saved by an older
- * version. [humidity] is the air's relative humidity in percent, null the same way. [usAqi] is the
- * air quality index on the EPA's scale (0-500), the one the owner reads, from a second request:
- * null when that one failed, which leaves the weather itself intact.
+ * version. [celsius], [humidity] and [usAqi] are the station's three figures, read from 在意空气
+ * in one answer (1.14) so they are true of the same moment; any one of them that the station does
+ * not carry falls back to Open-Meteo's own, and the weather itself stands whatever happens to
+ * them. [usAqi] keeps its old name — the field is written to prefs — but its scale is now the one
+ * 在意空气 publishes, which for a Chinese station is the national index, lower than the EPA's for
+ * the same air; only the fallback is on the EPA's scale. Nor is it an hourly model any more: it is
+ * the nearest station's own reading, which usually moves once an hour.
  */
 data class WeatherNow(
     val celsius: Int, val kind: WeatherKind, val day: Boolean,
@@ -424,24 +428,29 @@ object Weather {
         val current = json.getJSONObject("current")
         val daily = json.optJSONObject("daily")
         fun today(key: String) = daily?.optJSONArray(key)?.optDouble(0)?.takeIf { !it.isNaN() }?.roundToInt()
+        // The degrees, the humidity and the air's index come from the one station (the owner,
+        // 1.14); the sky's icon and today's range stay Open-Meteo's, which is the only one of the
+        // two that knows what the sky is doing.
+        val air = airReading(lat, lon)
         return WeatherNow(
-            celsius = current.getDouble("temperature_2m").roundToInt(),
+            celsius = air.celsius ?: current.getDouble("temperature_2m").roundToInt(),
             kind = kindOf(current.getInt("weather_code")),
             day = current.optInt("is_day", 1) == 1,
             high = today("temperature_2m_max"),
             low = today("temperature_2m_min"),
-            humidity = current.optDouble("relative_humidity_2m").takeIf { !it.isNaN() }?.roundToInt(),
-            usAqi = airQuality(lat, lon),
+            humidity = air.humidity
+                ?: current.optDouble("relative_humidity_2m").takeIf { !it.isNaN() }?.roundToInt(),
+            usAqi = air.aqi ?: openMeteoAqi(lat, lon),
         )
     }
 
     /**
-     * The air quality index on the EPA's scale ("US AQI"), the one the owner asked for by name,
-     * from Open-Meteo's air-quality API. A second request on its own host, so a network that
-     * blocks it costs the weather nothing.
+     * The three figures the owner checks — the degrees, the humidity, the air's index — read from
+     * one place, one station, one moment (the owner, 1.14): 在意空气 has all three in one answer,
+     * where they used to come from two hosts and two clocks. A reading it does not carry falls
+     * back to Open-Meteo's own, so a station without a thermometer costs only the thermometer.
      */
-    private fun airQuality(lat: Float, lon: Float): Int? =
-        waqiAqi(lat, lon) ?: openMeteoAqi(lat, lon)
+    private data class AirReading(val celsius: Int? = null, val humidity: Int? = null, val aqi: Int? = null)
 
     /**
      * 在意空气's own source (aqicn.org, the WAQI feed), by coordinates so no town needs naming.
@@ -451,12 +460,19 @@ object Weather {
      */
     private val WAQI_TOKEN = BuildConfig.WAQI_TOKEN
 
-    private fun waqiAqi(lat: Float, lon: Float): Int? = runCatching {
-        if (WAQI_TOKEN == "demo") return null
+    private fun airReading(lat: Float, lon: Float): AirReading = runCatching {
+        if (WAQI_TOKEN == "demo") return@runCatching AirReading()
         val json = JSONObject(get("https://api.waqi.info/feed/geo:$lat;$lon/?token=$WAQI_TOKEN"))
-        if (json.optString("status") != "ok") return null
-        json.getJSONObject("data").optString("aqi").toDoubleOrNull()?.roundToInt()?.takeIf { it > 0 }
-    }.onFailure { Log.w(TAG, "aqicn unavailable", it) }.getOrNull()
+        if (json.optString("status") != "ok") return@runCatching AirReading()
+        val data = json.getJSONObject("data")
+        val iaqi = data.optJSONObject("iaqi")
+        fun figure(key: String) = iaqi?.optJSONObject(key)?.optDouble("v")?.takeIf { !it.isNaN() }?.roundToInt()
+        AirReading(
+            celsius = figure("t"),
+            humidity = figure("h")?.takeIf { it in 0..100 },
+            aqi = data.optString("aqi").toDoubleOrNull()?.roundToInt()?.takeIf { it > 0 },
+        )
+    }.onFailure { Log.w(TAG, "aqicn unavailable", it) }.getOrNull() ?: AirReading()
 
     private fun openMeteoAqi(lat: Float, lon: Float): Int? = runCatching {
         val json = JSONObject(get("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=$lat&longitude=$lon&current=us_aqi&timezone=auto"))
