@@ -171,6 +171,7 @@ class PhoneServer private constructor(private val context: Context, private val 
                     val ok = installed(pkg) && asked in setOf("library", "own", "custom") &&
                         (asked != "library" || IconLibrary.has(pkg))
                     if (ok) {
+                        CustomIcons.snapshot(pkg)
                         IconLibrary.choose(pkg, pick)
                         runBlocking(Dispatchers.Main) { CustomIcons.changed(); IconLibrary.changed() }
                     }
@@ -179,6 +180,7 @@ class PhoneServer private constructor(private val context: Context, private val 
                 session.method == Method.POST && path == "/api/icon/reset" -> {
                     val pkg = form(session)["app"].orEmpty()
                     if (installed(pkg)) {
+                        CustomIcons.snapshot(pkg)
                         CustomIcons.clear(pkg)
                         IconLibrary.choose(pkg, null)
                         onMain { CustomIcons.changed(); IconLibrary.changed() }
@@ -189,7 +191,7 @@ class PhoneServer private constructor(private val context: Context, private val 
                     // The replaced picture comes back, the current one steps aside for it.
                     val pkg = form(session)["app"].orEmpty()
                     val ok = installed(pkg) && CustomIcons.undo(pkg)
-                    if (ok) onMain { CustomIcons.changed() }
+                    if (ok) onMain { CustomIcons.changed(); IconLibrary.changed() }
                     json(state().put("saved", ok))
                 }
                 session.method == Method.POST && path == "/api/weather/city" -> {

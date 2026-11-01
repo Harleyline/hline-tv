@@ -2424,9 +2424,9 @@ function tileSheet(e, inFolder, hidden) {
       closeSheet();
       try { take(await api('api/icon/reset', { app: a.key })); toast(t('toast_icon_reset')); } catch (err) { toast(t('toast_set_fail')); }
     });
-    // The picture the last upload replaced is kept once: this puts it back, and swaps the two,
-    // so a picture one is not happy with is never a dead end.
-    if (a.custom && a.prev) action(il, t('icon_prev'), 'tint', async () => {
+    // The picture the last change replaced is kept whatever it was — a sent picture, the
+    // library's, the app's own — and this puts it back, so a choice is never a dead end.
+    if (a.prev) action(il, t('icon_prev'), 'tint', async () => {
       closeSheet();
       try { const next = await api('api/icon/undo', { app: a.key }); if (!next.saved) throw new Error('not saved'); take(next); toast(t('toast_icon_prev')); }
       catch (err) { toast(t('toast_set_fail')); }

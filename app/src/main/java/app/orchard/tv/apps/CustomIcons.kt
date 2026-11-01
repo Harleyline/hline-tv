@@ -15,6 +15,12 @@ import java.io.InputStream
  * 16:9 and kept by package name in files/icons; a tile with one draws it instead of the app's own
  * artwork (AppCatalog). Only the owner's own uploads live here, and removing one only ever deletes
  * that app's file.
+ *
+ * 换回上一张 works on the tile's whole picture, not only on sent files: before anything changes
+ * the picture — an upload, a pick of the library's or the app's own, a reset — [snapshot] records
+ * what stood there (which source, and the sent file's bytes when the source was the sent one), and
+ * [undo] puts exactly that back. The state being replaced becomes the new "previous", so undo
+ * walks back and forth between the two.
  */
 object CustomIcons {
     /** 1280×720: sharp on a 4K UI's 704 px tile, small enough to decode on every app reload. */
@@ -34,16 +40,17 @@ object CustomIcons {
     /** By package name; a pinned input's key holds slashes, so it goes by a hash of the key. */
     private fun fileFor(pkg: String) = if (isValidKey(pkg)) File(dir, "$pkg.png") else File(dir, "input-${hash(pkg)}.png")
 
-    /** The picture this one replaced, kept once so the phone can put it back. */
-    private fun prevFor(pkg: String) = if (isValidKey(pkg)) File(dir, "$pkg.prev.png") else File(dir, "input-${hash(pkg)}.prev.png")
+    private fun prevPngFor(pkg: String) = if (isValidKey(pkg)) File(dir, "$pkg.prev.png") else File(dir, "input-${hash(pkg)}.prev.png")
+
+    private fun prevMetaFor(pkg: String) = if (isValidKey(pkg)) File(dir, "$pkg.prev.json") else File(dir, "input-${hash(pkg)}.prev.json")
 
     private fun hash(key: String): String =
         java.security.MessageDigest.getInstance("SHA-1").digest(key.toByteArray()).joinToString("") { "%02x".format(it) }
 
     fun has(pkg: String): Boolean = ::dir.isInitialized && fileFor(pkg).exists()
 
-    /** Whether a replaced picture is kept for [pkg], for the phone page's 换回上一张. */
-    fun hasPrev(pkg: String): Boolean = ::dir.isInitialized && prevFor(pkg).exists()
+    /** Whether a previous state is kept for [pkg], for the phone page's 换回上一张. */
+    fun hasPrev(pkg: String): Boolean = ::dir.isInitialized && prevMetaFor(pkg).exists()
 
     /** When the app's picture last changed; 0 without one. Part of the tile cache's key. */
     fun stamp(pkg: String): Long = if (::dir.isInitialized) fileFor(pkg).lastModified() else 0L
@@ -51,15 +58,31 @@ object CustomIcons {
     /** The app's picture at tile size, or null. Off the main thread. */
     fun load(pkg: String): Bitmap? = if (has(pkg)) BitmapFactory.decodeFile(fileFor(pkg).path) else null
 
-    /** Stores [input] as the app's picture; the one it replaces is kept for [undo]. Off the main thread; false if it is not an image. */
+    /**
+     * Records the picture as it stands now — the source it comes from, and the sent file's bytes
+     * when it comes from one — before a change replaces it. Off the main thread.
+     */
+    fun snapshot(pkg: String) {
+        if (!::dir.isInitialized) return
+        val pick = IconLibrary.pick(pkg)
+        val showingSent = pick == null && has(pkg)
+        runCatching {
+            prevMetaFor(pkg).writeText(org.json.JSONObject()
+                .put("pick", pick?.name ?: "")
+                .put("sent", showingSent).toString())
+            val prev = prevPngFor(pkg); val cur = fileFor(pkg)
+            if (showingSent && cur.exists()) cur.copyTo(prev, overwrite = true) else prev.delete()
+        }
+    }
+
+    /** Stores [input] as the app's picture, keeping the state it replaces for [undo]. Off the main thread; false if it is not an image. */
     fun save(pkg: String, input: InputStream, cacheDir: File): Boolean {
         val tmp = File.createTempFile("icon", ".bin", cacheDir)
         return try {
             tmp.outputStream().use { input.copyTo(it) }
             val bmp = Images.decodeCover(tmp, W, H) ?: return false
-            val dst = fileFor(pkg)
-            if (dst.exists()) dst.copyTo(prevFor(pkg), overwrite = true)
-            dst.outputStream().use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
+            snapshot(pkg)
+            fileFor(pkg).outputStream().use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
             bmp.recycle()
             true
         } finally {
@@ -68,31 +91,40 @@ object CustomIcons {
     }
 
     /**
-     * Puts the replaced picture back, and keeps the current one in its place — so undo undoes
-     * itself, and the owner can walk back and forth between the two. False without one.
+     * Puts back the state [snapshot] recorded, and keeps the present state as the new "previous"
+     * — so undo undoes itself, whatever the two states were (a sent picture, the library, the
+     * app's own). False without a recorded state.
      */
     fun undo(pkg: String): Boolean {
-        if (!::dir.isInitialized) return false
-        val cur = fileFor(pkg); val prev = prevFor(pkg)
-        if (!prev.exists()) return false
-        if (cur.exists()) {
-            val swap = File(dir, "swap.tmp")
-            cur.copyTo(swap, overwrite = true)
-            prev.copyTo(cur, overwrite = true)
-            swap.copyTo(prev, overwrite = true)
-            swap.delete()
+        if (!::dir.isInitialized || !hasPrev(pkg)) return false
+        val meta = runCatching { org.json.JSONObject(prevMetaFor(pkg).readText()) }.getOrNull() ?: return false
+        val pick = when (meta.optString("pick")) {
+            "Library" -> IconLibrary.Pick.Library
+            "Own" -> IconLibrary.Pick.Own
+            else -> null
+        }
+        val sent = meta.optBoolean("sent")
+        // The sent file's bytes of the state being restored, read before they are replaced.
+        val bytes = if (sent) prevPngFor(pkg).takeIf { it.exists() }?.readBytes() else null
+        // The present becomes the previous.
+        snapshot(pkg)
+        // And the recorded state comes back.
+        IconLibrary.choose(pkg, pick)
+        val cur = fileFor(pkg)
+        if (sent) {
+            bytes?.let { cur.writeBytes(it) }
         } else {
-            prev.renameTo(cur)
+            cur.delete()
         }
         return true
     }
 
+    /** The sent file only; the 换回上一张 record is kept, so even this can be undone. */
     fun clear(pkg: String) {
         fileFor(pkg).delete()
-        prevFor(pkg).delete()
     }
 
-    /** Called on the main thread after a save or clear. */
+    /** Called on the main thread after a save, an undo or a clear. */
     fun changed() {
         version++
     }
