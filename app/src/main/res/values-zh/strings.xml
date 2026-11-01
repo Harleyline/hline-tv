@@ -311,4 +311,10 @@
     <string name="cc_standby_needs">需电脑授权</string>
     <string name="cc_standby_hint">把电视待机写成「快速待机」：关机后米家仍可遥控、唤醒更快。待机耗电略增（约几瓦）。个别品牌不认此设置时，请在电视自身的设置里选择快速待机。</string>
     <string name="cc_standby_needs_hint">开启需要「写入安全设置」权限：用电脑执行一次 tools/install.sh（见 README）即可。</string>
+    <string name="menu_phone_set">在手机上设置</string>
+    <string name="phone_set_title">手机设置</string>
+    <string name="phone_set_hint">扫码打开设置页：发自己的照片、换图标、改名字。</string>
+    <string name="wp_scan_hint">想在首页放自己的照片？手机扫码，即拍即传。</string>
+    <string name="phone_set_offline">没有网络：请先把电视连上 Wi-Fi 或网线。</string>
+    <string name="phone_set_waiting">正在生成二维码…</string>
 </resources>

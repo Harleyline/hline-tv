@@ -176,7 +176,9 @@ fun WallpaperSheet(
         if (!visible) return@LaunchedEffect
         val url = withContext(Dispatchers.IO) { PhoneServer.start(context) }
         phoneUrl = url
-        qr = url?.let { withContext(Dispatchers.Default) { PhoneServer.qr(it).asImageBitmap() } }
+        // The code lands on the photo upload, the thing people open it for from here; the plain
+        // address (typed into a computer) stays without it.
+        qr = url?.let { withContext(Dispatchers.Default) { PhoneServer.qr("$it#upload").asImageBitmap() } }
     }
 
     val shown = remember { MutableTransitionState(false) }

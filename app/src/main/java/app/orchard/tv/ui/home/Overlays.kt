@@ -11,6 +11,7 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -44,9 +45,13 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -65,12 +70,15 @@ import app.orchard.tv.ui.components.Pressable
 import app.orchard.tv.ui.components.consumeTaps
 import app.orchard.tv.ui.components.dismissOnTap
 import app.orchard.tv.ui.components.liquidGlass
+import app.orchard.tv.wallpaper.PhoneServer
 import app.orchard.tv.settings.AerialSettings
 import app.orchard.tv.ui.theme.Glyph
 import app.orchard.tv.ui.theme.GlyphIcon
 import app.orchard.tv.ui.theme.Motion
 import app.orchard.tv.ui.theme.Palette
 import app.orchard.tv.ui.theme.Type
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
 /** Keeps the last non-null value, so an overlay still has its content while it animates out. */
@@ -127,7 +135,7 @@ fun MenuRow(
     }
 }
 
-private enum class MenuPage { Main, Folders, Rename, Device }
+private enum class MenuPage { Main, Folders, Rename, Device, Phone }
 
 private val MenuWidth = 250.dp
 
@@ -222,6 +230,7 @@ fun AppMenu(
                     MenuPage.Folders -> stringResource(R.string.menu_to_folder)
                     MenuPage.Rename -> stringResource(R.string.menu_rename_folder)
                     MenuPage.Device -> stringResource(R.string.menu_source_device)
+                    MenuPage.Phone -> stringResource(R.string.phone_set_title)
                 }
                 BasicText(
                     title, style = Type.Headline, maxLines = 1, overflow = TextOverflow.Ellipsis,
@@ -256,6 +265,8 @@ fun AppMenu(
                                 }
                                 if (shownApp.shortcut == null) MenuRow(Glyph.Info, stringResource(R.string.menu_info), { onInfo(shownApp.key) })
                             }
+                            // What a remote cannot do well: sending pictures, cropping, typing names.
+                            MenuRow(Glyph.Globe, stringResource(R.string.menu_phone_set), { page = MenuPage.Phone })
                             // What the TV starts on, for homes that switch it on to watch television.
                             val boots = shownApp.source?.let { it.id == AerialSettings.bootSource } ?: (shownApp.key == AerialSettings.bootApp)
                             MenuRow(
@@ -306,8 +317,50 @@ fun AppMenu(
                             )
                         }
                     }
+                    MenuPage.Phone -> PhoneSetupContent(shownApp.key)
                 }
             }
+        }
+    }
+}
+
+/**
+ * A QR code that opens the phone page with this app highlighted (#app=key): sending pictures,
+ * cropping, and typing names are what a remote cannot do well. The server listens on demand.
+ */
+@Composable
+private fun PhoneSetupContent(appKey: String) {
+    val context = LocalContext.current
+    var qr by remember { mutableStateOf<ImageBitmap?>(null) }
+    var offline by remember { mutableStateOf(false) }
+    LaunchedEffect(appKey) {
+        val base = withContext(Dispatchers.IO) { PhoneServer.start(context) }
+        if (base == null) {
+            offline = true
+        } else {
+            val url = base + "#app=" + java.net.URLEncoder.encode(appKey, "UTF-8")
+            qr = withContext(Dispatchers.Default) { PhoneServer.qr(url).asImageBitmap() }
+        }
+    }
+    Column(Modifier.padding(horizontal = 14.dp)) {
+        if (qr != null) {
+            Box(
+                Modifier
+                    .size(112.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Color.White)
+                    .padding(8.dp),
+            ) {
+                Image(qr!!, contentDescription = null, contentScale = ContentScale.Fit, filterQuality = FilterQuality.None, modifier = Modifier.fillMaxSize())
+            }
+            Spacer(Modifier.height(8.dp))
+            BasicText(stringResource(R.string.phone_set_hint), style = Type.Caption)
+        } else {
+            BasicText(
+                stringResource(if (offline) R.string.phone_set_offline else R.string.phone_set_waiting),
+                style = Type.Caption,
+                modifier = Modifier.padding(vertical = 12.dp),
+            )
         }
     }
 }

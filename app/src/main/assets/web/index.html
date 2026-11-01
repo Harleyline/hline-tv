@@ -270,6 +270,23 @@
     .agrid.sorting .atile:not(.lift) { transition: none; }
     .toast { transform: translate(-50%, 0); }
   }
+  /* Cropping before sending: what the frame shows is what the TV shows. A dark room, the picture
+     under a 16:9 frame, a slider for zoom; the photo is only sent once it is confirmed. */
+  .crop { position: fixed; inset: 0; z-index: 60; display: flex; flex-direction: column; background: #000; color: #fff; }
+  .crop-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: calc(env(safe-area-inset-top) + 8px) 6px 4px; }
+  .crop-head strong { font-size: 16px; font-weight: 600; }
+  .crop-head button { border: 0; background: none; color: #fff; font-size: 16px; padding: 10px 12px; }
+  .crop-head button[disabled] { opacity: .4; }
+  .crop-body { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .crop-stage { position: relative; overflow: hidden; touch-action: none; background: #101010; }
+  .crop-stage img { position: absolute; left: 50%; top: 50%; max-width: none; user-select: none; -webkit-user-drag: none; }
+  .crop-frame { position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,.55); }
+  .crop-foot { padding: 8px 22px calc(env(safe-area-inset-bottom) + 16px); }
+  .crop-foot input { width: 100%; accent-color: #fff; }
+  .crop-foot p { margin: 2px 0 0; font-size: 12.5px; color: rgba(255,255,255,.68); text-align: center; }
+  /* A QR code opened this tab at one thing: point at it. */
+  .glow { animation: glow 1.1s ease 2; }
+  @keyframes glow { 50% { box-shadow: 0 0 0 3px var(--tint); border-radius: 12px; } }
 </style>
 </head>
 <body>
@@ -375,6 +392,21 @@
 <div class="toast" id="toast"></div>
 <div class="drop" id="drop" aria-hidden="true"><b data-i18n="drop_hint"></b><span data-i18n="drop_sub"></span></div>
 
+<div class="crop" id="crop" hidden>
+  <div class="crop-head">
+    <button id="cropCancel" type="button" data-i18n="cancel"></button>
+    <strong id="cropTitle"></strong>
+    <button id="cropSave" type="button" data-i18n="save"></button>
+  </div>
+  <div class="crop-body">
+    <div class="crop-stage" id="cropStage"><img id="cropImg" alt=""><div class="crop-frame"></div></div>
+  </div>
+  <div class="crop-foot">
+    <input id="cropZoom" type="range" min="100" max="320" value="100" aria-label="zoom">
+    <p data-i18n="crop_hint"></p>
+  </div>
+</div>
+
 <script>
 const base = location.pathname.replace(/\/?$/, '/');
 const $ = s => document.querySelector(s);
@@ -383,7 +415,7 @@ let state = null, stateJson = '';
 
 // The language: ?lang=ru in the address, else the one picked under More (kept on the phone), else the
 // first of the phone's preferred languages that has a table, else English. Keys are in KEYS, one array of texts per language.
-const KEYS = ["screensaver", "screensaver_short", "ss_aerial", "ss_photos", "ss_clock", "focus", "focus_high", "focus_standard", "weather", "city_ph", "set", "upload_label", "feedback_h", "feedback_hint", "diag_show", "diag_copy", "diag_github", "hint_aerial", "hint_photos", "hint_clock", "g_live", "g_live_sub", "g_daily", "g_daily_sub", "g_photo", "g_builtin", "g_auto", "toast_wallpaper", "aria_delete", "confirm_delete", "wx_clear", "wx_partlycloudy", "wx_cloudy", "wx_fog", "wx_rain", "wx_snow", "wx_thunder", "wx_chosen", "wx_auto_btn", "toast_auto", "wx_guessed", "wx_none", "tag_source", "aria_rename", "toast_renamed", "toast_name_reset", "toast_rename_fail", "aria_reset_icon", "toast_icon_reset", "focus_hint_standard", "focus_hint_high", "daily_title", "daily_caption", "rotate_title", "rotate_caption", "empty_photos", "add_second", "toast_tv_updated", "sending_n", "toast_added", "toast_no_photos", "toast_send_fail", "toast_city_set", "toast_city_nf", "toast_set_fail", "toast_sending_icon", "toast_icon_set", "toast_icon_bad", "diag_collecting", "toast_diag_fail", "toast_copied", "toast_copy_manual", "language", "hint_follows", "ss_videos", "hint_videos", "videos_h", "videos_upload", "videos_hint", "videos_empty", "confirm_video_delete", "toast_videos_added", "toast_video_bad", "sending_video", "hint_system", "tab_home", "tab_more", "current_wp", "cancel", "save", "name_ph", "rename_hint", "change_icon", "this_tv", "folder_count", "folder_ph", "inputs_h", "inputs_hint", "rename_hint_app", "was_named", "arrange_hint", "arrange_unready", "hidden_h", "hidden_none", "hidden_locked", "show_app", "hide_app", "to_folder", "new_folder", "out_of_folder", "ungroup", "ungroup_confirm", "folder_hint", "toast_hidden", "toast_shown", "toast_in_folder", "toast_out_folder", "toast_ungrouped", "tab_looks", "looks_title", "show_on_home", "source_device", "source_plain", "source_device_hint", "tv_model", "sw_always", "sw_always_sub", "sw_weather", "sw_saver_time", "sw_saver_time_sub", "g_source_sub", "icon_h", "icon_library", "icon_own", "icon_custom", "toast_icon_picked", "drop_hint", "drop_sub", "drop_none", "toast_diag_paste", "wx_locate", "toast_locate_ok", "toast_locate_fail", "sw_aqi", "sw_humidity" ];
+const KEYS = ["screensaver", "screensaver_short", "ss_aerial", "ss_photos", "ss_clock", "focus", "focus_high", "focus_standard", "weather", "city_ph", "set", "upload_label", "feedback_h", "feedback_hint", "diag_show", "diag_copy", "diag_github", "hint_aerial", "hint_photos", "hint_clock", "g_live", "g_live_sub", "g_daily", "g_daily_sub", "g_photo", "g_builtin", "g_auto", "toast_wallpaper", "aria_delete", "confirm_delete", "wx_clear", "wx_partlycloudy", "wx_cloudy", "wx_fog", "wx_rain", "wx_snow", "wx_thunder", "wx_chosen", "wx_auto_btn", "toast_auto", "wx_guessed", "wx_none", "tag_source", "aria_rename", "toast_renamed", "toast_name_reset", "toast_rename_fail", "aria_reset_icon", "toast_icon_reset", "focus_hint_standard", "focus_hint_high", "daily_title", "daily_caption", "rotate_title", "rotate_caption", "empty_photos", "add_second", "toast_tv_updated", "sending_n", "toast_added", "toast_no_photos", "toast_send_fail", "toast_city_set", "toast_city_nf", "toast_set_fail", "toast_sending_icon", "toast_icon_set", "toast_icon_bad", "diag_collecting", "toast_diag_fail", "toast_copied", "toast_copy_manual", "language", "hint_follows", "ss_videos", "hint_videos", "videos_h", "videos_upload", "videos_hint", "videos_empty", "confirm_video_delete", "toast_videos_added", "toast_video_bad", "sending_video", "hint_system", "tab_home", "tab_more", "current_wp", "cancel", "save", "name_ph", "rename_hint", "change_icon", "this_tv", "folder_count", "folder_ph", "inputs_h", "inputs_hint", "rename_hint_app", "was_named", "arrange_hint", "arrange_unready", "hidden_h", "hidden_none", "hidden_locked", "show_app", "hide_app", "to_folder", "new_folder", "out_of_folder", "ungroup", "ungroup_confirm", "folder_hint", "toast_hidden", "toast_shown", "toast_in_folder", "toast_out_folder", "toast_ungrouped", "tab_looks", "looks_title", "show_on_home", "source_device", "source_plain", "source_device_hint", "tv_model", "sw_always", "sw_always_sub", "sw_weather", "sw_saver_time", "sw_saver_time_sub", "g_source_sub", "icon_h", "icon_library", "icon_own", "icon_custom", "toast_icon_picked", "drop_hint", "drop_sub", "drop_none", "toast_diag_paste", "wx_locate", "toast_locate_ok", "toast_locate_fail", "sw_aqi", "sw_humidity" , "crop_title_photo", "crop_title_icon", "crop_hint", "toast_crop_fail"];
 const TEXTS = {
  "zh": [
   "屏幕保护程序",
@@ -531,6 +563,10 @@ const TEXTS = {
   "没拿到手机的位置，请手动输入城市",
   "空气质量",
   "湿度",
+  "裁剪照片",
+  "裁剪图标",
+  "拖动移动，滑杆缩放",
+  "这张图片读不出来",
  ],
  "zh-TW": [
   "螢幕保護程式",
@@ -678,6 +714,10 @@ const TEXTS = {
   "拿不到手機的位置，請手動輸入城市",
   "空氣品質",
   "濕度",
+  "裁剪照片",
+  "裁剪圖示",
+  "拖曳移動，滑桿縮放",
+  "這張圖片讀不出來",
  ],
  "ja": [
   "スクリーンセーバー",
@@ -825,6 +865,10 @@ const TEXTS = {
   "スマホの位置を取得できません。都市名を入力してください",
   "空気質",
   "湿度",
+  "写真を切り抜く",
+  "アイコンを切り抜く",
+  "ドラッグで移動、スライダーで拡大",
+  "画像を読み込めません",
  ],
  "ko": [
   "화면 보호기",
@@ -972,6 +1016,10 @@ const TEXTS = {
   "휴대전화 위치를 가져오지 못했습니다. 도시를 입력하세요",
   "공기질",
   "습도",
+  "사진 자르기",
+  "아이콘 자르기",
+  "끌어서 이동, 슬라이더로 확대",
+  "사진을 읽을 수 없습니다",
  ],
  "en": [
   "Screensaver",
@@ -1119,6 +1167,10 @@ const TEXTS = {
   "Could not get your phone's location; type your city instead",
   "Air Quality",
   "Humidity",
+  "Crop the photo",
+  "Crop the icon",
+  "Drag to move · slide to zoom",
+  "Couldn't read that picture",
  ],
  "ru": [
   "Заставка",
@@ -1266,6 +1318,10 @@ const TEXTS = {
   "Не удалось получить местоположение телефона; введите город",
   "Качество воздуха",
   "Влажность",
+  "Обрезать фото",
+  "Обрезать иконку",
+  "Перетащите, чтобы сдвинуть · ползунок — масштаб",
+  "Не удалось прочитать фото",
  ],
  "uk": [
   "Заставка",
@@ -1413,6 +1469,10 @@ const TEXTS = {
   "Не вдалося отримати місце телефона; введіть місто",
   "Якість повітря",
   "Вологість",
+  "Обрізати фото",
+  "Обрізати іконку",
+  "Перетягніть, щоб зсунути · повзунок — масштаб",
+  "Не вдалося прочитати фото",
  ],
  "kk": [
   "Экран қорғаушы",
@@ -1560,6 +1620,10 @@ const TEXTS = {
   "Телефонның орнын алу мүмкін болмады; қаланы енгізіңіз",
   "Ауа сапасы",
   "Ылғалдылық",
+  "Фотоны қию",
+  "Белгішені қию",
+  "Жылжыту үшін сүйреңіз · масштаб сырғытпа",
+  "Фото оқылмады",
  ]
 };
 const LANGS = Object.keys(TEXTS);
@@ -1798,7 +1862,21 @@ function renderWallpapers() {
   }
 }
 let uploading = 0;
-function uploadPhotos(e) { sendPhotos([...e.target.files]); }
+/*
+ * One picture goes through the cropper first: which part of it Home shows is the owner's call, and
+ * a remote has no way to say it. Several are sent as they are — cropping each would ask for more
+ * taps than the result is worth, and the TV takes the middle of a picture anyway.
+ */
+async function uploadPhotos(e) {
+  const files = [...e.target.files]; e.target.value = '';
+  if (!files.length) return;
+  if (files.length === 1) {
+    const cropped = await cropPicture(files[0], 1920, 1080, t('crop_title_photo'));
+    if (!cropped) return;
+    return sendPhotos([cropped]);
+  }
+  sendPhotos(files);
+}
 async function sendPhotos(files) {
   if (!files.length || uploading) return;
   uploading = files.length; stateJson = ''; render();
@@ -1809,6 +1887,93 @@ async function sendPhotos(files) {
     const next = await r.json(); uploading = 0; take(next);
     toast(next.added ? t('toast_added', { n: next.added }) : t('toast_no_photos'));
   } catch (err) { uploading = 0; stateJson = ''; render(); toast(t('toast_send_fail')); }
+}
+
+/*
+ * Cropping, without a library: a stage the size of the screen with a 16:9 frame over it, the
+ * picture moved by one finger and zoomed by the slider, and the same rectangle drawn into a canvas
+ * at the size the TV wants. All in pixels: the stage may be 360 wide on a phone, the photo 4000,
+ * and the frame has to come out the same either way. Resolves with a File, or null if cancelled.
+ */
+function cropPicture(file, outW, outH, title) {
+  return new Promise(resolve => {
+    const box = $('#crop'), stage = $('#cropStage'), img = $('#cropImg'), zoom = $('#cropZoom');
+    const view = { natW: 0, natH: 0, zoom: 1, tx: 0, ty: 0, W: 0, H: 0 };
+    const url = URL.createObjectURL(file);
+    const done = out => {
+      box.hidden = true; document.body.style.overflow = '';
+      zoom.value = '100'; img.onload = img.onerror = null; img.removeAttribute('src');
+      URL.revokeObjectURL(url);
+      resolve(out);
+    };
+    // The picture at zoom 1 covers the frame; every move and zoom is measured off that.
+    const scale = () => Math.max(view.W / view.natW, view.H / view.natH) * view.zoom;
+    const clamp = () => {
+      const s = scale();
+      const mx = Math.max(0, (view.natW * s - view.W) / 2), my = Math.max(0, (view.natH * s - view.H) / 2);
+      view.tx = Math.min(mx, Math.max(-mx, view.tx));
+      view.ty = Math.min(my, Math.max(-my, view.ty));
+    };
+    const paint = () => {
+      const s = scale();
+      img.style.width = view.natW * s + 'px'; img.style.height = view.natH * s + 'px';
+      img.style.transform = `translate(calc(-50% + ${view.tx}px), calc(-50% + ${view.ty}px))`;
+    };
+    const layout = () => {
+      const w = Math.max(120, Math.min(innerWidth - 20, (innerHeight - 200) * outW / outH));
+      view.W = w; view.H = w * outH / outW;
+      stage.style.width = view.W + 'px'; stage.style.height = view.H + 'px';
+      clamp(); paint();
+    };
+    const settle = (z, fresh) => {
+      view.zoom = z;
+      if (fresh) { view.tx = 0; view.ty = 0; }
+      clamp(); paint();
+    };
+    const result = () => {
+      const s = scale();
+      // The picture's left edge in stage pixels, then the frame in the picture's own.
+      const sx = -(view.W / 2 + view.tx - view.natW * s / 2) / s;
+      const sy = -(view.H / 2 + view.ty - view.natH * s / 2) / s;
+      const c = document.createElement('canvas');
+      c.width = outW; c.height = outH;
+      const ctx = c.getContext('2d');
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(img, sx, sy, view.W / s, view.H / s, 0, 0, outW, outH);
+      return new Promise(ok => c.toBlob(b => ok(b), 'image/jpeg', 0.92));
+    };
+
+    $('#cropTitle').textContent = title;
+    $('#cropSave').disabled = false;
+    zoom.oninput = e => settle(e.target.value / 100);
+    $('#cropSave').onclick = async () => {
+      $('#cropSave').disabled = true;
+      const blob = await result();
+      if (!blob) { toast(t('toast_crop_fail')); $('#cropSave').disabled = false; return; }
+      done(new File([blob], (file.name || 'photo').replace(/\.\w+$/, '') + '.jpg', { type: 'image/jpeg' }));
+    };
+    $('#cropCancel').onclick = () => done(null);
+    // One finger moves the picture; the slider zooms. The frame never lets the picture slip off.
+    let drag = null;
+    stage.onpointerdown = e => { drag = { id: e.pointerId, x: e.clientX, y: e.clientY }; stage.setPointerCapture && stage.setPointerCapture(e.pointerId); };
+    stage.onpointermove = e => {
+      if (!drag || e.pointerId !== drag.id) return;
+      view.tx += e.clientX - drag.x; view.ty += e.clientY - drag.y;
+      drag.x = e.clientX; drag.y = e.clientY;
+      clamp(); paint();
+    };
+    const up = e => { if (drag && e.pointerId === drag.id) drag = null; };
+    stage.onpointerup = up; stage.onpointercancel = up;
+    addEventListener('resize', () => { if (!box.hidden) layout(); }, { passive: true });
+
+    img.onload = () => {
+      view.natW = img.naturalWidth; view.natH = img.naturalHeight;
+      box.hidden = false; document.body.style.overflow = 'hidden';
+      layout(); settle(1, true);
+    };
+    img.onerror = () => { done(null); toast(t('toast_crop_fail')); };
+    img.src = url;
+  });
 }
 
 /* Screensaver tab. */
@@ -1971,7 +2136,10 @@ $('#wxLocate').onclick = async () => {
 
 let iconFor = null;
 $('#iconFile').onchange = async e => {
-  const f = e.target.files[0]; const a = iconFor; e.target.value = '';
+  let f = e.target.files[0]; const a = iconFor; e.target.value = '';
+  if (!f) return;
+  // A tile is 16:9: the picture is fitted to it here, where it can be seen, not guessed at later.
+  f = await cropPicture(f, 1280, 720, t('crop_title_icon'));
   if (!f || !a) return;
   toast(t('toast_sending_icon', { label: a.label }));
   try {
@@ -2418,9 +2586,44 @@ function render() {
 
 initLangSwitch();
 applyI18n();
-show((location.hash || '').slice(1) || (() => { try { return localStorage.getItem('aerial-tab'); } catch (e) { return null; } })(), true);
+
+/*
+ * The QR code on the TV opens this page with a fragment: #app=<key> for one tile's sheet (its name,
+ * its picture), #upload for the photo upload. Anything else is a tab, as it was.
+ */
+function entryFor(key) {
+  const L = (state && state.layout) || {};
+  const pool = [...(L.home || []), ...(L.hidden || [])];
+  for (const f of Object.values(L.folders || {})) pool.push(...(f.apps || []));
+  const row = pool.find(x => x.key === key && x.kind !== 'folder');
+  if (row) return row;
+  const a = ((state && state.apps) || []).find(x => x.key === key);
+  return a ? { key: a.key, label: a.label, stamp: a.stamp } : null;
+}
+/* Where the code pointed: scroll it in, ring it once, and open what it stands for. */
+function pointAt(selector, then) {
+  const node = document.querySelector(selector);
+  if (!node) return;
+  node.scrollIntoView({ block: 'center', behavior: scrollBehavior() });
+  node.classList.add('glow');
+  setTimeout(() => node.classList.remove('glow'), 2600);
+  if (then) setTimeout(then, 480);
+}
+function bootTab() {
+  const raw = (location.hash || '').slice(1);
+  let saved = null; try { saved = localStorage.getItem('aerial-tab'); } catch (e) {}
+  if (raw.indexOf('app=') === 0) {
+    show('home', true);
+    const key = decodeURIComponent(raw.slice(4));
+    return () => pointAt(`#homeBody .atile[data-key="${key}"]`, () => { const e = entryFor(key); if (e) tileSheet(e, null); });
+  }
+  if (raw === 'upload') { show('looks', true); return () => pointAt('#sections .btn.add'); }
+  show(raw || saved, true);
+  return null;
+}
+const fromQr = bootTab();
 async function refresh() { try { state = await api('api/state'); render(); } catch (e) {} }
-refresh();
+refresh().then(() => { if (fromQr) setTimeout(fromQr, 140); });
 setInterval(() => { if (!document.hidden && sheet.hidden && !arrDragging) refresh(); }, 6000);
 </script>
 </body>

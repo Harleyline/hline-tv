@@ -312,4 +312,10 @@
     <string name="cc_standby_needs">Needs ADB grant</string>
     <string name="cc_standby_hint">Writes the TV\&#8217;s quick-standby mode so Mi Home keeps working and wake is instant while the TV is off. Standby draws a little more power. On TVs that ignore the setting, pick it in the TV\&#8217;s own settings.</string>
     <string name="cc_standby_needs_hint">Turning this on needs the write-secure-settings permission: run tools/install.sh once over ADB (see README).</string>
+    <string name="menu_phone_set">Set up on your phone</string>
+    <string name="phone_set_title">Phone settings</string>
+    <string name="phone_set_hint">Scan to open the settings page: send your own photos, change an icon or a name.</string>
+    <string name="wp_scan_hint">Want your own photos on Home? Scan with your phone and send one over.</string>
+    <string name="phone_set_offline">No network: connect the TV to Wi-Fi or Ethernet first.</string>
+    <string name="phone_set_waiting">Preparing the QR code…</string>
 </resources>
