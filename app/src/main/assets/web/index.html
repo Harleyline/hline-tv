@@ -2381,13 +2381,15 @@ function tileSheet(e, inFolder, hidden) {
         b.append(img, el('span', 'txt', c.label));
         b.insertAdjacentHTML('beforeend', ICON.tick);
         if (c.pick !== 'custom') b.onclick = async () => {
-          closeSheet();
-          if (a.icon === c.pick) return;
+          // The tick moves only when the answer is back: closing first looked like "not
+          // switching" whenever the sheet was reopened before the round trip.
+          if (a.icon === c.pick) { closeSheet(); return; }
+          b.disabled = true;
           try {
             const next = await api('api/icon/pick', { app: a.key, pick: c.pick });
             if (!next.saved) throw new Error('not saved');
-            take(next); toast(t('toast_icon_picked'));
-          } catch (err) { toast(t('toast_set_fail')); }
+            take(next); toast(t('toast_icon_picked')); closeSheet();
+          } catch (err) { toast(t('toast_set_fail')); b.disabled = false; }
         };
         cl.appendChild(b);
       }
