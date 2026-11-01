@@ -57,7 +57,12 @@ class PhoneServer private constructor(private val context: Context, private val 
         val path = uri.removePrefix(prefix).ifEmpty { "/" }
         return runCatching {
             when {
-                path == "/" -> newFixedLengthResponse(Response.Status.OK, "text/html; charset=utf-8", page())
+                // The page changes with every build, and a phone keeps its tab for days: told
+                // nothing, browsers kept serving an old page for weeks (icons set "not changing").
+                // Always revalidate — the file is small and the TV is on the same network.
+                path == "/" -> newFixedLengthResponse(Response.Status.OK, "text/html; charset=utf-8", page()).apply {
+                    addHeader("Cache-Control", "no-cache")
+                }
                 path == "/api/state" -> json(state())
                 path == "/api/diagnostics" -> text(Response.Status.OK, Diagnostics.report(context))
                 path.startsWith("/thumb/") -> thumb(path.removePrefix("/thumb/"))
