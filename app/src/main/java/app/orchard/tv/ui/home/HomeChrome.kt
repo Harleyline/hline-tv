@@ -267,6 +267,11 @@ fun HomeBackground(
     glassAwaitsStop: Boolean = false,
     /** The grid's own glass, where it is not the picture's ([frosted]): the aerial film's (Wallpapers.clipGlass). */
     gridGlass: ImageBitmap? = null,
+    /**
+     * The plate under the top row as a clear one: the smoke and the lit edge, no frosted picture.
+     * A still wallpaper then reads through the dock the way a film already does (the owner).
+     */
+    clearPlate: Boolean = true,
 ) {
     val shade = remember { Images.homeShade.asImageBitmap() }
     Box(Modifier.fillMaxSize()) {
@@ -285,7 +290,7 @@ fun HomeBackground(
             if (a > 0.01f) drawDrawingIn(saverImage, saverPush(), a)
         }
         Box(Modifier.fillMaxSize().diagLayer("plate")) {
-            Plate(frosted ?: backdrop, filmGlass, plate, scroll, collapse, cover, filmStopped, toSaver, lift)
+            Plate(frosted ?: backdrop, filmGlass, plate, scroll, collapse, cover, filmStopped, toSaver, lift, clearPlate)
         }
     }
 }
@@ -384,7 +389,7 @@ private fun Pictures(
  * moves or a new frame fades in, every [GLASS_EVERY_MS]: the film plays with Compose all but still.
  */
 @Composable
-private fun Plate(glass: ImageBitmap?, film: ImageBitmap?, plate: Rect?, scroll: () -> Float, collapse: Float, cover: () -> Float, filmStopped: () -> Float, toSaver: () -> Float, lift: () -> Float) {
+private fun Plate(glass: ImageBitmap?, film: ImageBitmap?, plate: Rect?, scroll: () -> Float, collapse: Float, cover: () -> Float, filmStopped: () -> Float, toSaver: () -> Float, lift: () -> Float, clear: Boolean = false) {
     var shown by remember { mutableStateOf(glass) }
     var under by remember { mutableStateOf<ImageBitmap?>(null) }
     val swap = remember { Animatable(1f) }
@@ -459,14 +464,18 @@ private fun Plate(glass: ImageBitmap?, film: ImageBitmap?, plate: Rect?, scroll:
         // A film's plate stays the film's, moving or stopped: switched to the still glass as the
         // film stopped (a menu, Control Center, the grid), it turned from see-through to frosted
         // all over, another colour (the owner, Xiaomi MiTV-MFTR0).
-        val alpha = if (film != null) 0f else visibility()
+        // [clear]: the plate keeps the smoke and the lit edge and drops the frosted picture, so a
+        // still wallpaper reads through it as a film's does (the owner: the dock went milky over a
+        // picture and see-through over an aerial). No glass is baked at all while it is set, which
+        // is the cheaper path too.
+        val alpha = if (film != null || clear) 0f else visibility()
         // The film's plate, while the film shows and the plate over a picture does not hide it.
         // With no frame to frost (an input's picture, which cannot be copied) it is the smoke and
         // the lit edge alone, so the top row keeps a plate over anything.
         val base = (1f - smooth(((scroll() / collapse).coerceIn(0f, 1f) / 0.55f).coerceIn(0f, 1f))) * (1f - toSaver())
         val frame = filmTop
         val edge = smoke
-        if (edge != null && (film != null || cover() > 0.01f) && alpha < 0.99f && base > 0.01f) {
+        if (edge != null && (film != null || cover() > 0.01f || clear) && alpha < 0.99f && base > 0.01f) {
             val p = (scroll() / collapse).coerceIn(0f, 1f)
             val r = plate.translate(0f, -scroll() - lift()).inflate(PlateSwell.toPx() * smooth((p / 0.55f).coerceIn(0f, 1f)))
             val t = filmSwap.value
@@ -481,7 +490,10 @@ private fun Plate(glass: ImageBitmap?, film: ImageBitmap?, plate: Rect?, scroll:
             } else if (frame != null) {
                 drawBaked(frame, r, FILM_FROST * base)
             }
-            drawBaked(edge, r, base)
+            // Alone on a still picture the smoke would sit on the screen as a grey band: it is
+            // lighter there, the edge doing the rest of the work.
+            val smoke = if (frame == null) base * CLEAR_SMOKE else base
+            drawBaked(edge, r, smoke)
         }
 
         // The plate rides with its row and dissolves into the frosted background: it fades
@@ -527,6 +539,12 @@ private val FILM_SMOKE = android.graphics.Color.argb(72, 0, 0, 0)
 
 /** A new key frame fades in over the last: slow, as the glass is soft, and seldom (GLASS_EVERY_MS). */
 private const val FILM_SWAP_MS = 700
+
+/**
+ * The smoke alone on a still picture, at this much of the film plate's: a hint of shade, so the
+ * white names keep their contrast, not the grey band full strength reads as.
+ */
+private const val CLEAR_SMOKE = 0.5f
 
 /** The Liquid Glass plate under the top row: how far it reaches past the tiles, and its corners. */
 val PlatePadH = 26.dp

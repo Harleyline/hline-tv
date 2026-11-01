@@ -298,7 +298,7 @@ private fun MainPage(vm: HomeViewModel, now: LocalDateTime, takeFocus: Boolean, 
                 vm.whenUnlocked { vm.overlay = Overlay.ControlCenter(CcPage.Wifi) }
             }
             RoundButton(
-                Glyph.Photo, stringResource(R.string.cc_personalize),
+                Glyph.Palette, stringResource(R.string.cc_personalize),
                 focusRequester = personalizeFocus,
                 modifier = Modifier.onFocusChanged { if (it.isFocused) cameFrom = personalizeFocus },
             ) {
