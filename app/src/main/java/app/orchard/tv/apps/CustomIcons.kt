@@ -18,9 +18,8 @@ import java.io.InputStream
  *
  * 换回上一张 works on the tile's whole picture, not only on sent files: before anything changes
  * the picture — an upload, a pick of the library's or the app's own, a reset — [snapshot] records
- * what stood there (which source, and the sent file's bytes when the source was the sent one), and
- * [undo] puts exactly that back. The state being replaced becomes the new "previous", so undo
- * walks back and forth between the two.
+ * what stood there (which source, and the sent file's bytes when one exists), and [undo] puts
+ * exactly that back, once: the record is spent on use, and the next change makes a new one.
  */
 object CustomIcons {
     /** 1280×720: sharp on a 4K UI's 704 px tile, small enough to decode on every app reload. */
@@ -92,24 +91,22 @@ object CustomIcons {
     }
 
     /**
-     * Puts back the state [snapshot] recorded, and keeps the present state as the new "previous"
-     * — so undo undoes itself, whatever the two states were (a sent picture, the library, the
-     * app's own). False without a recorded state.
+     * Puts back the state [snapshot] recorded, and spends the record: 换回上一张 is a one-shot —
+     * the button is there once, after a change, and gone once used, until the next change makes a
+     * new one. False without a recorded state.
      */
     fun undo(pkg: String): Boolean {
         if (!::dir.isInitialized || !hasPrev(pkg)) return false
-        val meta = runCatching { org.json.JSONObject(prevMetaFor(pkg).readText()) }.getOrNull() ?: return false
-        val pick = when (meta.optString("pick")) {
-            "Library" -> IconLibrary.Pick.Library
-            "Own" -> IconLibrary.Pick.Own
-            else -> null
+        val meta = runCatching { org.json.JSONObject(prevMetaFor(pkg).readText()) }.getOrNull()
+        val pick = meta?.let {
+            when (it.optString("pick")) {
+                "Library" -> IconLibrary.Pick.Library
+                "Own" -> IconLibrary.Pick.Own
+                else -> null
+            }
         }
-        val sent = meta.optBoolean("sent")
-        // The sent file's bytes of the state being restored, read before they are replaced.
+        val sent = meta?.optBoolean("sent") == true
         val bytes = if (sent) prevPngFor(pkg).takeIf { it.exists() }?.readBytes() else null
-        // The present becomes the previous.
-        snapshot(pkg)
-        // And the recorded state comes back.
         IconLibrary.choose(pkg, pick)
         val cur = fileFor(pkg)
         if (sent) {
@@ -117,6 +114,8 @@ object CustomIcons {
         } else {
             cur.delete()
         }
+        prevMetaFor(pkg).delete()
+        prevPngFor(pkg).delete()
         return true
     }
 

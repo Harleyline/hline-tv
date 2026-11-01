@@ -110,8 +110,8 @@
     <string name="ss_aerial">航拍</string>
     <string name="ss_photos">壁纸</string>
     <string name="ss_clock">时钟</string>
-    <string name="wp_phone_title">用手机或电脑设置</string>
-    <string name="wp_phone_body">扫码，或用电脑打开下面的地址：发照片和视频、换 App 图标、设置城市。手机或电脑要和电视在同一个网络。</string>
+    <string name="wp_phone_title">用手机或电脑，设置 HLine TV</string>
+    <string name="wp_phone_body">扫码，或在电脑上打开下方地址：自定义壁纸、App 图标、应用名字，随心搭配。手机或电脑需与电视在同一网络。</string>
     <string name="wp_phone_offline">先把电视连上网络，才能用手机或电脑设置。</string>
     <string name="ss_start">立即开始</string>
     <string name="ss_delay">闲置后开始</string>

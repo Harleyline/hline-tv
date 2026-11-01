@@ -111,8 +111,8 @@
     <string name="ss_aerial">Films</string>
     <string name="ss_photos">Wallpaper</string>
     <string name="ss_clock">Clock</string>
-    <string name="wp_phone_title">Set up from a phone or computer</string>
-    <string name="wp_phone_body">Scan the code, or open the address in a computer’s browser, to send photos and videos, change icons and set the city. Both must be on the TV’s network.</string>
+    <string name="wp_phone_title">Set up HLine TV from your phone or computer</string>
+    <string name="wp_phone_body">Scan the code, or open the address below on a computer: choose your own wallpaper, change an app’s icon or its name. Both need to be on the TV’s network.</string>
     <string name="wp_phone_offline">Connect the TV to a network to set it up from a phone or computer.</string>
     <string name="ss_start">Start Now</string>
     <string name="ss_delay">Start After</string>
