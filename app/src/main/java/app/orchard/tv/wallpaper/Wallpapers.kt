@@ -671,7 +671,6 @@ object Wallpapers {
         val photos = (photoDir.listFiles { f -> f.extension == "jpg" } ?: emptyArray())
             .sortedByDescending { it.lastModified() }
             .map { Wallpaper("photo:${it.nameWithoutExtension}", WallpaperKind.Photo, names.getString(R.string.wp_photo_mine)) }
-        val auto = Wallpaper(AUTO, WallpaperKind.Auto, names.getString(R.string.wp_auto_follow))
         val live = Wallpaper(LIVE, WallpaperKind.Live, names.getString(R.string.ss_aerial))
         // All of them in turn, then each on its own (#762); the pickers show the first only for two or more.
         val films = ScreensaverVideos.all(app)
@@ -679,11 +678,11 @@ object Wallpapers {
             listOf(Wallpaper(VIDEOS, WallpaperKind.Video, names.getString(R.string.wp_videos_rotate))) +
                 films.map { Wallpaper(VIDEO_PREFIX + it.id, WallpaperKind.Video, it.name.substringBeforeLast('.').ifBlank { it.name }) }
         val inputs = sources.map { (id, name) -> Wallpaper(SOURCE_PREFIX + id, WallpaperKind.Source, name) }
-        items = listOf(live) + videos + daily + builtins + photos + auto + inputs
-        // A preset this build no longer draws (the city skyline went in 1.14, the owner's call):
-        // the old choice would point at nothing and Home would open on a black screen. The dunes
-        // take over, and the picker shows them as the chosen one.
-        if (selectedId.startsWith("grad:") && items.none { it.id == selectedId }) select(DEFAULT_FALLBACK)
+        items = listOf(live) + videos + daily + builtins + photos + inputs
+        // A choice this build no longer lists (the city skyline preset went in 1.14, the Follow App
+        // wallpaper in 1.2, the owner's call): the old selection would point at nothing and Home
+        // would open on a black screen. The dunes take over, and the picker shows them as chosen.
+        if (selectedId == AUTO || (selectedId.startsWith("grad:") && items.none { it.id == selectedId })) select(DEFAULT_FALLBACK)
     }
 
     // ---- daily photos ----

@@ -663,7 +663,6 @@ private fun wallpaperNote(wp: Wallpaper): String? = when {
     wp.id == Wallpapers.LATEST_DAILY -> stringResource(R.string.wp_daily_note)
     wp.id == Wallpapers.ROTATE_PHOTOS -> stringResource(R.string.wp_photos_rotate_note)
     wp.kind == WallpaperKind.Photo -> stringResource(R.string.wp_photo_note)
-    wp.kind == WallpaperKind.Auto -> stringResource(R.string.wp_auto_note)
     wp.kind == WallpaperKind.Daily -> wp.caption
     else -> null
 }
