@@ -110,7 +110,7 @@
     <string name="ss_photos">تام قەغىزى</string>
     <string name="ss_clock">سائەت</string>
     <string name="wp_phone_title">تېلېفون ياكى كومپيۇتېردىن HLine TV نى تەڭشەش</string>
-    <string name="wp_phone_body">1-قەدەم: كودنى سكاننېرلاڭ ياكى ئادرېسنى ئېچىڭ (تېلېفون/كومپيۇتېر تېلېۋىزور بىلەن ئوخشاش Wi-Fi دا)\n2-قەدەم: تام قەغىزى، بەلگە ۋە ئىسىمنى خالىغانچە تەڭشەڭ</string>
+    <string name="wp_phone_body">1-قەدەم: كودنى سكاننېرلاڭ ياكى ئادرېسنى ئېچىڭ (تېلېۋىزور بىلەن ئوخشاش Wi-Fi دا)\n2-قەدەم: تام قەغىزى، بەلگە ۋە ئىسىمنى تەڭشەڭ</string>
     <string name="wp_phone_offline">تېلېفوندىن تەڭشەش ئۈچۈن تورغا ئۇلىنىڭ.</string>
     <string name="ss_start">ھازىر باشلاش</string>
     <string name="ss_delay">كېيىن باشلاش</string>

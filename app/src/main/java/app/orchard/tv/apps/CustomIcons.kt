@@ -34,6 +34,11 @@ object CustomIcons {
     fun init(context: Context) {
         if (::dir.isInitialized) return
         dir = File(context.filesDir, "icons").apply { mkdirs() }
+        // The 换回上一张 record belongs to the change it backs out of, not to the tile forever:
+        // records left over from a previous run (an update restarts the process) would show the
+        // button on tiles the owner never touched this time. Fresh run, no history.
+        dir.listFiles { f -> f.isFile && (f.name.endsWith(".prev.json") || f.name.endsWith(".prev.png")) }
+            ?.forEach { it.delete() }
     }
 
     /** By package name; a pinned input's key holds slashes, so it goes by a hash of the key. */

@@ -104,7 +104,7 @@
     <string name="ss_photos">Тұсқағаз</string>
     <string name="ss_clock">Сағат</string>
     <string name="wp_phone_title">HLine TV-ді телефонмен немесе компьютерден баптаңыз</string>
-    <string name="wp_phone_body">1-қадам: QR кодты сканерлеңіз немесе сілтемені ашыңыз (телефон/компьютер теледидармен бір Wi-Fi желісінде)\n2-қадам: Тұсқағазды, қолданба белгішелерін мен атауларын қалауыңызша өзгертіңіз</string>
+    <string name="wp_phone_body">1-қадам: QR кодты сканерлеп немесе сілтемені ашыңыз (теледидармен бір Wi-Fi желісінде)\n2-қадам: Тұсқағаз, белгіше және атауларды өзгертіңіз</string>
     <string name="wp_phone_offline">Телефоннан немесе компьютерден баптау үшін теледидарды желіге қосыңыз.</string>
     <string name="ss_start">Қазір бастау</string>
     <string name="ss_delay">Бастау уақыты</string>

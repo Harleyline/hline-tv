@@ -103,8 +103,8 @@
     <string name="ss_aerial">Аэросъёмка</string>
     <string name="ss_photos">Обои</string>
     <string name="ss_clock">Часы</string>
-    <string name="wp_phone_title">Настройте HLine TV с телефона или компьютера</string>
-    <string name="wp_phone_body">Шаг 1. Отсканируйте код или откройте ссылку (телефон или компьютер — в той же сети Wi-Fi, что и телевизор)\nШаг 2. Меняйте обои, значки и названия приложений — как вам нравится</string>
+    <string name="wp_phone_title">Настройте HLine TV с телефона</string>
+    <string name="wp_phone_body">Шаг 1. Отсканируйте код или откройте ссылку (в той же сети Wi-Fi, что и телевизор)\nШаг 2. Меняйте обои, значки и названия приложений</string>
     <string name="wp_phone_offline">Подключите телевизор к сети, чтобы настроить его с телефона или компьютера.</string>
     <string name="ss_start">Запустить сейчас</string>
     <string name="ss_delay">Запускать через</string>

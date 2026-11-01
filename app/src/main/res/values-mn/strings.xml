@@ -110,7 +110,7 @@
     <string name="ss_photos">Арын дэвсгэр</string>
     <string name="ss_clock">Цаг</string>
     <string name="wp_phone_title">Утас, компьютерээс HLine TV тохируулах</string>
-    <string name="wp_phone_body">1-р алхам: QR код уншуулж эсвэл хаягаар нээнэ үү (утас/компьютер ТВ-той ижил Wi-Fi-д)\n2-р алхам: Ханын зураг, аппын дүрс, нэрийг хүссэнээр тохируул</string>
+    <string name="wp_phone_body">1-р алхам: QR код уншуулж эсвэл хаягийг нээнэ үү (ТВ-той ижил Wi-Fi-д)\n2-р алхам: Ханын зураг, дүрс, нэрийг тохируулаарай</string>
     <string name="wp_phone_offline">Утсаар тохируулахын тулд сүлжээнд холбогдоно уу.</string>
     <string name="ss_start">Одоо эхлэх</string>
     <string name="ss_delay">Хойш эхлэх</string>
