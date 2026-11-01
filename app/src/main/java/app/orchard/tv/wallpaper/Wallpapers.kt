@@ -18,6 +18,7 @@ import app.orchard.tv.BuildConfig
 import app.orchard.tv.R
 import app.orchard.tv.guard.GuardSetup
 import app.orchard.tv.settings.AerialSettings
+import app.orchard.tv.settings.AppLanguage
 import app.orchard.tv.system.DiagLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -738,9 +739,14 @@ object Wallpapers {
         lastDailyRefresh = System.currentTimeMillis()
         val added = withContext(Dispatchers.IO) {
             runCatching {
-                // The market sets the language of the captions; Bing has no Russian or Ukrainian ones
-                // (it answers those markets in English), so everything but Chinese asks for English.
-                val market = if (Locale.getDefault().language == "zh") "zh-CN" else "en-US"
+                // The market sets the language of the captions; Bing has no Russian, Ukrainian or
+                // Korean ones (it answers those markets in English), so everything but Chinese asks
+                // for English. The app's own language leads; System falls back to the TV's.
+                val market = when (AerialSettings.language) {
+                    AppLanguage.Zh, AppLanguage.ZhTw -> "zh-CN"
+                    AppLanguage.System -> if (Locale.getDefault().language == "zh") "zh-CN" else "en-US"
+                    else -> "en-US"
+                }
                 // Each market has its own photo for a given date, and the files are named by date.
                 val marketFile = File(dailyDir, "market")
                 // No file: kept before markets were told apart, which was always zh-CN.

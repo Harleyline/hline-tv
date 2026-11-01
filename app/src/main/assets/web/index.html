@@ -1693,8 +1693,10 @@ function applyI18n() {
 }
 
 
-const hints = { aerial: t('hint_aerial'), photos: t('hint_photos'), clock: t('hint_clock'), videos: t('hint_videos'), system: t('hint_system') };
-const groups = [
+// Both re-read on every use: the language follows the TV, and values taken once at load would
+// keep the language the phone had when the page opened.
+const hints = () => ({ aerial: t('hint_aerial'), photos: t('hint_photos'), clock: t('hint_clock'), videos: t('hint_videos'), system: t('hint_system') });
+const groups = () => [
   ['live', t('g_live'), t('g_live_sub')],
   ['daily', t('g_daily'), t('g_daily_sub')],
   ['photo', t('g_photo'), ''],
@@ -1873,7 +1875,7 @@ function renderWallpapers() {
   // Sending a picture of one's own is what people come here for: a way in at the very top of the
   // tab, not only further down under 我的照片. It doubles as the #upload anchor the TV's QR points at.
   root.appendChild(uploadBtn());
-  for (const [kind, title, sub] of groups) {
+  for (const [kind, title, sub] of groups()) {
     // Moving: the aerial films and the owner's videos.
     let list = state.wallpapers.filter(w => w.kind === kind || (kind === 'live' && w.kind === 'video'));
     // Each video on its own; the card that plays them in turn only for two or more (#762), as on the TV.
@@ -2031,7 +2033,7 @@ function cropPicture(file, outW, outH, title) {
 let sendingVideo = '';
 function renderScreensaver() {
   document.querySelectorAll('#ss [data-mode]').forEach(b => b.setAttribute('aria-checked', b.dataset.mode === state.screensaver ? 'true' : 'false'));
-  $('#ssFoot').textContent = state.screensaverFollows ? t('hint_follows') : state.screensaver === 'system' ? hints.system : '';
+  $('#ssFoot').textContent = state.screensaverFollows ? t('hint_follows') : state.screensaver === 'system' ? hints().system : '';
   $('#ssFoot').hidden = !$('#ssFoot').textContent;
   // The time only over the aerial and photo screensavers; the clock one is its clock.
   $('#ssTimeBox').hidden = state.screensaver !== 'aerial' && state.screensaver !== 'photos';
@@ -2096,7 +2098,7 @@ window.addEventListener('drop', e => {
 });
 
 /* More tab: focus style and weather. */
-const weatherNames = { clear: t('wx_clear'), partlycloudy: t('wx_partlycloudy'), cloudy: t('wx_cloudy'), fog: t('wx_fog'), rain: t('wx_rain'), snow: t('wx_snow'), thunder: t('wx_thunder') };
+const weatherNames = () => ({ clear: t('wx_clear'), partlycloudy: t('wx_partlycloudy'), cloudy: t('wx_cloudy'), fog: t('wx_fog'), rain: t('wx_rain'), snow: t('wx_snow'), thunder: t('wx_thunder') });
 /* The town as this page's language reads it: the Chinese name for Chinese and Japanese, the
    Latin one the TV keeps beside it for everything else (2.17). */
 function placeText(w) {
@@ -2111,7 +2113,7 @@ function renderMore() {
   $('#swHumidity').checked = !!state.showHumidity;
   document.querySelectorAll('#focus [data-style]').forEach(b => b.setAttribute('aria-checked', b.dataset.style === state.focusStyle ? 'true' : 'false'));
   const w = state.weather || {};
-  $('#wxNow').textContent = w.celsius !== undefined ? `${w.celsius}° ${weatherNames[w.kind] || ''}` : '—';
+  $('#wxNow').textContent = w.celsius !== undefined ? `${w.celsius}° ${weatherNames()[w.kind] || ''}` : '—';
   $('#wxPlace').textContent = placeText(w);
   const hint = $('#wxHint'); hint.replaceChildren();
   if (w.chosen) {
