@@ -60,18 +60,19 @@ object CustomIcons {
 
     /**
      * Records the picture as it stands now — the source it comes from, and the sent file's bytes
-     * when it comes from one — before a change replaces it. Off the main thread.
+     * whenever there is one (even hidden behind a pick) — before a change replaces it. Off the
+     * main thread.
      */
     fun snapshot(pkg: String) {
         if (!::dir.isInitialized) return
         val pick = IconLibrary.pick(pkg)
-        val showingSent = pick == null && has(pkg)
+        val sent = has(pkg)
         runCatching {
             prevMetaFor(pkg).writeText(org.json.JSONObject()
                 .put("pick", pick?.name ?: "")
-                .put("sent", showingSent).toString())
+                .put("sent", sent).toString())
             val prev = prevPngFor(pkg); val cur = fileFor(pkg)
-            if (showingSent && cur.exists()) cur.copyTo(prev, overwrite = true) else prev.delete()
+            if (sent && cur.exists()) cur.copyTo(prev, overwrite = true) else prev.delete()
         }
     }
 

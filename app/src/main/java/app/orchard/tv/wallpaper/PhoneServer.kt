@@ -170,7 +170,15 @@ class PhoneServer private constructor(private val context: Context, private val 
                     }
                     val ok = installed(pkg) && asked in setOf("library", "own", "custom") &&
                         (asked != "library" || IconLibrary.has(pkg))
-                    if (ok) {
+                    // A pick that changes nothing (custom when the sent picture already stands in
+                    // front) is not a change: recording it would overwrite the state worth
+                    // returning to with a copy of the present one.
+                    val changes = ok && when (asked) {
+                        "custom" -> IconLibrary.pick(pkg) != null
+                        "library" -> IconLibrary.pick(pkg) != IconLibrary.Pick.Library
+                        else -> IconLibrary.pick(pkg) != IconLibrary.Pick.Own
+                    }
+                    if (changes) {
                         CustomIcons.snapshot(pkg)
                         IconLibrary.choose(pkg, pick)
                         runBlocking(Dispatchers.Main) { CustomIcons.changed(); IconLibrary.changed() }
