@@ -121,7 +121,7 @@
   .chip i{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
   .hero h1{margin:0;font-size:inherit;font-weight:700;letter-spacing:0}
   .hero h1 .brandmark{display:block;font-family:"Didot","Bodoni 72","Songti SC","Times New Roman",serif;font-weight:400;font-size:18px;letter-spacing:.72em;text-indent:.72em;text-transform:uppercase;color:rgba(255,255,255,.95)}
-  .hero h1 .slogan{display:block;margin-top:26px;font-size:clamp(64px,12.65vw,180px);line-height:1.12;letter-spacing:-.042em;font-weight:700;
+  .hero h1 .slogan{display:block;margin-top:26px;font-size:clamp(72px,14.2vw,200px);line-height:1.12;letter-spacing:-.042em;font-weight:700;
     background:linear-gradient(98deg,#ffffff 6%,#e4f5ff 40%,#d3caff 96%);-webkit-background-clip:text;background-clip:text;color:transparent;
     filter:drop-shadow(0 18px 50px rgba(0,0,0,.55))}
   .hero h1 .slogan span{display:block}
@@ -144,7 +144,7 @@
   @media(max-width:760px){.hero{padding:104px 0 96px;min-height:94vh}.scroll-hint{display:none}}
   @media(max-height:1000px) and (min-width:761px){
     .hero{padding:96px 0 76px}
-    .hero h1 .slogan{margin-top:16px;font-size:clamp(48px,9.46vw,136px)}
+    .hero h1 .slogan{margin-top:16px;font-size:clamp(54px,10.6vw,152px)}
     .hero .lead{margin-top:22px;font-size:clamp(15px,1.7vw,18px)}
     .hero .closer{margin-top:26px;font-size:clamp(19px,2.6vw,28px)}
     .actions{margin-top:28px}
@@ -555,8 +555,8 @@ adb install HLine-TV.apk</pre>
       heroBg.style.transform = 'translate3d(0,' + (y * 0.28).toFixed(2) + 'px,0)';
     }
     if (slogan) {
-      const p = Math.min(Math.max(y / (heroEl.offsetHeight * 0.55), 0), 1);
-      slogan.style.opacity = (1 - p).toFixed(3);
+      const p = Math.min(Math.max(y / (heroEl.offsetHeight * 0.26), 0), 1);
+      slogan.style.opacity = Math.pow(1 - p, 1.25).toFixed(3);
       slogan.style.transform = 'translate3d(0,' + (-y * 0.16).toFixed(2) + 'px,0)';
     }
     queued = false;
