@@ -351,7 +351,9 @@ object Wallpapers {
         WallpaperKind.Video -> videoFrame.takeIf { videoFrameIsOf(wp.id) }?.let { Images.decodeCover(it, w, h) }
             ?: firstVideoFrame(wp.id, w, h)
             ?: Gradients.render(Gradients.byKey("dunes_gilded") ?: Gradients.presets.first(), w, h)
-        WallpaperKind.Source -> Gradients.byKey(SOURCE_PICTURE)?.let { Gradients.render(it, w, h) }
+        // An input's stand-in: the dune blurred over, so a source reads unlike a chosen wallpaper
+        // (the owner) — and unlike the box's own picture, which covers it when it arrives.
+        WallpaperKind.Source -> Gradients.byKey(SOURCE_PICTURE)?.let { Images.frost(Gradients.render(it, w, h), app) }
     }
 
     private fun firstVideoFrame(id: String, w: Int, h: Int): Bitmap? {
@@ -422,8 +424,10 @@ object Wallpapers {
             else -> 0L
         }
         // "clear": a film's picture baked unshaded, not one kept from when it was shaded.
+        // "src": the input's stand-in baked blurred, not one kept from when it was sharp.
         val film = if (wp.kind == WallpaperKind.Live || wp.kind == WallpaperKind.Video) "|clear" else ""
-        return "${wp.id}|$stamp|${screenW}x$screenH|${BuildConfig.VERSION_CODE}$film"
+        val src = if (wp.kind == WallpaperKind.Source) "|src" else ""
+        return "${wp.id}|$stamp|${screenW}x$screenH|${BuildConfig.VERSION_CODE}$film$src"
     }
 
     /**
