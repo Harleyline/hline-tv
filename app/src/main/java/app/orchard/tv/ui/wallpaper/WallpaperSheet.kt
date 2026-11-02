@@ -71,6 +71,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.type
@@ -277,6 +278,10 @@ fun WallpaperSheet(
             // came to three or four screens of scrolling (the owner, 2.20). A section is one screen,
             // and a row holds two of the shorter settings side by side.
             var tab by remember { mutableStateOf(PersonalizeTab.Wallpaper) }
+            // Left is the only way into the rail, and losing the rail is the only way out of it:
+            // while this is false the rail's items cannot be focused at all (see PersonalizeRail).
+            var railUp by remember { mutableStateOf(false) }
+            LaunchedEffect(visible) { if (!visible) railUp = false }
             // The cards take the remote the first time the sheet opens; coming back to the rail's
             // Wallpaper item later must not steal it from the rail.
             var tookFocus by remember { mutableStateOf(false) }
@@ -288,9 +293,26 @@ fun WallpaperSheet(
             // next one halfway down.
             LaunchedEffect(tab) { scroll.scrollTo(0) }
 
-            PersonalizeRail(tab) { tab = it }
+            PersonalizeRail(tab, railUp, onSelect = { tab = it }, onLost = { railUp = false })
             Spacer(Modifier.width(18.dp))
-            Column(Modifier.weight(1f).fillMaxHeight()) {
+            Column(
+                Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    // Left off the rows goes to the rail — and only Left does. Up and Down stay in
+                    // the section even at its last row, where the search used to fall into the rail
+                    // and carry the owner out of the page he had just reached the end of (2.22).
+                    // A control that reads Left itself (the minutes, a picker) takes the key first,
+                    // so this only fires where Left had nothing to do.
+                    .onKeyEvent { e ->
+                        if (!railUp && e.type == KeyEventType.KeyDown && e.key == Key.DirectionLeft) {
+                            railUp = true
+                            true
+                        } else {
+                            false
+                        }
+                    },
+            ) {
                 // The section's name stays put while its rows scroll under it: a long section (six
                 // rows of settings) scrolled its own title off the top, which read as a broken pane.
                 BasicText(stringResource(tab.label), style = Type.LargeTitle)
@@ -620,17 +642,19 @@ fun WallpaperSheet(
                     // Six settings to a section are taller than the sheet: the rows scroll, and a row
                     // half under the edge read as a row cut in two. The foot of the list fades instead,
                     // which says there is more below without breaking the row (the owner, 2.21).
+                    // Shallow: at 0.62 black over 46 dp the fade read as a black block under the last
+                    // card, not as shade (the owner, 2.22).
                     if (scroll.canScrollForward) {
                         Box(
                             Modifier
                                 .align(Alignment.BottomCenter)
                                 .fillMaxWidth()
-                                .height(46.dp)
+                                .height(34.dp)
                                 .background(
                                     Brush.verticalGradient(
                                         0f to Color.Transparent,
-                                        0.55f to Color.Black.copy(alpha = 0.30f),
-                                        1f to Color.Black.copy(alpha = 0.62f),
+                                        0.55f to Color.Black.copy(alpha = 0.06f),
+                                        1f to Color.Black.copy(alpha = 0.20f),
                                     ),
                                 ),
                         )
@@ -861,30 +885,36 @@ private enum class PersonalizeTab(val label: Int, val glyph: Glyph) {
 /**
  * The sections down the sheet's left edge, as the settings on Apple TV have them: the panel beside
  * the rail is that one section, and the rail stays put, so the sheet never becomes a long column.
+ *
+ * The rail can only be *reached* with Left (`awake`); it does not take focus on its own. That is
+ * what stops two faults the owner hit in 2.22: coming back from a sub-page, Compose handed focus
+ * to whichever item lay nearest the card it had been on, and that item opened its section (backing
+ * out of 壁纸 landed on 天气与时钟); and walking off the bottom of a section dropped into the rail,
+ * which is a jump out of the page the owner had reached the end of. Neither can happen to an item
+ * that cannot be focused.
  */
 @Composable
-private fun PersonalizeRail(selected: PersonalizeTab, onSelect: (PersonalizeTab) -> Unit) {
-    // Moving onto a section opens it, as the tab bars on Apple TV do — but only when the owner
-    // moved there. When focus is merely *handed back* to the rail (a picker closed, Hidden Apps
-    // came back, the screensaver ended), Compose re-seats it on whichever item lies nearest by
-    // geometry, and that item's focus effect opened its own section: backing out of the wallpaper
-    // page landed on 天气与时钟, the third item, because the card that had held the focus sits
-    // beside it (the owner, 2.22). So the rail remembers whether a D-pad move happened; without
-    // one it puts the cursor back on the open section and nothing changes.
-    var walked by remember { mutableStateOf(false) }
+private fun PersonalizeRail(
+    selected: PersonalizeTab,
+    awake: Boolean,
+    onSelect: (PersonalizeTab) -> Unit,
+    onLost: () -> Unit,
+) {
     val requesters = remember { PersonalizeTab.entries.associateWith { FocusRequester() } }
-    // A move off the end of the rail moves no focus, so the flag would still be set for the next,
-    // unrelated hand-back to consume: it lapses on its own.
-    LaunchedEffect(walked) { if (walked) { delay(400); walked = false } }
+    // Left from the rows asks for the rail; the items become focusable a frame later, so the take
+    // is retried until it lands (as the pickers' chips do).
+    LaunchedEffect(awake) {
+        if (!awake) return@LaunchedEffect
+        repeat(12) {
+            withFrameNanos { }
+            if (runCatching { requesters.getValue(selected).requestFocus() }.isSuccess) return@LaunchedEffect
+        }
+    }
     Column(
         Modifier
             .width(176.dp)
             .padding(top = 2.dp)
-            .onPreviewKeyEvent { e ->
-                if (e.type == KeyEventType.KeyDown && (e.key == Key.DirectionDown || e.key == Key.DirectionUp)) walked = true
-                false
-            }
-            .onFocusChanged { if (!it.hasFocus) walked = false },
+            .onFocusChanged { if (!it.hasFocus) onLost() },
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         PersonalizeTab.entries.forEach { tab ->
@@ -892,11 +922,8 @@ private fun PersonalizeRail(selected: PersonalizeTab, onSelect: (PersonalizeTab)
                 tab = tab,
                 selected = tab == selected,
                 focusRequester = requesters.getValue(tab),
-                isWalked = { walked },
-                // OK on a section, or a walk onto it: that section opens.
-                onSelect = { walked = false; onSelect(tab) },
-                // Focus arrived without a walk: give it back to the open section.
-                onRestored = { walked = false; runCatching { requesters.getValue(selected).requestFocus() } },
+                awake = awake,
+                onSelect = { onSelect(tab) },
             )
         }
     }
@@ -907,18 +934,21 @@ private fun RailItem(
     tab: PersonalizeTab,
     selected: Boolean,
     focusRequester: FocusRequester,
-    isWalked: () -> Boolean,
+    awake: Boolean,
     onSelect: () -> Unit,
-    onRestored: () -> Unit,
 ) {
-    Pressable(onClick = onSelect, focusRequester = focusRequester, focusedScale = 1.03f) { state ->
-        LaunchedEffect(state.focused) {
-            when {
-                !state.focused || selected -> Unit
-                isWalked() -> onSelect()
-                else -> onRestored()
-            }
-        }
+    Pressable(
+        onClick = onSelect,
+        focusRequester = focusRequester,
+        focusedScale = 1.03f,
+        // Not a candidate for the focus search until Left has asked for the rail: that keeps Up
+        // and Down inside the rows, and keeps a hand-back from landing here.
+        modifier = Modifier.focusProperties { canFocus = awake },
+    ) { state ->
+        // Walking onto a section opens it, as the tab bars on Apple TV do: up and down walk the
+        // sections and the panel follows, with no select needed; OK does the same for a remote
+        // whose owner expects it.
+        LaunchedEffect(state.focused) { if (state.focused && !selected) onSelect() }
         val bg by animateColorAsState(
             when {
                 state.focused -> Palette.Focus
