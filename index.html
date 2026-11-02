@@ -2,13 +2,14 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
+<meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>HLine TV — 干净的安卓电视桌面｜Android TV 启动器下载</title>
 <meta name="description" content="HLine TV 是一个干净的安卓电视桌面（Android TV 启动器）：开机没有广告、没有推荐位、没有会员角标，只有时间、天气、你的 App 和会动的壁纸。支持 Android 5.0 以上电视、盒子与投影，免费开源。">
 <meta name="keywords" content="HLine TV,安卓电视桌面,Android TV 启动器,电视桌面,去广告桌面,电视 launcher,Apple TV 风格桌面,小米电视桌面">
 <meta name="author" content="HLine TV">
 <link rel="canonical" href="https://harleyline.github.io/hline-tv/">
-<link rel="preload" as="image" href="img/hero.webp" type="image/webp" fetchpriority="high">
+<link rel="preload" as="image" href="img/hero.webp" type="image/webp" fetchpriority="high" imagesrcset="img/hero-900.webp 900w, img/hero.webp 1600w" imagesizes="100vw">
 <meta name="robots" content="index,follow">
 
 <meta property="og:type" content="website">
@@ -82,6 +83,7 @@
   }
   main,header,footer{position:relative;z-index:1}
   .wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+  @media(max-width:760px){.wrap{padding:0 34px}.hero-inner{padding:0 34px}}
   a{color:inherit;text-decoration:none}
   .mono{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
   section[id],div[id]{scroll-margin-top:84px}
@@ -90,7 +92,7 @@
   header.solid{background:rgba(6,7,10,.74);border-bottom-color:var(--line-soft)}
   header .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
   .brand{display:flex;align-items:center;gap:10px;font-weight:650;letter-spacing:-.01em}
-  .brand img{height:39px;width:auto;display:block}
+  .brand img{height:35px;width:auto;display:block}
   nav{display:flex;gap:28px;align-items:center}
   nav a{font-size:14px;color:var(--sub);transition:color .18s}
   nav a:hover{color:var(--ink)}
@@ -214,14 +216,16 @@
   /* install */
   .steps{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:52px}
   @media(max-width:860px){.steps{grid-template-columns:1fr}}
-  .term{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#0a0c11}
+  .term,.step-copy{border:1px solid var(--line-soft);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;
+    background:linear-gradient(180deg,rgba(255,255,255,.032),rgba(10,12,17,.55));transition:border-color .25s ease}
+  .term:hover,.step-copy:hover{border-color:rgba(110,231,255,.26)}
   .term-bar{display:flex;align-items:center;gap:7px;padding:12px 15px;border-bottom:1px solid var(--line-soft);background:rgba(255,255,255,.022)}
   .term-bar i{width:9px;height:9px;border-radius:50%;background:#2b3138}
   .term-bar i:nth-child(1){background:#3a2a2f}
   .term-bar span{margin-left:8px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--faint);text-transform:uppercase}
   .term pre{margin:0;padding:20px;font-family:var(--mono);font-size:12.8px;line-height:1.75;color:#c8e6f2;overflow-x:auto;white-space:pre}
   .term pre .c{color:#5f6a76}
-  .step-copy{border:1px solid var(--line-soft);border-radius:var(--radius);padding:28px 26px;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent)}
+  .step-copy-body{padding:20px 22px 24px}
   .step-copy h3{margin:0 0 9px;font-size:17px;font-weight:650;display:flex;align-items:center;gap:9px}
   .step-copy h3 svg{width:19px;height:19px;stroke:rgba(110,231,255,.85);fill:none;stroke-width:1.6;flex:none}
   .step-copy p{margin:0;color:var(--sub);font-size:15.5px;line-height:1.7}
@@ -251,7 +255,7 @@
 <header>
   <div class="wrap">
     <a class="brand" href="/hline-tv/">
-      <img src="img/logo-horizontal.svg" alt="HLine TV">
+      <img src="img/logo-horizontal.svg" width="157" height="35" alt="HLine TV" fetchpriority="high" decoding="async">
     </a>
     <nav>
       <a href="#why">为什么</a>
@@ -267,8 +271,9 @@
   <section class="hero">
     <div class="hero-bg" aria-hidden="true">
       <picture>
-        <source srcset="img/hero.webp" type="image/webp">
-        <img src="img/hero.jpg" width="1600" height="900" alt="" fetchpriority="high" decoding="async">
+        <source srcset="img/hero-900.webp 900w, img/hero.webp 1600w" sizes="100vw" type="image/webp">
+        <img src="img/hero.jpg" srcset="img/hero-900.jpg 900w, img/hero.jpg 1600w" sizes="100vw"
+             width="1600" height="900" alt="" fetchpriority="high" decoding="async">
       </picture>
     </div>
     <div class="hero-inner">
@@ -473,17 +478,23 @@ adb install HLine-TV.apk</pre>
     </div>
     <div class="steps">
       <div class="step-copy reveal">
-        <h3>🍶 U 盘安装，即插即用</h3>
-        <p>将 <code>HLine-TV.apk</code> 拷入 U 盘，通过电视文件管理器打开即可安装。</p>
+        <div class="term-bar"><i></i><i></i><i></i><span>usb</span></div>
+        <div class="step-copy-body">
+          <h3><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2.5" width="6" height="9" rx="1.4"/><path d="M12 11.5V21"/><path d="M8.5 21h7"/></svg>U 盘安装，即插即用</h3>
+          <p>将 <code>HLine-TV.apk</code> 拷入 U 盘，通过电视文件管理器打开即可安装。</p>
+        </div>
       </div>
       <div class="step-copy reveal">
-        <h3>🛡️ 兼容无忧，另有妙招</h3>
+        <div class="term-bar"><i></i><i></i><i></i><span>guard</span></div>
+        <div class="step-copy-body">
+          <h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.2-3 7.6-7 9-4-1.4-7-4.8-7-9V6z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg>兼容无忧，另有妙招</h3>
         <p>少数电视限制「桌面类」应用，可换用 <code>HLine-TV-Guard.apk</code>。无声接管 Home 键，同样优雅。各品牌开 ADB 的位置见 <a href="https://github.com/Harleyline/hline-tv#打开电视的-adb-调试" style="color:#bfe9fb">README</a>。</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <section id="faq" class="wrap">
+  <section id="faq" class="wrap section-gap">
     <span class="eyebrow reveal">FAQ</span>
     <h2 class="reveal">关于 HLine TV，了解更多细节</h2>
     <div class="faq reveal">
