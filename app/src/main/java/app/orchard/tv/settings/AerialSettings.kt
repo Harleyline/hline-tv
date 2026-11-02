@@ -189,6 +189,13 @@ object AerialSettings {
     var pinSet by mutableStateOf(false); private set
 
     /**
+     * Whether Aerial may send its anonymous install line and, when asked, a feedback log
+     * (system/UsageReport). null until the owner answers the card in Personalize's General tab:
+     * nothing is sent while it is null, so a yes is an answer given, not assumed.
+     */
+    var reportConsent by mutableStateOf<Boolean?>(null); private set
+
+    /**
      * The PIN is four presses of the arrow keys rather than four digits: quicker on a remote with
      * no number keys, and a child watching sees nothing on screen to copy (issue #368).
      */
@@ -267,6 +274,12 @@ object AerialSettings {
         bootApp = prefs.getString("boot_app", null)
         pinHash = prefs.getString("pin_hash", null)
         pinSet = pinHash != null
+        // Answered once, kept for good: an unanswered card stays unanswered, and nothing is sent.
+        reportConsent = when (prefs.getString("report_consent", null)) {
+            "yes" -> true
+            "no" -> false
+            else -> null
+        }
         pinArrows = prefs.getBoolean("pin_arrows", false)
         oneRowHome = prefs.getBoolean("one_row_home", true)
         peekNextRow = prefs.getBoolean("peek_next_row", true)
@@ -434,6 +447,12 @@ object AerialSettings {
     fun chooseShowHumidity(on: Boolean) {
         showHumidity = on
         app.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit { putBoolean("show_humidity", on) }
+    }
+
+    /** The owner's answer on the anonymous install line (system/UsageReport). */
+    fun chooseReportConsent(on: Boolean) {
+        reportConsent = on
+        app.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit { putString("report_consent", if (on) "yes" else "no") }
     }
 
     fun chooseScreensaverClock(on: Boolean) {

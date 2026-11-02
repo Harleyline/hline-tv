@@ -318,4 +318,27 @@
     <string name="wp_scan_hint">Want your own photos on Home? Scan with your phone and send one over.</string>
     <string name="phone_set_offline">No network: connect the TV to Wi-Fi or Ethernet first.</string>
     <string name="phone_set_waiting">Preparing the QR code…</string>
+    <!-- Personalize's sections (the rail on the left), and the two rows a reporter is asked for. -->
+    <string name="st_tab_top">Clock &amp; Weather</string>
+    <string name="st_tab_general">General</string>
+    <string name="st_tab_privacy">Privacy</string>
+    <string name="st_weather_off_hint">Off leaves the clock by itself at the top of Home.</string>
+    <string name="st_clock_place">Clock Side</string>
+    <string name="st_stats">Anonymous Stats</string>
+    <string name="st_stats_hint">This TV\'s brand, model, Android version and HLine TV version. No account, no photos, no list of apps.</string>
+    <string name="st_stats_title">Help count installs?</string>
+    <string name="st_stats_body">Only this TV\'s brand, model, Android version and HLine TV version would be sent. No account, no photos, no apps, and nothing that says who you are. Change it here at any time.</string>
+    <string name="st_stats_allow">Allow</string>
+    <string name="st_stats_deny">Not Now</string>
+    <string name="st_feedback">Feedback Log</string>
+    <string name="st_feedback_hint">Sends this TV\'s diagnostics and recent log to the developer, addresses masked. Use it when something goes wrong.</string>
+    <string name="st_feedback_off_hint">This build has no address to send a log to.</string>
+    <string name="st_feedback_off">Not Set Up</string>
+    <string name="st_feedback_send">Upload</string>
+    <string name="st_feedback_sending">Uploading…</string>
+    <string name="st_feedback_sent">Sent</string>
+    <string name="st_feedback_sent_hint">The log reached the developer. Thank you.</string>
+    <string name="st_feedback_retry">Retry</string>
+    <string name="st_feedback_failed_hint">It did not go through. Check the network and try again.</string>
+    <string name="st_version_footer">HLine TV %1$s (%2$d)</string>
 </resources>

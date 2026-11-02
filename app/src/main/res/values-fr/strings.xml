@@ -310,4 +310,26 @@
     <string name="phone_set_hint">Scannez pour ouvrir la page : envoyez vos photos, changez l\'icône ou le nom.</string>
     <string name="phone_set_offline">Pas de réseau : connectez d\'abord la TV au Wi-Fi ou à l\'Ethernet.</string>
     <string name="phone_set_waiting">Préparation du QR code…</string>
+    <string name="st_tab_top">Horloge et météo</string>
+    <string name="st_tab_general">Général</string>
+    <string name="st_tab_privacy">Confidentialité</string>
+    <string name="st_weather_off_hint">Désactivée, seule l\'horloge reste en haut de l\'accueil.</string>
+    <string name="st_clock_place">Côté de l\'horloge</string>
+    <string name="st_stats">Statistiques anonymes</string>
+    <string name="st_stats_hint">Uniquement la marque, le modèle, la version d\'Android et la version de HLine TV de ce téléviseur. Ni compte, ni photos, ni liste d\'applications.</string>
+    <string name="st_stats_title">Aider à compter les installations ?</string>
+    <string name="st_stats_body">Seuls la marque, le modèle, la version d\'Android et la version de HLine TV de ce téléviseur seraient envoyés. Ni compte, ni photos, ni applications, rien qui puisse vous identifier. Modifiable ici à tout moment.</string>
+    <string name="st_stats_allow">Autoriser</string>
+    <string name="st_stats_deny">Plus tard</string>
+    <string name="st_feedback">Journal de retour</string>
+    <string name="st_feedback_hint">Envoie au développeur le diagnostic et le journal récent de ce téléviseur, adresses masquées. À utiliser en cas de problème.</string>
+    <string name="st_feedback_off_hint">Cette version n\'a pas d\'adresse d\'envoi.</string>
+    <string name="st_feedback_off">Non configuré</string>
+    <string name="st_feedback_send">Envoyer</string>
+    <string name="st_feedback_sending">Envoi…</string>
+    <string name="st_feedback_sent">Envoyé</string>
+    <string name="st_feedback_sent_hint">Le journal est arrivé chez le développeur. Merci.</string>
+    <string name="st_feedback_retry">Réessayer</string>
+    <string name="st_feedback_failed_hint">L\'envoi a échoué. Vérifiez le réseau et réessayez.</string>
+    <string name="st_version_footer">HLine TV %1$s (%2$d)</string>
 </resources>

@@ -303,5 +303,27 @@
     <string name="phone_set_hint">Відскануйте, щоб відкрити сторінку: надішліть свої фото, змініть значок чи назву.</string>
     <string name="phone_set_offline">Немає мережі: спершу підключіть телевізор до Wi-Fi або кабелю.</string>
     <string name="phone_set_waiting">Готуємо QR-код…</string>
+    <string name="st_tab_top">Годинник і погода</string>
+    <string name="st_tab_general">Загальні</string>
+    <string name="st_tab_privacy">Приватність</string>
+    <string name="st_weather_off_hint">Якщо вимкнути, вгорі залишиться лише годинник.</string>
+    <string name="st_clock_place">Бік годинника</string>
+    <string name="st_stats">Анонімна статистика</string>
+    <string name="st_stats_hint">Лише бренд, модель, версія Android і версія HLine TV цього телевізора. Без акаунта, фото та списку застосунків.</string>
+    <string name="st_stats_title">Допомогти порахувати встановлення?</string>
+    <string name="st_stats_body">Надсилатимуться лише бренд, модель, версія Android і версія HLine TV цього телевізора. Без акаунта, фото, застосунків і будь-чого, що вказує на вас. Тут це можна вимкнути будь-коли.</string>
+    <string name="st_stats_allow">Дозволити</string>
+    <string name="st_stats_deny">Не зараз</string>
+    <string name="st_feedback">Журнал для звіту</string>
+    <string name="st_feedback_hint">Надсилає діагностику та останній журнал цього телевізора розробнику; адреси приховані. Для випадків, коли щось не працює.</string>
+    <string name="st_feedback_off_hint">У цій збірці не задано адресу для надсилання.</string>
+    <string name="st_feedback_off">Не налаштовано</string>
+    <string name="st_feedback_send">Надіслати</string>
+    <string name="st_feedback_sending">Надсилання…</string>
+    <string name="st_feedback_sent">Надіслано</string>
+    <string name="st_feedback_sent_hint">Журнал дійшов до розробника. Дякуємо.</string>
+    <string name="st_feedback_retry">Повторити</string>
+    <string name="st_feedback_failed_hint">Не вдалося надіслати. Перевірте мережу та спробуйте ще раз.</string>
+    <string name="st_version_footer">HLine TV %1$s (%2$d)</string>
 </resources>
 

@@ -1,0 +1,16 @@
+name = "hline-report"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+# 装机记录存在这里。先建命名空间，把返回的 id 填进来：
+#   npx wrangler kv namespace create REPORT
+[[kv_namespaces]]
+binding = "REPORT"
+id = "把 wrangler kv namespace create 的输出填在这里"
+
+# 不在这里写任何密钥。用 wrangler secret put 设置：
+#   GITHUB_TOKEN   一个有 issues:write 权限的细粒度 token（只给 hline-tv 这一个仓库）
+#   GITHUB_REPO    Harleyline/hline-tv
+#   STATS_KEY      /stats 查看页的口令，自己定一串
+#   REPORT_KEY     （可选）App 端 X-Report-Key 要对上的口令，防止别人乱发
+#   ISSUE_LABELS   （可选）给 Issue 打的标签，逗号分隔，标签必须已经存在

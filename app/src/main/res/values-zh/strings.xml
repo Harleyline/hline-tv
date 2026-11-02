@@ -317,4 +317,27 @@
     <string name="wp_scan_hint">想在首页放自己的照片？手机扫码，即拍即传。</string>
     <string name="phone_set_offline">没有网络：请先把电视连上 Wi-Fi 或网线。</string>
     <string name="phone_set_waiting">正在生成二维码…</string>
+    <!-- 个性化左侧的分类栏，以及反馈要用的两行 -->
+    <string name="st_tab_top">天气与时钟</string>
+    <string name="st_tab_general">通用</string>
+    <string name="st_tab_privacy">隐私</string>
+    <string name="st_weather_off_hint">关掉后顶部只剩时钟。</string>
+    <string name="st_clock_place">时钟位置</string>
+    <string name="st_stats">匿名统计</string>
+    <string name="st_stats_hint">只发送这台电视的品牌、型号、安卓版本和 HLine TV 版本，不含账号、照片和应用列表。</string>
+    <string name="st_stats_title">帮忙统计装机量？</string>
+    <string name="st_stats_body">只上传这台电视的品牌、型号、安卓版本和 HLine TV 版本，不含账号、照片、应用列表，也不含任何能认出你的信息。随时可以在这里关掉。</string>
+    <string name="st_stats_allow">允许</string>
+    <string name="st_stats_deny">暂不</string>
+    <string name="st_feedback">反馈日志</string>
+    <string name="st_feedback_hint">把这台电视的诊断信息和最近的日志发给开发者，地址已脱敏。出问题时用它。</string>
+    <string name="st_feedback_off_hint">这个版本没有配置接收地址。</string>
+    <string name="st_feedback_off">未配置</string>
+    <string name="st_feedback_send">上传</string>
+    <string name="st_feedback_sending">上传中…</string>
+    <string name="st_feedback_sent">已上传</string>
+    <string name="st_feedback_sent_hint">日志已送达开发者，谢谢。</string>
+    <string name="st_feedback_retry">重试</string>
+    <string name="st_feedback_failed_hint">没有上传成功，检查网络后再试一次。</string>
+    <string name="st_version_footer">HLine TV %1$s（%2$d）</string>
 </resources>

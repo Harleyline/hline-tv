@@ -303,5 +303,27 @@
     <string name="phone_set_hint">Сканерлесеңіз, баптау беті ашылады: өз фотоларыңызды жіберіп, белгішені немесе атауын өзгертіңіз.</string>
     <string name="phone_set_offline">Желі жоқ: алдымен теледидарды Wi-Fi немесе кабельге қосыңыз.</string>
     <string name="phone_set_waiting">QR код дайындалуда…</string>
+    <string name="st_tab_top">Сағат және ауа райы</string>
+    <string name="st_tab_general">Жалпы</string>
+    <string name="st_tab_privacy">Құпиялылық</string>
+    <string name="st_weather_off_hint">Өшірсеңіз, жоғарғы жақта тек сағат қалады.</string>
+    <string name="st_clock_place">Сағат жағы</string>
+    <string name="st_stats">Анонимді статистика</string>
+    <string name="st_stats_hint">Осы теледидардың бренді, үлгісі, Android нұсқасы және HLine TV нұсқасы ғана. Тіркелгі, фото, қолданбалар тізімі жоқ.</string>
+    <string name="st_stats_title">Орнату санын санауға көмектесесіз бе?</string>
+    <string name="st_stats_body">Осы теледидардың бренді, үлгісі, Android нұсқасы және HLine TV нұсқасы ғана жіберіледі. Тіркелгі, фото, қолданбалар және сізді танытатын ешнәрсе жоқ. Мұнда кез келген уақытта өшіруге болады.</string>
+    <string name="st_stats_allow">Рұқсат ету</string>
+    <string name="st_stats_deny">Қазір емес</string>
+    <string name="st_feedback">Кері байланыс журналы</string>
+    <string name="st_feedback_hint">Осы теледидардың диагностикасы мен соңғы журналын әзірлеушіге жібереді, мекенжайлар жасырылған. Бірдеңе дұрыс болмағанда қолданыңыз.</string>
+    <string name="st_feedback_off_hint">Бұл құрастырылымда жіберу мекенжайы орнатылмаған.</string>
+    <string name="st_feedback_off">Орнатылмаған</string>
+    <string name="st_feedback_send">Жіберу</string>
+    <string name="st_feedback_sending">Жіберілуде…</string>
+    <string name="st_feedback_sent">Жіберілді</string>
+    <string name="st_feedback_sent_hint">Журнал әзірлеушіге жетті. Рақмет.</string>
+    <string name="st_feedback_retry">Қайталау</string>
+    <string name="st_feedback_failed_hint">Жіберілмеді. Желіні тексеріп, қайта көріңіз.</string>
+    <string name="st_version_footer">HLine TV %1$s (%2$d)</string>
 </resources>
 

@@ -303,5 +303,27 @@
     <string name="phone_set_hint">Отсканируйте, чтобы открыть страницу: пришлите свои фото, смените значок или название.</string>
     <string name="phone_set_offline">Нет сети: сначала подключите телевизор к Wi-Fi или кабелю.</string>
     <string name="phone_set_waiting">Готовим QR-код…</string>
+    <string name="st_tab_top">Часы и погода</string>
+    <string name="st_tab_general">Общие</string>
+    <string name="st_tab_privacy">Приватность</string>
+    <string name="st_weather_off_hint">Если выключить, наверху останутся только часы.</string>
+    <string name="st_clock_place">Сторона часов</string>
+    <string name="st_stats">Анонимная статистика</string>
+    <string name="st_stats_hint">Только бренд, модель, версия Android и версия HLine TV этого телевизора. Без аккаунта, фотографий и списка приложений.</string>
+    <string name="st_stats_title">Помочь посчитать установки?</string>
+    <string name="st_stats_body">Будут отправлены только бренд, модель, версия Android и версия HLine TV этого телевизора. Без аккаунта, фотографий, приложений и всего, что указывает на вас. Здесь это можно выключить в любой момент.</string>
+    <string name="st_stats_allow">Разрешить</string>
+    <string name="st_stats_deny">Не сейчас</string>
+    <string name="st_feedback">Журнал для отчёта</string>
+    <string name="st_feedback_hint">Отправляет диагностику и недавний журнал этого телевизора разработчику; адреса скрыты. Пригодится, когда что-то идёт не так.</string>
+    <string name="st_feedback_off_hint">В этой сборке не задан адрес для отправки.</string>
+    <string name="st_feedback_off">Не настроено</string>
+    <string name="st_feedback_send">Отправить</string>
+    <string name="st_feedback_sending">Отправка…</string>
+    <string name="st_feedback_sent">Отправлено</string>
+    <string name="st_feedback_sent_hint">Журнал дошёл до разработчика. Спасибо.</string>
+    <string name="st_feedback_retry">Повторить</string>
+    <string name="st_feedback_failed_hint">Отправить не удалось. Проверьте сеть и попробуйте ещё раз.</string>
+    <string name="st_version_footer">HLine TV %1$s (%2$d)</string>
 </resources>
 

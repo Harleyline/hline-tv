@@ -29,7 +29,7 @@ app/src/main/java/app/orchard/tv/
 │   ├── home/PinPad.kt       家长密码键盘（设置 / 解锁，遥控器数字键或屏幕键盘）
 │   ├── home/Screensaver.kt  屏保 UI：航拍（Media3 ExoPlayer，见 wallpaper/AerialStream.kt）/ 照片（Ken Burns）/ 时钟
 │   ├── control/ControlCenter.kt  控制中心：按钮、音量/亮度滑块、「个性化」入口、有新版本时的提示和升级说明页、底部版本号；信号源页（只负责切换）和信号源设置页（显示在主屏幕、开机时打开）
-│   └── wallpaper/WallpaperSheet.kt  个性化面板（壁纸、屏保和开始时间、焦点样式、家长密码、天气）+ 手机扫码卡片
+│   └── wallpaper/WallpaperSheet.kt  个性化面板：左边分类栏（壁纸／布局／天气与时钟／屏保／城市／通用／隐私），右边放这一类，底行常驻版本号 + 手机扫码卡片
 ├── wallpaper/
 │   ├── Wallpapers.kt        壁纸单例：来源（每日/内置/照片/照片每天换一张/跟随App）、选择、首页背景烘焙（结果存在 files/backdrop/，冷启动直接读回）、缩略图、上传
 │   ├── Gradients.kt         14 张 Mac 风格内置壁纸（山丘、沙丘、海、波浪、光晕），在电视上按实际分辨率画
@@ -142,7 +142,20 @@ Logo 的大小统一：先在 256×256 的采样里找出 Logo 的范围，再�
 
 ## 个性化：壁纸、屏保、焦点样式、天气
 
-控制中心的「个性化」打开 `WallpaperSheet`，按「看得到的效果」从上到下分组：壁纸（一行缩略图：航拍、每日一图、我的照片（两张以上时加「每天换」）、6 张内置图 `Wallpapers.FEATURED_BUILTINS`、跟随 App；以前的每日图和其余内置图只在被选中时出现；行下面一条说明跟着聚焦的卡片变）、主屏幕（三张卡片：布局/第二排/底板/App 名称/隐藏的 App；时钟位置和大小；焦点样式和按键声音）、屏幕保护程序（类型和立即开始、开始时间）、天气（只读）、家长密码。除壁纸外都是 tvOS 设置那样的分组卡片，一行一个设置，左边名称、右边选项；每组下面一条说明，跟着组里聚焦的那一行变（`Group` / `SettingRow`），说明区固定两行高，焦点移动时面板不跳。天气的城市在手机页设置。右边是手机扫码卡片。焦点移到最后一行「家长密码」时，面板滚到底，让它下面的说明也露出来。
+控制中心的「个性化」打开 `WallpaperSheet`。2.20 起面板分两类栏：左边 `PersonalizeRail` 六项——壁纸、布局、天气与时钟、屏保、城市、通用；右边只画这一类（`PersonalizeTab`），每类两三行，一屏放得下。以前是 24 行一列，540 dp 的画布只剩 336 dp 可视高度，改一个开关要滚三四屏。焦点走到分类上就切换（和 Apple TV 的设置一样，不用按确定），切换时右边滚回顶部；第一次打开时焦点仍在壁纸卡片上，回到壁纸这一类不会再把焦点抢走（`tookFocus`）。
+
+每类里的排布：
+
+- **壁纸**：一行缩略图（航拍、每日一图、我的照片（两张以上时加「每天换」）、6 张内置图 `Wallpapers.FEATURED_BUILTINS`、跟随 App；以前的每日图和其余内置图只在被选中时出现；行下面一条说明跟着聚焦的卡片变）、片源 shelf、播放方式。右边是手机扫码卡片，每一类都在。
+- **布局**：行数｜网格、App 名称｜底板、下一行预览｜隐藏的 App（两排时只留隐藏的 App）。
+- **天气与时钟**：天气（关／小／大，把「是否显示」和「大小」并成一个决定）｜天气位置、时钟大小｜时钟位置；第二组是空气质量｜湿度。
+- **屏保**：类型和立即开始、画质、延时、返回键启动｜显示时钟。
+- **城市**：定位城市、按次轮播的其它城市、添加城市（城市在手机页设置）。
+- **通用**：语言｜按键声音、动效、家长密码｜自动睡眠。待机时间原来在屏保页自成一组（四行加一组要滚动，标题会被顶出屏幕），它管的是遥控器不动时电视自己睡，和屏保无关，挪到这里和「家长密码」并排。
+- **隐私**（最后一类）：匿名统计｜反馈日志。两格都是把东西发出去的设置，放在通用里会让那一页五行放不下；单独一类也正好让「反馈日志」落在整个列表的最下面。未回答过统计询问时，这一页顶上先出现 `ConsentCard`，回答后消失。
+
+短的两项用 `PairRow` 并排（一行 54 dp，两半各一半宽，中间一条竖细线），长的一行仍是 `SettingRow`（58 dp）。除壁纸外都是 tvOS 设置那样的分组卡片，左边名称、右边选项（`Capsule` 分段控件 / `Chip` 药丸 / `SwitchPill`），每组下面一条说明，跟着组里聚焦的那一行变（`Group`），说明区固定两行高，焦点移动时面板不跳。面板最后一行固定是 `VersionLine`（版本号），不进滚动区，滚到哪一类都在。
+
 
 「隐藏的 App」从控制中心挪到了这里：点开是原来的 `HiddenAppsSheet`，返回回到个性化；设了家长密码时先输密码。
 
@@ -196,6 +209,16 @@ NanoHTTPD 监听 8790 端口，路径前缀是 8 位随机令牌（每次打开�
 给维护者没有的电视用：机型、固件指纹、屏幕和内存、HOME 解析和所有候选、守护看着的原桌面、守护和通知监听的状态、各项授权、屏保和按键音设置、亮度、`TvInputManager` 的输入和 Aerial 显示的信号源、Aerial 认识的厂商包（只列这些，不列全部 App）、DiagLog 最近 150 行、本进程 Aerial 各 tag 的 logcat（不含 AerialWeather，里面有城市）。日志里的 IP、MAC、手机页令牌打码。不收集账号、序列号、Wi-Fi 名称、天气城市。
 
 三个出口：手机页 `GET api/diagnostics`（页面最下面「反馈问题」，可复制，局域网 HTTP 没有 `navigator.clipboard`，用 `execCommand`）；`adb shell dumpsys activity app.orchard.tv/.MainActivity report`；`tools/report.sh` 在它前面再加只有 shell 能读的：getprop、包信息和 appops、HOME 候选和 role、相关 settings、无障碍绑定、tv_input 硬件、系统服务里关于 Aerial 的 logcat（只按 tag 取：小米应用商店会在日志里打印已装 App 列表）。
+
+## 上报（system/UsageReport.kt）
+
+两个出口，一份内容：报机器。
+
+- **装机量**：`start()` 在 `MainActivity` 启动时调一次，每个版本发一条（`report` prefs 里的 `sent_<版本名+版本号>` 记住发过的），字段只有品牌、厂商、型号、设备代号、SDK、安卓版本、App 版本、flavor、Aerial 的语言，加一个第一次启动时生成的随机 UUID（`install_id`）。没有任何能从电视反查到人的东西：没有序列号、MAC、IP、城市、应用列表。
+- **反馈日志**：个性化 → 隐私 → 「反馈日志」，内容就是 `Diagnostics.report()`（已脱敏），由 `upload()` 发出去，返回什么就显示什么（成功／失败／未配置）。
+- **同意**：`AerialSettings.reportConsent`（`settings` prefs 的 `report_consent`：`yes` / `no` / 没有这个键＝没回答）。没回答或回答「否」，`start()` 和「上传」都不发请求。界面上是隐私页顶上那张 `ConsentCard` 和「匿名统计」那一格。
+- **地址是编译期的**：`BuildConfig.REPORT_URL` / `REPORT_KEY`，来自 `local/report.properties`（`url=`、`key=`，不进版本库）或 `-PreportUrl= -PreportKey=`。**留空＝一个字节也不发**，界面显示「未配置」。`REPORT_URL` 里带 `feishu.cn`、`qyapi.weixin.qq.com`、`dingtalk.com` 时改发群机器人要的文本格式，否则按 `/v1/install`、`/v1/feedback` 发 JSON。
+- **接收端**：`tools/report-worker/`（Cloudflare Worker + KV + GitHub Issue，`/stats` 看汇总）。没有第三方 SDK，只有 `HttpURLConnection` + `org.json`。
 
 ## 机型修正（system/DeviceProfile.kt）
 
