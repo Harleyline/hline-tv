@@ -281,6 +281,11 @@
     <string name="lang_ug">維吾爾語</string>
     <string name="lang_mn">蒙古語</string>
     <string name="st_cities">城市</string>
+    <string name="st_cities_title">天氣城市</string>
+    <string name="st_group_weather">天氣</string>
+    <string name="st_group_clock">時鐘</string>
+    <string name="st_cities_entry_hint">首頁在這些城市之間輪換，每十秒一個</string>
+    <string name="st_cities_count">%1$d 個城市</string>
     <string name="st_cities_hint">主畫面在這些城市之間輪換，每個 10 秒，像機場的出發螢幕。</string>
     <string name="st_city_add">加入城市</string>
     <string name="st_city_pick">選擇城市</string>

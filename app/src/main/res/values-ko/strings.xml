@@ -281,6 +281,11 @@
     <string name="lang_ug">위구르어</string>
     <string name="lang_mn">몽골어</string>
     <string name="st_cities">도시</string>
+    <string name="st_cities_title">날씨 도시</string>
+    <string name="st_group_weather">날씨</string>
+    <string name="st_group_clock">시계</string>
+    <string name="st_cities_entry_hint">홈에서 이 도시들을 10초씩 번갈아 보여줍니다</string>
+    <string name="st_cities_count">도시 %1$d곳</string>
     <string name="st_cities_hint">홈이 이 도시들을 10초씩 번갈아 보여 줍니다. 공항 출발 안내판처럼요.</string>
     <string name="st_city_add">도시 추가</string>
     <string name="st_city_pick">도시 선택</string>

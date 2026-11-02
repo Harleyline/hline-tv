@@ -93,9 +93,21 @@ object UsageReport {
     }
 
     private fun send(context: Context, kind: String, report: String?): String {
-        val url = BuildConfig.REPORT_URL.trim().trimEnd('/')
-        val body = if (isBot(url)) botBody(context, kind, report) else apiBody(context, kind, report)
-        return post(if (isBot(url)) url else "$url/v1/$kind", body)
+        val base = BuildConfig.REPORT_URL.trim()
+        val body = if (isBot(base)) botBody(context, kind, report) else apiBody(context, kind, report)
+        return post(if (isBot(base)) base else endpoint(base, kind), body)
+    }
+
+    /**
+     * The address a kind is posted to. The owner's address may carry a query of its own — a hosted
+     * report server answers only on its share link, `https://host/?sharecode=…` — so the path is
+     * built around it rather than by pasting "/v1/…" onto the end of the string.
+     */
+    private fun endpoint(base: String, kind: String): String {
+        val at = base.indexOf('?')
+        val head = (if (at >= 0) base.substring(0, at) else base).trimEnd('/')
+        val query = if (at >= 0) base.substring(at) else ""
+        return "$head/v1/$kind$query"
     }
 
     /** A group bot (Feishu, WeCom, DingTalk) takes a line of text, not fields. */

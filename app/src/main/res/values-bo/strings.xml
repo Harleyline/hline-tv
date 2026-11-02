@@ -280,6 +280,11 @@
     <string name="lang_ug">ئۇيغۇرچە</string>
     <string name="lang_mn">Монгол</string>
     <string name="st_cities">གྲོང་ཁྱེར།</string>
+    <string name="st_cities_title">གནམ་གཤིས་གྲོང་ཁྱེར།</string>
+    <string name="st_group_weather">གནམ་གཤིས།</string>
+    <string name="st_group_clock">ཆུ་ཚོད།</string>
+    <string name="st_cities_entry_hint">གྲོང་ཁྱེར་འདི་དག་སྐར་མ་བཅུ་རེས་སུ་བརྗེ་བ།</string>
+    <string name="st_cities_count">གྲོང་ཁྱེར་ %1$d</string>
     <string name="st_cities_hint">རེ་རེ་སྐར་ཆ་10། རེས་མོས།</string>
     <string name="st_city_add">གྲོང་ཁྱེར་ཁ་སྣོན།</string>
     <string name="st_city_pick">གྲོང་ཁྱེར་འདེམས།</string>

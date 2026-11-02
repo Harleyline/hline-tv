@@ -1,0 +1,13 @@
+{
+  "name": "hline-report-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Receives HLine TV's install counts and feedback logs, stores each log under a name that says what set it came from.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

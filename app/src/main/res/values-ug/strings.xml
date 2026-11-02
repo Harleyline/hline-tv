@@ -280,6 +280,11 @@
     <string name="lang_ug">ئۇيغۇرچە</string>
     <string name="lang_mn">Монгол</string>
     <string name="st_cities">شەھەرلەر</string>
+    <string name="st_cities_title">ھاۋارايى شەھەرلىرى</string>
+    <string name="st_group_weather">ھاۋارايى</string>
+    <string name="st_group_clock">سائەت</string>
+    <string name="st_cities_entry_hint">باش بەت بۇ شەھەرلەرنى ئون سېكۇنتتىن ئالماشتۇرىدۇ</string>
+    <string name="st_cities_count">%1$d شەھەر</string>
     <string name="st_cities_hint">ھەر بىرى 10 سېكۇنت نۆۋەتلىشىدۇ.</string>
     <string name="st_city_add">شەھەر قوشۇش</string>
     <string name="st_city_pick">شەھەر تاللاش</string>

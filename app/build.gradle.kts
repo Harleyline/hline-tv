@@ -16,7 +16,7 @@ android {
         // Android 5.0. Compose 1.10 and later need 6.0, so the Compose BOM below stays on 1.9.
         minSdk = 21
         targetSdk = 34
-        versionCode = 149
+        versionCode = 150
         versionName = "1.6"
         // The free air-quality token from aqicn.org/data-platform/token (weather/Weather.kt). Kept out
         // of version control like the signing key; without one the weather falls back to Open-Meteo.

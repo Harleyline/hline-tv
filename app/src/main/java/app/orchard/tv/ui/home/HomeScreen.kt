@@ -550,23 +550,26 @@ fun HomeScreen(
         // without a picture of the screen).
         val moduleBox = remember { mutableStateMapOf<String, String>() }
         val showWeather = AerialSettings.showWeather
+        // The clock can be turned off, as the weather can (2.23): everything below treats it as an
+        // absent block rather than a small one.
+        val showClock = AerialSettings.showClock
         // Two large blocks cannot share the screen: when both are set large, the weather keeps the
         // side it was given and the clock takes the other one. Not a random pick, and not a layout
         // that has to fit two 100 dp blocks over the rows.
-        val bothLarge = showWeather && AerialSettings.weatherLarge && AerialSettings.largeClock
+        val bothLarge = showWeather && AerialSettings.weatherLarge && showClock && AerialSettings.largeClock
         val weatherRightNow = AerialSettings.weatherRight
         val clockRightNow = if (bothLarge) !weatherRightNow else AerialSettings.clockRight
-        val largeClock = AerialSettings.largeClock || AerialSettings.weatherLarge
+        val largeClock = showClock && (AerialSettings.largeClock || AerialSettings.weatherLarge)
         // What the taller side holds: each block keeps the room it draws in, and two on one side
         // stack with a gap. The rows below must clear whichever side is lower.
         val gap = 8.dp
         val weatherH = if (showWeather) {
             if (AerialSettings.weatherLarge) ModuleWeatherLarge else ModuleWeatherSmall
         } else 0.dp
-        val clockH = if (AerialSettings.largeClock) ModuleClockLarge else ModuleClockSmall
+        val clockH = if (!showClock) 0.dp else if (AerialSettings.largeClock) ModuleClockLarge else ModuleClockSmall
         fun sideHeight(right: Boolean): Dp {
             val weatherHere = showWeather && weatherRightNow == right
-            val clockHere = clockRightNow == right
+            val clockHere = showClock && clockRightNow == right
             var h = 0.dp
             if (weatherHere) h += weatherH
             if (clockHere) h += (if (weatherHere) gap else 0.dp) + clockH
@@ -784,7 +787,7 @@ fun HomeScreen(
                 }
                 listOf(false, true).forEach { right ->
                     val weatherHere = right == weatherRightNow && showWeather
-                    val clockHere = right == clockRightNow
+                    val clockHere = right == clockRightNow && showClock
                     if (!weatherHere && !clockHere) return@forEach
                     val both = weatherHere && clockHere
                     // Two blocks on the right give the corner to the pill and start under it; a

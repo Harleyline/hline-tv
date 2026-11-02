@@ -281,6 +281,11 @@
     <string name="lang_ug">ウイグル語</string>
     <string name="lang_mn">モンゴル語</string>
     <string name="st_cities">都市</string>
+    <string name="st_cities_title">天気の都市</string>
+    <string name="st_group_weather">天気</string>
+    <string name="st_group_clock">時計</string>
+    <string name="st_cities_entry_hint">ホームはこれらの都市を10秒ずつ切り替えます</string>
+    <string name="st_cities_count">%1$d 都市</string>
     <string name="st_cities_hint">ホームがこの都市を 10 秒ずつ順に切り替えます（空港の出発案内のように）。</string>
     <string name="st_city_add">都市を追加</string>
     <string name="st_city_pick">都市を選ぶ</string>

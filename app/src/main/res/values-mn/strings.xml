@@ -280,6 +280,11 @@
     <string name="lang_ug">ئۇيغۇرچە</string>
     <string name="lang_mn">Монгол</string>
     <string name="st_cities">Хотууд</string>
+    <string name="st_cities_title">Цаг агаарын хотууд</string>
+    <string name="st_group_weather">Цаг агаар</string>
+    <string name="st_group_clock">Цаг</string>
+    <string name="st_cities_entry_hint">Нүүр хуудас эдгээр хотыг 10 секунд тутам сэлгэнэ</string>
+    <string name="st_cities_count">%1$d хот</string>
     <string name="st_cities_hint">10 секунд тутамд ээлжилнэ.</string>
     <string name="st_city_add">Хот нэмэх</string>
     <string name="st_city_pick">Хот сонгох</string>

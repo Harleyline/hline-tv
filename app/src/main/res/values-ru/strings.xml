@@ -274,6 +274,11 @@
     <string name="lang_ug">ئۇيغۇرچە</string>
     <string name="lang_mn">Монгол</string>
     <string name="st_cities">Города</string>
+    <string name="st_cities_title">Города погоды</string>
+    <string name="st_group_weather">Погода</string>
+    <string name="st_group_clock">Часы</string>
+    <string name="st_cities_entry_hint">Главная чередует эти города, по десять секунд</string>
+    <string name="st_cities_count">Городов: %1$d</string>
     <string name="st_cities_hint">Главный экран показывает их по очереди, по десять секунд, как табло в аэропорту.</string>
     <string name="st_city_add">Добавить город</string>
     <string name="st_city_pick">Выберите город</string>

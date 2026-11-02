@@ -144,6 +144,10 @@ object AerialSettings {
     /** The clock, with the date and lunar day, in the top right instead of the top left. */
     var clockRight by mutableStateOf(true); private set
 
+    /** Whether Home shows the clock at all — the same 关 / 小 / 大 the weather is given, rather than
+     *  a size with no way to turn it off (the owner, 2.23). */
+    var showClock by mutableStateOf(true); private set
+
     /** The date and lunar day over a big clock above the top row, instead of one small line. */
     var largeClock by mutableStateOf(true); private set
 
@@ -213,7 +217,9 @@ object AerialSettings {
 
     const val NEVER = 0
 
-    val screensaverChoices = listOf(2, 5, 10, 20, NEVER)
+    /** One minute at a time from 2 to 20: the owner asked for a stepper rather than five fixed
+     *  delays, which also left the row's label cut in a section narrower than the whole sheet. */
+    val SCREENSAVER_MINUTES = 2..20
 
     /** Which of Apple's files the aerial screensaver plays; Auto is the best this TV decodes (issues #198, #217). */
     var aerialQuality by mutableStateOf(AerialQuality.Auto); private set
@@ -289,6 +295,7 @@ object AerialSettings {
         standbyMinutes = prefs.getInt("standby_minutes", kept).takeIf { it in STANDBY_MINUTES } ?: DEFAULT_STANDBY_MINUTES
         homeColumns = prefs.getInt("home_columns", DEFAULT_HOME_COLUMNS).takeIf { it in HOME_COLUMNS } ?: DEFAULT_HOME_COLUMNS
         clockRight = prefs.getBoolean("clock_right", true)
+        showClock = prefs.getBoolean("show_clock", true)
         largeClock = prefs.getBoolean("large_clock", true)
         weatherRight = prefs.getBoolean("weather_right", false)
         weatherLarge = prefs.getBoolean("weather_large", false)
@@ -322,7 +329,10 @@ object AerialSettings {
             else -> UiSounds.Tv
         }
         backStartsScreensaver = prefs.getBoolean("back_starts_screensaver", true)
-        screensaverMinutes = prefs.getInt("screensaver_minutes", DEFAULT_SCREENSAVER_MINUTES)
+        // A value kept from the five fixed delays (1, 5, 10, 30) is brought into the stepper's
+        // range on the way in, rather than leaving the panel on a number it cannot show.
+        val keptSaver = prefs.getInt("screensaver_minutes", DEFAULT_SCREENSAVER_MINUTES)
+        screensaverMinutes = if (keptSaver == NEVER) NEVER else keptSaver.coerceIn(SCREENSAVER_MINUTES)
         aerialQuality = AerialQuality.of(prefs.getString("aerial_quality", null))
         aerialKind = prefs.getString("aerial_kind", null)?.takeIf { it in AERIAL_KINDS } ?: "space"
         effects = Effects.of(prefs.getString("effects", null))
@@ -409,6 +419,11 @@ object AerialSettings {
         app.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit { putBoolean("clock_right", on) }
     }
 
+    fun chooseShowClock(on: Boolean) {
+        showClock = on
+        app.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit { putBoolean("show_clock", on) }
+    }
+
     fun chooseLargeClock(on: Boolean) {
         largeClock = on
         app.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit { putBoolean("large_clock", on) }
@@ -477,9 +492,9 @@ object AerialSettings {
     }
 
     fun chooseScreensaverMinutes(minutes: Int) {
-        screensaverMinutes = minutes
-        app.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit { putInt("screensaver_minutes", minutes) }
-        GuardSetup.setSystemScreensaverOff(app, minutes == NEVER)
+        screensaverMinutes = if (minutes == NEVER) NEVER else minutes.coerceIn(SCREENSAVER_MINUTES)
+        app.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit { putInt("screensaver_minutes", screensaverMinutes) }
+        GuardSetup.setSystemScreensaverOff(app, screensaverMinutes == NEVER)
     }
 
     fun setPinned(inputId: String, pinned: Boolean) {

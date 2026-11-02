@@ -282,6 +282,11 @@
     <string name="lang_ug">ئۇيغۇرچە</string>
     <string name="lang_mn">Монгол</string>
     <string name="st_cities">Cities</string>
+    <string name="st_cities_title">Weather Cities</string>
+    <string name="st_group_weather">Weather</string>
+    <string name="st_group_clock">Clock</string>
+    <string name="st_cities_entry_hint">The towns Home takes turns through, ten seconds each</string>
+    <string name="st_cities_count">%1$d cities</string>
     <string name="st_cities_hint">The weather takes turns through these towns, ten seconds each, like a departure board.</string>
     <string name="st_city_add">Add City</string>
     <string name="st_city_pick">Choose a City</string>

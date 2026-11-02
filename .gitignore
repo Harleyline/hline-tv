@@ -21,3 +21,6 @@ site/icons/
 
 # Wrangler state and the account cache (account id, e-mail).
 .wrangler/
+
+# The report server keeps what TVs send it; never versioned.
+tools/report-server/data/

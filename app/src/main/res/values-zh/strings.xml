@@ -281,6 +281,11 @@
     <string name="lang_ug">ئۇيغۇرچە</string>
     <string name="lang_mn">Монгол</string>
     <string name="st_cities">城市</string>
+    <string name="st_cities_title">天气城市</string>
+    <string name="st_group_weather">天气</string>
+    <string name="st_group_clock">时钟</string>
+    <string name="st_cities_entry_hint">首页在这些城市之间轮换，每十秒一个</string>
+    <string name="st_cities_count">%1$d 个城市</string>
     <string name="st_cities_hint">天气在这些城市之间轮换，每个 10 秒，像机场的出发屏。</string>
     <string name="st_city_add">添加城市</string>
     <string name="st_city_pick">选择城市</string>

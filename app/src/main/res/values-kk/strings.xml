@@ -274,6 +274,11 @@
     <string name="lang_ug">ئۇيغۇرچە</string>
     <string name="lang_mn">Моңғол</string>
     <string name="st_cities">Қалалар</string>
+    <string name="st_cities_title">Ауа райы қалалары</string>
+    <string name="st_group_weather">Ауа райы</string>
+    <string name="st_group_clock">Сағат</string>
+    <string name="st_cities_entry_hint">Басты бет осы қалаларды кезектестіреді, әрқайсысы он секунд</string>
+    <string name="st_cities_count">%1$d қала</string>
     <string name="st_cities_hint">Басты экран оларды кезекпен, әрқайсысын он секундтан көрсетеді, әуежай таблосы сияқты.</string>
     <string name="st_city_add">Қала қосу</string>
     <string name="st_city_pick">Қала таңдаңыз</string>

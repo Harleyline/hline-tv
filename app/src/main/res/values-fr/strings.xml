@@ -281,6 +281,11 @@
     <string name="lang_ug">ئۇيغۇرچە</string>
     <string name="lang_mn">Монгол</string>
     <string name="st_cities">Villes</string>
+    <string name="st_cities_title">Villes météo</string>
+    <string name="st_group_weather">Météo</string>
+    <string name="st_group_clock">Horloge</string>
+    <string name="st_cities_entry_hint">Accueil passe par ces villes, dix secondes chacune</string>
+    <string name="st_cities_count">%1$d villes</string>
     <string name="st_cities_hint">L’accueil passe de l’une à l’autre, dix secondes chacune, comme un tableau de départs.</string>
     <string name="st_city_add">Ajouter une ville</string>
     <string name="st_city_pick">Choisir une ville</string>
