@@ -69,6 +69,9 @@ import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.layout.ContentScale
@@ -78,6 +81,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import app.orchard.tv.BuildConfig
@@ -765,9 +769,7 @@ private fun WallpaperRows(takeFocus: Boolean, onTook: () -> Unit = {}) {
             WallpaperCard(wp, if (wp === list.first()) first else null, onFocused = { note = hint })
         }
     }
-    Box(Modifier.height(42.dp).padding(start = 4.dp, top = 8.dp)) {
-        note?.let { BasicText(it, style = Type.Caption.copy(color = Palette.TertiaryLabel), maxLines = 2, overflow = TextOverflow.Ellipsis) }
-    }
+    HintText(note, start = 4.dp)
 }
 
 /** What a wallpaper card is, for the note under the row; null where its picture says it all. */
@@ -862,20 +864,61 @@ private enum class PersonalizeTab(val label: Int, val glyph: Glyph) {
  */
 @Composable
 private fun PersonalizeRail(selected: PersonalizeTab, onSelect: (PersonalizeTab) -> Unit) {
-    // 176 dp: the longest of the twelve languages still fits beside its glyph at 13 sp — Japanese
-    // 「スクリーンセーバー」 and French «Économiseur d'écran» were cut at 152 (the owner, 2.21).
-    Column(Modifier.width(176.dp).padding(top = 2.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        PersonalizeTab.entries.forEach { tab -> RailItem(tab, tab == selected) { onSelect(tab) } }
+    // Moving onto a section opens it, as the tab bars on Apple TV do — but only when the owner
+    // moved there. When focus is merely *handed back* to the rail (a picker closed, Hidden Apps
+    // came back, the screensaver ended), Compose re-seats it on whichever item lies nearest by
+    // geometry, and that item's focus effect opened its own section: backing out of the wallpaper
+    // page landed on 天气与时钟, the third item, because the card that had held the focus sits
+    // beside it (the owner, 2.22). So the rail remembers whether a D-pad move happened; without
+    // one it puts the cursor back on the open section and nothing changes.
+    var walked by remember { mutableStateOf(false) }
+    val requesters = remember { PersonalizeTab.entries.associateWith { FocusRequester() } }
+    // A move off the end of the rail moves no focus, so the flag would still be set for the next,
+    // unrelated hand-back to consume: it lapses on its own.
+    LaunchedEffect(walked) { if (walked) { delay(400); walked = false } }
+    Column(
+        Modifier
+            .width(176.dp)
+            .padding(top = 2.dp)
+            .onPreviewKeyEvent { e ->
+                if (e.type == KeyEventType.KeyDown && (e.key == Key.DirectionDown || e.key == Key.DirectionUp)) walked = true
+                false
+            }
+            .onFocusChanged { if (!it.hasFocus) walked = false },
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        PersonalizeTab.entries.forEach { tab ->
+            RailItem(
+                tab = tab,
+                selected = tab == selected,
+                focusRequester = requesters.getValue(tab),
+                isWalked = { walked },
+                // OK on a section, or a walk onto it: that section opens.
+                onSelect = { walked = false; onSelect(tab) },
+                // Focus arrived without a walk: give it back to the open section.
+                onRestored = { walked = false; runCatching { requesters.getValue(selected).requestFocus() } },
+            )
+        }
     }
 }
 
 @Composable
-private fun RailItem(tab: PersonalizeTab, selected: Boolean, onSelect: () -> Unit) {
-    Pressable(onClick = onSelect, focusedScale = 1.03f) { state ->
-        // Moving onto a section opens it, as the tab bars on Apple TV do: up and down walk the
-        // sections and the panel follows, with no select needed; OK does the same for a remote
-        // whose owner expects it.
-        LaunchedEffect(state.focused) { if (state.focused && !selected) onSelect() }
+private fun RailItem(
+    tab: PersonalizeTab,
+    selected: Boolean,
+    focusRequester: FocusRequester,
+    isWalked: () -> Boolean,
+    onSelect: () -> Unit,
+    onRestored: () -> Unit,
+) {
+    Pressable(onClick = onSelect, focusRequester = focusRequester, focusedScale = 1.03f) { state ->
+        LaunchedEffect(state.focused) {
+            when {
+                !state.focused || selected -> Unit
+                isWalked() -> onSelect()
+                else -> onRestored()
+            }
+        }
         val bg by animateColorAsState(
             when {
                 state.focused -> Palette.Focus
@@ -981,6 +1024,28 @@ private fun ConsentCard(onAllow: () -> Unit, onDeny: () -> Unit) {
 }
 
 /**
+ * The one line of explanation under a card or a group of rows: two lines of room, measured in the
+ * font the language actually uses. A fixed height was the bug — a line of Caption is ~16 dp in
+ * Latin and ~24 dp in Japanese, Chinese and Russian, so the fixed box held two Latin lines and one
+ * CJK one and cut every Japanese hint into an ellipsis (the owner, 2.22). Reading the line height
+ * off the style keeps the box steady for one- and two-line hints, and lets the three-line ones
+ * (ру́сский) push it open rather than lose their last line.
+ */
+@Composable
+private fun HintText(text: String?, start: Dp, end: Dp = 0.dp) {
+    val measurer = rememberTextMeasurer()
+    val density = LocalDensity.current
+    val twoLines = with(density) {
+        (measurer.measure("国", style = Type.Caption, maxLines = 1, softWrap = false).size.height * 2).toDp()
+    }
+    Box(Modifier.heightIn(min = twoLines + 5.dp).padding(start = start, top = 5.dp, end = end)) {
+        text?.let {
+            BasicText(it, style = Type.Caption.copy(color = Palette.TertiaryLabel), maxLines = 3, overflow = TextOverflow.Ellipsis)
+        }
+    }
+}
+
+/**
  * A card of setting rows, as in tvOS Settings, with one note under it: the focused row's, or
  * [note] when the row has none or focus is elsewhere. The note keeps two lines of room so the
  * sheet does not shift as focus moves.
@@ -1001,20 +1066,7 @@ private fun Group(note: String? = null, rows: @Composable ColumnScope.(note: (St
     // fixed 40 dp held two Latin lines and one Japanese one, so the Japanese hint ended in an
     // ellipsis (the owner, 2.22). Taller hints (ру́сский runs to three lines) push the box open
     // instead of being cut.
-    val measurer = rememberTextMeasurer()
-    val density = LocalDensity.current
-    val twoLines = with(density) {
-        (measurer.measure("国", style = Type.Caption, maxLines = 1, softWrap = false).size.height * 2).toDp()
-    }
-    Box(
-        Modifier
-            .heightIn(min = twoLines + 5.dp)
-            .padding(start = 16.dp, top = 5.dp, end = 8.dp),
-    ) {
-        (if (inside) focusedNote ?: note else note)?.let {
-            BasicText(it, style = Type.Caption.copy(color = Palette.TertiaryLabel), maxLines = 3, overflow = TextOverflow.Ellipsis)
-        }
-    }
+    HintText(if (inside) focusedNote ?: note else note, start = 16.dp, end = 8.dp)
 }
 
 /** One row: the setting's name on the left, its control on the right, a hairline above all but the first. */
