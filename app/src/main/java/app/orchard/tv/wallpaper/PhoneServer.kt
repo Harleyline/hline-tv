@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.ConnectivityManager
+import android.net.wifi.WifiManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.Log
@@ -576,6 +577,20 @@ class PhoneServer private constructor(private val context: Context, private val 
             return (1..8).map { alphabet[rnd.nextInt(alphabet.length)] }.joinToString("")
         }
 
+        /** The network's IPv4 address, the kind a phone on the same network can reach. */
+        private fun ipv4Of(cm: ConnectivityManager, n: android.net.Network): String? =
+            runCatching { cm.getLinkProperties(n) }.getOrNull()?.linkAddresses?.map { it.address }
+                ?.firstOrNull { it is Inet4Address && !it.isLoopbackAddress && !it.isLinkLocalAddress && !isBenchmark(it) }
+                ?.hostAddress
+
+        private fun isWifi(cm: ConnectivityManager, n: android.net.Network): Boolean =
+            runCatching { cm.getNetworkCapabilities(n) }?.getOrNull()
+                ?.let { it.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) && !it.hasTransport(NetworkCapabilities.TRANSPORT_VPN) } ?: false
+
+        private fun isEthernet(cm: ConnectivityManager, n: android.net.Network): Boolean =
+            runCatching { cm.getNetworkCapabilities(n) }?.getOrNull()
+                ?.let { it.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) && !it.hasTransport(NetworkCapabilities.TRANSPORT_VPN) } ?: false
+
         fun lanAddress(context: Context): String? {
             val cm = context.getSystemService<ConnectivityManager>() ?: return null
             val current = cm.currentNetwork()
@@ -583,17 +598,29 @@ class PhoneServer private constructor(private val context: Context, private val 
             // cannot reach (Clash and the like use 198.18.0.1; Xiaomi S55, issue #667). The Wi-Fi
             // or Ethernet network under it is still in allNetworks: take its address first.
             val networks = runCatching { cm.allNetworks.toList() }.getOrDefault(emptyList())
-            val lan = networks.filter { n ->
-                val caps = runCatching { cm.getNetworkCapabilities(n) }.getOrNull() ?: return@filter false
-                !caps.hasTransport(NetworkCapabilities.TRANSPORT_VPN) &&
-                    (caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))
-            }.sortedByDescending { it == current }
-            // When a TV reports no usable network the owner reads "offline" — say why, for the
+            // Wi-Fi before Ethernet: a TV with a cable and Wi-Fi both up is reached from the phone
+            // over the Wi-Fi one, which is the network the phone is on; boxes wired to a router the
+            // phone also reaches by Wi-Fi are the same case. The default network comes last: on
+            // VIDAA with a VPN it is the tunnel (docs/devices/hisense-vidaa.md).
+            val order = networks.filter { isWifi(cm, it) } + networks.filter { isEthernet(cm, it) } + listOfNotNull(current)
+            var addr = order.firstNotNullOfOrNull { ipv4Of(cm, it) }
+            // Some firmware (Konka, Skyworth, operator boxes) keeps the address out of
+            // ConnectivityManager's reach: the Wi-Fi service still knows it.
+            if (addr == null) {
+                val ip = runCatching {
+                    context.applicationContext.getSystemService<WifiManager>()?.connectionInfo?.ipAddress
+                }.getOrNull()
+                if (ip != null && ip != 0) {
+                    val bytes = byteArrayOf(
+                        (ip and 0xff).toByte(), (ip shr 8 and 0xff).toByte(),
+                        (ip shr 16 and 0xff).toByte(), (ip shr 24 and 0xff).toByte(),
+                    )
+                    addr = runCatching { java.net.InetAddress.getByAddress(bytes).hostAddress }.getOrNull()
+                    if (addr != null) Log.i(TAG, "address from the Wi-Fi service: $addr")
+                }
+            }
+            // When a TV reports no address the owner reads "offline" — say what was there, for the
             // diagnostics that come back with a report (nothing to retry against otherwise).
-            val addr = (lan + listOfNotNull(current)).firstNotNullOfOrNull { n ->
-                runCatching { cm.getLinkProperties(n) }.getOrNull()?.linkAddresses?.map { it.address }
-                    ?.firstOrNull { it is Inet4Address && !it.isLoopbackAddress && !it.isLinkLocalAddress && !isBenchmark(it) }
-            }?.hostAddress
             if (addr == null) Log.w(TAG, "no LAN address: ${networks.size} network(s): " +
                 networks.joinToString { n ->
                     val caps = runCatching { cm.getNetworkCapabilities(n) }.getOrNull()
