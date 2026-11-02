@@ -60,6 +60,8 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.onFocusChanged
@@ -72,6 +74,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.onPreviewKeyEvent
@@ -79,6 +82,7 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -146,6 +150,7 @@ fun WallpaperSheet(
     warm: Boolean = false,
 ) {
     val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
     var phoneUrl by remember { mutableStateOf<String?>(null) }
     var qr by remember { mutableStateOf<ImageBitmap?>(null) }
     // Two pickers open over the sheet: the language's, and the towns' the weather takes turns through.
@@ -156,11 +161,18 @@ fun WallpaperSheet(
     // Which one was last open, so the sheet can take the remote back when it closes: the panel
     // goes away with the focus it held, and the sheet then sat cursorless until a tap.
     var pickerWas by remember { mutableStateOf<String?>(null) }
+    // The cursor's home on the panel: the first row of the section that is open. Right out of the
+    // rail lands here, whatever row the remote happened to leave last (the owner's second rule).
+    val firstRow = remember { FocusRequester() }
+    // Left is the only way into the rail, and Back is the only way back up to it: while this is
+    // false the rail's items cannot be focused at all (see PersonalizeRail).
+    var railUp by remember { mutableStateOf(false) }
+    LaunchedEffect(visible) { if (!visible) railUp = false }
     val languageChip = remember { FocusRequester() }
     val cityChip = remember { FocusRequester() }
     LaunchedEffect(languagePicker, cityPicker) {
         if (languagePicker || cityPicker || pickerWas == null) return@LaunchedEffect
-        val back = if (pickerWas == "city") cityChip else languageChip
+        val back = if (pickerWas == "city") cityChip else firstRow
         pickerWas = null
         // The panel leaves over 150 ms and holds the cursor while it does; the chip's grab is
         // retried over many frames, until it takes (or nearly a second is spent in vain).
@@ -180,7 +192,10 @@ fun WallpaperSheet(
     // panel is up — a hidden sheet ticking them too meant a turn every five seconds (1.83).
     WeatherTurns(Weather.rotating && visible)
 
-    BackHandler(enabled = visible, onBack = onDismiss)
+    // Back is one level up, not out: from the rows it returns to the rail, and only from the rail
+    // does it leave the panel (the owner's third rule, 2.22). The pickers below register theirs
+    // later, so theirs is the one that answers while one is open.
+    BackHandler(enabled = visible) { if (railUp) onDismiss() else railUp = true }
 
     // The phone page listens all along (PhoneServer.listen); the address is read again each time,
     // as the TV's may have changed. A TV waking from an update or standby may not have its Wi-Fi
@@ -280,10 +295,6 @@ fun WallpaperSheet(
             // came to three or four screens of scrolling (the owner, 2.20). A section is one screen,
             // and a row holds two of the shorter settings side by side.
             var tab by remember { mutableStateOf(PersonalizeTab.Wallpaper) }
-            // Left is the only way into the rail, and losing the rail is the only way out of it:
-            // while this is false the rail's items cannot be focused at all (see PersonalizeRail).
-            var railUp by remember { mutableStateOf(false) }
-            LaunchedEffect(visible) { if (!visible) railUp = false }
             // The cards take the remote the first time the sheet opens; coming back to the rail's
             // Wallpaper item later must not steal it from the rail.
             var tookFocus by remember { mutableStateOf(false) }
@@ -295,7 +306,19 @@ fun WallpaperSheet(
             // next one halfway down.
             LaunchedEffect(tab) { scroll.scrollTo(0) }
 
-            PersonalizeRail(tab, railUp, onSelect = { tab = it }, onLost = { railUp = false })
+            PersonalizeRail(
+                tab, railUp,
+                onSelect = { tab = it },
+                onLost = { railUp = false },
+                onLeaveRight = {
+                    // Out of the rail and into the rows: the first row of the section takes the
+                    // cursor, and only then does the rail let go of it. Where no row asked for the
+                    // requester (a section of plain readings), fall back on the nearest one to the
+                    // right rather than leaving the cursor in a rail it can no longer hold.
+                    if (runCatching { firstRow.requestFocus() }.isSuccess) railUp = false
+                    else if (focusManager.moveFocus(FocusDirection.Right)) railUp = false
+                },
+            )
             Spacer(Modifier.width(18.dp))
             Column(
                 Modifier
@@ -351,7 +374,7 @@ fun WallpaperSheet(
                         when (tab) {
                             // The picture behind everything, then which shelf of films it comes from.
                             PersonalizeTab.Wallpaper -> {
-                                WallpaperRows(takeFocus && !tookFocus) { tookFocus = true }
+                                WallpaperRows(takeFocus && !tookFocus, focusRequester = firstRow, onTook = { tookFocus = true })
                                 Spacer(Modifier.height(10.dp))
                                 // Only while an aerial is the wallpaper: a second-level choice of the
                                 // aerial has no business standing under a static picture, where picking
@@ -386,7 +409,7 @@ fun WallpaperSheet(
                                 SettingRow(R.string.st_layout, stringResource(R.string.st_home_layout_hint), note, first = true) {
                                     Picker(
                                         listOf(true to R.string.st_home_one_row, false to R.string.st_home_standard),
-                                        AerialSettings.oneRowHome, AerialSettings::chooseOneRowHome,
+                                        AerialSettings.oneRowHome, AerialSettings::chooseOneRowHome, firstRow,
                                     )
                                 }
                                 SettingRow(R.string.st_columns, stringResource(R.string.st_columns_hint), note) {
@@ -430,7 +453,7 @@ fun WallpaperSheet(
                                     R.string.wp_weather,
                                     stringResource(if (AerialSettings.showWeather) R.string.st_weather_size_hint else R.string.st_weather_off_hint),
                                     note, first = true,
-                                ) { WeatherSize() }
+                                ) { WeatherSize(firstRow) }
                                 SettingRow(R.string.st_weather_place, stringResource(R.string.st_weather_place_hint), note) {
                                     Picker(
                                         listOf(false to R.string.st_clock_left, true to R.string.st_clock_right),
@@ -450,10 +473,10 @@ fun WallpaperSheet(
                                     )
                                 }
                                 SettingRow(R.string.st_air, null, note) {
-                                    SwitchPill(AerialSettings.showAqi, AerialSettings::chooseShowAqi)
+                                    SwitchPill(AerialSettings.showAqi, choose = AerialSettings::chooseShowAqi)
                                 }
                                 SettingRow(R.string.st_humidity, null, note) {
-                                    SwitchPill(AerialSettings.showHumidity, AerialSettings::chooseShowHumidity)
+                                    SwitchPill(AerialSettings.showHumidity, choose = AerialSettings::chooseShowHumidity)
                                 }
                             }
 
@@ -470,7 +493,7 @@ fun WallpaperSheet(
                                             else -> null
                                         },
                                         note, first = true,
-                                    ) { ScreensaverChoice(onStartScreensaver) }
+                                    ) { ScreensaverChoice(onStartScreensaver, firstRow) }
                                     // Only the qualities this TV can play; a 1080p-only TV has nothing to choose.
                                     val qualities = remember { AerialFormats.supported(context) }
                                     if (qualities.size > 1) SettingRow(R.string.ss_quality, stringResource(R.string.ss_quality_hint), note) {
@@ -508,10 +531,10 @@ fun WallpaperSheet(
                                     // The clock screensaver is its clock, and the others show none.
                                     val showClock = Wallpapers.screensaver == ScreensaverMode.Aerial || Wallpapers.screensaver == ScreensaverMode.Photos
                                     SettingRow(R.string.ss_back, stringResource(R.string.ss_back_choice_hint), note) {
-                                        SwitchPill(AerialSettings.backStartsScreensaver, AerialSettings::chooseBackStartsScreensaver)
+                                        SwitchPill(AerialSettings.backStartsScreensaver, choose = AerialSettings::chooseBackStartsScreensaver)
                                     }
                                     if (showClock) SettingRow(R.string.ss_show_time, stringResource(R.string.ss_show_time_hint), note) {
-                                        SwitchPill(AerialSettings.screensaverClock, AerialSettings::chooseScreensaverClock)
+                                        SwitchPill(AerialSettings.screensaverClock, choose = AerialSettings::chooseScreensaverClock)
                                     }
                                 }
                             }
@@ -564,10 +587,14 @@ fun WallpaperSheet(
                                     // The language on a row of its own, at the top: it is the one setting a
                                     // reader who cannot read the rest comes looking for (the owner, 2.21).
                                     SettingRow(R.string.st_language, stringResource(R.string.st_language_hint), note, first = true) {
-                                        ActionChip(languageName(AerialSettings.language), Glyph.ChevronRight, focusRequester = languageChip) {
-                                            pickerWas = "language"
-                                            languagePicker = true
-                                        }
+                                        ActionChip(
+                                            languageName(AerialSettings.language), Glyph.ChevronRight,
+                                            focusRequester = firstRow,
+                                            onClick = {
+                                                pickerWas = "language"
+                                                languagePicker = true
+                                            },
+                                        )
                                     }
                                     SettingRow(
                                         R.string.st_sounds,
@@ -620,10 +647,14 @@ fun WallpaperSheet(
                                         SettingRow(
                                             R.string.st_stats, stringResource(R.string.st_stats_hint), note, first = true,
                                         ) {
-                                            SwitchPill(AerialSettings.reportConsent == true) { on ->
-                                                AerialSettings.chooseReportConsent(on)
-                                                if (on) UsageReport.start(context)
-                                            }
+                                            SwitchPill(
+                                                AerialSettings.reportConsent == true,
+                                                focusRequester = firstRow,
+                                                choose = { on ->
+                                                    AerialSettings.chooseReportConsent(on)
+                                                    if (on) UsageReport.start(context)
+                                                },
+                                            )
                                         }
                                         SettingRow(
                                             R.string.st_feedback,
@@ -763,10 +794,10 @@ fun WallpaperSheet(
  * choice. The focused card's note is under the row, as under a group of settings.
  */
 @Composable
-private fun WallpaperRows(takeFocus: Boolean, onTook: () -> Unit = {}) {
+private fun WallpaperRows(takeFocus: Boolean, focusRequester: FocusRequester? = null, onTook: () -> Unit = {}) {
     val items = Wallpapers.items
     val selected = Wallpapers.selectedId
-    val first = remember { FocusRequester() }
+    val first = focusRequester ?: remember { FocusRequester() }
     LaunchedEffect(Unit) {
         if (!takeFocus) return@LaunchedEffect
         withFrameNanos { }
@@ -913,6 +944,7 @@ private fun PersonalizeRail(
     awake: Boolean,
     onSelect: (PersonalizeTab) -> Unit,
     onLost: () -> Unit,
+    onLeaveRight: () -> Unit,
 ) {
     // `onLost` fires once if the rail cannot take the remote after all (the rows had nothing to
     // give it), so Left can be tried again. It is *not* wired to the rail column's focus: focus
@@ -932,7 +964,16 @@ private fun PersonalizeRail(
     Column(
         Modifier
             .width(176.dp)
-            .padding(top = 2.dp),
+            .padding(top = 2.dp)
+            .onKeyEvent { e ->
+                // Right out of the rail: the section's first row takes the cursor.
+                if (e.type == KeyEventType.KeyDown && e.key == Key.DirectionRight) {
+                    onLeaveRight()
+                    true
+                } else {
+                    false
+                }
+            },
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         PersonalizeTab.entries.forEach { tab ->
@@ -1146,7 +1187,7 @@ private fun SettingRow(label: Int, hint: String?, note: (String?) -> Unit, first
 /** The weather's size, and with it whether there is one: 关 / 小 / 大 in one capsule. A switch for
  *  "show weather" beside a size row asked the same question twice (the owner, 2.20). */
 @Composable
-private fun WeatherSize() {
+private fun WeatherSize(focusRequester: FocusRequester? = null) {
     val size = when {
         !AerialSettings.showWeather -> 0
         AerialSettings.weatherLarge -> 2
@@ -1155,10 +1196,12 @@ private fun WeatherSize() {
     Capsule(
         listOf(0 to R.string.st_off, 1 to R.string.st_clock_small, 2 to R.string.st_clock_large),
         size,
-    ) { pick ->
-        AerialSettings.chooseShowWeather(pick != 0)
-        if (pick != 0) AerialSettings.chooseWeatherLarge(pick == 2)
-    }
+        focusRequester = focusRequester,
+        choose = { pick ->
+            AerialSettings.chooseShowWeather(pick != 0)
+            if (pick != 0) AerialSettings.chooseWeatherLarge(pick == 2)
+        },
+    )
 }
 
 /** Hidden Apps: how many there are, and the way into them. */
@@ -1173,27 +1216,38 @@ private fun HiddenAppsChip(count: Int, onClick: () -> Unit) {
 
 /** The values of a setting on their own, without the row around them: what a [PairRow] half holds. */
 @Composable
-private fun <T> Picker(options: List<Pair<T, Any>>, current: T, choose: (T) -> Unit) {
+private fun <T> Picker(options: List<Pair<T, Any>>, current: T, choose: (T) -> Unit, focusRequester: FocusRequester? = null) {
     // Two or three values as one capsule, as iOS splits a switch (the owner, 2.16); more stay
-    // chips, where a capsule would be a row of its own with a pill per value.
-    if (options.size <= 3) Capsule(options, current, choose)
-    else Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-        options.forEach { (value, text) ->
-            Chip(if (text is Int) stringResource(text) else text.toString(), on = current == value) { choose(value) }
+    // chips, where a capsule would be a row of its own with a pill per value. Either way the whole
+    // row is one stop for the remote: Left and Right step the value (2.22).
+    if (options.size <= 3) {
+        Capsule(options, current, choose, focusRequester)
+    } else {
+        val index = options.indexOfFirst { it.first == current }.coerceAtLeast(0)
+        Pressable(
+            onClick = {},
+            focusRequester = focusRequester,
+            focusedScale = 1.02f,
+            onKey = { e -> stepValues(e, index, options.lastIndex) { choose(options[it].first) } },
+        ) { state ->
+            Row(
+                Modifier
+                    .then(if (state.focused) Modifier.border(1.6.dp, Color.White, RoundedCornerShape(22.dp)) else Modifier)
+                    .padding(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                options.forEach { (value, text) ->
+                    Chip(if (text is Int) stringResource(text) else text.toString(), on = current == value, enabled = false) { choose(value) }
+                }
+            }
         }
     }
 }
 
 /** 关 on the left, 开 on the right, one capsule: iOS's switch, as the owner asked (2.16). */
 @Composable
-private fun SwitchPill(on: Boolean, choose: (Boolean) -> Unit) {
-    Row(
-        Modifier.clip(RoundedCornerShape(50)).background(Palette.Fill).padding(3.dp),
-        horizontalArrangement = Arrangement.spacedBy(2.dp),
-    ) {
-        Segment(stringResource(R.string.st_off), on = !on) { choose(false) }
-        Segment(stringResource(R.string.st_on), on = on) { choose(true) }
-    }
+private fun SwitchPill(on: Boolean, focusRequester: FocusRequester? = null, choose: (Boolean) -> Unit) {
+    Capsule(listOf(false to R.string.st_off, true to R.string.st_on), on, choose = choose, focusRequester = focusRequester)
 }
 
 /** A row of chips for one of a few values. */
@@ -1206,24 +1260,56 @@ private fun <T> Choices(
     current: T,
     choose: (T) -> Unit,
     first: Boolean = false,
+    focusRequester: FocusRequester? = null,
 ) {
-    SettingRow(label, hint, note, first) { Picker(options, current, choose) }
+    SettingRow(label, hint, note, first) { Picker(options, current, choose, focusRequester) }
+}
+
+/**
+ * The menu's fourth rule, as one function: Left and Right walk a row of values one at a time and
+ * stop at the ends. Right at the last value sticks — there is nothing past it, and the key is
+ * spent. Left at the first value hands the key back to whatever holds the row, and that is what
+ * takes the cursor out to the rail (the owner, 2.22).
+ */
+private fun stepValues(event: KeyEvent, index: Int, last: Int, choose: (Int) -> Unit): Boolean {
+    val code = event.nativeKeyEvent.keyCode
+    if (code != NativeKeyEvent.KEYCODE_DPAD_LEFT && code != NativeKeyEvent.KEYCODE_DPAD_RIGHT) return false
+    val step = if (code == NativeKeyEvent.KEYCODE_DPAD_RIGHT) 1 else -1
+    val next = index + step
+    if (next !in 0..last) return step > 0
+    if (event.type == KeyEventType.KeyDown) choose(next)
+    return true
 }
 
 /**
  * One capsule holding a row of values, the chosen one a white pill inside it — iOS's segmented
  * control, which the owner asked for by name (2.16: "左边关，右边开那种"). The track is the row's
  * own fill, so it sits on the glass without another material.
+ *
+ * It is one thing to the remote, not one per value: Left and Right step the value, and the row is
+ * a single stop on the way down the page.
  */
 @Composable
-private fun <T> Capsule(options: List<Pair<T, Any>>, current: T, choose: (T) -> Unit) {
-    Row(
-        Modifier.clip(RoundedCornerShape(50)).background(Palette.Fill).padding(3.dp),
-        horizontalArrangement = Arrangement.spacedBy(2.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        options.forEach { (value, text) ->
-            Segment(if (text is Int) stringResource(text) else text.toString(), on = current == value) { choose(value) }
+private fun <T> Capsule(options: List<Pair<T, Any>>, current: T, choose: (T) -> Unit, focusRequester: FocusRequester? = null) {
+    val index = options.indexOfFirst { it.first == current }.coerceAtLeast(0)
+    Pressable(
+        onClick = {},
+        focusRequester = focusRequester,
+        focusedScale = 1.02f,
+        onKey = { e -> stepValues(e, index, options.lastIndex) { choose(options[it].first) } },
+    ) { state ->
+        Row(
+            Modifier
+                .clip(RoundedCornerShape(50))
+                .background(Palette.Fill)
+                .then(if (state.focused) Modifier.border(1.6.dp, Color.White, RoundedCornerShape(50)) else Modifier)
+                .padding(3.dp),
+            horizontalArrangement = Arrangement.spacedBy(2.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            options.forEach { (value, text) ->
+                Segment(if (text is Int) stringResource(text) else text.toString(), on = current == value, enabled = false) { choose(value) }
+            }
         }
     }
 }
@@ -1237,9 +1323,10 @@ private fun Segment(
     label: String,
     on: Boolean,
     focusRequester: FocusRequester? = null,
+    enabled: Boolean = true,
     onClick: () -> Unit,
 ) {
-    Pressable(onClick = onClick, focusRequester = focusRequester, focusedScale = 1.05f) { state ->
+    Pressable(onClick = onClick, focusRequester = focusRequester, enabled = enabled, focusedScale = 1.05f) { state ->
         val bg by animateColorAsState(
             when {
                 on -> Palette.Focus
@@ -1293,10 +1380,12 @@ private fun Minutes(minutes: Int, range: IntRange, choose: (Int) -> Unit) {
         onKey = { e ->
             val code = e.nativeKeyEvent.keyCode
             if (code != NativeKeyEvent.KEYCODE_DPAD_LEFT && code != NativeKeyEvent.KEYCODE_DPAD_RIGHT) return@Pressable false
-            // A held key repeats: thirty minutes is one sweep of the pad.
-            if (e.type == KeyEventType.KeyDown) {
-                choose((minutes + if (code == NativeKeyEvent.KEYCODE_DPAD_RIGHT) 1 else -1).coerceIn(range))
-            }
+            val step = if (code == NativeKeyEvent.KEYCODE_DPAD_RIGHT) 1 else -1
+            // A held key repeats: thirty minutes is one sweep of the pad. At the ends the value
+            // holds; Left there hands the key back, and it goes out to the rail (2.22).
+            val next = minutes + step
+            if (next !in range) return@Pressable step > 0
+            if (e.type == KeyEventType.KeyDown) choose(next)
             true
         },
     ) { state ->
@@ -1368,8 +1457,8 @@ private fun WeatherValue() {
 
 /** A pill to pick one of a few options: a check on the chosen one, white when focused. */
 @Composable
-private fun Chip(label: String, on: Boolean, onFocused: (() -> Unit)? = null, onClick: () -> Unit) {
-    Pressable(onClick = onClick, focusedScale = 1.06f) { state ->
+private fun Chip(label: String, on: Boolean, onFocused: (() -> Unit)? = null, enabled: Boolean = true, onClick: () -> Unit) {
+    Pressable(onClick = onClick, enabled = enabled, focusedScale = 1.06f) { state ->
         if (onFocused != null) LaunchedEffect(state.focused) { if (state.focused) onFocused() }
         val bg by animateColorAsState(
             when {
@@ -1409,18 +1498,19 @@ private fun ActionChip(label: String, glyph: Glyph, focusRequester: FocusRequest
 }
 
 @Composable
-private fun ScreensaverChoice(onStart: () -> Unit) {
+private fun ScreensaverChoice(onStart: () -> Unit, focusRequester: FocusRequester? = null) {
     // The choice first, then the action that tries it. Three only (the owner, 2.18): the films,
     // the wallpaper itself, and the clock. The videos and the system's own screensaver stay for
     // whoever chose them, but they are no longer offered here.
     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-        listOf(
-            ScreensaverMode.Aerial to R.string.ss_aerial,
-            ScreensaverMode.Photos to R.string.ss_photos,
-            ScreensaverMode.Clock to R.string.ss_clock,
-        ).forEach { (mode, label) ->
-            Chip(stringResource(label), on = Wallpapers.screensaver == mode) { Wallpapers.chooseScreensaver(mode) }
-        }
+        Picker(
+            listOf(
+                ScreensaverMode.Aerial to R.string.ss_aerial,
+                ScreensaverMode.Photos to R.string.ss_photos,
+                ScreensaverMode.Clock to R.string.ss_clock,
+            ),
+            Wallpapers.screensaver, Wallpapers::chooseScreensaver, focusRequester,
+        )
         Spacer(Modifier.width(6.dp))
         Pressable(onClick = onStart, focusedScale = 1.06f) { state ->
             val bg by animateColorAsState(if (state.focused) Palette.Focus else Palette.FillStrong, tween(140, easing = Motion.EaseOut), label = "ss-start")
