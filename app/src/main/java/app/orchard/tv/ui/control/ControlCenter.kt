@@ -151,7 +151,11 @@ fun ControlCenter(
         modifier = Modifier.fillMaxSize(),
     ) {
         // A tap outside the panel closes Control Center.
-        Box(Modifier.fillMaxSize().dismissOnTap(onClose).background(Color.Black.copy(alpha = 0.28f)))
+        // 0.28 → 0.45 → 0.58: the panel is glass, and at 0.28 the picture behind it (a city at
+        // night, a bright film) read through it as plainly as the panel's own text; at 0.45 the
+        // clock's figures still came through the frosted top of the panel (the owner, 2.21 and
+        // 2.22). The screen dims first, so what shows through is a shape, not a photograph.
+        Box(Modifier.fillMaxSize().dismissOnTap(onClose).background(Color.Black.copy(alpha = 0.58f)))
     }
 
     Box(Modifier.fillMaxSize().padding(top = 24.dp, end = 32.dp), contentAlignment = Alignment.TopEnd) {
@@ -160,7 +164,7 @@ fun ControlCenter(
         // against about 26 ms on the second opening (Xiaomi MiTV-MFTR0, release build). Drawn once
         // at 1% while Home is idle, without focus, the first opening is like the second.
         if (warm && !visible) {
-            Column(Modifier.graphicsLayer { alpha = 0.01f }.width(300.dp).liquidGlass(24.dp).padding(16.dp)) {
+            Column(Modifier.graphicsLayer { alpha = 0.01f }.width(300.dp).liquidGlass(24.dp, deeper = true).padding(16.dp)) {
                 MainPage(vm, now, false, onOpen)
             }
         }
@@ -174,7 +178,12 @@ fun ControlCenter(
                 Modifier
                     .width(300.dp)
                     .consumeTaps()
-                    .liquidGlass(24.dp)
+                    .liquidGlass(24.dp, deeper = true)
+                    // A veil inside the glass. The frost is drawn at 79 % and the screen behind it
+                    // dimmed to 42 %, and the clock's white figures still read through the panel's
+                    // head — the one thing a panel must not do is let the desktop's own type
+                    // compete with its text (the owner, 2.22).
+                    .background(Color.Black.copy(alpha = 0.22f))
                     .padding(16.dp),
             ) {
                 AnimatedContent(

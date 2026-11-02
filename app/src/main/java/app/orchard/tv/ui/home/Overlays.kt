@@ -138,7 +138,10 @@ fun MenuRow(
 
 private enum class MenuPage { Main, Folders, Rename, Device, Phone }
 
-private val MenuWidth = 250.dp
+// 288 rather than 250: «Personnaliser l'icône et le nom» and «アイコン・アプリ名をカスタマイズ»
+// ended in an ellipsis at 250, and a menu that hides what its rows do is not a menu (the owner,
+// 2.22).
+private val MenuWidth = 288.dp
 
 /**
  * Long-press menu, opening out of the tile it belongs to. Choosing a folder or a folder's name

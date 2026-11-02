@@ -968,7 +968,13 @@ fun HomeScreen(
                         if (key != null && apps.indexOfFirst { it.key == key } in 0 until columns) down = requester(key)
                     }
                     .graphicsLayer {
-                        alpha = 1f - (toSaver.value * 2f).coerceIn(0f, 1f)
+                        // Scrolling the grid by hand carried the top-row names under the pill, and
+                        // there it sat on them — Wi-Fi, the time and the Control Center switch across
+                        // a name (the owner, 2.21). It fades as soon as the grid leaves the top, and
+                        // is back when the remote walks onto it or Home scrolls home.
+                        val pushed = (scroll.value / (collapsePx.coerceAtLeast(1f) * 0.5f)).coerceIn(0f, 1f)
+                        val away = if (pillFocused) 0f else pushed
+                        alpha = (1f - away) * (1f - (toSaver.value * 2f).coerceIn(0f, 1f))
                         // No offscreen buffer: it would cut the focused pill's 8% growth to a box.
                         compositingStrategy = CompositingStrategy.ModulateAlpha
                     },
