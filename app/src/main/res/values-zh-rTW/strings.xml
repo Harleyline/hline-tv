@@ -310,5 +310,27 @@
     <string name="phone_set_hint">掃描開啟設定頁：傳自己的照片、換圖示、改名稱。</string>
     <string name="phone_set_offline">沒有網路：請先把電視連上 Wi-Fi 或網路線。</string>
     <string name="phone_set_waiting">正在產生 QR Code…</string>
+    <string name="st_tab_top">天氣與時鐘</string>
+    <string name="st_tab_general">一般</string>
+    <string name="st_tab_privacy">隱私</string>
+    <string name="st_weather_off_hint">關閉後頂端只剩時鐘。</string>
+    <string name="st_clock_place">時鐘位置</string>
+    <string name="st_stats">匿名統計</string>
+    <string name="st_stats_hint">只傳送這台電視的品牌、型號、Android 版本和 HLine TV 版本，不含帳號、照片與應用程式清單。</string>
+    <string name="st_stats_title">協助統計安裝量？</string>
+    <string name="st_stats_body">只上傳這台電視的品牌、型號、Android 版本和 HLine TV 版本，不含帳號、照片、應用程式清單，也不含任何能辨識你的資訊。隨時可以在這裡關閉。</string>
+    <string name="st_stats_allow">允許</string>
+    <string name="st_stats_deny">暫時不要</string>
+    <string name="st_feedback">意見回饋記錄</string>
+    <string name="st_feedback_hint">把這台電視的診斷資訊與最近的記錄傳給開發者，位址已遮蔽。出問題時請用它。</string>
+    <string name="st_feedback_off_hint">這個版本沒有設定接收位址。</string>
+    <string name="st_feedback_off">未設定</string>
+    <string name="st_feedback_send">上傳</string>
+    <string name="st_feedback_sending">上傳中…</string>
+    <string name="st_feedback_sent">已上傳</string>
+    <string name="st_feedback_sent_hint">記錄已送達開發者，謝謝。</string>
+    <string name="st_feedback_retry">重試</string>
+    <string name="st_feedback_failed_hint">沒有上傳成功，請確認網路後再試一次。</string>
+    <string name="st_version_footer">HLine TV %1$s（%2$d）</string>
 </resources>
 

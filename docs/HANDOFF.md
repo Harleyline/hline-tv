@@ -207,6 +207,8 @@ adb -s $XIAOMI_TV:5555 shell cmd package compile -m speed -f app.orchard.tv
 4. 运行 `tools/deploy-site.sh`（在 main 上、`tools/` 已提交）。国内访问 GitHub 慢或打不开，所以官网自己放一份最新 Release 的 APK 和安装脚本：脚本把 Release 的两个 APK 下载到 `site/download/`，把 `tools/get.sh` 复制成 `site/install.sh`，把 `install.sh`、`restore.sh`、`tcast-push.py` 复制到 `site/tools/`，再部署官网；图标库的图从 `local/dangbei-icons/icons` 生成到 `site/icons/`，没有 `local/` 时脚本拒绝部署。这些副本不进版本库（见 `.gitignore`）。**每次发版都要跑一次**，否则官网上的 APK 还是旧版。`get.sh`、`install.sh` 先从官网下载，失败再从 GitHub 下载。
 5. 官网 `site/` 有中文（`index.html`）和英文（`en/index.html`）两页，共用 `style.css` 和 `app.js`（页面里的 `window.T` 放各自的文案和 Agent 提示词）。页面开头的小脚本按浏览器语言跳转，用户点过语言切换后以用户的选择为准（`localStorage` 的 `aerial-lang`）。改文案时两页都要改，README 也一样（`README.md` 中文、`README.en.md` 英文）。改了 `style.css` 或 `app.js` 要把页面里引用的 `?v=` 加 1。官网是 Cloudflare Worker 静态资源（配置见 `wrangler.jsonc`），绑定在 https://harleyline.github.io/hline-tv 和 https://tv.qust.me。改完官网也用 `tools/deploy-site.sh` 部署（直接 `npx wrangler@4 deploy` 会把官网上的 APK 和脚本删掉）。`site/_headers` 让图片在浏览器里缓存 7 天，所以替换截图时要把 `index.html` 里图片地址的 `?v=` 加 1，否则用户看到的还是旧图。`site/_redirects` 把旧地址 `/download/standard`、`/download/guard` 跳转到 `site/download/` 里的 APK。`site/agent.md`（中文）和 `site/en/agent.md`（英文）是给 Agent 看的安装说明，官网和 README 的 Agent 提示词只让 Agent 去读它；里面的 Windows 逐条步骤照抄了 `tools/install.sh` 和 `tools/restore.sh`，改这两个脚本时要一起改。
 
+6. 装机量与反馈日志的接收地址是编译期参数，不填就一个字节也不发：`local/report.properties`（`url=`、`key=`，不进版本库）或 `-PreportUrl=... -PreportKey=...`。接收端在 `tools/report-worker/`（Cloudflare Worker + KV + GitHub Issue），部署与隐私边界见那里的 README。少了这个地址，个性化 → 通用 里的「匿名统计」和「反馈日志」会显示「未配置」。
+
 ## 调试技巧
 
 - **截图**：`adb shell screencap -p /data/local/tmp/x.png && adb pull ...`（小米用 `/data/local/tmp`，TCL 用 `/sdcard`）。用完要删掉。
@@ -214,6 +216,7 @@ adb -s $XIAOMI_TV:5555 shell cmd package compile -m speed -f app.orchard.tv
 - **守护状态**：`dumpsys accessibility | grep -E "label=(Aerial|app.orchard.tv)"`（有输出就是已绑定；小米 ASTP0 上标签显示成类名）；日志 tag 是 `AerialGuard`。
 - **壁纸**：日志 tag 是 `AerialWallpaper`。
 - **logcat 看不到 App 日志的电视**（创维 7T631_T60）：`adb shell dumpsys activity app.orchard.tv/.MainActivity` 末尾打印 `DiagLog` 最近的记录（启动、显示模式、绘制、按键、焦点、屏保、加载耗时）；诊断版（`./gradlew -Pdiag ...`，版本名带 `-diag`）或 `ConfigReceiver --ez diag true` 之后还写进 `/sdcard/Android/data/app.orchard.tv/files/aerial-diag.log`，可以 `adb pull`。试验开关（下次启动生效）：`--ez mode_switch false` 不切刷新率（诊断版默认就不切），`--ez soft_layer true` 用软件绘制首页。
+- **上报（装机量／反馈日志）**：`UsageReport` 只发品牌、型号、安卓版本、App 版本和一个随机安装 id，同意与否单独存在 `settings` 表的 `report_consent`（`yes` / `no`，未回答就不发）。日志那一份就是 `Diagnostics.report()` 的内容，已经过 `mask()`。日志里有 `report: install sent …` 这样一行。想清掉已发记号：`adb shell run-as app.orchard.tv` 不可用时改 `shared_prefs/report.xml`（`sent_<版本>` 键）。
 - **机型适配信息**：`TV=<ip> tools/report.sh`（只读）生成可以贴进 issue 的 `aerial-report-<机型>.md`，macOS 上顺便复制到剪贴板；用户也可以在手机页最下面「反馈问题」里复制。issue 表单是 `.github/ISSUE_TEMPLATE/device.yml`。内容和隐私边界见 ARCHITECTURE.md「诊断报告」。
 - **测应用内升级**：`ConfigReceiver --ez check_update true` 立刻检查；`--ez update_test true` 让「下载并安装」用推到 `Android/data/app.orchard.tv/files/update-test.apk` 的包（测完删掉这个文件）。见 ARCHITECTURE.md「升级」。
 - **手机配置页**：令牌不写日志，从电视截图里识别二维码即可：`swift tools/qr-from-screenshot.swift shot.png`。

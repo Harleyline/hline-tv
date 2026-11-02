@@ -16,8 +16,8 @@ android {
         // Android 5.0. Compose 1.10 and later need 6.0, so the Compose BOM below stays on 1.9.
         minSdk = 21
         targetSdk = 34
-        versionCode = 146
-        versionName = "1.3"
+        versionCode = 149
+        versionName = "1.6"
         // The free air-quality token from aqicn.org/data-platform/token (weather/Weather.kt). Kept out
         // of version control like the signing key; without one the weather falls back to Open-Meteo.
         val waqi = rootProject.file("local/waqi.token").takeIf { it.isFile }?.readText()?.trim()
@@ -28,6 +28,20 @@ android {
         val diag = project.hasProperty("diag")
         buildConfigField("boolean", "DIAG", diag.toString())
         if (diag) versionNameSuffix = "-diag"
+        // Where the anonymous install count and the feedback log go (system/UsageReport): a Worker
+        // of one's own (tools/report-worker), a Feishu/WeCom group bot, anything that takes a POST.
+        // Empty — the default, and what ships — sends nothing at all: no address, no traffic.
+        // Set it in local/report.properties (url=, key=), kept out of version control, or per build:
+        //   ./gradlew assembleStandardRelease -PreportUrl=https://hline.example.workers.dev
+        val reportProps = Properties().apply {
+            rootProject.file("local/report.properties").takeIf { it.isFile }?.inputStream()?.use { load(it) }
+        }
+        val reportUrl = (project.findProperty("reportUrl") as String?)?.trim()
+            ?: reportProps.getProperty("url", "").trim()
+        val reportKey = (project.findProperty("reportKey") as String?)?.trim()
+            ?: reportProps.getProperty("key", "").trim()
+        buildConfigField("String", "REPORT_URL", "\"$reportUrl\"")
+        buildConfigField("String", "REPORT_KEY", "\"$reportKey\"")
     }
 
     // standard: a normal HOME app. guard: no HOME intent filter at all, for China-market firmwares

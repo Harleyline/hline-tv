@@ -82,6 +82,7 @@ import app.orchard.tv.system.SystemProbe
 import app.orchard.tv.system.HisenseSources
 import app.orchard.tv.system.IdlePower
 import app.orchard.tv.system.TvLight
+import app.orchard.tv.system.UsageReport
 import app.orchard.tv.system.LaunchFallback
 import app.orchard.tv.system.settingsLaunchIntent
 import app.orchard.tv.update.Updates
@@ -234,6 +235,9 @@ class MainActivity : ComponentActivity() {
         SourceLooks.init(this)
         AppNames.init(this)
         AerialSettings.init(this)
+        // The anonymous install line, once per version, and only once the owner said yes to the
+        // card in Personalize (system/UsageReport): a build without an address sends nothing.
+        UsageReport.start(this)
         // The families follow the language: on this Android the two scripts no TV ships can only
         // be the base family, so the styles are built for the one the app is speaking.
         app.orchard.tv.ui.theme.Type.applyLanguage(AerialSettings.localeTag(this))
