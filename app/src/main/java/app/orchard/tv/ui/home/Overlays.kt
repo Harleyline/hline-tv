@@ -78,6 +78,7 @@ import app.orchard.tv.ui.theme.Motion
 import app.orchard.tv.ui.theme.Palette
 import app.orchard.tv.ui.theme.Type
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
@@ -334,12 +335,19 @@ private fun PhoneSetupContent(appKey: String) {
     var qr by remember { mutableStateOf<ImageBitmap?>(null) }
     var offline by remember { mutableStateOf(false) }
     LaunchedEffect(appKey) {
-        val base = withContext(Dispatchers.IO) { PhoneServer.start(context) }
-        if (base == null) {
-            offline = true
-        } else {
-            val url = base + "#app=" + java.net.URLEncoder.encode(appKey, "UTF-8")
-            qr = withContext(Dispatchers.Default) { PhoneServer.qr(url).asImageBitmap() }
+        // A TV waking from an update or standby may not have its Wi-Fi yet: keep trying while the
+        // panel is open, so the code appears the moment the network does. A start that fails for
+        // another reason (the port taken) logs why; it still reads as offline here.
+        while (true) {
+            val base = withContext(Dispatchers.IO) { PhoneServer.start(context) }
+            if (base == null) {
+                offline = true
+                kotlinx.coroutines.delay(3_000)
+            } else {
+                val url = base + "#app=" + java.net.URLEncoder.encode(appKey, "UTF-8")
+                qr = withContext(Dispatchers.Default) { PhoneServer.qr(url).asImageBitmap() }
+                break
+            }
         }
     }
     Column(Modifier.padding(horizontal = 14.dp)) {

@@ -558,10 +558,25 @@ class PhoneServer private constructor(private val context: Context, private val 
                 !caps.hasTransport(NetworkCapabilities.TRANSPORT_VPN) &&
                     (caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))
             }.sortedByDescending { it == current }
-            return (lan + listOfNotNull(current)).firstNotNullOfOrNull { n ->
+            // When a TV reports no usable network the owner reads "offline" — say why, for the
+            // diagnostics that come back with a report (nothing to retry against otherwise).
+            val addr = (lan + listOfNotNull(current)).firstNotNullOfOrNull { n ->
                 runCatching { cm.getLinkProperties(n) }.getOrNull()?.linkAddresses?.map { it.address }
                     ?.firstOrNull { it is Inet4Address && !it.isLoopbackAddress && !it.isLinkLocalAddress && !isBenchmark(it) }
             }?.hostAddress
+            if (addr == null) Log.w(TAG, "no LAN address: ${networks.size} network(s): " +
+                networks.joinToString { n ->
+                    val caps = runCatching { cm.getNetworkCapabilities(n) }.getOrNull()
+                    (when {
+                        caps == null -> "?"
+                        caps.hasTransport(NetworkCapabilities.TRANSPORT_VPN) -> "vpn"
+                        caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> "wifi"
+                        caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> "eth"
+                        caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> "cell"
+                        else -> "other"
+                    }) + (if (n == current) "*" else "")
+                })
+            return addr
         }
 
         /** 198.18.0.0/15, the range proxy apps put their tunnel in; never a home network. */

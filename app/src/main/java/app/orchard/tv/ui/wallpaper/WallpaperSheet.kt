@@ -171,14 +171,19 @@ fun WallpaperSheet(
     BackHandler(enabled = visible, onBack = onDismiss)
 
     // The phone page listens all along (PhoneServer.listen); the address is read again each time,
-    // as the TV's may have changed.
+    // as the TV's may have changed. A TV waking from an update or standby may not have its Wi-Fi
+    // yet: keep trying while the sheet is open, so the code appears the moment the network does.
     LaunchedEffect(visible) {
         if (!visible) return@LaunchedEffect
-        val url = withContext(Dispatchers.IO) { PhoneServer.start(context) }
-        phoneUrl = url
-        // The code lands on the photo upload, the thing people open it for from here; the plain
-        // address (typed into a computer) stays without it.
-        qr = url?.let { withContext(Dispatchers.Default) { PhoneServer.qr("$it#upload").asImageBitmap() } }
+        while (true) {
+            val url = withContext(Dispatchers.IO) { PhoneServer.start(context) }
+            phoneUrl = url
+            // The code lands on the photo upload, the thing people open it for from here; the plain
+            // address (typed into a computer) stays without it.
+            qr = url?.let { withContext(Dispatchers.Default) { PhoneServer.qr("$it#upload").asImageBitmap() } }
+            if (url != null) break
+            delay(3_000)
+        }
     }
 
     val shown = remember { MutableTransitionState(false) }
