@@ -37,8 +37,8 @@
   "applicationCategory": "UtilitiesApplication",
   "applicationSubCategory": "Android TV launcher",
   "operatingSystem": "Android 5.0 及以上",
-  "softwareVersion": "1.5",
-  "inLanguage": ["zh-CN","zh-TW","en","ja","ko","ru","uk","kk","fr","mn","bo","ug"],
+  "softwareVersion": "1.6",
+  "inLanguage": ["zh-CN","zh-TW","en","ja","ko","ru","uk","kk","fr","es","de","th","pt","ar"],
   "url": "https://harleyline.github.io/hline-tv/",
   "downloadUrl": "https://github.com/Harleyline/hline-tv/releases/latest/download/HLine-TV.apk",
   "installUrl": "https://github.com/Harleyline/hline-tv/releases/latest",
@@ -86,7 +86,13 @@
   @media(max-width:760px){.wrap{padding:0 34px}.hero-inner{padding:0 34px}}
   a{color:inherit;text-decoration:none}
   .mono{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
-  section[id],div[id]{scroll-margin-top:84px}
+  /* A section carries 130–210 px of its own top padding — the gap between chapters. An anchor
+     used to jump to the box, so 功能 landed with a whole screen of nothing above its title. The
+     jump now subtracts that padding, and every menu item meets its own first line (2.24). */
+  section[id]{scroll-margin-top:calc(76px - var(--sec-pad,0px))}
+  div[id]{scroll-margin-top:84px}
+  #why,#features{--sec-pad:clamp(96px,13vh,160px)}
+  #install,#faq{--sec-pad:clamp(170px,23vh,270px)}
 
   header{position:sticky;top:0;z-index:30;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(6,7,10,0);border-bottom:1px solid transparent;transition:background .35s ease,border-color .35s ease}
   header.solid{background:rgba(6,7,10,.74);border-bottom-color:var(--line-soft)}
@@ -301,7 +307,7 @@
       <div class="screen">
         <picture>
           <source srcset="img/home.webp" type="image/webp">
-          <img src="img/home.jpg" width="1400" height="788" alt="HLine TV 首页：沙丘壁纸、时间与天气、底部一排常用 App" decoding="async">
+          <img src="img/home.jpg" width="1400" height="788" alt="HLine TV 首页：城市夜景壁纸、时间与天气、底部一排常用 App" decoding="async">
         </picture>
       </div>
       <p class="tv-note">把 Apple TV 的优雅，带给你的安卓电视。</p>
@@ -365,7 +371,7 @@
         <div>
           <span class="row-index"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 15h18"/></svg>01 · 首页</span>
           <h3>天气，抬眼即见。</h3>
-          <p>右上角常年留着天气：温度、空气、城市，开机第一眼就到位。时间在侧，各安其位。</p>
+          <p>右上角常年留着天气：温度、空气、城市，开机第一眼就到位。时间在侧，各安其位——天气与时钟分开调，大小、左右、显隐都随你。</p>
         </div>
         <div class="row-media"><picture>
           <source srcset="img/weather.webp" type="image/webp">
@@ -377,7 +383,7 @@
         <div>
           <span class="row-index"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.6"/><path d="M4 17l5-5 4 4 3-3 4 4"/></svg>02 · 壁纸</span>
           <h3>动静之间，皆是风景</h3>
-          <p>航拍视界、精选壁纸、私人相册。随心而动，每一眼都如初见。</p>
+          <p>航拍视界、精选壁纸、私人相册。随心而动，每一眼都如初见。航拍片源只在选中航拍时出现，切走就收起。</p>
         </div>
         <div class="row-media"><picture>
           <source srcset="img/w-stack.webp" type="image/webp">
@@ -389,7 +395,7 @@
         <div>
           <span class="row-index"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>03 · 屏保</span>
           <h3>空闲时，它很美</h3>
-          <p>航拍影片、壁纸轮换，或者只留一枚时钟。闲置的电视，一样体面。</p>
+          <p>航拍影片、壁纸轮换，或者只留一枚时钟。等待时间按分钟调，1 分钟也好，2 小时也好。闲置的电视，一样体面。</p>
         </div>
         <div class="row-media"><picture>
           <source srcset="img/screensaver.webp" type="image/webp">
@@ -424,7 +430,7 @@
 
     <div class="statement reveal">
       <h3>电视说什么语言，手机页就说什么语言</h3>
-      <p>界面 12 种语言，含繁体中文、藏语、维吾尔语、蒙古语；手机扫码打开的设置页，自动用电视的语言。</p>
+      <p>界面 14 种语言，含繁体中文、日本語、한국어、Español、Deutsch、ไทย、Português、العربية；手机扫码打开的设置页，自动用电视的语言。</p>
     </div>
 
     <div class="statement reveal">
@@ -454,7 +460,7 @@
     <div class="langs reveal">
       <span>简体中文</span><span>繁體中文</span><span>English</span><span>日本語</span><span>한국어</span>
       <span>Русский</span><span>Українська</span><span>Қазақша</span><span>Français</span>
-      <span>Монгол</span><span>བོད་སྐད</span><span>ئۇيغۇرچە</span>
+      <span>Español</span><span>Deutsch</span><span>ไทย</span><span>Português</span><span>العربية</span>
     </div>
   </section>
 
