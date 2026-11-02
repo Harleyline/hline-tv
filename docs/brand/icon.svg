@@ -1,12 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108">
-  <!-- Adaptive-icon canvas: 108 x 108; launchers show the central 72 (safe zone 66).
-       Same mark as the website logo (site/favicon.svg), scaled 2.25x into the visible 72. -->
+  <!-- App icon: the plate and its H from logo-horizontal.svg, on the near-black tile the launcher
+       icons use. The wordmark is left out — too fine to read at 48 dp. -->
   <defs>
-    <linearGradient id="bg" x1="18" y1="18" x2="90" y2="90" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#2FD0A5"/>
-      <stop offset="1" stop-color="#5B5BF0"/>
+    <linearGradient id="tile" x1="54" y1="0" x2="54" y2="108" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#12121B"/><stop offset="1" stop-color="#05050A"/>
+    </linearGradient>
+    <linearGradient id="hl" x1="8" y1="8" x2="92" y2="92" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3AA0FF"/><stop offset="1" stop-color="#6A4CFF"/>
     </linearGradient>
   </defs>
-  <rect width="108" height="108" fill="url(#bg)"/>
-  <path d="M33.75 65.25c6.75-13.5 13.5-20.25 20.25-20.25s13.5 6.75 20.25 20.25" fill="none" stroke="#FFFFFF" stroke-width="5.4" stroke-linecap="round"/>
+  <rect width="108" height="108" fill="url(#tile)"/>
+  <g transform="translate(14.61 14.61) scale(0.78)">
+    <path fill="url(#hl)" d="M14 22C14 14 20 10 28 11L80 18C88 19 92 24 91 32L88 70C88 78 83 83 75 84L24 90C16 91 10 86 10 78Z"/>
+    <path fill="#FFFFFF" d="M32 39.5Q32 37 34.5 37H38.5Q41 37 41 39.5V45.5H59V39.5Q59 37 61.5 37H65.5Q68 37 68 39.5V60.5Q68 63 65.5 63H61.5Q59 63 59 60.5V54.5H41V60.5Q41 63 38.5 63H34.5Q32 63 32 60.5Z"/>
+  </g>
 </svg>

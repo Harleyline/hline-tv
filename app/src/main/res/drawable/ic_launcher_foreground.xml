@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Source: docs/brand/icon.svg. The arc sits inside the 66dp safe zone of the 108dp canvas. -->
+<!-- Source: the owner's logo-horizontal.svg (HLINE TV), the plate and its H alone: the wordmark is
+     too fine to read at an icon's size. The plate keeps the mark's own gradient and the H is drawn
+     over it in white, as the logo has it on paper. Scaled to 0.68 and centred, the plate's corners
+     reach 39 of the 72-unit tile, so no launcher's mask cuts them. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
     android:width="108dp" android:height="108dp"
     android:viewportWidth="108" android:viewportHeight="108">
-    <path android:pathData="M33.75,65.25c6.75,-13.5 13.5,-20.25 20.25,-20.25s13.5,6.75 20.25,20.25"
-        android:strokeColor="#FFFFFFFF" android:strokeWidth="5.4"
-        android:strokeLineCap="round" android:fillColor="#00000000" />
+    <group android:translateX="19.66" android:translateY="19.66"
+        android:scaleX="0.68" android:scaleY="0.68">
+        <path android:pathData="M14,22C14,14 20,10 28,11L80,18C88,19 92,24 91,32L88,70C88,78 83,83 75,84L24,90C16,91 10,86 10,78Z">
+            <aapt:attr name="android:fillColor">
+                <gradient android:type="linear"
+                    android:startX="8" android:startY="8"
+                    android:endX="92" android:endY="92"
+                    android:startColor="#FF3AA0FF" android:endColor="#FF6A4CFF" />
+            </aapt:attr>
+        </path>
+        <path android:pathData="M32,39.5Q32,37 34.5,37H38.5Q41,37 41,39.5V45.5H59V39.5Q59,37 61.5,37H65.5Q68,37 68,39.5V60.5Q68,63 65.5,63H61.5Q59,63 59,60.5V54.5H41V60.5Q41,63 38.5,63H34.5Q32,63 32,60.5Z"
+            android:fillColor="#FFFFFFFF" />
+    </group>
 </vector>

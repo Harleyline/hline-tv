@@ -65,7 +65,7 @@ enum class Effects(val key: String) {
  */
 enum class AppLanguage(val tag: String) {
     System(""), Zh("zh"), ZhTw("zh-TW"), En("en"), Ja("ja"), Ko("ko"),
-    Fr("fr"), Ru("ru"), Bo("bo"), Ug("ug"), Mn("mn");
+    Fr("fr"), Ru("ru"), Es("es"), De("de"), Th("th"), Pt("pt"), Ar("ar");
 
     companion object {
         fun of(tag: String?) = entries.firstOrNull { it.tag == (tag ?: "") } ?: System
@@ -549,8 +549,8 @@ object AerialSettings {
         if (tag.isNullOrEmpty()) return context
         val conf = android.content.res.Configuration(context.resources.configuration)
         conf.setLocale(java.util.Locale.forLanguageTag(tag))
-        // The launcher is laid out left to right whatever the language: Uyghur's script runs right
-        // to left, and mirroring the whole TV UI for it is not what anyone asked for (2.13).
+        // The launcher is laid out left to right whatever the language: Arabic's script runs right
+        // to left, and mirroring the whole TV UI for it is not what anyone asked for (2.24).
         if (conf.layoutDirection == android.view.View.LAYOUT_DIRECTION_RTL) {
             conf.setLayoutDirection(java.util.Locale.US)
         }

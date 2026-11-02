@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The icon as a vector, for every Android the launcher runs on that knows adaptive icons (8.0
+     and up, which is every set this ships to): the two layers above are drawn at whatever size the
+     launcher asks for, so the mark stays sharp in its grid — the 192 px raster in mipmap-xxxhdpi
+     was upscaled by the TV's launcher into a slot twice its size and read as a blur (the owner,
+     2.24). The rasters stay for launchers that do not read this file. -->
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@drawable/ic_launcher_background" />
+    <foreground android:drawable="@drawable/ic_launcher_foreground" />
+</adaptive-icon>

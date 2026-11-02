@@ -313,6 +313,11 @@ fun WallpaperSheet(
             // came to three or four screens of scrolling (the owner, 2.20). A section is one screen,
             // and a row holds two of the shorter settings side by side.
             var tab by remember { mutableStateOf(PersonalizeTab.Wallpaper) }
+            // Which card the cursor is standing on in the wallpaper row. The aerial's source row
+            // belongs to the aerial card and nothing else: stepping right onto 每日照片 takes it
+            // away at once, and stepping back onto 航拍 brings it back (the owner, 2.24). Null
+            // until a card has taken the cursor, where the picture in use decides.
+            var focusedWallpaper by remember { mutableStateOf<Wallpaper?>(null) }
             // The feedback log's press: on its way, and what came of the last one.
             var sending by remember { mutableStateOf(false) }
             var outcome by remember { mutableStateOf<UsageReport.Sent?>(null) }
@@ -323,6 +328,9 @@ fun WallpaperSheet(
             LaunchedEffect(tab) {
                 scroll.scrollTo(0)
                 book.last = null
+                // A section opens at its top, so its cards have no cursor yet either: the aerial's
+                // source row would otherwise stay hidden from the section the cursor last stood in.
+                focusedWallpaper = null
             }
 
             PersonalizeRail(
@@ -398,12 +406,16 @@ fun WallpaperSheet(
                             PersonalizeTab.Wallpaper -> {
                                 // The rail holds the cursor when the panel opens, so the cards do
                                 // not grab it; Right out of 壁纸 hands it to the first card.
-                                WallpaperRows(false, focusRequester = firstRow)
+                                WallpaperRows(false, focusRequester = firstRow, onCard = { focusedWallpaper = it })
                                 Spacer(Modifier.height(10.dp))
-                                // Only while an aerial is the wallpaper: a second-level choice of the
-                                // aerial has no business standing under a static picture, where picking
-                                // it did nothing (the owner, 1.94).
-                                if (Wallpapers.resolve()?.kind == WallpaperKind.Live && Aerials.KINDS.size > 1) Group { note ->
+                                // Only under the aerial card: a second-level choice of the aerial has
+                                // no business standing under a static picture, where picking it did
+                                // nothing (the owner, 1.94). Which card the cursor is on decides, so
+                                // the row goes the moment the cursor leaves 航拍 for 每日照片 and
+                                // comes back with it (2.24); with no cursor yet, the picture in use
+                                // decides, so the section never opens without the row it used to keep.
+                                val underAerial = (focusedWallpaper ?: Wallpapers.resolve())?.kind == WallpaperKind.Live
+                                if (underAerial && Aerials.KINDS.size > 1) Group { note ->
                                     Choices(
                                         R.string.st_aerial_kind, null, note,
                                         listOf(
@@ -650,28 +662,10 @@ fun WallpaperSheet(
                             // something: one row, side by side, with the one-time question above it. A
                             // section of its own so that neither is buried five rows down in General.
                             PersonalizeTab.Privacy -> {
-                                if (AerialSettings.reportConsent == null && UsageReport.configured) ConsentCard(
-                                    onAllow = {
-                                        AerialSettings.chooseReportConsent(true)
-                                        UsageReport.start(context)
-                                    },
-                                    onDeny = { AerialSettings.chooseReportConsent(false) },
-                                )
-                                Group(stringResource(if (UsageReport.configured) R.string.st_stats_hint else R.string.st_feedback_off_hint)) { note ->
-                                    if (UsageReport.configured) {
-                                        SettingRow(
-                                            R.string.st_stats, stringResource(R.string.st_stats_hint), note, first = true,
-                                        ) {
-                                            SwitchPill(
-                                                AerialSettings.reportConsent == true,
-                                                focusRequester = firstRow,
-                                                choose = { on ->
-                                                    AerialSettings.chooseReportConsent(on)
-                                                    if (on) UsageReport.start(context)
-                                                },
-                                            )
-                                        }
-                                    }
+                                // The feedback log alone. The anonymous install count had a row and a
+                                // one-time question here; the owner asked for both to go, so the
+                                // section says one thing and does one thing (2.24).
+                                Group(stringResource(if (UsageReport.configured) R.string.st_feedback_hint else R.string.st_feedback_off_hint)) { note ->
                                     // The log's row, and it is a button whatever the build: 「上传」 on
                                     // the right, the cursor lands on it (there is nothing else in the
                                     // section to land on), and pressing it uploads at once. A build
@@ -688,11 +682,11 @@ fun WallpaperSheet(
                                             },
                                         ),
                                         note,
-                                        first = !UsageReport.configured,
+                                        first = true,
                                     ) {
                                         FeedbackChip(
                                             sending, outcome,
-                                            focusRequester = if (UsageReport.configured) null else firstRow,
+                                            focusRequester = firstRow,
                                         ) {
                                             if (sending) return@FeedbackChip
                                             sending = true
@@ -851,7 +845,7 @@ fun WallpaperSheet(
  * choice. The focused card's note is under the row, as under a group of settings.
  */
 @Composable
-private fun WallpaperRows(takeFocus: Boolean, focusRequester: FocusRequester? = null, onTook: () -> Unit = {}) {
+private fun WallpaperRows(takeFocus: Boolean, focusRequester: FocusRequester? = null, onTook: () -> Unit = {}, onCard: (Wallpaper) -> Unit = {}) {
     val items = Wallpapers.items
     val selected = Wallpapers.selectedId
     val first = focusRequester ?: remember { FocusRequester() }
@@ -894,7 +888,10 @@ private fun WallpaperRows(takeFocus: Boolean, focusRequester: FocusRequester? = 
     ) {
         items(list, key = { it.id }) { wp ->
             val hint = wallpaperNote(wp)
-            WallpaperCard(wp, if (wp === list.first()) first else null, atStart = wp === list.first()) { note = hint }
+            WallpaperCard(wp, if (wp === list.first()) first else null, atStart = wp === list.first()) {
+                note = hint
+                onCard(wp)
+            }
         }
     }
     HintText(note, start = 12.dp)
@@ -1788,9 +1785,11 @@ private fun languageName(language: AppLanguage): String = stringResource(
         AppLanguage.Ko -> R.string.lang_ko
         AppLanguage.Fr -> R.string.lang_fr
         AppLanguage.Ru -> R.string.lang_ru
-        AppLanguage.Bo -> R.string.lang_bo
-        AppLanguage.Ug -> R.string.lang_ug
-        AppLanguage.Mn -> R.string.lang_mn
+        AppLanguage.Es -> R.string.lang_es
+        AppLanguage.De -> R.string.lang_de
+        AppLanguage.Th -> R.string.lang_th
+        AppLanguage.Pt -> R.string.lang_pt
+        AppLanguage.Ar -> R.string.lang_ar
     },
 )
 

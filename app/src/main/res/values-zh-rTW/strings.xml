@@ -276,10 +276,12 @@
     <string name="lang_ja">日本語</string>
     <string name="lang_ko">한국어</string>
     <string name="lang_ru">俄語</string>
+    <string name="lang_es">Español</string>
+    <string name="lang_de">Deutsch</string>
+    <string name="lang_th">ไทย</string>
+    <string name="lang_pt">Português</string>
+    <string name="lang_ar">العربية</string>
     <string name="lang_fr">法語</string>
-    <string name="lang_bo">藏語</string>
-    <string name="lang_ug">維吾爾語</string>
-    <string name="lang_mn">蒙古語</string>
     <string name="st_cities">城市</string>
     <string name="st_cities_title">天氣城市</string>
     <string name="st_group_weather">天氣</string>

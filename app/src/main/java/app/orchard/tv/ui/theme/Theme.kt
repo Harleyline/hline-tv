@@ -63,9 +63,8 @@ val LocalReducedMotion = staticCompositionLocalOf { false }
 // Inter is Latin-only. Noto Sans JP and Noto Sans KR (one W400 cut each since 1.5) come after it in
 // the family, so kana, hangul and kanji draw from a proper Japanese/Korean cut instead of falling
 // through the TV's dozens of system fonts — the list Inter, JP, KR covers Latin, Japanese and
-// Korean in one chain, Inter first so Latin never changes (the owner, 1.75). Noto Serif Tibetan
-// and Noto Sans Arabic then close the chain for Tibetan and Uyghur, the two scripts nothing else
-// in it covers (2.12).
+// Korean in one chain, Inter first so Latin never changes (the owner, 1.75). Noto Sans Arabic and
+// Noto Sans Thai then close the chain for the two scripts nothing else in it covers (2.24).
 // One weight per cut: the bundled Noto Sans JP and KR were 9.1 MB and 10.2 MB variable fonts
 // carrying nine weights, and every style below asks for W400 (see Type). They are now the same
 // fonts instanced at 400 with the vertical metrics dropped, 5.3 MB and 5.8 MB (1.5, docs/PERF-1.5.md).
@@ -77,34 +76,37 @@ private fun cjkFonts(res: Int): List<Font> =
 private val japanFonts by lazy { cjkFonts(R.font.noto_sans_jp) }
 private val koreaFonts by lazy { cjkFonts(R.font.noto_sans_kr) }
 
-// Tibetan and Uyghur, the two scripts Inter has nothing for. Inter carries Latin, Greek and
-// Cyrillic already, so English, French, Russian and Mongolian Cyrillic need nothing extra; but a
-// Tibetan syllable or an Arabic-script word would otherwise come from whatever the TV happens to
-// ship, which on most Chinese sets is nothing at all. Both are Noto, so they sit in the same
-// chain: Noto Serif Tibetan is the only Tibetan Noto Google publishes (there is no Sans), and
-// Noto Sans Arabic covers Uyghur's own letters (ئ ۇ ۆ ۈ ې ڭ گ) as well as Arabic.
-private val tibetanFonts by lazy { listOf(Font(R.font.noto_serif_tibetan, FontWeight.W400)) }
+// Arabic and Thai, the two scripts Inter has nothing for. Inter carries Latin, Greek and Cyrillic
+// already, so English, French, German, Spanish, Portuguese and Russian need nothing extra; but an
+// Arabic-script or Thai word would otherwise come from whatever the TV happens to ship, which on
+// most Chinese sets is nothing at all — a screen of boxes. Both are Noto, so they sit in the same
+// chain: Noto Sans Arabic covers Arabic's own letters and their joining forms, and Noto Sans Thai
+// the vowels and tone marks Thai stacks above and below the line.
 private val arabicFonts by lazy { listOf(Font(R.font.noto_sans_arabic, FontWeight.W400)) }
+private val thaiFonts by lazy { listOf(Font(R.font.noto_sans_thai, FontWeight.W400)) }
 
-private val tibetan by lazy { FontFamily(tibetanFonts) }
 private val arabic by lazy { FontFamily(arabicFonts) }
+private val thai by lazy { FontFamily(thaiFonts) }
 
 /**
- * The family a language's own name reads in: the bundled cut for the two scripts no TV ships,
- * whatever language the app itself is speaking — the language picker lists all of them at once.
+ * The family a language's own name reads in: the bundled cut for the scripts no TV ships, whatever
+ * language the app itself is speaking — the language picker lists all of them at once.
  */
 fun scriptFamily(tag: String?): FontFamily? = when (tag) {
-    "bo" -> tibetan
-    "ug" -> arabic
+    // Their own cuts, so that a name and a word keep their shapes on a TV whose system font has
+    // none of them: Arabic's joining forms, Thai's vowels and tone marks stacked over and under
+    // the line. A row left to the chain fell to boxes on this Xiaomi (the owner, 2.24).
+    "ar" -> arabic
+    "th" -> thai
     else -> null
 }
 
 /**
  * The family the app's words are set in for the language [tag] speaks. There is no way on this
  * Android to add a fallback of one's own — CustomFallbackBuilder is API 29 and the TVs are 9 — and
- * a Compose font list resolves to a single typeface, so for the two scripts no TV ships, the
- * bundled cut has to be the base. Latin then falls to the TV's own, which is Roboto here; every
- * other language keeps Inter.
+ * a Compose font list resolves to a single typeface, so for a script no TV ships, the bundled cut
+ * has to be the base. Latin then falls to the TV's own, which is Roboto here; every other language
+ * keeps Inter.
  */
 internal fun familyFor(tag: String?, display: Boolean): FontFamily =
     scriptFamily(tag) ?: if (display) InterDisplay else InterText
@@ -115,8 +117,8 @@ val ScriptWarm: List<Pair<FontFamily, FontWeight>> by lazy {
     listOfNotNull(
         japanFonts.firstOrNull()?.let { FontFamily(it) to FontWeight.W400 },
         koreaFonts.firstOrNull()?.let { FontFamily(it) to FontWeight.W400 },
-        FontFamily(tibetanFonts) to FontWeight.W400,
         FontFamily(arabicFonts) to FontWeight.W400,
+        FontFamily(thaiFonts) to FontWeight.W400,
     )
 }
 
@@ -132,7 +134,7 @@ private fun inter(opticalSize: Float) = if (Build.VERSION.SDK_INT < 26) FontFami
                 FontVariation.Setting("opsz", opticalSize),
             ),
         )
-    } + japanFonts + koreaFonts + tibetanFonts + arabicFonts,
+    } + japanFonts + koreaFonts + arabicFonts + thaiFonts,
 )
 
 /** Tabular figures: a clock's digits keep their width as they change, and match line to line. */
