@@ -58,10 +58,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
@@ -311,13 +313,40 @@ fun WallpaperSheet(
                         } else {
                             false
                         }
-                    },
+                    }
+                    // Back in the rows: the rail closes behind the cursor. A row taking focus is a
+                    // positive sign, unlike the rail's own focus going quiet for a frame.
+                    .onFocusChanged { if (it.hasFocus) railUp = false },
             ) {
                 // The section's name stays put while its rows scroll under it: a long section (six
                 // rows of settings) scrolled its own title off the top, which read as a broken pane.
                 BasicText(stringResource(tab.label), style = Type.LargeTitle)
                 Spacer(Modifier.height(10.dp))
-                Box(Modifier.weight(1f).fillMaxWidth()) {
+                Box(
+                    Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        // Composited offscreen so the rows can be erased with DstIn below.
+                        .graphicsLayer { compositingStrategy = CompositingStrategy.Offscreen }
+                        .drawWithContent {
+                            drawContent()
+                            // More below: the last rows dissolve into the glass rather than being
+                            // covered by a band. Nothing is drawn on top, so there is no edge and
+                            // no block to see under the last card (the owner, 2.22).
+                            if (scroll.canScrollForward) {
+                                val foot = 34.dp.toPx()
+                                drawRect(
+                                    brush = Brush.verticalGradient(
+                                        0f to Color.White,
+                                        1f to Color.Transparent,
+                                        startY = size.height - foot,
+                                        endY = size.height,
+                                    ),
+                                    blendMode = BlendMode.DstIn,
+                                )
+                            }
+                        },
+                ) {
                     Column(Modifier.fillMaxSize().verticalScroll(scroll)) {
                         when (tab) {
                             // The picture behind everything, then which shelf of films it comes from.
@@ -639,26 +668,11 @@ fun WallpaperSheet(
                         }
                         Spacer(Modifier.height(14.dp))
                     }
-                    // Six settings to a section are taller than the sheet: the rows scroll, and a row
-                    // half under the edge read as a row cut in two. The foot of the list fades instead,
-                    // which says there is more below without breaking the row (the owner, 2.21).
-                    // Shallow: at 0.62 black over 46 dp the fade read as a black block under the last
-                    // card, not as shade (the owner, 2.22).
-                    if (scroll.canScrollForward) {
-                        Box(
-                            Modifier
-                                .align(Alignment.BottomCenter)
-                                .fillMaxWidth()
-                                .height(34.dp)
-                                .background(
-                                    Brush.verticalGradient(
-                                        0f to Color.Transparent,
-                                        0.55f to Color.Black.copy(alpha = 0.06f),
-                                        1f to Color.Black.copy(alpha = 0.20f),
-                                    ),
-                                ),
-                        )
-                    }
+                    // No block at the foot of the list: a dark band laid over the rows read as a
+                    // black bar hanging under the last card, its lower edge a hard line where the
+                    // band stopped (the owner, 2.22). The content itself is erased instead — a
+                    // gradient that takes the rows' alpha to nothing, so the glass behind shows
+                    // through and there is no edge to see.
                 }
                 // The version on the sheet's last line, whatever the section: the one thing a
                 // reporter is always asked for (the owner, 2.20).
@@ -900,6 +914,10 @@ private fun PersonalizeRail(
     onSelect: (PersonalizeTab) -> Unit,
     onLost: () -> Unit,
 ) {
+    // `onLost` fires once if the rail cannot take the remote after all (the rows had nothing to
+    // give it), so Left can be tried again. It is *not* wired to the rail column's focus: focus
+    // moving from one item to the next leaves the column without focus for a frame, and closing
+    // the rail on that frame is what made Up and Down dead inside it (the owner, 2.22).
     val requesters = remember { PersonalizeTab.entries.associateWith { FocusRequester() } }
     // Left from the rows asks for the rail; the items become focusable a frame later, so the take
     // is retried until it lands (as the pickers' chips do).
@@ -909,12 +927,12 @@ private fun PersonalizeRail(
             withFrameNanos { }
             if (runCatching { requesters.getValue(selected).requestFocus() }.isSuccess) return@LaunchedEffect
         }
+        onLost()
     }
     Column(
         Modifier
             .width(176.dp)
-            .padding(top = 2.dp)
-            .onFocusChanged { if (!it.hasFocus) onLost() },
+            .padding(top = 2.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         PersonalizeTab.entries.forEach { tab ->
