@@ -9,6 +9,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -76,6 +77,14 @@ fun Pressable(
     val state = remember { PressState() }
     val ownRequester = remember { FocusRequester() }
     val requester = focusRequester ?: ownRequester
+    // A control in a labelled row offers itself to the panel, so that leaving the side rail to the
+    // right can come back to the row the cursor was in (RowBook).
+    val rowKey = LocalRowKey.current
+    val book = LocalRowBook.current
+    DisposableEffect(rowKey, requester, book) {
+        if (rowKey != null && book != null) book.put(rowKey, requester)
+        onDispose { if (rowKey != null && book != null) book.drop(rowKey, requester) }
+    }
     val click by rememberUpdatedState(onClick)
     val reduced = LocalReducedMotion.current
     val scale by animateFloatAsState(
