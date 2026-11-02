@@ -269,9 +269,10 @@ fun HomeBackground(
     gridGlass: ImageBitmap? = null,
     /**
      * The plate under the top row as a clear one: the smoke and the lit edge, no frosted picture.
-     * A still wallpaper then reads through the dock the way a film already does (the owner).
+     * Tried in 1.14, rolled back (the owner): over a still wallpaper the dock needs its frost —
+     * all clear, the row floated on nothing.
      */
-    clearPlate: Boolean = true,
+    clearPlate: Boolean = false,
 ) {
     val shade = remember { Images.homeShade.asImageBitmap() }
     Box(Modifier.fillMaxSize()) {
