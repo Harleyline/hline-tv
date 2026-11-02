@@ -223,6 +223,11 @@
     background: var(--scrim); color: #fff; pointer-events: none; opacity: 0; transition: opacity .15s ease;
   }
   .drop.on { opacity: 1; }
+  /* The TV unreachable: the page keeps polling, so this says why nothing answers. */
+  .banner {
+    margin: 0 0 14px; padding: 11px 16px; border-radius: 12px; background: var(--fill);
+    color: var(--secondary); font-size: 14.5px; text-align: center;
+  }
   .drop b { font-size: 24px; font-weight: 600; padding: 28px 40px 0; border: 2px dashed rgba(255,255,255,.7); border-bottom: 0; border-radius: 18px 18px 0 0; }
   .drop span { font-size: 15px; opacity: .85; padding: 0 40px 28px; border: 2px dashed rgba(255,255,255,.7); border-top: 0; border-radius: 0 0 18px 18px; }
 
@@ -291,6 +296,7 @@
 </head>
 <body>
 <main>
+<div class="banner" id="conn" hidden></div>
 <header>
   <button class="link back" id="homeBack" hidden><svg width="11" height="18" viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2L2 10l8 8"/></svg><span data-i18n="tab_home"></span></button>
   <h1 id="title"></h1>
@@ -415,7 +421,7 @@ let state = null, stateJson = '';
 
 // The language: ?lang=ru in the address, else the one picked under More (kept on the phone), else the
 // first of the phone's preferred languages that has a table, else English. Keys are in KEYS, one array of texts per language.
-const KEYS = ["screensaver", "screensaver_short", "ss_aerial", "ss_photos", "ss_clock", "focus", "focus_high", "focus_standard", "weather", "city_ph", "set", "upload_label", "feedback_h", "feedback_hint", "diag_show", "diag_copy", "diag_github", "hint_aerial", "hint_photos", "hint_clock", "g_live", "g_live_sub", "g_daily", "g_daily_sub", "g_photo", "g_builtin", "g_auto", "toast_wallpaper", "aria_delete", "confirm_delete", "wx_clear", "wx_partlycloudy", "wx_cloudy", "wx_fog", "wx_rain", "wx_snow", "wx_thunder", "wx_chosen", "wx_auto_btn", "toast_auto", "wx_guessed", "wx_none", "tag_source", "aria_rename", "toast_renamed", "toast_name_reset", "toast_rename_fail", "aria_reset_icon", "toast_icon_reset", "focus_hint_standard", "focus_hint_high", "daily_title", "daily_caption", "rotate_title", "rotate_caption", "empty_photos", "add_second", "toast_tv_updated", "sending_n", "toast_added", "toast_no_photos", "toast_send_fail", "toast_city_set", "toast_city_nf", "toast_set_fail", "toast_sending_icon", "toast_icon_set", "toast_icon_bad", "diag_collecting", "toast_diag_fail", "toast_copied", "toast_copy_manual", "language", "hint_follows", "ss_videos", "hint_videos", "videos_h", "videos_upload", "videos_hint", "videos_empty", "confirm_video_delete", "toast_videos_added", "toast_video_bad", "sending_video", "hint_system", "tab_home", "tab_more", "current_wp", "cancel", "save", "name_ph", "rename_hint", "change_icon", "this_tv", "folder_count", "folder_ph", "inputs_h", "inputs_hint", "rename_hint_app", "was_named", "arrange_hint", "arrange_unready", "hidden_h", "hidden_none", "hidden_locked", "show_app", "hide_app", "to_folder", "new_folder", "out_of_folder", "ungroup", "ungroup_confirm", "folder_hint", "toast_hidden", "toast_shown", "toast_in_folder", "toast_out_folder", "toast_ungrouped", "tab_looks", "looks_title", "show_on_home", "source_device", "source_plain", "source_device_hint", "tv_model", "sw_always", "sw_always_sub", "sw_weather", "sw_saver_time", "sw_saver_time_sub", "g_source_sub", "icon_h", "icon_library", "icon_own", "icon_custom", "toast_icon_picked", "drop_hint", "drop_sub", "drop_none", "toast_diag_paste", "wx_locate", "toast_locate_ok", "toast_locate_fail", "sw_aqi", "sw_humidity" , "crop_title_photo", "crop_title_icon", "crop_hint", "toast_crop_fail", "icon_prev", "toast_icon_prev"];
+const KEYS = ["screensaver", "screensaver_short", "ss_aerial", "ss_photos", "ss_clock", "focus", "focus_high", "focus_standard", "weather", "city_ph", "set", "upload_label", "feedback_h", "feedback_hint", "diag_show", "diag_copy", "diag_github", "hint_aerial", "hint_photos", "hint_clock", "g_live", "g_live_sub", "g_daily", "g_daily_sub", "g_photo", "g_builtin", "g_auto", "toast_wallpaper", "aria_delete", "confirm_delete", "wx_clear", "wx_partlycloudy", "wx_cloudy", "wx_fog", "wx_rain", "wx_snow", "wx_thunder", "wx_chosen", "wx_auto_btn", "toast_auto", "wx_guessed", "wx_none", "tag_source", "aria_rename", "toast_renamed", "toast_name_reset", "toast_rename_fail", "aria_reset_icon", "toast_icon_reset", "focus_hint_standard", "focus_hint_high", "daily_title", "daily_caption", "rotate_title", "rotate_caption", "empty_photos", "add_second", "toast_tv_updated", "sending_n", "toast_added", "toast_no_photos", "toast_send_fail", "toast_city_set", "toast_city_nf", "toast_set_fail", "toast_sending_icon", "toast_icon_set", "toast_icon_bad", "diag_collecting", "toast_diag_fail", "toast_copied", "toast_copy_manual", "language", "hint_follows", "ss_videos", "hint_videos", "videos_h", "videos_upload", "videos_hint", "videos_empty", "confirm_video_delete", "toast_videos_added", "toast_video_bad", "sending_video", "hint_system", "tab_home", "tab_more", "current_wp", "cancel", "save", "name_ph", "rename_hint", "change_icon", "this_tv", "folder_count", "folder_ph", "inputs_h", "inputs_hint", "rename_hint_app", "was_named", "arrange_hint", "arrange_unready", "hidden_h", "hidden_none", "hidden_locked", "show_app", "hide_app", "to_folder", "new_folder", "out_of_folder", "ungroup", "ungroup_confirm", "folder_hint", "toast_hidden", "toast_shown", "toast_in_folder", "toast_out_folder", "toast_ungrouped", "tab_looks", "looks_title", "show_on_home", "source_device", "source_plain", "source_device_hint", "tv_model", "sw_always", "sw_always_sub", "sw_weather", "sw_saver_time", "sw_saver_time_sub", "g_source_sub", "icon_h", "icon_library", "icon_own", "icon_custom", "toast_icon_picked", "drop_hint", "drop_sub", "drop_none", "toast_diag_paste", "wx_locate", "toast_locate_ok", "toast_locate_fail", "sw_aqi", "sw_humidity" , "crop_title_photo", "crop_title_icon", "crop_hint", "toast_crop_fail", "icon_prev", "toast_icon_prev", "conn_lost"];
 const TEXTS = {
  "zh": [
   "屏幕保护程序",
@@ -569,6 +575,7 @@ const TEXTS = {
   "这张图片读不出来",
   "换回上一张",
   "已换回上一张",
+  "连不上电视了，正在重试…",
  ],
  "zh-TW": [
   "螢幕保護程式",
@@ -722,6 +729,7 @@ const TEXTS = {
   "這張圖片讀不出來",
   "換回上一張",
   "已換回上一張",
+  "連不上電視了，正在重試…",
  ],
  "ja": [
   "スクリーンセーバー",
@@ -875,6 +883,7 @@ const TEXTS = {
   "画像を読み込めませんでした",
   "前の画像に戻す",
   "前の画像に戻しました",
+  "テレビに接続できません。再試行しています…",
  ],
  "ko": [
   "화면 보호기",
@@ -1028,6 +1037,7 @@ const TEXTS = {
   "이미지를 불러올 수 없습니다",
   "이전 이미지로",
   "이전 이미지로 되돌렸습니다",
+  "TV에 연결할 수 없습니다. 다시 시도하는 중…",
  ],
  "en": [
   "Screensaver",
@@ -1181,6 +1191,7 @@ const TEXTS = {
   "Couldn't read that picture",
   "Put the last one back",
   "The last picture is back",
+  "Can't reach the TV. Retrying…",
  ],
  "ru": [
   "Заставка",
@@ -1334,6 +1345,7 @@ const TEXTS = {
   "Не удалось открыть фото",
   "Вернуть прошлую",
   "Прошлая картинка снова на месте",
+  "Не удаётся связаться с телевизором. Повторяем…",
  ],
  "uk": [
   "Заставка",
@@ -1487,6 +1499,7 @@ const TEXTS = {
   "Не вдалося відкрити фото",
   "Повернути попередню",
   "Попереднє зображення повернуто",
+  "Не вдається зв’язатися з телевізором. Повторюємо…",
  ],
  "kk": [
   "Экран қорғаушы",
@@ -1640,6 +1653,7 @@ const TEXTS = {
   "Фотоны ашу мүмкін болмады",
   "Алдыңғысын қайтару",
   "Алдыңғы сурет қайтарылды",
+  "Теледидарға қосылу мүмкін емес. Қайталап жатырмыз…",
  ]
 };
 const LANGS = Object.keys(TEXTS);
@@ -2695,7 +2709,17 @@ function bootTab() {
   return null;
 }
 const fromQr = bootTab();
-async function refresh() { try { take(await api('api/state')); } catch (e) {} }
+async function refresh() {
+  try { take(await api('api/state')); lost(false); }
+  // The TV asleep, its Wi-Fi changed, or a tab left open overnight: say so instead of sitting
+  // still, and the next poll (every six seconds) picks it up again.
+  catch (e) { lost(true); }
+}
+function lost(on) {
+  const b = $('#conn'); if (!b) return;
+  b.hidden = !on;
+  if (on) b.textContent = t('conn_lost');
+}
 refresh().then(() => { if (fromQr) setTimeout(fromQr, 140); });
 setInterval(() => { if (!document.hidden && sheet.hidden && !arrDragging) refresh(); }, 6000);
 </script>

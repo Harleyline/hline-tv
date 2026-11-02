@@ -48,12 +48,14 @@ import java.security.SecureRandom
  * random token shown only on the TV (the QR code and the address under it), so another device on
  * the network cannot use it by guessing. The token stays the same from one start to the next.
  */
-class PhoneServer private constructor(private val context: Context, private val token: String) : NanoHTTPD(PORT) {
+class PhoneServer private constructor(private val context: Context, private val token: String, port: Int = PORT) : NanoHTTPD(port) {
 
     override fun serve(session: IHTTPSession): Response {
         val prefix = "/$token"
         val uri = session.uri
-        if (!uri.startsWith(prefix)) return text(Response.Status.NOT_FOUND, "Not found")
+        // A bookmarked address, or a tab kept for days past a re-install: the token has changed.
+        // Say so instead of a bare 404 the owner cannot act on.
+        if (!uri.startsWith(prefix)) return gone(token.isEmpty())
         val path = uri.removePrefix(prefix).ifEmpty { "/" }
         return runCatching {
             when {
@@ -485,8 +487,30 @@ class PhoneServer private constructor(private val context: Context, private val 
 
     private fun text(status: Response.Status, msg: String) = newFixedLengthResponse(status, "text/plain; charset=utf-8", msg)
 
+    /** Shown on an address whose token is no longer this TV's, in every language the app speaks. */
+    private fun gone(empty: Boolean): Response {
+        val body = """
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>HLine TV</title>
+            <div style="font:16px/1.7 -apple-system,system-ui,'PingFang SC','Noto Sans CJK SC',sans-serif;
+                        max-width:34em;margin:12vh auto;padding:0 22px;color:#111">
+            <p>这个地址已经失效：请在电视上重新扫描二维码（长按 App → 自定义图标/名字，或个性化面板右侧）。</p>
+            <p>此地址已失效，請在電視上重新掃描 QR 碼。</p>
+            <p>このアドレスは使えなくなりました。テレビで QR コードを読み取り直してください。</p>
+            <p>이 주소는 더 이상 쓸 수 없습니다. TV에서 QR코드를 다시 스캔하세요.</p>
+            <p>This address is no longer in use. Scan the QR code on the TV again.</p>
+            <p>Этот адрес больше не действует. Отсканируйте QR-код на телевизоре заново.</p>
+            <p>Ця адреса більше не діє. Відскануйте QR-код на телевізорі знову.</p>
+            <p>Бұл мекенжай енді жарамсыз. Теледидардағы QR кодын қайта сканнерлеңіз.</p>
+            </div>
+        """.trimIndent()
+        return newFixedLengthResponse(Response.Status.NOT_FOUND, "text/html; charset=utf-8", body)
+    }
+
     companion object {
         const val PORT = 8790
+        /** Tried in order: the page works on whichever is free, and its QR code says which. */
+        private val PORTS = intArrayOf(PORT, 8791, 8792, 8793, 8794)
         private const val TAG = "AerialPhone"
         /** Enough for a batch of phone photos at full size. */
         private const val MAX_UPLOAD = 200L * 1024 * 1024
@@ -506,20 +530,25 @@ class PhoneServer private constructor(private val context: Context, private val 
             running?.let { if (it.isAlive) return it }
             // A force-stop that brings a new process up while the old socket is still being torn
             // down leaves the port in use for a few seconds: try again before giving up (2.10).
+            // Something else may hold the port for good (another app on the TV, or a firmware
+            // server): the next one in line is taken instead, and the QR code carries its number.
             var cause: Throwable? = null
             repeat(4) { attempt ->
-                val server = runCatching {
-                    PhoneServer(context.applicationContext, token(context)).also {
-                        it.start(SOCKET_READ_TIMEOUT, true)
-                        running = it
+                for (port in PORTS) {
+                    val server = runCatching {
+                        PhoneServer(context.applicationContext, token(context), port).also {
+                            it.start(SOCKET_READ_TIMEOUT, true)
+                            running = it
+                        }
+                    }.onFailure { cause = it }.getOrNull()
+                    if (server != null) {
+                        if (port != PORT) Log.i(TAG, "listening on $port: $PORT was taken")
+                        return server
                     }
-                }.onFailure {
-                    cause = it
-                    Thread.sleep(1_500L)
-                }.getOrNull()
-                if (server != null) return server
+                }
+                Thread.sleep(1_500L)
             }
-            cause?.let { Log.w(TAG, "could not listen", it) }
+            cause?.let { Log.w(TAG, "could not listen on any of ${PORTS.joinToString()}", it) }
             return null
         }
 
@@ -527,7 +556,8 @@ class PhoneServer private constructor(private val context: Context, private val 
         fun start(context: Context): String? {
             val ip = lanAddress(context) ?: return null
             val server = listen(context) ?: return null
-            return "http://$ip:$PORT/${server.token}/".also { DiagLog.i("phone page: $it") }
+            val port = runCatching { server.listeningPort }.getOrDefault(PORT)
+            return "http://$ip:$port/${server.token}/".also { DiagLog.i("phone page: $it") }
         }
 
         /**
