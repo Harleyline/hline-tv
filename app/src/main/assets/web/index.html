@@ -41,7 +41,7 @@
   }
 
   h2 { counter-increment: sec; font-size: 12.5px; font-weight: 700; letter-spacing: .02em; color: var(--secondary);
-    margin: 22px 4px 9px; display: flex; align-items: baseline; gap: 8px; }
+    margin: 30px 4px 13px; display: flex; align-items: baseline; gap: 8px; }
   h2::before {
     content: counter(sec, decimal-leading-zero); flex: 0 0 auto; color: var(--tint); font-size: 11.5px; font-weight: 700;
     letter-spacing: .1em; font-variant-numeric: tabular-nums;
@@ -49,22 +49,23 @@
   h2 i { font-style: normal; }
   h2.big { counter-increment: none; display: block; font-size: 19px; font-weight: 700; letter-spacing: -.01em; color: var(--label); margin: 26px 4px 10px; }
   h2.big::before { content: none; }
-  .foot { color: var(--secondary); font-size: 13px; margin: 7px 16px 0; }
+  .foot { color: var(--secondary); font-size: 13px; margin: 11px 4px 0; }
   .foot .link { font-size: 13px; }
-  #sections .foot { margin: 8px 4px 0; }
+  #sections .foot { margin: 10px 4px 0; }
+  .list + .list { margin-top: 12px; }
   section > .list:first-child, section > .hero:first-child { margin-top: 14px; }
 
   /* Inset grouped list, as in iOS Settings. */
   .list { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid var(--hair); }
   .item {
-    position: relative; display: flex; align-items: center; gap: 12px; width: 100%; min-height: 48px; padding: 12px 16px;
+    position: relative; display: flex; align-items: center; gap: 12px; width: 100%; min-height: 50px; padding: 13px 16px;
     border: 0; background: none; text-align: left; transition: background-color .2s ease;
   }
   .item + .item::before { content: ""; position: absolute; top: 0; left: 16px; right: 16px; height: 1px; background: var(--sep); }
   button.item:active, label.item:active { background: var(--fill); transition-duration: 0s; }
-  .item .txt { flex: 1; min-width: 0; }
+  .item .txt { flex: 1 1 auto; min-width: 0; }
   .item .sub { display: block; font-size: 12.5px; color: var(--secondary); margin-top: 3px; line-height: 1.4; }
-  .item .val { color: var(--secondary); white-space: nowrap; }
+  .item .val { color: var(--secondary); white-space: nowrap; max-width: 56%; overflow: hidden; text-overflow: ellipsis; }
   .item .chev { color: var(--tertiary); flex-shrink: 0; }
   .item.tint { color: var(--tint); }
   .item.danger { color: var(--danger); }
@@ -99,7 +100,7 @@
   .hero .cap b { font-size: 16.5px; font-weight: 600; }
   /* Cells start at the top: a button centres its content, so a tile without a caption sat lower than its neighbour. */
   .grid {
-    display: flex; gap: 12px; align-items: flex-start; margin: 0 -16px; padding: 2px 16px 4px;
+    display: flex; gap: 12px; align-items: flex-start; margin: 0; padding: 3px 16px 6px 3px;
     overflow-x: auto; overflow-y: hidden; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; scrollbar-width: none;
   }
   .grid::-webkit-scrollbar { display: none; }
@@ -138,14 +139,14 @@
   .btn:active { transform: scale(.97); }
   .btn[disabled] { opacity: .6; pointer-events: none; }
   .btn.plain { background: var(--card); color: var(--tint); box-shadow: none; border: 1px solid var(--hair); }
-  .row { display: flex; gap: 10px; margin-top: 10px; }
+  .row { display: flex; gap: 10px; margin-top: 12px; }
   .row .btn { flex: 1; }
   .add { margin-bottom: 14px; }
   .empty { color: var(--secondary); font-size: 15px; padding: 4px 4px 0; margin: 0; }
   .link { appearance: none; border: 0; background: none; color: var(--tint); padding: 0; cursor: pointer; }
 
   /* Screensaver modes as cards: icon, name, one line of what it does. */
-  #ss { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: none; border: 0; overflow: visible; }
+  #ss { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: none; border: 0; overflow: visible; }
   #ss .item {
     display: flex; flex-direction: column; align-items: flex-start; gap: 0; min-height: 0;
     padding: 13px 13px 14px; background: var(--card); border: 1px solid var(--hair); border-radius: 18px;
@@ -169,13 +170,14 @@
   }
   #ss .item[aria-checked="true"] .txt > span:first-child { color: #7fa8ff; }
 
-  .wx { display: flex; align-items: baseline; gap: 10px; }
+  .wx { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; row-gap: 2px; }
   .wx b { font-size: 30px; font-weight: 300; letter-spacing: -.02em; }
   .wx span { color: var(--secondary); font-size: 15px; }
   .field { display: flex; align-items: center; gap: 8px; }
-  .field { margin: 0 16px 12px; padding: 10px 14px; background: rgba(255,255,255,.045); border: 1px solid var(--hair); border-radius: 14px; }
+  .field { gap: 10px; }
   .field input {
-    flex: 1; min-width: 0; font: inherit; font-size: 16px; color: var(--label); background: none; border: 0; outline: none; padding: 0;
+    flex: 1; min-width: 0; font: inherit; font-size: 16px; color: var(--label);
+    background: rgba(255,255,255,.06); border: 1px solid var(--hair); border-radius: 12px; outline: none; padding: 9px 12px;
   }
   .field input::placeholder { color: var(--tertiary); }
   .field .link { font-weight: 600; }
