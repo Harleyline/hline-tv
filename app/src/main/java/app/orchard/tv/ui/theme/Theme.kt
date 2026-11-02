@@ -60,17 +60,19 @@ val LocalReducedMotion = staticCompositionLocalOf { false }
 // the way SF Pro switches between Text and Display. Font variations need Android 8.0; before that
 // every weight would come out as Inter Regular, so those TVs use the system's Roboto instead.
 //
-// Inter is Latin-only. Noto Sans JP and Noto Sans KR (variable, weights 100–900) come after it in
+// Inter is Latin-only. Noto Sans JP and Noto Sans KR (one W400 cut each since 1.5) come after it in
 // the family, so kana, hangul and kanji draw from a proper Japanese/Korean cut instead of falling
 // through the TV's dozens of system fonts — the list Inter, JP, KR covers Latin, Japanese and
 // Korean in one chain, Inter first so Latin never changes (the owner, 1.75). Noto Serif Tibetan
 // and Noto Sans Arabic then close the chain for Tibetan and Uyghur, the two scripts nothing else
 // in it covers (2.12).
-@OptIn(ExperimentalTextApi::class)
-private fun cjkFonts(res: Int): List<Font> = if (Build.VERSION.SDK_INT < 26) emptyList() else (1..9).map { i ->
-    val w = i * 100
-    Font(res, FontWeight(w), variationSettings = FontVariation.Settings(FontVariation.weight(w)))
-}
+// One weight per cut: the bundled Noto Sans JP and KR were 9.1 MB and 10.2 MB variable fonts
+// carrying nine weights, and every style below asks for W400 (see Type). They are now the same
+// fonts instanced at 400 with the vertical metrics dropped, 5.3 MB and 5.8 MB (1.5, docs/PERF-1.5.md).
+// A static face also needs no Android 8.0 variation support, but the gate stays: on the TVs below
+// 8.0 the system font already covers CJK, and 11 MB of bundled cuts would buy them nothing.
+private fun cjkFonts(res: Int): List<Font> =
+    if (Build.VERSION.SDK_INT < 26) emptyList() else listOf(Font(res, FontWeight.W400))
 
 private val japanFonts by lazy { cjkFonts(R.font.noto_sans_jp) }
 private val koreaFonts by lazy { cjkFonts(R.font.noto_sans_kr) }

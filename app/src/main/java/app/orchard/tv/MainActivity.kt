@@ -67,6 +67,7 @@ import app.orchard.tv.settings.AerialSettings
 import app.orchard.tv.wallpaper.PhoneServer
 import app.orchard.tv.wallpaper.Wallpapers
 import app.orchard.tv.system.BootOpen
+import app.orchard.tv.system.DeviceClass
 import app.orchard.tv.system.DiagLog
 import app.orchard.tv.system.FrameStats
 import app.orchard.tv.system.Shots
@@ -437,18 +438,33 @@ class MainActivity : ComponentActivity() {
      * of black screen, every time Home comes back. Xiaomi MiTV-MFTR0 and MFFU1 have a single 60 Hz
      * mode; TCL MT5879 (Android 11) lists 50 to 120 Hz but cannot say which switches are seamless,
      * so both stay as they are.
+     *
+     * Only on a TV with the headroom ([DeviceClass.capable]): twice the frames is twice the GPU's
+     * work, and a 120 Hz mode on a two-core box drops every other frame instead of looking smoother.
+     * Before Android 12 nothing says which switches are seamless, so there the rate is only a hint
+     * (`preferredRefreshRate`) and the firmware decides — Sony's Android 10 sets report a 120 Hz
+     * panel and hand Home 60 Hz, and this is all they will take without a black screen.
      */
     private fun preferSmoothestRefreshRate() {
-        if (Build.VERSION.SDK_INT < 31) return
         // Twice the frames is twice the GPU's work: Lite stays at the rate the TV chose.
         if (AerialSettings.lite) return DiagLog.i("refresh rate left as it is (lite effects)")
-        val display = display ?: return
-        val current = display.mode
+        if (!DeviceClass.capable(this)) return DiagLog.i("refresh rate left as it is (no headroom: ${DeviceClass.describe(this)})")
+        val d = display() ?: return
+        val current = d.mode
+        if (Build.VERSION.SDK_INT < 31) {
+            val best = d.supportedModes
+                .filter { it.physicalWidth == current.physicalWidth && it.physicalHeight == current.physicalHeight }
+                .maxByOrNull { it.refreshRate }?.refreshRate ?: return
+            if (best <= current.refreshRate + 0.5f) return
+            window.attributes = window.attributes.apply { preferredRefreshRate = best }
+            DiagLog.i("refresh rate hint ${current.refreshRate} -> $best Hz (a hint: only Android 12 says which switches are seamless)")
+            return
+        }
         val seamless = current.alternativeRefreshRates
-        val best = display.supportedModes
+        val best = d.supportedModes
             .filter { m ->
                 m.physicalWidth == current.physicalWidth && m.physicalHeight == current.physicalHeight &&
-                    m.refreshRate <= 120.5f && seamless.any { kotlin.math.abs(it - m.refreshRate) < 0.5f }
+                    m.refreshRate <= 144.5f && seamless.any { kotlin.math.abs(it - m.refreshRate) < 0.5f }
             }
             .maxByOrNull { it.refreshRate }
             ?.takeIf { it.refreshRate > current.refreshRate + 0.5f } ?: return

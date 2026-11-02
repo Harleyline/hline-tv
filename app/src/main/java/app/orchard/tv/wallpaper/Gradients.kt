@@ -91,10 +91,15 @@ object Gradients {
         return out
     }
 
-    /** One of the shipped photographs, cropped to [width]×[height]. Call off the main thread. */
+    /**
+     * One of the shipped photographs, cropped to [width]×[height]. Call off the main thread.
+     * WebP at quality 92 (1.5): the same pictures, 2244 KB of JPEG down to 1396 KB, and assets are
+     * stored uncompressed in the APK, so that comes off its size whole. BitmapFactory reads WebP
+     * from Android 4.0 on.
+     */
     private fun photo(name: String, width: Int, height: Int): Bitmap? = runCatching {
         val ctx = context ?: return null
-        val src = ctx.assets.open("wallpapers/$name.jpg").use { BitmapFactory.decodeStream(it) } ?: return null
+        val src = ctx.assets.open("wallpapers/$name.webp").use { BitmapFactory.decodeStream(it) } ?: return null
         Images.cover(src, width, height).also { if (it !== src) src.recycle() }
     }.getOrNull()
 }

@@ -4,10 +4,14 @@ local.properties
 .idea/
 *.iml
 .kotlin/
+.workbuddy/
 
 # Machine- and household-specific: TV addresses, signing key. Hand over privately.
 local/
 .DS_Store
+
+# Release APKs renamed and put here for a review or an upload: build output, never versioned.
+/*.apk
 
 # Copied into the website by tools/deploy-site.sh: the latest release's APKs and the install scripts.
 site/download/

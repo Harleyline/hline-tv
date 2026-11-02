@@ -16,6 +16,7 @@ import android.os.Build
  */
 object DeviceClass {
     @Volatile private var known: Boolean? = null
+    @Volatile private var fast: Boolean? = null
 
     fun lowEnd(context: Context): Boolean = known ?: run {
         val am = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
@@ -25,11 +26,31 @@ object DeviceClass {
             .also { known = it }
     }
 
+    /**
+     * Whether this TV has the headroom for the most expensive thing Aerial can ask of it: running
+     * Home at twice the refresh rate (MainActivity.preferSmoothestRefreshRate). A 120 Hz panel on a
+     * two-core box drops every other frame instead of looking smoother, so the rate is only raised
+     * where the GPU can keep the budget: not a low-end set, at least 2 GB, four cores and OpenGL ES 3
+     * (the glass and the tile's light need it; TV GPUs without it are the ones Aerial draws Lite for).
+     * Read from the system, like [lowEnd], not from a list of models.
+     */
+    fun capable(context: Context): Boolean = fast ?: run {
+        if (lowEnd(context)) return false.also { fast = it }
+        val am = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val mb = ActivityManager.MemoryInfo().also(am::getMemoryInfo).totalMem / (1 shl 20)
+        val gles = runCatching { am.deviceConfigurationInfo.reqGlEsVersion }.getOrDefault(0)
+        val cores = Runtime.getRuntime().availableProcessors()
+        (mb >= 2048 && cores >= 4 && gles >= 0x30000).also { fast = it }
+    }
+
     /** One line for diagnostics: what the check saw. */
     fun describe(context: Context): String {
         val am = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val info = ActivityManager.MemoryInfo().also(am::getMemoryInfo)
-        return "low-end=${lowEnd(context)} (low-RAM flag ${am.isLowRamDevice}, ${info.totalMem / (1 shl 20)} MB, " +
-            "${Runtime.getRuntime().availableProcessors()} cores, memory class ${am.memoryClass} MB)"
+        val gles = runCatching { am.deviceConfigurationInfo.reqGlEsVersion }.getOrDefault(0)
+        return "low-end=${lowEnd(context)} capable=${capable(context)} " +
+            "(low-RAM flag ${am.isLowRamDevice}, ${info.totalMem / (1 shl 20)} MB, " +
+            "${Runtime.getRuntime().availableProcessors()} cores, GLES ${gles shr 16}.${(gles shr 8) and 0xFF}, " +
+            "memory class ${am.memoryClass} MB)"
     }
 }

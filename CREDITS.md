@@ -15,7 +15,7 @@ HLine TV 在 Aerial（MIT License, © pengchujin and contributors）与 ClearYou
 
 - **内置壁纸**（`app/src/main/assets/wallpapers/`）：沙丘两张、浪一张由项目所有者提供；两张城市壁纸来自 [Unsplash](https://unsplash.com/)，依据 Unsplash License 免费使用：
   - `city_skyline.jpg` — <https://images.unsplash.com/photo-1477959858617-67f85cf4f1df>
-  - `city_lights.jpg` — <https://images.unsplash.com/photo-1444723121867-7a241cacace9>
+  - `city_lights.webp` — <https://images.unsplash.com/photo-1444723121867-7a241cacace9>
 - **每日一图**：必应（cn.bing.com）当日的公开图片，仅在线获取并临时缓存，版权归微软/图片作者所有。
 - **界面截图**（`site/img/`）：拍摄自本项目运行画面，其中出现的第三方应用图标与商标归其各自所有者所有，仅用于说明兼容性。
 
