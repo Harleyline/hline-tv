@@ -286,9 +286,9 @@
     <string name="st_cities_title">Cidades do clima</string>
     <string name="st_group_weather">Clima</string>
     <string name="st_group_clock">Relógio</string>
-    <string name="st_cities_entry_hint">A tela inicial alterna entre estas cidades, dez segundos cada uma</string>
+    <string name="st_cities_entry_hint">As cidades por onde o clima passa</string>
     <string name="st_cities_count">%1$d cidades</string>
-    <string name="st_cities_hint">O clima alterna entre estas cidades, 10 segundos cada, como o painel de partidas de um aeroporto.</string>
+    <string name="st_cities_hint">O clima passa de uma cidade para outra, em ordem.</string>
     <string name="st_city_add">Adicionar cidade</string>
     <string name="st_city_pick">Escolher cidade</string>
     <string name="st_city_remove">Remover</string>
@@ -346,4 +346,7 @@
     <string name="st_feedback_retry">Tentar de novo</string>
     <string name="st_feedback_failed_hint">Não foi possível enviar; verifique a rede e tente outra vez.</string>
     <string name="st_version_footer">HLine TV %1$s (%2$d)</string>
+    <string name="st_cities_phone_title">Leia o código para adicionar uma cidade</string>
+    <string name="st_cities_phone_body">Aponte a câmera do celular, pesquise qualquer cidade do mundo e toque para aplicar. Papel de parede, ícones e nomes também ficam no celular.</string>
+    <string name="st_cities_auto">Pela rede</string>
 </resources>

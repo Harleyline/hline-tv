@@ -286,9 +286,9 @@
     <string name="st_cities_title">天気の都市</string>
     <string name="st_group_weather">天気</string>
     <string name="st_group_clock">時計</string>
-    <string name="st_cities_entry_hint">ホームはこれらの都市を10秒ずつ切り替えます</string>
+    <string name="st_cities_entry_hint">天気を切り替えて表示する都市</string>
     <string name="st_cities_count">%1$d 都市</string>
-    <string name="st_cities_hint">ホームがこの都市を 10 秒ずつ順に切り替えます（空港の出発案内のように）。</string>
+    <string name="st_cities_hint">天気はこれらの都市を順に表示します。</string>
     <string name="st_city_add">都市を追加</string>
     <string name="st_city_pick">都市を選ぶ</string>
     <string name="st_city_remove">削除</string>
@@ -339,5 +339,8 @@
     <string name="st_feedback_retry">再試行</string>
     <string name="st_feedback_failed_hint">送信できませんでした。ネットワークを確認してもう一度お試しください。</string>
     <string name="st_version_footer">HLine TV %1$s（%2$d）</string>
+    <string name="st_cities_phone_title">スキャンして都市を追加</string>
+    <string name="st_cities_phone_body">スマホでスキャンして世界の都市を検索し、タップするだけで設定。壁紙やアプリアイコンもスマホから変えられます。</string>
+    <string name="st_cities_auto">ネットワーク位置情報</string>
 </resources>
 

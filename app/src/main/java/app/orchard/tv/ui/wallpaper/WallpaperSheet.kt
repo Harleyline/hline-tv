@@ -162,9 +162,11 @@ fun WallpaperSheet(
     // Two pickers open over the sheet: the language's, and the towns' the weather takes turns through.
     var languagePicker by remember { mutableStateOf(false) }
     var citiesUp by remember { mutableStateOf(false) }
-    var cityPicker by remember { mutableStateOf(false) }
+    // The phone's code for the weather section, beside the towns' rows: a city is added on the
+    // phone, where it can be typed and searched worldwide (the owner, 11-03).
+    var weatherQr by remember { mutableStateOf<ImageBitmap?>(null) }
     // Either picker over the sheet: the screen behind it goes frosted, as behind Hidden Apps.
-    val pickerUp = languagePicker || cityPicker || citiesUp
+    val pickerUp = languagePicker || citiesUp
     // Which one was last open, so the sheet can take the remote back when it closes: the panel
     // goes away with the focus it held, and the sheet then sat cursorless until a tap.
     var pickerWas by remember { mutableStateOf<String?>(null) }
@@ -183,10 +185,17 @@ fun WallpaperSheet(
     val cityChip = remember { FocusRequester() }
     val citiesChip = remember { FocusRequester() }
     val citiesFirst = remember { FocusRequester() }
-    LaunchedEffect(languagePicker, cityPicker, citiesUp) {
-        if (languagePicker || cityPicker || citiesUp || pickerWas == null) return@LaunchedEffect
+    // The phone's code for the weather section, made when that page opens.
+    LaunchedEffect(citiesUp, phoneUrl) {
+        if (citiesUp && weatherQr == null) {
+            weatherQr = phoneUrl?.let { url ->
+                withContext(Dispatchers.Default) { runCatching { PhoneServer.qr("$url#weather").asImageBitmap() }.getOrNull() }
+            }
+        }
+    }
+    LaunchedEffect(languagePicker, citiesUp) {
+        if (languagePicker || citiesUp || pickerWas == null) return@LaunchedEffect
         val back = when (pickerWas) {
-            "city" -> if (citiesUp) citiesFirst else cityChip
             "cities" -> citiesChip
             else -> firstRow
         }
@@ -300,7 +309,7 @@ fun WallpaperSheet(
                 // The wallpaper behind the sheet, blurred and opaque inside its outline: what is
                 // under the panel reads as colour and shape only, and no window black can show at
                 // its corners (the owner, 1.83).
-                .focusProperties { if (languagePicker || cityPicker || citiesUp) enter = { FocusRequester.Cancel } }
+                .focusProperties { if (languagePicker || citiesUp) enter = { FocusRequester.Cancel } }
                 // The dock's own material, edge and all (2.00), a shade deeper (2.01): the same
                 // glass, the same lit rim, the same rounded corners, with the veil that keeps the
                 // rows readable on a bright picture — the owner wants the contrast high.
@@ -787,12 +796,14 @@ fun WallpaperSheet(
         }
     }
     // The towns the weather is read for: a page of its own, opened from the weather's row. The
-    // place it reads, the towns Home turns through, and the way to add one.
+    // place it reads, the towns Home turns through, and the phone's code to add one with — a city
+    // is added on the phone now, where it can be typed and searched worldwide (the owner, 11-03).
     PickerOverlay(
         visible = citiesUp,
         title = stringResource(R.string.st_cities_title),
         onDismiss = { citiesUp = false },
         firstRequester = citiesFirst,
+        side = { WeatherPhoneCard(phoneUrl, weatherQr) },
     ) { first ->
         val full = Weather.extras.size >= Weather.MAX_EXTRA_CITIES
         Column(Modifier.heightIn(max = 404.dp).verticalScroll(rememberScrollState())) {
@@ -800,6 +811,13 @@ fun WallpaperSheet(
                 stringResource(R.string.st_cities_hint) + Weather.fetchedAtText(),
             ) { note ->
                 SettingRow(R.string.wp_weather_city, null, note, first = true) { WeatherValue() }
+                // The network's guess, for a TV that has just been set up: one chip, and the town
+                // stands where the address puts it (the owner, 11-03).
+                SettingRow(R.string.st_weather_place, null, note) {
+                    ActionChip(stringResource(R.string.st_cities_auto), Glyph.Place, focusRequester = first) {
+                        Weather.useNetworkLocation()
+                    }
+                }
                 // Home takes turns through these with the located town, ten seconds each.
                 Weather.extras.forEachIndexed { index, town ->
                     TownRow(
@@ -809,32 +827,14 @@ fun WallpaperSheet(
                         focusRequester = if (full && index == 0) first else null,
                     ) { Weather.removeCity(town.name) }
                 }
-                SettingRow(
-                    R.string.st_cities,
-                    if (full) stringResource(R.string.st_city_full) else stringResource(R.string.st_cities_hint),
-                    note,
-                ) {
-                    if (full) {
-                        BasicText(
-                            stringResource(R.string.st_city_full),
-                            style = Type.Body.copy(color = Palette.SecondaryLabel),
-                            modifier = Modifier.padding(end = 8.dp),
-                        )
-                    } else {
-                        ActionChip(stringResource(R.string.st_city_add), Glyph.ChevronRight, focusRequester = first) {
-                            pickerWas = "city"
-                            cityPicker = true
-                        }
-                    }
-                }
             }
+            Spacer(Modifier.height(10.dp))
+            BasicText(
+                stringResource(R.string.wp_weather_guessed),
+                style = Type.Caption.copy(color = Palette.SecondaryLabel),
+                modifier = Modifier.padding(horizontal = 4.dp),
+            )
         }
-    }
-    // The towns on the phone page's own list (assets/cities-cn.tsv), where a Chinese name always
-    // finds its city: Open-Meteo's geocoder does not know most of them (issue #187).
-    CityPickerOverlay(visible = cityPicker, onDismiss = { cityPicker = false }) { city ->
-        cityPicker = false
-        Weather.addCity(city)
     }
 }
 
@@ -1773,6 +1773,37 @@ private fun PhoneCard(url: String?, qr: ImageBitmap?) {
 }
 
 
+/**
+ * The phone's code beside the weather's towns, with what it is for: scan, search a city anywhere,
+ * tap it in (the owner, 11-03). Its own words, not the setup page's.
+ */
+@Composable
+private fun WeatherPhoneCard(url: String?, qr: ImageBitmap?) {
+    Column(Modifier.width(236.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Box(
+            Modifier.size(152.dp).clip(RoundedCornerShape(18.dp)).background(Color.White).padding(11.dp),
+            contentAlignment = Alignment.Center,
+        ) {
+            if (qr != null) {
+                Image(qr, contentDescription = null, contentScale = ContentScale.Fit, filterQuality = FilterQuality.None, modifier = Modifier.fillMaxSize())
+            } else {
+                GlyphIcon(Glyph.Offline, Color.Black.copy(alpha = 0.35f), 40.dp)
+            }
+        }
+        Spacer(Modifier.height(13.dp))
+        BasicText(stringResource(R.string.st_cities_phone_title), style = Type.Headline)
+        Spacer(Modifier.height(5.dp))
+        BasicText(
+            stringResource(R.string.st_cities_phone_body),
+            style = Type.Caption.copy(textAlign = androidx.compose.ui.text.style.TextAlign.Center),
+        )
+        if (url != null) {
+            Spacer(Modifier.height(6.dp))
+            BasicText(url.removePrefix("http://"), style = Type.Caption.copy(color = Palette.SecondaryLabel))
+        }
+    }
+}
+
 /** Aerial's languages by the names their readers know them by. */
 @Composable
 private fun languageName(language: AppLanguage): String = stringResource(
@@ -1838,6 +1869,8 @@ private fun PickerOverlay(
     onBack: () -> Unit = onDismiss,
     /** The panel's own first stop, when the caller needs to come back to it later. */
     firstRequester: FocusRequester? = null,
+    /** A companion laid on the right of the rows: the panel widens to hold it (the cities' code). */
+    side: (@Composable () -> Unit)? = null,
     rows: @Composable (FocusRequester) -> Unit,
 ) {
     val own = remember { FocusRequester() }
@@ -1865,17 +1898,34 @@ private fun PickerOverlay(
                 .dismissOnTap(onDismiss),
             contentAlignment = Alignment.Center,
         ) {
-            Column(
-                Modifier
-                    .width(430.dp)
-                    .clip(RoundedCornerShape(24.dp))
-                    .liquidGlass(24.dp)
-                    .consumeTaps()
-                    .padding(22.dp),
-            ) {
+            val content: @Composable () -> Unit = {
                 BasicText(title, style = Type.Headline)
                 Spacer(Modifier.height(14.dp))
                 rows(first)
+            }
+            if (side == null) {
+                Column(
+                    Modifier
+                        .width(430.dp)
+                        .clip(RoundedCornerShape(24.dp))
+                        .liquidGlass(24.dp)
+                        .consumeTaps()
+                        .padding(22.dp),
+                ) { content() }
+            } else {
+                // Rows on the left, the companion on the right, one panel (the owner, 11-03).
+                Row(
+                    Modifier
+                        .width(620.dp)
+                        .clip(RoundedCornerShape(24.dp))
+                        .liquidGlass(24.dp)
+                        .consumeTaps()
+                        .padding(22.dp),
+                ) {
+                    Column(Modifier.weight(1f)) { content() }
+                    Spacer(Modifier.width(20.dp))
+                    side()
+                }
             }
         }
     }

@@ -286,9 +286,9 @@
     <string name="st_cities_title">Ciudades del tiempo</string>
     <string name="st_group_weather">Tiempo</string>
     <string name="st_group_clock">Reloj</string>
-    <string name="st_cities_entry_hint">El inicio alterna entre estas ciudades, diez segundos cada una</string>
+    <string name="st_cities_entry_hint">Las ciudades que recorre el tiempo</string>
     <string name="st_cities_count">%1$d ciudades</string>
-    <string name="st_cities_hint">El tiempo alterna entre estas ciudades, 10 segundos cada una, como el panel de salidas de un aeropuerto.</string>
+    <string name="st_cities_hint">El tiempo pasa de una ciudad a otra, por orden.</string>
     <string name="st_city_add">Añadir una ciudad</string>
     <string name="st_city_pick">Elegir una ciudad</string>
     <string name="st_city_remove">Quitar</string>
@@ -346,4 +346,7 @@
     <string name="st_feedback_retry">Reintentar</string>
     <string name="st_feedback_failed_hint">No se ha podido enviar; comprueba la red e inténtalo otra vez.</string>
     <string name="st_version_footer">HLine TV %1$s (%2$d)</string>
+    <string name="st_cities_phone_title">Escanea para añadir una ciudad</string>
+    <string name="st_cities_phone_body">Escanea con tu móvil, busca cualquier ciudad del mundo y tócala para aplicarla. El fondo de pantalla y los iconos también se cambian desde el móvil.</string>
+    <string name="st_cities_auto">Por red</string>
 </resources>

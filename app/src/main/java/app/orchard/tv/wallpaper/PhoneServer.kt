@@ -210,6 +210,22 @@ class PhoneServer private constructor(private val context: Context, private val 
                     val found = name.isNotBlank() && runBlocking(Dispatchers.Main) { Weather.choose(name) }
                     json(state().put("found", found))
                 }
+                // The phone page's city search: typed on the phone, answered in its language.
+                session.method == Method.GET && path == "/api/weather/search" -> {
+                    val f = form(session)
+                    json(Weather.search(f["q"].orEmpty(), f["lang"].orEmpty().ifBlank { "en" }))
+                }
+                // A city chosen out of those answers: the point and names stand as given.
+                session.method == Method.POST && path == "/api/weather/pick" -> {
+                    val f = form(session)
+                    val lat = f["lat"]?.toDoubleOrNull()
+                    val lon = f["lon"]?.toDoubleOrNull()
+                    val name = f["name"].orEmpty().trim()
+                    if (lat != null && lon != null && name.isNotBlank() && lat in -90.0..90.0 && lon in -180.0..180.0) {
+                        runBlocking(Dispatchers.Main) { Weather.pick(lat, lon, name, f["ascii"].orEmpty()) }
+                    }
+                    json(state())
+                }
                 session.method == Method.POST && path == "/api/weather/auto" -> {
                     onMain { Weather.useNetworkLocation() }
                     json(state())

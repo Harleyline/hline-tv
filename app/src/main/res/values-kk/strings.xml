@@ -279,9 +279,9 @@
     <string name="st_cities_title">Ауа райы қалалары</string>
     <string name="st_group_weather">Ауа райы</string>
     <string name="st_group_clock">Сағат</string>
-    <string name="st_cities_entry_hint">Басты бет осы қалаларды кезектестіреді, әрқайсысы он секунд</string>
+    <string name="st_cities_entry_hint">Ауа райы кезектесетін қалалар</string>
     <string name="st_cities_count">%1$d қала</string>
-    <string name="st_cities_hint">Басты экран оларды кезекпен, әрқайсысын он секундтан көрсетеді, әуежай таблосы сияқты.</string>
+    <string name="st_cities_hint">Ауа райы осы қалалар бойынша кезекпен көрсетіледі.</string>
     <string name="st_city_add">Қала қосу</string>
     <string name="st_city_pick">Қала таңдаңыз</string>
     <string name="st_city_remove">Жою</string>
@@ -332,5 +332,8 @@
     <string name="st_feedback_retry">Қайталау</string>
     <string name="st_feedback_failed_hint">Жіберілмеді. Желіні тексеріп, қайта көріңіз.</string>
     <string name="st_version_footer">HLine TV %1$s (%2$d)</string>
+    <string name="st_cities_phone_title">Қала қосу үшін сканерлеңіз</string>
+    <string name="st_cities_phone_body">Телефонмен кодты сканерлеп, әлемнің кез келген қаласын тауып, бір түртіп орнатыңыз. Тұсқағаз бен таңбаны да телефоннан өзгертуге болады.</string>
+    <string name="st_cities_auto">Желі арқылы</string>
 </resources>
 

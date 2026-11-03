@@ -279,9 +279,9 @@
     <string name="st_cities_title">Города погоды</string>
     <string name="st_group_weather">Погода</string>
     <string name="st_group_clock">Часы</string>
-    <string name="st_cities_entry_hint">Главная чередует эти города, по десять секунд</string>
+    <string name="st_cities_entry_hint">Города, между которыми переключается погода</string>
     <string name="st_cities_count">Городов: %1$d</string>
-    <string name="st_cities_hint">Главный экран показывает их по очереди, по десять секунд, как табло в аэропорту.</string>
+    <string name="st_cities_hint">Погода показывается по очереди в этих городах.</string>
     <string name="st_city_add">Добавить город</string>
     <string name="st_city_pick">Выберите город</string>
     <string name="st_city_remove">Удалить</string>
@@ -332,5 +332,8 @@
     <string name="st_feedback_retry">Повторить</string>
     <string name="st_feedback_failed_hint">Отправить не удалось. Проверьте сеть и попробуйте ещё раз.</string>
     <string name="st_version_footer">HLine TV %1$s (%2$d)</string>
+    <string name="st_cities_phone_title">Сканируйте, чтобы добавить город</string>
+    <string name="st_cities_phone_body">Отсканируйте код телефоном, найдите любой город мира и коснитесь его. Обои, значки и имена тоже настраиваются с телефона.</string>
+    <string name="st_cities_auto">По сети</string>
 </resources>
 

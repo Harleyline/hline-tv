@@ -414,11 +414,12 @@
     <label class="item"><span class="txt" data-i18n="sw_humidity"></span><input class="switch" type="checkbox" id="swHumidity" data-setting="showHumidity"></label>
     <div class="item wx"><b id="wxNow">—</b><span id="wxPlace"></span></div>
     <form class="item field" id="cityForm">
-      <input id="city" type="text" data-i18n-placeholder="city_ph" enterkeyhint="done" autocomplete="off">
-      <button class="link" id="cityBtn" data-i18n="set" disabled></button>
+      <input id="city" type="text" data-i18n-placeholder="city_ph" enterkeyhint="search" autocomplete="off">
     </form>
     <button class="item tint center" id="wxLocate" data-i18n="wx_locate"></button>
   </div>
+  <!-- The phone page's city search: type, and the answers come back in this page's language. -->
+  <div class="list" id="cityHits" hidden></div>
   <p class="foot" id="wxHint"></p>
 
   <h2 data-i18n="this_tv"></h2>
@@ -489,7 +490,7 @@ const TEXTS = {
   "高对比度",
   "标准",
   "天气",
-  "输入城市，例如 杭州",
+  "搜索城市，例如 杭州",
   "设置",
   "添加照片",
   "反馈问题",
@@ -1105,7 +1106,7 @@ const TEXTS = {
   "High Contrast",
   "Standard",
   "Weather",
-  "Enter a city, e.g. London",
+  "Search a city, e.g. London",
   "Set",
   "Add Photos",
   "Report a Problem",
@@ -2236,17 +2237,68 @@ document.querySelectorAll('#focus [data-style]').forEach(b => b.onclick = async 
   if (b.dataset.style === state.focusStyle) return;
   try { take(await api('api/focus', { style: b.dataset.style })); toast(t('toast_tv_updated')); } catch (e) { toast(t('toast_set_fail')); }
 });
-$('#city').oninput = () => $('#cityBtn').disabled = !$('#city').value.trim();
-$('#cityForm').onsubmit = async e => {
-  e.preventDefault();
-  const name = $('#city').value.trim(); if (!name) return;
-  const btn = $('#cityBtn'); btn.disabled = true; $('#city').blur();
+// City search as you type: the TV asks the geocoder in this page's language, so a query in any
+// script comes back readable (海外的小伙伴, the owner, 11-03). A tap on an answer puts the weather
+// there by its own point and name — nothing looked up a second time.
+let cityTimer = null, cityHits = [], cityAsked = '';
+// A search never puts a town on by itself: the answers wait, and a tap on one sets it (the owner,
+// 11-03). Nothing is applied until the reader has seen the list.
+function hideHits() { clearTimeout(cityTimer); cityHits = []; const b = $('#cityHits'); b.hidden = true; b.replaceChildren(); }
+function renderHits() {
+  const b = $('#cityHits'); b.replaceChildren();
+  if (!cityHits.length) {
+    if (!cityAsked) { b.hidden = true; return; }
+    // Said in the list itself, one row, so nothing piles up under it.
+    const row = document.createElement('div'); row.className = 'item';
+    const txt = document.createElement('span'); txt.className = 'txt';
+    txt.textContent = t('toast_city_nf', { name: cityAsked });
+    txt.style.color = 'var(--secondary)';
+    row.appendChild(txt); b.appendChild(row); b.hidden = false; return;
+  }
+  cityHits.forEach(h => {
+    const row = document.createElement('button'); row.className = 'item'; row.type = 'button';
+    const txt = document.createElement('span'); txt.className = 'txt';
+    const name = document.createElement('span'); name.textContent = h.name;
+    txt.appendChild(name);
+    if (h.where) { const sub = document.createElement('span'); sub.className = 'sub'; sub.textContent = h.where; txt.appendChild(sub); }
+    row.appendChild(txt);
+    row.onclick = () => pickCity(h);
+    b.appendChild(row);
+  });
+  b.hidden = false;
+}
+async function searchCities(q) {
+  cityAsked = q;
+  const mine = ++searchCities.seq;
+  try { cityHits = (await api(`api/weather/search?q=${encodeURIComponent(q)}&lang=${LANG}`)).hits || []; }
+  catch (e) { cityHits = []; }
+  // The answer of an older query must not land over a newer one's.
+  if (mine === searchCities.seq && $('#city').value.trim() === q) renderHits();
+}
+searchCities.seq = 0;
+async function pickCity(h) {
+  hideHits(); cityAsked = '';
+  const input = $('#city'); input.value = ''; input.blur();
   try {
-    const next = await api('api/weather/city', { name }); take(next);
-    toast(next.found ? t('toast_city_set', { place: placeText(next.weather) }) : t('toast_city_nf', { name }));
-    if (next.found) $('#city').value = '';
-  } catch (err) { toast(t('toast_set_fail')); }
-  btn.disabled = !$('#city').value.trim();
+    const next = await api('api/weather/pick', { lat: h.lat, lon: h.lon, name: h.name, ascii: h.ascii || h.name });
+    take(next); toast(t('toast_city_set', { place: placeText(next.weather) }));
+  } catch (e) { toast(t('toast_set_fail')); }
+}
+$('#city').oninput = () => {
+  const q = $('#city').value.trim();
+  clearTimeout(cityTimer);
+  cityAsked = '';
+  if (!q) { hideHits(); return; }
+  cityTimer = setTimeout(() => searchCities(q), 350);
+};
+// Enter and the keyboard's search key ask, they do not set: same list, no waiting for the timer.
+$('#cityForm').onsubmit = e => {
+  e.preventDefault();
+  const q = $('#city').value.trim();
+  if (!q) return;
+  clearTimeout(cityTimer);
+  $('#city').blur();
+  searchCities(q);
 };
 
 // The TV has no location of its own (no GPS, no network location on a TV), and the address its
@@ -2793,6 +2845,8 @@ function bootTab() {
     return () => pointAt(`#homeBody .atile[data-key="${key}"]`, () => { const e = entryFor(key); if (e) tileSheet(e, null); });
   }
   if (raw === 'upload') { show('looks', true); return () => pointAt('#sections .btn.add'); }
+  // The TV's 添加城市 row: straight to the city search, cursor in the box.
+  if (raw === 'weather') { show('more', true); return () => pointAt('#cityForm .field, #city'); }
   show(raw || saved, true);
   return null;
 }

@@ -286,9 +286,9 @@
     <string name="st_cities_title">مدن الطقس</string>
     <string name="st_group_weather">الطقس</string>
     <string name="st_group_clock">الساعة</string>
-    <string name="st_cities_entry_hint">تتبدّل الشاشة الرئيسية بين هذه المدن، عشر ثوانٍ لكل مدينة</string>
+    <string name="st_cities_entry_hint">المدن التي يتنقل بينها الطقس</string>
     <string name="st_cities_count">%1$d مدن</string>
-    <string name="st_cities_hint">يتبدّل الطقس بين هذه المدن، 10 ثوانٍ لكل واحدة، كلوحة الرحلات المغادرة في المطار.</string>
+    <string name="st_cities_hint">يتنقل الطقس بين هذه المدن بالترتيب.</string>
     <string name="st_city_add">إضافة مدينة</string>
     <string name="st_city_pick">اختيار مدينة</string>
     <string name="st_city_remove">حذف</string>
@@ -346,4 +346,7 @@
     <string name="st_feedback_retry">إعادة المحاولة</string>
     <string name="st_feedback_failed_hint">لم يتم الإرسال؛ تحقق من الشبكة وحاول مرة أخرى.</string>
     <string name="st_version_footer">HLine TV %1$s (%2$d)</string>
+    <string name="st_cities_phone_title">امسح الرمز لإضافة مدينة</string>
+    <string name="st_cities_phone_body">امسح الرمز بهاتفك وابحث عن أي مدينة في العالم ثم المسها لتعيينها. ويمكن أيضًا تغيير الخلفيات والأيقونات من الهاتف.</string>
+    <string name="st_cities_auto">عبر الشبكة</string>
 </resources>

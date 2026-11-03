@@ -18,6 +18,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
@@ -442,8 +443,9 @@ object Weather {
         fun today(key: String) = daily?.optJSONArray(key)?.optDouble(0)?.takeIf { !it.isNaN() }?.roundToInt()
         // The degrees, the humidity and the air's index come from the one station (the owner,
         // 1.14); the sky's icon and today's range stay Open-Meteo's, which is the only one of the
-        // two that knows what the sky is doing.
-        val air = airReading(lat, lon)
+        // two that knows what the sky is doing. 在意空气's ground is Greater China, where its
+        // stations are dense; abroad the free sources answer for themselves (the owner, 1.6).
+        val air = if (inGreaterChina(lat, lon)) airReading(lat, lon) else AirReading()
         return WeatherNow(
             celsius = air.celsius ?: current.getDouble("temperature_2m").roundToInt(),
             kind = kindOf(current.getInt("weather_code")),
@@ -463,6 +465,9 @@ object Weather {
      * back to Open-Meteo's own, so a station without a thermometer costs only the thermometer.
      */
     private data class AirReading(val celsius: Int? = null, val humidity: Int? = null, val aqi: Int? = null)
+
+    /** Greater China — the mainland with 香港、澳门、台湾 — where 在意空气's stations stand. */
+    private fun inGreaterChina(lat: Float, lon: Float) = lat in 17f..55f && lon in 73f..135.5f
 
     /**
      * 在意空气's own source (aqicn.org, the WAQI feed), by coordinates so no town needs naming.
@@ -556,6 +561,73 @@ object Weather {
 
     /** A place looked up: coordinates and both names. */
     private class Quad(val lat: Double, val lon: Double, val name: String, val ascii: String)
+
+    /**
+     * City search for the phone page: the geocoder's answers in the phone's own language, so a
+     * query typed in any script comes back readable, towns before villages. Off the main thread.
+     */
+    fun search(query: String, lang: String): JSONObject {
+        val q = query.trim()
+        val hits = JSONArray()
+        if (q.isEmpty()) return JSONObject().put("hits", hits)
+        val page = lang.take(2).lowercase().ifBlank { "en" }
+
+        fun ask(language: String): List<JSONObject> = runCatching {
+            val url = "https://geocoding-api.open-meteo.com/v1/search?name=" +
+                URLEncoder.encode(q, "UTF-8") + "&count=8&language=" +
+                URLEncoder.encode(language, "UTF-8") + "&format=json"
+            val res = JSONObject(get(url)).optJSONArray("results") ?: JSONArray()
+            (0 until res.length()).map { res.getJSONObject(it) }
+        }.onFailure { Log.w(TAG, "city search failed", it) }.getOrDefault(emptyList())
+
+        var found = ask(page)
+        var inPageLanguage = true
+        if (found.isEmpty()) {
+            // A name in a script the index does not match (東京 answers in zh, not ja): found in
+            // another language, then read back in the page's own by id — Apple's rule, the local
+            // name where it has one, English where it does not.
+            found = ask("en").ifEmpty { ask("zh") }
+            inPageLanguage = false
+        }
+        for (r0 in found) {
+            var r = r0
+            if (!inPageLanguage) {
+                val id = r0.optLong("id", 0L)
+                if (id != 0L) runCatching {
+                    r = JSONObject(get("https://geocoding-api.open-meteo.com/v1/get?id=$id&language=" + URLEncoder.encode(page, "UTF-8")))
+                }.onFailure { Log.w(TAG, "could not name ${r0.optString("name")} in $page", it) }
+            }
+            val name = r.optString("name").ifBlank { q }
+            val region = r.optString("admin1").ifBlank { r0.optString("admin1") }
+            val country = r.optString("country").ifBlank { r0.optString("country") }
+            hits.put(JSONObject()
+                .put("lat", r.optDouble("latitude", r0.optDouble("latitude", 0.0)))
+                .put("lon", r.optDouble("longitude", r0.optDouble("longitude", 0.0)))
+                .put("name", name)
+                .put("ascii", r0.optString("ascii_name", "").ifBlank { name })
+                .put("where", listOf(region, country).filter { it.isNotBlank() }.distinct().joinToString(" · ")))
+        }
+        return JSONObject().put("hits", hits)
+    }
+
+    /**
+     * A city picked on the phone out of [search]'s answers: its point and its names stand as the
+     * answer gave them, nothing looked up again. A fix abroad keeps the name the searcher saw.
+     */
+    suspend fun pick(lat: Double, lon: Double, name: String, ascii: String) {
+        prefs.edit {
+            putFloat("lat", lat.toFloat())
+            putFloat("lon", lon.toFloat())
+            putString("place", name)
+            putString("place_ascii", ascii.ifBlank { name })
+            putBoolean("chosen", true)
+            putBoolean("checked_against_cities", true)
+        }
+        chosen = true
+        place = prefs.getString("place", null)
+        placeAscii = prefs.getString("place_ascii", null)
+        refresh()
+    }
 
     /**
      * Places the weather at a point somebody else found: the phone page, whose browser knows where
