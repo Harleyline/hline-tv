@@ -473,10 +473,12 @@ body{font-family:'Inter TV','MiSans TV','NotoKR TV',-apple-system,'PingFang SC',
   .langs{gap:5px;margin-top:14px}
   .langs span{padding:6px 11px;font-size:12.5px}
 
-  /* devices — compact inline rows */
-  .dev-groups{margin-top:10px}
-  .dev-row{display:flex;flex-wrap:wrap;align-items:center;gap:4px 5px;padding:6px 0}
-  .dev-row h4{margin:0 2px 0 0;font-size:11.5px;color:#aeb9c4;flex:0 0 auto}
+  /* devices — single flowing stream: brand labels + chips all inline,
+     short brands share the same line; content unchanged */
+  .dev-groups{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:6px;margin-top:14px}
+  .dev-row,.dev-row .chips{display:contents}
+  .dev-row h4{margin:0;font-size:11.5px;color:#8fa0ad;flex:0 0 auto;letter-spacing:.02em}
+  .dev-row+.dev-row h4::before{content:"·";margin:0 6px 0 0;color:#42505c}
   .chips{gap:4px}
   .chip{font-size:10.5px;padding:3px 8px;letter-spacing:.03em}
 
