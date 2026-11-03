@@ -391,3 +391,31 @@ body{font-family:'Inter TV','MiSans TV','NotoKR TV',-apple-system,'PingFang SC',
 .chips .chip:hover{color:#fff;border-color:rgba(170,225,255,.6);
   box-shadow:0 0 0 1px rgba(170,225,255,.22),0 12px 34px rgba(80,170,255,.22),inset 0 1px 0 rgba(255,255,255,.22);
   transform:translateY(-1px)}
+
+/* ---- mobile layout fixes (<=760px only; desktop untouched) ---- */
+@media(max-width:760px){
+  .hero{--hz:clamp(42px,11.5vw,56px)}
+  .hero h1 .slogan span:first-child{letter-spacing:.08em;text-indent:.08em}
+  .hero h1 .slogan span+span{letter-spacing:.04em;text-indent:.04em}
+  .hero .lead{text-wrap:initial;font-size:15px;line-height:1.7;padding:0 6px}
+  .hero .lead br{display:none}
+  .actions{gap:12px}
+  .actions .btn{min-width:0;max-width:100%;padding:15px 24px;font-size:16px}
+  .actions .btn.primary{padding-left:28px;padding-right:28px}
+  .actions .btn .btn-name{font-size:17px}
+  .hero-meta{font-size:10.5px;letter-spacing:.08em}
+  .hero-meta span+span::before{margin:0 7px}
+  nav{gap:12px}
+  nav a.cta{padding:7px 14px;font-size:13px}
+  .stat b{font-size:26px}
+  .stat span{font-size:13px}
+  .section-far{padding-top:110px}
+  .section-gap{padding-top:96px}
+  .rows{margin-top:44px;gap:72px}
+  #features .rows{margin-top:44px}
+  .panel{padding:26px 22px}
+  .langs{gap:9px;margin-top:36px}
+  .langs span{padding:10px 20px;font-size:15.5px}
+  .term pre{font-size:12px;padding:16px;white-space:pre-wrap;overflow-wrap:anywhere}
+  .term-h{padding:14px 16px 0;font-size:15.5px}
+}
