@@ -576,8 +576,17 @@ fun WallpaperSheet(
                                             )
                                         }
                                         SettingRow(R.string.st_cities_title, stringResource(R.string.st_cities_entry_hint), note) {
+                                            // What the cities are for, said on the row itself: the
+                                            // place the weather stands for and its reading now,
+                                            // beside the count (the owner, 11-03).
+                                            val slot = Weather.slots.firstOrNull { it.located }
+                                            val here = Weather.placeName(slot, appLocale().language)
+                                            val temp = slot?.now?.celsius
                                             ActionChip(
-                                                stringResource(R.string.st_cities_count, Weather.extras.size + 1),
+                                                listOfNotNull(
+                                                    here?.let { p -> if (temp != null) "$p ${temp}°" else p },
+                                                    stringResource(R.string.st_cities_count, Weather.extras.size + 1),
+                                                ).joinToString(" · "),
                                                 Glyph.ChevronRight,
                                                 focusRequester = citiesChip,
                                             ) {
