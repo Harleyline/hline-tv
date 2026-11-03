@@ -110,8 +110,8 @@
     <string name="ss_aerial">Aéreo</string>
     <string name="ss_photos">Fondo</string>
     <string name="ss_clock">Reloj</string>
-    <string name="wp_phone_title">Configura HLine TV desde el móvil o el ordenador</string>
-    <string name="wp_phone_body">Paso 1: escanea el código o abre la dirección (móvil u ordenador en la misma Wi-Fi que el televisor)\nPaso 2: combina a tu gusto el fondo, los iconos y los nombres de las apps</string>
+    <string name="wp_phone_title">Escanea y configura desde el móvil</string>
+    <string name="wp_phone_body">En la misma Wi-Fi que el televisor, escanea y personaliza fondo e iconos.</string>
     <string name="wp_phone_offline">Conecta antes el televisor a la red para configurarlo desde el móvil o el ordenador.</string>
     <string name="ss_start">Empezar ahora</string>
     <string name="ss_delay">Tras inactividad</string>

@@ -110,8 +110,8 @@
     <string name="ss_aerial">تصوير جوي</string>
     <string name="ss_photos">الخلفية</string>
     <string name="ss_clock">الساعة</string>
-    <string name="wp_phone_title">اضبط HLine TV من الهاتف أو الكمبيوتر</string>
-    <string name="wp_phone_body">الخطوة 1: امسح الرمز أو افتح العنوان (الهاتف أو الكمبيوتر على شبكة Wi-Fi نفسها التي عليها التلفاز)\nالخطوة 2: نسّق الخلفية والأيقونات وأسماء التطبيقات كما تشاء</string>
+    <string name="wp_phone_title">امسح الرمز واضبط من هاتفك</string>
+    <string name="wp_phone_body">على شبكة Wi-Fi نفسها التي عليها التلفاز، امسح الرمز لضبط الخلفيات والأيقونات.</string>
     <string name="wp_phone_offline">وصّل التلفاز بالشبكة أولًا ليُضبط من الهاتف أو الكمبيوتر.</string>
     <string name="ss_start">ابدأ الآن</string>
     <string name="ss_delay">بعد عدم الاستخدام</string>

@@ -110,8 +110,8 @@
     <string name="ss_aerial">ภาพทางอากาศ</string>
     <string name="ss_photos">วอลเปเปอร์</string>
     <string name="ss_clock">นาฬิกา</string>
-    <string name="wp_phone_title">ตั้งค่า HLine TV ด้วยมือถือหรือคอมพิวเตอร์</string>
-    <string name="wp_phone_body">ขั้นที่ 1: สแกนโค้ดหรือเปิดที่อยู่ (มือถือหรือคอมพิวเตอร์ต้องต่อ Wi-Fi เดียวกับทีวี)\nขั้นที่ 2: จัดวอลเปเปอร์ ไอคอน และชื่อแอปได้ตามใจ</string>
+    <string name="wp_phone_title">สแกนโค้ดเพื่อตั้งค่าจากมือถือ</string>
+    <string name="wp_phone_body">ต่อ Wi-Fi เดียวกับทีวี แล้วสแกนโค้ดเพื่อแต่งวอลเปเปอร์และไอคอนได้เลย</string>
     <string name="wp_phone_offline">เชื่อมต่อทีวีกับเครือข่ายก่อน จึงจะตั้งค่าจากมือถือหรือคอมพิวเตอร์ได้</string>
     <string name="ss_start">เริ่มเลย</string>
     <string name="ss_delay">เมื่อไม่ใช้งาน</string>

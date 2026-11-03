@@ -38,6 +38,13 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.net.Inet4Address
+import java.security.KeyFactory
+import java.security.KeyStore
+import java.security.spec.PKCS8EncodedKeySpec
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
+import javax.net.ssl.KeyManagerFactory
+import javax.net.ssl.SSLContext
 import java.security.SecureRandom
 
 /**
@@ -558,6 +565,16 @@ class PhoneServer private constructor(private val context: Context, private val 
         const val PORT = 8790
         /** Tried in order: the page works on whichever is free, and its QR code says which. */
         private val PORTS = intArrayOf(PORT, 8791, 8792, 8793, 8794)
+        /**
+         * The same page over https, on ports of its own: a browser hands out the phone's own
+         * location only on a secure page, so the address in the QR code is this one (the owner,
+         * 11-03). The certificate is the app's own, made once and carried in the assets.
+         */
+        const val SECURE_PORT = 8795
+        private val SECURE_PORTS = intArrayOf(SECURE_PORT, 8796, 8797, 8798, 8799)
+        private const val CERT_FILE = "phone-cert.der"
+        private const val KEY_FILE = "phone-key.der"
+        private const val KEY_PASS = "hline-phone"
         private const val TAG = "AerialPhone"
         /** Enough for a batch of phone photos at full size. */
         private const val MAX_UPLOAD = 200L * 1024 * 1024
@@ -567,6 +584,9 @@ class PhoneServer private constructor(private val context: Context, private val 
         @Volatile
         private var running: PhoneServer? = null
 
+        @Volatile
+        private var secureRunning: PhoneServer? = null
+
         /**
          * Listens for as long as Aerial runs, from Home's start (MainActivity.startWork), so a
          * computer can open the page at any time without Personalize open on the TV. On every
@@ -574,7 +594,7 @@ class PhoneServer private constructor(private val context: Context, private val 
          */
         @Synchronized
         fun listen(context: Context): PhoneServer? {
-            running?.let { if (it.isAlive) return it }
+            running?.let { if (it.isAlive) { listenSecure(context); return it } }
             // A force-stop that brings a new process up while the old socket is still being torn
             // down leaves the port in use for a few seconds: try again before giving up (2.10).
             // Something else may hold the port for good (another app on the TV, or a firmware
@@ -590,6 +610,7 @@ class PhoneServer private constructor(private val context: Context, private val 
                     }.onFailure { cause = it }.getOrNull()
                     if (server != null) {
                         if (port != PORT) Log.i(TAG, "listening on $port: $PORT was taken")
+                        listenSecure(context)
                         return server
                     }
                 }
@@ -599,10 +620,51 @@ class PhoneServer private constructor(private val context: Context, private val 
             return null
         }
 
+        /** The page over https, beside the plain one: a failure here leaves the plain address. */
+        @Synchronized
+        private fun listenSecure(context: Context) {
+            secureRunning?.let { if (it.isAlive) return }
+            // The certificate and the key ride along as DER: a PKCS12 made by a desktop keytool
+            // carries key protection Android's own reader does not answer (PBKDF2, the owner's TV).
+            val factory = runCatching {
+                val cert = CertificateFactory.getInstance("X.509")
+                    .generateCertificate(context.assets.open(CERT_FILE)) as X509Certificate
+                val key = KeyFactory.getInstance("RSA").generatePrivate(
+                    PKCS8EncodedKeySpec(context.assets.open(KEY_FILE).use { it.readBytes() })
+                )
+                val store = KeyStore.getInstance("PKCS12").apply {
+                    load(null, null)
+                    setKeyEntry("phone", key, KEY_PASS.toCharArray(), arrayOf(cert))
+                }
+                val keys = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
+                keys.init(store, KEY_PASS.toCharArray())
+                SSLContext.getInstance("TLS").apply { init(keys.keyManagers, null, null) }.serverSocketFactory
+            }.onFailure { Log.w(TAG, "no certificate for the secure page", it) }.getOrNull() ?: return
+            for (port in SECURE_PORTS) {
+                val server = runCatching {
+                    PhoneServer(context.applicationContext, token(context), port).also {
+                        it.makeSecure(factory, null)
+                        it.start(SOCKET_READ_TIMEOUT, true)
+                        secureRunning = it
+                    }
+                }.getOrNull()
+                if (server != null) {
+                    if (port != SECURE_PORT) Log.i(TAG, "secure page on $port: $SECURE_PORT was taken")
+                    return
+                }
+            }
+            Log.w(TAG, "could not listen on any of ${SECURE_PORTS.joinToString()}")
+        }
+
         /** The address to put in the QR code, listening first if need be, or null offline. */
         fun start(context: Context): String? {
             val ip = lanAddress(context) ?: return null
             val server = listen(context) ?: return null
+            // https where it could be had: only a secure page may read the phone's own location.
+            secureRunning?.takeIf { it.isAlive }?.let { that ->
+                val port = runCatching { that.listeningPort }.getOrDefault(SECURE_PORT)
+                return "https://$ip:$port/${that.token}/".also { DiagLog.i("phone page: $it") }
+            }
             val port = runCatching { server.listeningPort }.getOrDefault(PORT)
             return "http://$ip:$port/${server.token}/".also { DiagLog.i("phone page: $it") }
         }

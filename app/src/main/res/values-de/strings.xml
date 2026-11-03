@@ -110,8 +110,8 @@
     <string name="ss_aerial">Luftaufnahmen</string>
     <string name="ss_photos">Hintergrund</string>
     <string name="ss_clock">Uhr</string>
-    <string name="wp_phone_title">HLine TV vom Handy oder Rechner einrichten</string>
-    <string name="wp_phone_body">Schritt 1: Code scannen oder Adresse öffnen (Handy oder Rechner im selben WLAN wie der Fernseher)\nSchritt 2: Hintergrund, Symbole und App-Namen nach Wunsch zusammenstellen</string>
+    <string name="wp_phone_title">Scannen und am Handy einrichten</string>
+    <string name="wp_phone_body">Im selben WLAN wie der Fernseher: scannen und Wallpaper und Symbole frei gestalten.</string>
     <string name="wp_phone_offline">Den Fernseher zuerst mit dem Netz verbinden, dann lässt er sich vom Handy oder Rechner einrichten.</string>
     <string name="ss_start">Jetzt starten</string>
     <string name="ss_delay">Nach Leerlauf</string>

@@ -110,8 +110,8 @@
     <string name="ss_aerial">Aéreo</string>
     <string name="ss_photos">Papel de parede</string>
     <string name="ss_clock">Relógio</string>
-    <string name="wp_phone_title">Configure a HLine TV pelo celular ou computador</string>
-    <string name="wp_phone_body">Passo 1: escaneie o código ou abra o endereço (celular ou computador no mesmo Wi-Fi da TV)\nPasso 2: combine como quiser o papel de parede, os ícones e os nomes dos apps</string>
+    <string name="wp_phone_title">Escaneie e configure pelo celular</string>
+    <string name="wp_phone_body">No mesmo Wi-Fi da TV, escaneie e personalize papel de parede e ícones.</string>
     <string name="wp_phone_offline">Conecte a TV à rede primeiro para configurá-la pelo celular ou computador.</string>
     <string name="ss_start">Começar agora</string>
     <string name="ss_delay">Após inatividade</string>

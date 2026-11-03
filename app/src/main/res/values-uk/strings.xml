@@ -103,8 +103,8 @@
     <string name="ss_aerial">Аерозйомка</string>
     <string name="ss_photos">Шпалери</string>
     <string name="ss_clock">Годинник</string>
-    <string name="wp_phone_title">Налаштуйте HLine TV з телефона чи комп\'ютера</string>
-    <string name="wp_phone_body">Крок 1. Відскануйте код або відкрийте посилання (у тому самому Wi-Fi, що й телевізор)\nКрок 2. Змінюйте шпалери, значки та назви застосунків</string>
+    <string name="wp_phone_title">Відскануйте та налаштуйте з телефона</string>
+    <string name="wp_phone_body">В одному Wi-Fi з телевізором — відскануйте та налаштуйте шпалери й значки.</string>
     <string name="wp_phone_offline">Підключіть телевізор до мережі, щоб налаштувати його з телефона чи комп\'ютера.</string>
     <string name="ss_start">Запустити зараз</string>
     <string name="ss_delay">Запускати через</string>

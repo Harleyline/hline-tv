@@ -110,8 +110,8 @@
     <string name="ss_aerial">空撮</string>
     <string name="ss_photos">壁紙</string>
     <string name="ss_clock">時計</string>
-    <string name="wp_phone_title">スマホ・パソコンで HLine TV をかんたん設定</string>
-    <string name="wp_phone_body">ステップ1：QRコードをスキャン、または下のURLにアクセス（スマホ・パソコンはテレビと同じWi-Fiに）\nステップ2：壁紙・アプリアイコン・アプリ名を、お好みでカスタマイズ</string>
+    <string name="wp_phone_title">スキャンしてスマホで設定</string>
+    <string name="wp_phone_body">テレビと同じ Wi-Fi につないでスキャンすれば、壁紙やアイコンを好きに設定できます。</string>
     <string name="wp_phone_offline">テレビをネットに接続すると、スマホやパソコンから設定できます。</string>
     <string name="ss_start">今すぐ開始</string>
     <string name="ss_delay">開始まで</string>
