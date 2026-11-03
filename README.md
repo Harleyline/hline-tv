@@ -2,115 +2,171 @@
 
 # HLine TV
 
-**干干净净的电视桌面**
+**A clean home screen for Android TV. Nothing on it is for sale.**
 
-开机看到的第一眼，没有广告，没有推荐位，没有会员角标。<br>
-只有时间、天气、你的 App，和一张会动的壁纸。<br>
-装在普通的安卓电视上，看起来像 Apple TV。
+The first thing your TV shows when it wakes up: the time, the weather, your apps, and a wallpaper
+that moves. No ads, no sponsored rows, no membership badges. Installed on a plain TV, it looks
+like it cost a lot more than it did.
 
-[![下载 APK](https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD%20APK-34a853?style=for-the-badge&logo=android&logoColor=white)](https://github.com/Harleyline/hline-tv/releases/latest)
-[![官网](https://img.shields.io/badge/%E5%AE%98%E7%BD%91-hline--tv-111111?style=for-the-badge)](https://harleyline.github.io/hline-tv/)
-[![版本](https://img.shields.io/github/v/release/Harleyline/hline-tv?style=flat-square&label=%E7%89%88%E6%9C%AC&color=2997ff)](https://github.com/Harleyline/hline-tv/releases/latest)
-![Android TV 5.0+](https://img.shields.io/badge/Android%20TV-5.0%2B-3ddc84?style=flat-square&logo=android&logoColor=white)
-[![许可证 MIT](https://img.shields.io/badge/%E8%AE%B8%E5%8F%AF%E8%AF%81-MIT-555555?style=flat-square)](LICENSE)
+[![Download APK](https://img.shields.io/badge/Download%20APK-34a853?style=for-the-badge&logo=android&logoColor=white)](https://github.com/Harleyline/hline-tv/releases/latest)
+[![Website](https://img.shields.io/badge/Website-hline--tv-111111?style=for-the-badge)](https://harleyline.github.io/hline-tv/)
+[![Version](https://img.shields.io/github/v/release/Harleyline/hline-tv?style=flat-square&label=version&color=2997ff)](https://github.com/Harleyline/hline-tv/releases/latest)
+![Android 5.0+](https://img.shields.io/badge/Android-5.0%2B-3ddc84?style=flat-square&logo=android&logoColor=white)
+![Size 11 MB](https://img.shields.io/badge/size-11%20MB-8e8e93?style=flat-square)
+![Languages 14](https://img.shields.io/badge/languages-14-5856d6?style=flat-square)
+[![MIT](https://img.shields.io/badge/license-MIT-555555?style=flat-square)](LICENSE)
 
-![HLine TV 首页：沙丘壁纸、时间与天气、底部是常用 App](docs/img/home.jpg)
+[English](README.md) · [简体中文](docs/i18n/zh-CN/README.md)
 
-<img src="docs/img/home-en.jpg" width="49%" alt="English interface: ocean wallpaper, date, Hangzhou weather">
-<img src="docs/img/apps.jpg" width="49%" alt="All apps, three rows of banner tiles with the focus on one">
+<img src="docs/img/home-en.jpg" alt="HLine TV home: aerial wallpaper, date and weather, a row of apps on a glass shelf" width="100%">
+
+<img src="docs/img/apps.jpg" width="49%" alt="All apps: banner tiles in rows, focus on one">
+<img src="docs/img/home.jpg" width="49%" alt="The same home screen in Chinese">
 
 </div>
 
-## 功能
+## Why people replace the stock launcher
 
-- **干净的首页**：常用的一排 App 放在屏幕下方的玻璃底板上，往下是全部 App；长按 OK 键可以移动、建文件夹、隐藏、卸载，或设为「开机时打开」。小米「应用中心」「米家」这类藏起来的系统 App 也在。
-- **用手机整理**：扫电视上的二维码，手机上就是和电视一样的图标网格——拖动排序、改名、换图标、发照片和视频，都在手机上完成。
-- **壁纸**：内置五张照片壁纸（沙丘两张、浪一张、城市两张），也可以发自己的照片、用必应每日一图，或跟随当前 App 的配色。
-- **航拍屏保**：闲置后自动播放航拍影片，画面上有时钟和地名，电视支持时播 4K 或 4K 杜比视界；也可以选「壁纸」或纯「时钟」。
-- **信号源**：HDMI 输入可以固定到桌面，开机直接进机顶盒或游戏机，图标和名字都能改。
-- **贴心的小事**：控制中心（信号源、网络、音量、亮度、个性化）、焦点音、家长密码、自动睡眠、多语言（中/繁/英/日/韩/俄/乌/哈萨克/法/蒙等）。
+|  | Most stock Android TV homes | HLine TV |
+|---|---|---|
+| Ads, sponsored rows, membership badges | Often there, rarely removable | None. There is nowhere to put them |
+| A recommendation rail | Fixed | Doesn't exist |
+| Reorder, rename, hide, uninstall apps | Partial, and only what the brand allows | Any app, plus folders and hidden apps |
+| App icons | Fixed | Replace any icon, from your phone |
+| Wallpaper | A fixed set | Five built in, your own photos, one new photo a day, or the colours of the app you're opening |
+| Screensaver | Brand logo, or nothing | Aerial films with a clock and place names, 4K where the TV allows |
+| Footprint | Dozens of processes | 11 MB, no background services |
 
-## 其他语言
+## What you get
 
-**English**　A home screen with nothing to sell you.<br>
-The first thing you see when the TV comes on: no ads, no sponsored rows, no membership badges. Just the time, the weather, your apps, and a wallpaper that moves.<br>
-Installed on a plain Android TV, it looks like an Apple TV.
+**A home screen with nothing to sell.** Your favourites sit on a glass shelf above the app grid.
+Long-press OK to move them, put them in folders, hide them, uninstall them, or make one open at
+boot. System apps the stock launcher keeps out of sight are here too.
 
-**日本語**　売り込みのないホーム画面。<br>
-電源を入れて最初に見えるのは、広告でも、おすすめ欄でも、会員バッジでもありません。時刻と天気、自分のアプリ、そして動く壁紙だけ。<br>
-ごく普通の Android テレビが、Apple TV のように見えます。
+**Change the layout from your phone.** Scan the QR code on the TV and the same grid opens in your
+phone's browser: drag to reorder, rename, swap icons, and send photos or videos straight to the TV.
+No account, no app to install on the phone. <!-- TODO(gif): phone page, drag + icon swap, <2 MB -->
 
-**한국어**　광고가 없는 홈 화면.<br>
-TV를 켜면 가장 먼저 보이는 것은 광고도, 추천 목록도, 멤버십 배지도 아닙니다. 시계와 날씨, 내 앱, 그리고 움직이는 배경화면뿐입니다.<br>
-평범한 Android TV에서도 Apple TV처럼 보입니다.
+**Wallpaper that isn't a stock photo.** Five built-in photographs (dunes, surf, city), your own
+pictures and videos, one new photo a day, or a colour pulled from the app you're launching.
 
-**Русский**　Главный экран, на котором ничего не продают.<br>
-При включении телевизора вы не увидите ни рекламы, ни рекомендаций, ни значков подписки. Только время, погода, ваши приложения и живой фон.<br>
-На обычном Android-телевизоре он выглядит как Apple TV.
+**A screensaver worth leaving on.** Aerial films over dunes and coastlines with the time and place
+on screen; 4K, and Dolby Vision on TVs that support it. Or just the wallpaper, or just the clock.
 
-## 下载安装
+**HDMI inputs become tiles.** Pin the set-top box or the console to the home screen, name it, give
+it an icon, and open it with one press — the remote-shy members of the household will thank you.
 
-不用 root，不动系统应用，随时能还原。电视和电脑（或手机）连同一个网络。
+**Small, and it runs on old TVs.** Android 5.0 and up, 11 MB, no always-on service. It boots on
+the ten-year-old panel in the spare room as happily as on a new one.
 
-| 文件（在 [Releases](https://github.com/Harleyline/hline-tv/releases/latest) 页面） | 说明 |
-|---|---|
-| `HLine-TV.apk` | 标准版，Android 5.0 及以上，先试这个 |
-| `HLine-TV-Guard.apk` | 标准版装不上时用（部分电视不允许安装桌面类应用） |
-| `version.txt` | 最新版本号，供应用内「检查更新」读取，不用手动下载 |
+## Install
 
-每个版本改了什么，见 [CHANGELOG.md](CHANGELOG.md)。
+No root. No system apps touched. Uninstall any time and the stock launcher is exactly as it was.
 
-**一键安装**：先在电视上打开 ADB 调试（见下表），然后电脑上执行（`TV` 换成电视的 IP）：
+**One command.** Turn on ADB debugging on the TV (table below), then from your computer:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Harleyline/hline-tv/main/tools/install.sh | TV=192.168.1.20 bash
 ```
 
-**手动安装**：
+**Or by hand:**
 
 ```bash
-adb connect 电视IP:5555
+adb connect TV_IP:5555
 adb install HLine-TV.apk
 ```
 
-装好后按系统提示把 HLine TV 设为默认桌面即可。
+Then accept the prompt that offers HLine TV as the home app.
 
-### 打开电视的 ADB 调试
-
-| 电视 | 怎么打开 |
+| File (on the [Releases](https://github.com/Harleyline/hline-tv/releases/latest) page) | What it is |
 |---|---|
-| **小米 / Redmi** | 设置 → 关于 → 连续按「产品型号/产品类型」进入开发者模式，再到 设置 → 账号与安全，打开「ADB 调试」和「安装未知来源的应用」 |
-| **TCL / 雷鸟** | 设置 → 关于 → 本机信息，快速按遥控器「上下左右」，在底部的「更多」里打开 ADB |
-| **海尔 / 模卡** | 按电视机身上的信号源键，再用遥控器按「左左上右」，在工厂菜单里打开「ADB 调试开关」，别动其他选项 |
-| **OPPO（含 S1）** | 设置 → 系统 → 关于本机 → 设备型号，按「上上右右」再按确认；再到 设置 → 系统 → 开发者选项，打开「USB 调试」 |
-| **索尼 BRAVIA** | 设置 →（部分机型要先「设备偏好设置」）关于 → 连按「内部版本号」7 次，再到开发者选项打开「USB 调试」。2021 年以后的机型多数只有「无线调试」，要先配对码配对；装法和每代菜单的差别见 [sony-bravia.md](docs/devices/sony-bravia.md) |
-| **其他 Android TV** | 设置 → 设备偏好设置 → 关于 → 连按「内部版本号」7 次，再在开发者选项里打开「USB 调试」 |
+| `HLine-TV.apk` | Standard build, Android 5.0+. Try this one first |
+| `HLine-TV-Guard.apk` | For TVs that refuse to install a launcher — same app, different package handling |
+| `version.txt` | The version number, read by the in-app updater. You don't need it |
 
-电视的 IP 在「设置 → 网络 → 已连接的网络」里。第一次连接会问是否允许调试，选「始终允许」。只有「无线调试」的电视（Android 11+）要多一步配对，安装脚本会引导。
+### Turning on ADB debugging
 
-## 应用内更新
+| TV | How |
+|---|---|
+| **Xiaomi / Redmi** | Settings → About → press the product model repeatedly to unlock Developer mode, then Settings → Account & Security → enable ADB debugging and installing from unknown sources |
+| **TCL / FFALCON** | Settings → About → System info, then press Up/Down/Left/Right on the remote; enable ADB under "More" at the bottom |
+| **Hisense / Vidaa** | Settings → About → press the build number seven times, then enable USB debugging in Developer options |
+| **Sony BRAVIA** | Settings → About → press the build number seven times → Developer options → USB debugging. Models from 2021 on often offer wireless debugging only, which needs pairing first — see [sony-bravia.md](docs/devices/sony-bravia.md) |
+| **Others** | Settings → Device preferences → About → press the build number seven times → Developer options → USB debugging |
 
-装好之后不用再来仓库下载：控制中心出现「新版本」时点「下载并安装」，应用会从本仓库的 Releases 拉取新 APK，App、排列顺序、壁纸和设置都会保留。
+The TV's IP address is under Settings → Network. The first connection asks whether to allow
+debugging: choose "always allow". TVs with wireless debugging only need one extra pairing step,
+and the install script walks you through it.
 
-给维护者的发布流程：
+## Tested on
 
-1. 改 `app/build.gradle.kts` 里的 `versionCode` / `versionName`；
-2. `./gradlew :app:assembleStandardRelease`（需要 `local/signing.properties` 里的签名密钥）；
-3. 把 `app/build/outputs/apk/standard/release/app-standard-release.apk` 改名为 `HLine-TV.apk`，再写一个只有版本号的 `version.txt`（如 `1.1`）；
-4. 在 GitHub 发布 Release（tag 如 `v1.1`），附上这两个文件。已装的电视几小时内会看到「新版本」。
+Twenty-seven models, documented one by one in [docs/devices](docs/devices) — what the ADB menu is
+called on each, what breaks, and what to do about it.
 
-## 构建
+| Brand | Models |
+|---|---|
+| Xiaomi / Redmi | [MFFU0](docs/devices/xiaomi-mitv-mffu0.md) · [MFTP0](docs/devices/xiaomi-mitv-mftp0.md) · [MFTR0](docs/devices/xiaomi-mitv-mftr0.md) · [MTSU0](docs/devices/xiaomi-mitv-mtsu0.md) · [NSOP0](docs/devices/xiaomi-mitv-nsop0.md) · [Android 6](docs/devices/xiaomi-android6.md) · [projector](docs/devices/xiaomi-ultraman-projector.md) |
+| TCL / FFALCON | [M7221](docs/devices/tcl-m7221-cn.md) · [MT5879](docs/devices/tcl-mt5879-cn.md) · [MT9655](docs/devices/tcl-mt9655-cn.md) · [T966D5](docs/devices/ffalcon-t966d5.md) |
+| Skyworth | [E900V21F](docs/devices/skyworth-e900v21f.md) · [P3 box](docs/devices/skyworth-p3-box.md) · [Coocaa](docs/devices/skyworth-coocaa.md) |
+| Hisense | [Vidaa](docs/devices/hisense-vidaa.md) |
+| Sony | [BRAVIA](docs/devices/sony-bravia.md) |
+| OPPO | [ColorOS TV](docs/devices/oppo-coloros-tv.md) |
+| Konka / Letv | [KKTV U86V9](docs/devices/konka-kktv-u86v9.md) · [X3-65](docs/devices/letv-x3-65.md) |
+| Projectors | [H3](docs/devices/xgimi-h3.md) · [XK03U](docs/devices/xgimi-xk03u-android8.md) · [Z7X](docs/devices/xgimi-z7x.md) · [R3 Ultra](docs/devices/obe-r3-ultra.md) · [X7](docs/devices/obe-x7.md) |
+| Boxes | [CM311-1](docs/devices/cm311-1-android9-atv.md) · [Tencent Aurora](docs/devices/tencent-aurora-box.md) |
+| Any other | [ADB by brand](docs/devices/adb-by-brand.md) |
 
-```bash
-./gradlew :app:assembleStandardRelease
-```
+## Privacy
 
-需要 JDK 17。签名密钥不在版本库里（`local/`，见 `docs/HANDOFF.md`）；没有密钥时构建会退回 debug 签名，可以全新安装，但不能覆盖升级已有安装。
+- No account, no sign-in, no analytics, no ad SDK.
+- Nothing is collected and nothing is uploaded about you or what you watch.
+- The network is used for four things only: the weather, one photo a day, the update check, and
+  the aerial films. Turn the TV's network off and the home screen still works.
+- It is a launcher, so it can see which app is in front — that is how the wallpaper follows the
+  app's colours. It is not sent anywhere.
 
-## 致谢与许可
+## Questions
 
-HLine TV 基于 Aerial（MIT）与 ClearYourTV 的思路构建，感谢原作者与贡献者。第三方素材与许可见 [CREDITS.md](CREDITS.md)。
+**Will this brick my TV?** No. It installs as a normal app, nothing is written to the system
+partition, and no root is involved.
 
-## 免责声明
+**Do I lose the stock launcher?** No. It stays installed and can be chosen again.
 
-HLine TV 是独立的个人项目，与 Apple、小米、索尼等公司无关。航拍影片来自 Apple 公开的流媒体地址，版权归 Apple 所有，本项目不存储、不再分发这些影片。请遵守你所在地区的法律法规使用本软件。
+**How do I go back?** Settings → Apps → HLine TV → uninstall, or pick the stock home in the
+default-app settings.
+
+**The APK won't install.** Some TVs block launcher apps by name. Use `HLine-TV-Guard.apk`.
+
+**Do I need Google services?** No.
+
+**Will it run on Android 5?** Yes — that is the minimum (API 21).
+
+**Are there ads or tracking?** None of either.
+
+**Can I use my own photos and videos?** Yes, from the phone page. Photos become wallpapers, videos
+become the screensaver.
+
+**Do updates keep my layout?** Yes — apps, order, wallpapers and settings all survive.
+
+**Does it work with my language?** Fourteen interface languages: Chinese, Traditional Chinese,
+English, Japanese, Korean, Russian, Ukrainian, Kazakh, German, Spanish, French, Portuguese, Arabic,
+Thai.
+
+## Updates
+
+Installed once, updated from the TV: when the control centre offers a new version, tap
+"Download and install". Everything is kept. Every build is on the
+[Releases](https://github.com/Harleyline/hline-tv/releases) page, and
+[CHANGELOG.md](CHANGELOG.md) has the details.
+
+## Credits and licence
+
+Thanks to everyone whose open work made this possible. Third-party assets and their licences are
+listed in [CREDITS.md](CREDITS.md).
+
+HLine TV is an independent personal project, not affiliated with Apple, Xiaomi, Sony or any other
+company named here. The flyover films are streamed from publicly available addresses; this project
+does not host or redistribute them. Please follow the laws of your country when using this
+software.
+
+MIT licensed.
