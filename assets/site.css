@@ -88,7 +88,9 @@
   .hero .lead{margin:26px auto 0;max-width:660px;font-size:clamp(17px,2vw,21px);color:rgba(240,246,251,.92);line-height:1.8;text-shadow:0 2px 22px rgba(0,0,0,.65);text-wrap:balance}
   .hero .closer{margin:34px 0 0;font-size:clamp(23px,3.2vw,36px);font-weight:650;letter-spacing:-.03em;color:#fff;text-shadow:0 3px 28px rgba(0,0,0,.65)}
   .actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin:36px 0 0}
-  .btn{display:inline-flex;align-items:center;gap:7px;padding:20px 40px;border-radius:999px;font-size:18px;font-weight:600;transition:transform .16s ease,border-color .18s,background .18s}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:20px 40px;border-radius:999px;font-size:18px;font-weight:600;transition:transform .16s ease,border-color .18s,background .18s}
+  .btn.primary{min-width:384px}
+  .btn.ghost{min-width:244px}
   .btn:hover{transform:translateY(-1px)}
   .btn.primary{background:#f4f7f9;color:#07080a;box-shadow:0 14px 42px rgba(110,231,255,.3);padding-left:62px;padding-right:62px}
   .btn.primary .btn-logo{display:block;width:26px;height:26px;margin-left:1px}
