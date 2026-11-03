@@ -299,9 +299,9 @@
     background:rgba(255,255,255,.2);border-radius:3.33cqw;padding:2.08cqw 2.71cqw;display:flex;gap:2.71cqw;
     backdrop-filter:blur(26px) saturate(1.2);-webkit-backdrop-filter:blur(26px) saturate(1.2);
     box-shadow:inset 0 1px 0 rgba(255,255,255,.26),0 18px 50px rgba(0,0,0,.34)}
-  .tm-tile{flex:1;aspect-ratio:16/9;border-radius:1.5cqw;position:relative;overflow:hidden;background:#14171c;
+  .tm-tile{flex:1;aspect-ratio:16/9;border-radius:1.5cqw;position:relative;overflow:hidden;background:transparent;
     box-shadow:0 .28cqw .9cqw rgba(0,0,0,.2)}
-  .tm-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  .tm-tile img{position:absolute;inset:-1px;width:calc(100% + 2px);height:calc(100% + 2px);object-fit:cover;display:block}
 
   @media(max-width:720px){.tm-status{font-size:2.4cqw;gap:1.7cqw}.tm-date{font-size:2.4cqw}.tm-time{font-size:9.6cqw}}
 
@@ -317,6 +317,9 @@
 
 /* ---- feature-section TV mockups: same dp sheet as the hero (1 dp = 0.1042 cqw) ---- */
 /* 01 · weather: the status line alone, over the wallpaper */
+.tv-weather .tvmock-wall{filter:brightness(.55) saturate(1.02) blur(2.5px);transform:scale(1.06)}
+.tv-weather .tm-status .tm-item{text-shadow:0 1px 3px rgba(0,0,0,.65),0 2px 14px rgba(0,0,0,.45)}
+.tv-weather .tm-status .tm-item>svg{filter:drop-shadow(0 1px 3px rgba(0,0,0,.6))}
 .tv-weather .tm-status{top:50%;transform:translate(-50%,-50%);right:auto;left:50%;font-size:4.43cqw;gap:3.13cqw}
 .tv-weather .tm-item{gap:1.38cqw}
 .tv-weather .tm-item>svg{width:4.18cqw;height:4.18cqw}
@@ -332,8 +335,8 @@
 .tg-row{position:absolute;left:5.83cqw;right:5.83cqw;display:flex;gap:2.92cqw}
 .tg-row.r1{top:7.5cqw}.tg-row.r2{top:21.35cqw}.tg-row.r3{top:35.2cqw}.tg-row.r4{top:49.06cqw}
 .tg-cell{flex:1;aspect-ratio:16/9;border-radius:1.5cqw;overflow:hidden;position:relative;
-  box-shadow:0 .28cqw .9cqw rgba(0,0,0,.2);background:#20242b}
-.tg-cell img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  box-shadow:0 .28cqw .9cqw rgba(0,0,0,.2);background:transparent}
+.tg-cell img{position:absolute;inset:-1px;width:calc(100% + 2px);height:calc(100% + 2px);object-fit:cover;display:block}
 .tg-focus{outline:.21cqw solid #fff;outline-offset:.1cqw;transform:scale(1.06);z-index:1}
 .tg-name{position:absolute;left:0;right:0;top:8.9cqw;text-align:center;color:#fff;font-size:1.35cqw;
   font-family:'Inter TV','MiSans TV','NotoKR TV',sans-serif;text-shadow:0 .21cqw .63cqw rgba(0,0,0,.5)}
