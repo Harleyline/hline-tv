@@ -340,7 +340,10 @@
     <string name="st_feedback_failed_hint">전송되지 않았습니다. 네트워크를 확인하고 다시 시도하세요.</string>
     <string name="st_version_footer">HLine TV %1$s (%2$d)</string>
     <string name="st_cities_phone_title">스캔해서 도시 추가</string>
-    <string name="st_cities_phone_body">휴대폰으로 스캔해 전 세계 도시를 검색하고, 탭 한 번으로 설정하세요. 배경화면과 아이콘도 휴대폰에서 바꿀 수 있습니다.</string>
+    <string name="st_cities_phone_body">휴대폰으로 스캔해 전 세계 도시를 검색하고, 탭 한 번으로 설정하세요.</string>
     <string name="st_cities_auto">네트워크 위치</string>
+    <string name="st_cities_auto_busy">위치 확인 중…</string>
+    <string name="st_cities_auto_done">위치를 확인했습니다</string>
+    <string name="st_cities_auto_failed">위치를 가져오지 못했습니다. 휴대폰으로 코드를 스캔해 설정하세요.</string>
 </resources>
 

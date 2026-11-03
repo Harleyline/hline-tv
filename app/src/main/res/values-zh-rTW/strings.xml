@@ -340,7 +340,10 @@
     <string name="st_feedback_failed_hint">沒有上傳成功，請確認網路後再試一次。</string>
     <string name="st_version_footer">HLine TV %1$s（%2$d）</string>
     <string name="st_cities_phone_title">掃碼新增城市</string>
-    <string name="st_cities_phone_body">手機掃碼，搜尋全球城市，點一下即套用；桌布、圖示與應用名稱也能在手機上設定。</string>
+    <string name="st_cities_phone_body">手機掃碼，搜尋全球城市，點一下即套用。</string>
     <string name="st_cities_auto">網路定位</string>
+    <string name="st_cities_auto_busy">定位中…</string>
+    <string name="st_cities_auto_done">已定位</string>
+    <string name="st_cities_auto_failed">沒能取得位置，請用手機掃碼設定城市。</string>
 </resources>
 

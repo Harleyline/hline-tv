@@ -198,6 +198,18 @@
     box-shadow: 0 14px 34px rgba(0,0,0,.55);
     -webkit-backdrop-filter: saturate(180%) blur(22px); backdrop-filter: saturate(180%) blur(22px);
   }
+  /* The answers to a city search, in a sheet of their own: at the end of a long page they fell
+     behind the tab bar, so they stand over the page and above the tabs (the owner, 11-03). */
+  #cityHits {
+    position: fixed; left: 50%; transform: translateX(-50%); z-index: 60;
+    width: min(calc(100% - 32px), 688px); bottom: calc(var(--tabbar) + 10px); margin: 0;
+    max-height: min(52vh, 430px); overflow-y: auto; -webkit-overflow-scrolling: touch;
+    background: var(--card2); border-radius: 18px; border: 1px solid rgba(255,255,255,.1);
+    box-shadow: 0 20px 48px rgba(0,0,0,.6);
+  }
+  #cityHits .item + .item { box-shadow: inset 0 1px 0 var(--sep); }
+  #cityHits .item:active { background: var(--fill); }
+  #cityHits .act { white-space: nowrap; }
   nav button {
     flex: 0 0 auto; max-width: none; border: 0; background: none; padding: 9px 17px; border-radius: 99px; color: var(--secondary);
     display: flex; flex-direction: row; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; cursor: pointer;
@@ -418,6 +430,11 @@
     </form>
     <button class="item tint center" id="wxLocate" data-i18n="wx_locate"></button>
   </div>
+  <!-- The towns Home turns through beside the located one: added from a search above, and taken
+       away here — three at most, the same limit the TV's own page holds (the owner, 11-03). -->
+  <h2 data-i18n="wx_cities"></h2>
+  <div class="list" id="wxCities" hidden></div>
+  <p class="foot" id="wxCitiesHint"></p>
   <!-- The phone page's city search: type, and the answers come back in this page's language. -->
   <div class="list" id="cityHits" hidden></div>
   <p class="foot" id="wxHint"></p>
@@ -478,7 +495,7 @@ let state = null, stateJson = '';
 
 // The language: ?lang=ru in the address, else the one picked under More (kept on the phone), else the
 // first of the phone's preferred languages that has a table, else English. Keys are in KEYS, one array of texts per language.
-const KEYS = ["screensaver", "screensaver_short", "ss_aerial", "ss_photos", "ss_clock", "focus", "focus_high", "focus_standard", "weather", "city_ph", "set", "upload_label", "feedback_h", "feedback_hint", "diag_show", "diag_copy", "diag_github", "hint_aerial", "hint_photos", "hint_clock", "g_live", "g_live_sub", "g_daily", "g_daily_sub", "g_photo", "g_builtin", "g_auto", "toast_wallpaper", "aria_delete", "confirm_delete", "wx_clear", "wx_partlycloudy", "wx_cloudy", "wx_fog", "wx_rain", "wx_snow", "wx_thunder", "wx_chosen", "wx_auto_btn", "toast_auto", "wx_guessed", "wx_none", "tag_source", "aria_rename", "toast_renamed", "toast_name_reset", "toast_rename_fail", "aria_reset_icon", "toast_icon_reset", "focus_hint_standard", "focus_hint_high", "daily_title", "daily_caption", "rotate_title", "rotate_caption", "empty_photos", "add_second", "toast_tv_updated", "sending_n", "toast_added", "toast_no_photos", "toast_send_fail", "toast_city_set", "toast_city_nf", "toast_set_fail", "toast_sending_icon", "toast_icon_set", "toast_icon_bad", "diag_collecting", "toast_diag_fail", "toast_copied", "toast_copy_manual", "language", "hint_follows", "ss_videos", "hint_videos", "videos_h", "videos_upload", "videos_hint", "videos_empty", "confirm_video_delete", "toast_videos_added", "toast_video_bad", "sending_video", "hint_system", "tab_home", "tab_more", "current_wp", "cancel", "save", "name_ph", "rename_hint", "change_icon", "this_tv", "folder_count", "folder_ph", "inputs_h", "inputs_hint", "rename_hint_app", "was_named", "arrange_hint", "arrange_unready", "hidden_h", "hidden_none", "hidden_locked", "show_app", "hide_app", "to_folder", "new_folder", "out_of_folder", "ungroup", "ungroup_confirm", "folder_hint", "toast_hidden", "toast_shown", "toast_in_folder", "toast_out_folder", "toast_ungrouped", "tab_looks", "looks_title", "show_on_home", "source_device", "source_plain", "source_device_hint", "tv_model", "sw_always", "sw_always_sub", "sw_weather", "sw_saver_time", "sw_saver_time_sub", "g_source_sub", "icon_h", "icon_library", "icon_own", "icon_custom", "toast_icon_picked", "drop_hint", "drop_sub", "drop_none", "toast_diag_paste", "wx_locate", "toast_locate_ok", "toast_locate_fail", "sw_aqi", "sw_humidity" , "crop_title_photo", "crop_title_icon", "crop_hint", "toast_crop_fail", "icon_prev", "toast_icon_prev", "conn_lost"];
+const KEYS = ["screensaver", "screensaver_short", "ss_aerial", "ss_photos", "ss_clock", "focus", "focus_high", "focus_standard", "weather", "city_ph", "set", "upload_label", "feedback_h", "feedback_hint", "diag_show", "diag_copy", "diag_github", "hint_aerial", "hint_photos", "hint_clock", "g_live", "g_live_sub", "g_daily", "g_daily_sub", "g_photo", "g_builtin", "g_auto", "toast_wallpaper", "aria_delete", "confirm_delete", "wx_clear", "wx_partlycloudy", "wx_cloudy", "wx_fog", "wx_rain", "wx_snow", "wx_thunder", "wx_chosen", "wx_auto_btn", "toast_auto", "wx_guessed", "wx_none", "tag_source", "aria_rename", "toast_renamed", "toast_name_reset", "toast_rename_fail", "aria_reset_icon", "toast_icon_reset", "focus_hint_standard", "focus_hint_high", "daily_title", "daily_caption", "rotate_title", "rotate_caption", "empty_photos", "add_second", "toast_tv_updated", "sending_n", "toast_added", "toast_no_photos", "toast_send_fail", "toast_city_set", "toast_city_nf", "toast_set_fail", "toast_sending_icon", "toast_icon_set", "toast_icon_bad", "diag_collecting", "toast_diag_fail", "toast_copied", "toast_copy_manual", "language", "hint_follows", "ss_videos", "hint_videos", "videos_h", "videos_upload", "videos_hint", "videos_empty", "confirm_video_delete", "toast_videos_added", "toast_video_bad", "sending_video", "hint_system", "tab_home", "tab_more", "current_wp", "cancel", "save", "name_ph", "rename_hint", "change_icon", "this_tv", "folder_count", "folder_ph", "inputs_h", "inputs_hint", "rename_hint_app", "was_named", "arrange_hint", "arrange_unready", "hidden_h", "hidden_none", "hidden_locked", "show_app", "hide_app", "to_folder", "new_folder", "out_of_folder", "ungroup", "ungroup_confirm", "folder_hint", "toast_hidden", "toast_shown", "toast_in_folder", "toast_out_folder", "toast_ungrouped", "tab_looks", "looks_title", "show_on_home", "source_device", "source_plain", "source_device_hint", "tv_model", "sw_always", "sw_always_sub", "sw_weather", "sw_saver_time", "sw_saver_time_sub", "g_source_sub", "icon_h", "icon_library", "icon_own", "icon_custom", "toast_icon_picked", "drop_hint", "drop_sub", "drop_none", "toast_diag_paste", "wx_locate", "toast_locate_ok", "toast_locate_fail", "sw_aqi", "sw_humidity" , "crop_title_photo", "crop_title_icon", "crop_hint", "toast_crop_fail", "icon_prev", "toast_icon_prev", "conn_lost", "wx_cities", "wx_cities_hint", "city_add", "city_remove", "toast_city_added", "toast_city_removed", "toast_city_full"];
 const TEXTS = {
  "zh": [
   "屏幕保护程序",
@@ -633,6 +650,13 @@ const TEXTS = {
   "换回上一张",
   "已换回上一张",
   "连不上电视了，正在重试…",
+  "轮换城市",
+  "最多 {n} 个，跟定位城市一起在电视上轮换显示。",
+  "添加城市",
+  "移除",
+  "已加入：{place}",
+  "已移除：{place}",
+  "最多只能加 {n} 个城市",
  ],
  "zh-TW": [
   "螢幕保護程式",
@@ -787,6 +811,13 @@ const TEXTS = {
   "換回上一張",
   "已換回上一張",
   "連不上電視了，正在重試…",
+  "輪換城市",
+  "最多 {n} 個，跟定位城市一起在電視上輪換顯示。",
+  "新增城市",
+  "移除",
+  "已加入：{place}",
+  "已移除：{place}",
+  "最多只能加 {n} 個城市",
  ],
  "ja": [
   "スクリーンセーバー",
@@ -941,6 +972,13 @@ const TEXTS = {
   "前の画像に戻す",
   "前の画像に戻しました",
   "テレビに接続できません。再試行しています…",
+  "切り替える都市",
+  "{n} つまで。現在地の都市と交代でテレビに表示されます。",
+  "都市を追加",
+  "削除",
+  "追加しました：{place}",
+  "削除しました：{place}",
+  "追加できるのは {n} つまでです",
  ],
  "ko": [
   "화면 보호기",
@@ -1095,6 +1133,13 @@ const TEXTS = {
   "이전 이미지로",
   "이전 이미지로 되돌렸습니다",
   "TV에 연결할 수 없습니다. 다시 시도하는 중…",
+  "순환 도시",
+  "최대 {n}개. 현재 위치 도시와 번갈아 TV에 표시됩니다.",
+  "도시 추가",
+  "삭제",
+  "추가됨: {place}",
+  "삭제됨: {place}",
+  "최대 {n}개까지 추가할 수 있습니다",
  ],
  "en": [
   "Screensaver",
@@ -1249,6 +1294,13 @@ const TEXTS = {
   "Put the last one back",
   "The last picture is back",
   "Can't reach the TV. Retrying…",
+  "Cities in rotation",
+  "Up to {n}, shown on the TV in turn with your located city.",
+  "Add city",
+  "Remove",
+  "Added: {place}",
+  "Removed: {place}",
+  "Up to {n} cities",
  ],
  "ru": [
   "Заставка",
@@ -1403,6 +1455,13 @@ const TEXTS = {
   "Вернуть прошлую",
   "Прошлая картинка снова на месте",
   "Не удаётся связаться с телевизором. Повторяем…",
+  "Города по кругу",
+  "До {n}: телевизор показывает их по очереди с вашим городом.",
+  "Добавить город",
+  "Удалить",
+  "Добавлено: {place}",
+  "Удалено: {place}",
+  "Можно добавить не больше {n} городов",
  ],
  "uk": [
   "Заставка",
@@ -1557,6 +1616,13 @@ const TEXTS = {
   "Повернути попередню",
   "Попереднє зображення повернуто",
   "Не вдається зв’язатися з телевізором. Повторюємо…",
+  "Міста по колу",
+  "До {n}: телевізор показує їх по черзі з вашим містом.",
+  "Додати місто",
+  "Видалити",
+  "Додано: {place}",
+  "Видалено: {place}",
+  "Можна додати не більше {n} міст",
  ],
  "kk": [
   "Экран қорғаушы",
@@ -1711,6 +1777,13 @@ const TEXTS = {
   "Алдыңғысын қайтару",
   "Алдыңғы сурет қайтарылды",
   "Теледидарға қосылу мүмкін емес. Қайталап жатырмыз…",
+  "Кезектегі қалалар",
+  "{n} қалаға дейін: теледидар оларды сіздің қалаңызбен кезекпен көрсетеді.",
+  "Қала қосу",
+  "Жою",
+  "Қосылды: {place}",
+  "Жойылды: {place}",
+  "{n} қаладан артық қосуға болмайды",
  ]
 };
 const LANGS = Object.keys(TEXTS);
@@ -2184,6 +2257,38 @@ function placeText(w) {
   const native = LANG === 'zh' || LANG === 'zh-TW' || LANG === 'ja';
   return (native ? (w.place || w.placeAscii) : (w.placeAscii || w.place)) || '';
 }
+// The towns Home turns through beside the located one — three at most, the same limit the TV's own
+// page holds. Added here out of a search, taken away by the row's own button.
+function cityName(c) {
+  const native = LANG === 'zh' || LANG === 'zh-TW' || LANG === 'ja';
+  return (native ? (c.name || c.ascii) : (c.ascii || c.name)) || '';
+}
+function citiesInRotation() { return ((state.weather || {}).cities) || []; }
+function citiesMax() { return (state.weather || {}).maxCities || 3; }
+function renderCities() {
+  const box = $('#wxCities'), foot = $('#wxCitiesHint'), list = citiesInRotation();
+  box.replaceChildren();
+  for (const c of list) {
+    const row = el('div', 'item');
+    // The town and its own reading, as the TV turns through them one after another.
+    const txt = el('span', 'txt', cityName(c));
+    if (c.celsius !== undefined) {
+      const sub = [`${c.celsius}°`, weatherNames()[c.kind] || ''].filter(Boolean).join(' ');
+      txt.appendChild(el('span', 'sub', sub));
+    }
+    row.appendChild(txt);
+    const b = el('button', 'link act', t('city_remove'));
+    b.onclick = async () => {
+      b.disabled = true;
+      try { take(await api('api/weather/remove', { name: c.name })); toast(t('toast_city_removed', { place: cityName(c) })); }
+      catch (e) { b.disabled = false; toast(t('toast_set_fail')); }
+    };
+    row.appendChild(b);
+    box.appendChild(row);
+  }
+  box.hidden = !list.length;
+  foot.textContent = t('wx_cities_hint', { n: citiesMax() });
+}
 function renderMore() {
   $('#swWeather').checked = state.showWeather !== false;
   // The air's index and the humidity beside it: the same two switches as Personalize (2.16).
@@ -2200,6 +2305,7 @@ function renderMore() {
     b.onclick = async () => { try { take(await api('api/weather/auto', {})); toast(t('toast_auto')); } catch (e) { toast(t('toast_set_fail')); } };
     hint.append(b);
   } else hint.textContent = (w.place || w.placeAscii) ? t('wx_guessed', { place: placeText(w) }) : t('wx_none');
+  renderCities();
 }
 function renderInputs() {
   const inputs = state.inputs || [];
@@ -2243,7 +2349,20 @@ document.querySelectorAll('#focus [data-style]').forEach(b => b.onclick = async 
 let cityTimer = null, cityHits = [], cityAsked = '';
 // A search never puts a town on by itself: the answers wait, and a tap on one sets it (the owner,
 // 11-03). Nothing is applied until the reader has seen the list.
-function hideHits() { clearTimeout(cityTimer); cityHits = []; const b = $('#cityHits'); b.hidden = true; b.replaceChildren(); }
+// The keyboard hides the bottom of the page, the tab bar with it: while it is up, the answers
+// stand over what is left of the view; when it is down, they stand over the tab bar.
+function placeHits() {
+  const b = $('#cityHits');
+  if (b.hidden) return;
+  const vv = window.visualViewport;
+  const over = vv ? Math.round(window.innerHeight - vv.height - vv.offsetTop) : 0;
+  b.style.bottom = over > 60 ? `${over + 10}px` : '';
+}
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', placeHits);
+  window.visualViewport.addEventListener('scroll', placeHits);
+}
+function hideHits() { clearTimeout(cityTimer); cityHits = []; const b = $('#cityHits'); b.hidden = true; b.style.bottom = ''; b.replaceChildren(); }
 function renderHits() {
   const b = $('#cityHits'); b.replaceChildren();
   if (!cityHits.length) {
@@ -2255,17 +2374,24 @@ function renderHits() {
     txt.style.color = 'var(--secondary)';
     row.appendChild(txt); b.appendChild(row); b.hidden = false; return;
   }
+  const full = citiesInRotation().length >= citiesMax();
   cityHits.forEach(h => {
-    const row = document.createElement('button'); row.className = 'item'; row.type = 'button';
-    const txt = document.createElement('span'); txt.className = 'txt';
-    const name = document.createElement('span'); name.textContent = h.name;
-    txt.appendChild(name);
-    if (h.where) { const sub = document.createElement('span'); sub.className = 'sub'; sub.textContent = h.where; txt.appendChild(sub); }
+    // A tap on the row puts the weather there; the button beside it adds the town to the rotation
+    // instead, so both the one place and the three it turns through are set from here (11-03).
+    const row = el('div', 'item arow'); row.setAttribute('role', 'button'); row.tabIndex = 0;
+    const txt = el('span', 'txt');
+    txt.appendChild(el('span', '', h.name));
+    if (h.where) txt.appendChild(el('span', 'sub', h.where));
     row.appendChild(txt);
+    const add = el('button', 'link act', t('city_add'));
+    add.disabled = full;
+    add.onclick = ev => { ev.stopPropagation(); addCity(h, add); };
+    row.appendChild(add);
     row.onclick = () => pickCity(h);
     b.appendChild(row);
   });
   b.hidden = false;
+  placeHits();
 }
 async function searchCities(q) {
   cityAsked = q;
@@ -2284,6 +2410,19 @@ async function pickCity(h) {
     take(next); toast(t('toast_city_set', { place: placeText(next.weather) }));
   } catch (e) { toast(t('toast_set_fail')); }
 }
+// The answer beside the row's own tap: the town joins the rotation, three at most. The answers
+// have done their job — the sheet closes and the field is empty again (the owner, 11-03).
+async function addCity(h, btn) {
+  btn.disabled = true;
+  try {
+    const next = await api('api/weather/add', { lat: h.lat, lon: h.lon, name: h.name, ascii: h.ascii || h.name });
+    if (!next.added) { toast(t('toast_city_full', { n: citiesMax() })); renderCities(); btn.disabled = false; return; }
+    take(next);
+    toast(t('toast_city_added', { place: h.name }));
+    hideHits(); cityAsked = '';
+    const input = $('#city'); input.value = ''; input.blur();
+  } catch (e) { btn.disabled = false; toast(t('toast_set_fail')); }
+}
 $('#city').oninput = () => {
   const q = $('#city').value.trim();
   clearTimeout(cityTimer);
@@ -2291,6 +2430,9 @@ $('#city').oninput = () => {
   if (!q) { hideHits(); return; }
   cityTimer = setTimeout(() => searchCities(q), 350);
 };
+// The keyboard covers the lower half: the field comes to the middle of what is left, or it is
+// typed into blind (the owner, 11-03).
+$('#city').onfocus = () => setTimeout(() => $('#city').scrollIntoView({ block: 'center', behavior: 'smooth' }), 300);
 // Enter and the keyboard's search key ask, they do not set: same list, no waiting for the timer.
 $('#cityForm').onsubmit = e => {
   e.preventDefault();

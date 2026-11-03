@@ -227,7 +227,24 @@ class PhoneServer private constructor(private val context: Context, private val 
                     json(state())
                 }
                 session.method == Method.POST && path == "/api/weather/auto" -> {
-                    onMain { Weather.useNetworkLocation() }
+                    runBlocking { runCatching { Weather.relocate() } }
+                    json(state())
+                }
+                // A town put into the rotation, and one taken out of it: the same answers a search
+                // gives, three of them at most beside the located town (the owner, 11-03).
+                session.method == Method.POST && path == "/api/weather/add" -> {
+                    val f = form(session)
+                    val lat = f["lat"]?.toDoubleOrNull()
+                    val lon = f["lon"]?.toDoubleOrNull()
+                    val name = f["name"].orEmpty().trim()
+                    val added = lat != null && lon != null && name.isNotBlank() &&
+                        lat in -90.0..90.0 && lon in -180.0..180.0 &&
+                        runBlocking(Dispatchers.Main) { Weather.addSlot(lat, lon, name, f["ascii"].orEmpty()) }
+                    json(state().put("added", added))
+                }
+                session.method == Method.POST && path == "/api/weather/remove" -> {
+                    val name = form(session)["name"].orEmpty().trim()
+                    if (name.isNotBlank()) runBlocking(Dispatchers.Main) { Weather.removeCity(name) }
                     json(state())
                 }
                 // The phone's own fix: a TV has no location of its own, and behind a proxy the
@@ -351,6 +368,19 @@ class PhoneServer private constructor(private val context: Context, private val 
                 // when it is set to a language that does not read Chinese (2.17).
                 put("placeAscii", Weather.placeAscii ?: "")
                 put("chosen", Weather.chosen)
+                // The towns Home turns through beside it, which the phone adds and takes away
+                // (the owner, 11-03).
+                put("maxCities", Weather.MAX_EXTRA_CITIES)
+                put("cities", JSONArray().apply {
+                    Weather.extras.forEach { town ->
+                        put(JSONObject().put("name", town.name).put("ascii", town.ascii)
+                            .put("lat", town.lat).put("lon", town.lon).apply {
+                                // Each town's own reading, so the phone shows them side by side as
+                                // the TV turns through them.
+                                town.now?.let { put("celsius", it.celsius); put("kind", it.kind.name.lowercase()) }
+                            })
+                    }
+                })
                 Weather.now?.let { put("celsius", it.celsius); put("kind", it.kind.name.lowercase()); put("day", it.day) }
             })
     }

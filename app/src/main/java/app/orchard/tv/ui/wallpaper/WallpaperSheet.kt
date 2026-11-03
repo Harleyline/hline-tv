@@ -806,16 +806,39 @@ fun WallpaperSheet(
         side = { WeatherPhoneCard(phoneUrl, weatherQr) },
     ) { first ->
         val full = Weather.extras.size >= Weather.MAX_EXTRA_CITIES
+        val strings = LocalContext.current
+        val scope = rememberCoroutineScope()
+        var locating by remember { mutableStateOf(false) }
+        // What the last ask for a location found, said in the note under the group: the row is the
+        // one the cursor is on, so its own note answers at once (the owner, 11-03).
+        var located by remember { mutableStateOf<String?>(null) }
         Column(Modifier.heightIn(max = 404.dp).verticalScroll(rememberScrollState())) {
             Group(
                 stringResource(R.string.st_cities_hint) + Weather.fetchedAtText(),
             ) { note ->
                 SettingRow(R.string.wp_weather_city, null, note, first = true) { WeatherValue() }
-                // The network's guess, for a TV that has just been set up: one chip, and the town
-                // stands where the address puts it (the owner, 11-03).
-                SettingRow(R.string.st_weather_place, null, note) {
-                    ActionChip(stringResource(R.string.st_cities_auto), Glyph.Place, focusRequester = first) {
-                        Weather.useNetworkLocation()
+                // The network's guess, asked for here: the TV's own fix, then the address — and
+                // said out loud either way, because a TV with neither leaves the place as it was
+                // (the owner, 11-03: a button that did nothing visible).
+                SettingRow(R.string.st_weather_place, located, note) {
+                    ActionChip(
+                        if (locating) stringResource(R.string.st_cities_auto_busy) else stringResource(R.string.st_cities_auto),
+                        Glyph.Place,
+                        focusRequester = first,
+                    ) {
+                        if (locating) return@ActionChip
+                        locating = true
+                        located = null
+                        scope.launch {
+                            // The town itself shows in the row above, so the note only says the ask
+                            // was answered — or that nothing answered.
+                            val (how, _) = Weather.relocate()
+                            locating = false
+                            located = strings.getString(
+                                if (how == Weather.Relocated.Nowhere) R.string.st_cities_auto_failed
+                                else R.string.st_cities_auto_done
+                            )
+                        }
                     }
                 }
                 // Home takes turns through these with the located town, ten seconds each.
@@ -1913,10 +1936,12 @@ private fun PickerOverlay(
                         .padding(22.dp),
                 ) { content() }
             } else {
-                // Rows on the left, the companion on the right, one panel (the owner, 11-03).
+                // Rows on the left, the companion on the right, one panel (the owner, 11-03). The
+                // rows carry the towns and their hints: 620 was a step too narrow for them, 780 too
+                // wide for the code beside them (the owner, 11-03).
                 Row(
                     Modifier
-                        .width(620.dp)
+                        .width(700.dp)
                         .clip(RoundedCornerShape(24.dp))
                         .liquidGlass(24.dp)
                         .consumeTaps()

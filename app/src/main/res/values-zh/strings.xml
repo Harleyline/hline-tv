@@ -348,6 +348,9 @@
     <string name="st_feedback_failed_hint">没有上传成功，检查网络后再试一次。</string>
     <string name="st_version_footer">HLine TV %1$s（%2$d）</string>
     <string name="st_cities_phone_title">扫码添加城市</string>
-    <string name="st_cities_phone_body">手机扫码，搜索全球城市，点一下就换上；壁纸、图标与应用名称也能在手机上设置。</string>
+    <string name="st_cities_phone_body">手机扫码，搜索全球城市，点一下就换上。</string>
     <string name="st_cities_auto">网络定位</string>
+    <string name="st_cities_auto_busy">定位中…</string>
+    <string name="st_cities_auto_done">已定位</string>
+    <string name="st_cities_auto_failed">没能取到位置，请用手机扫码设置城市。</string>
 </resources>

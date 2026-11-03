@@ -589,6 +589,13 @@ object Weather {
             found = ask("en").ifEmpty { ask("zh") }
             inPageLanguage = false
         }
+        if (found.isEmpty()) {
+            // A name the geocoder does not index at all in its own script (서울, กรุงเทพ, 北京市):
+            // OpenStreetMap reads the world's towns as they are written, and names each one back in
+            // the page's language.
+            val osm = searchOsm(q, page)
+            if (osm.length() > 0) return JSONObject().put("hits", osm)
+        }
         for (r0 in found) {
             var r = r0
             if (!inPageLanguage) {
@@ -608,6 +615,52 @@ object Weather {
                 .put("where", listOf(region, country).filter { it.isNotBlank() }.distinct().joinToString(" · ")))
         }
         return JSONObject().put("hits", hits)
+    }
+
+    /**
+     * Towns from OpenStreetMap's own search, for a name typed in a script the geocoder above does
+     * not index: 서울, 東京 and กรุงเทพ are read as they are written, and each town comes back named
+     * in the page's language (its name:<lang> tag, English where it has none) with the Latin name
+     * beside it for the TV's other languages. Off the main thread.
+     */
+    private fun searchOsm(q: String, page: String): JSONArray {
+        val hits = JSONArray()
+        // It asks for a name of its own on every call; the app's is enough, and says what it is.
+        val url = "https://nominatim.openstreetmap.org/search?q=" + URLEncoder.encode(q, "UTF-8") +
+            "&format=jsonv2&limit=6&addressdetails=1&namedetails=1&featureType=city&accept-language=" +
+            URLEncoder.encode(page, "UTF-8")
+        val res = runCatching { JSONArray(get(url, agent = "HLineTV/1.6 (Android TV launcher)")) }
+            .onFailure { Log.w(TAG, "town search failed", it) }.getOrDefault(JSONArray())
+        for (i in 0 until res.length()) {
+            val r = res.optJSONObject(i) ?: continue
+            val names = r.optJSONObject("namedetails") ?: JSONObject()
+            // Some tags list alternatives ("东京都/東京都"); the first is the one to show.
+            fun tag(key: String) = names.optString(key).substringBefore('/').trim()
+            val lat = r.optString("lat").toDoubleOrNull() ?: continue
+            val lon = r.optString("lon").toDoubleOrNull() ?: continue
+            val local = tidyTown(tag("name:$page").ifBlank { tag("name:en") }.ifBlank { tag("name") }
+                .ifBlank { r.optString("name") })
+            val ascii = tidyTown(tag("name:en").ifBlank { r.optString("name") })
+            val address = r.optJSONObject("address") ?: JSONObject()
+            val where = listOf(address.optString("state"), address.optString("country"))
+                .filter { it.isNotBlank() }.distinct().joinToString(" · ")
+            hits.put(JSONObject()
+                .put("lat", lat)
+                .put("lon", lon)
+                .put("name", local)
+                .put("ascii", ascii)
+                .put("where", where))
+        }
+        return hits
+    }
+
+    /** A town without the rank on it: 서울특별시 reads 서울, 東京都 reads 東京. */
+    private fun tidyTown(name: String): String {
+        for (suffix in listOf("특별자치시", "특별자치도", "특별시", "광역시")) {
+            if (name.endsWith(suffix) && name.length > suffix.length) return name.dropLast(suffix.length)
+        }
+        if (name.length > 2 && (name.endsWith("市") || name.endsWith("都"))) return name.dropLast(1)
+        return name
     }
 
     /**
@@ -675,7 +728,21 @@ object Weather {
         return true
     }
 
-    /** Takes a town out of the rotation, by its Chinese name. */
+    /**
+     * A town added from the phone page, which searched the world for it: its point and both names
+     * stand as the searcher saw them, exactly as a pick does. False when the rotation is full or the
+     * town is already in it.
+     */
+    fun addSlot(lat: Double, lon: Double, name: String, ascii: String): Boolean {
+        val town = name.trim()
+        if (town.isEmpty() || extras.size >= MAX_EXTRA_CITIES || extras.any { it.name == town }) return false
+        extras = extras + CitySlot(town, ascii.trim().ifBlank { town }, lat.toFloat(), lon.toFloat())
+        writeCities()
+        refresh()
+        return true
+    }
+
+    /** Takes a town out of the rotation, by its name. */
     fun removeCity(name: String) {
         val left = extras.filterNot { it.name == name }
         if (left.size == extras.size) return
@@ -703,14 +770,75 @@ object Weather {
         }
     }
 
-    /** Back to locating the place: the TV's own fix, or else the address. */
-    fun useNetworkLocation() {
+    /** How a relocation ended, for the note the owner is shown. */
+    enum class Relocated { Device, Address, Nowhere }
+
+    /**
+     * The network's guess, asked for by the owner rather than made behind their back: the TV's own
+     * fix first, then the address its traffic leaves by. Unlike [fetch]'s guess an address that
+     * reads as another country counts here — the owner has asked for the place to be looked up
+     * again, so a town set by mistake, or one left over from a proxy that has since moved, is
+     * exactly what they want gone. Nothing answered: the place the weather had stands.
+     *
+     * Off the main thread (up to [Where]'s wait for a fix); the answer is how it ended and the
+     * town it settled on.
+     */
+    suspend fun relocate(): Pair<Relocated, String?> = withContext(Dispatchers.IO) {
+        val kept = listOf("lat", "lon", "place", "place_ascii", "located_at", "located_by")
+            .associateWith { prefs.all[it] }
         prefs.edit {
-            putBoolean("chosen", false); putString("place_ascii", null)
-            remove("lat"); remove("lon"); remove("located_at"); remove("located_by")
+            putBoolean("chosen", false)
+            kept.keys.forEach { remove(it) }
         }
         chosen = false
-        refresh()
+        var how = Relocated.Nowhere
+        val fix = runCatching { Where.device(app) }.getOrNull()
+        if (fix != null) {
+            val named = runCatching { nameAt(fix.lat, fix.lon) }.getOrNull()
+            prefs.edit {
+                putFloat("lat", fix.lat.toFloat()); putFloat("lon", fix.lon.toFloat())
+                putLong("located_at", System.currentTimeMillis())
+                putString("located_by", fix.how)
+                if (named != null) { putString("place", named.first); putString("place_ascii", named.second) }
+            }
+            how = Relocated.Device
+        } else {
+            val byAddress = runCatching { locateByAddress() }.getOrNull()
+            if (byAddress != null) {
+                // ipinfo names the town in English; the geocoder names the point better, and in the
+                // TV's own language.
+                val named = runCatching { nameAt(byAddress.first.toDouble(), byAddress.second.toDouble()) }.getOrNull()
+                if (named != null) prefs.edit { putString("place", named.first); putString("place_ascii", named.second) }
+                how = Relocated.Address
+            }
+        }
+        if (how == Relocated.Nowhere) {
+            // Put back what was there: with nothing found, an empty place would leave the weather
+            // with no town at all.
+            prefs.edit {
+                kept.forEach { (key, value) ->
+                    when (value) {
+                        is Float -> putFloat(key, value)
+                        is String -> putString(key, value)
+                        is Long -> putLong(key, value)
+                        else -> remove(key)
+                    }
+                }
+            }
+            DiagLog.i("weather: the owner asked for a location; neither the TV nor the address gave one")
+        }
+        val town = prefs.getString("place", null)
+        DiagLog.i("weather: the owner asked for a location; $how says ${town ?: "no town"}")
+        if (how != Relocated.Nowhere) {
+            // The reading and the state both belong to the main thread; this may be called from the
+            // phone page's thread.
+            withContext(Dispatchers.Main) {
+                place = town
+                placeAscii = prefs.getString("place_ascii", null)
+                refresh()
+            }
+        }
+        how to town
     }
 
     /** WMO weather interpretation codes, as Open-Meteo reports them. */
@@ -728,16 +856,18 @@ object Weather {
      * Android before 7.1 does not trust the Let's Encrypt root these hosts use; they answer the
      * same over plain HTTP (allowed for them in network_security_config.xml).
      */
-    private fun get(url: String): String = try {
-        read(url)
+    private fun get(url: String, agent: String? = null): String = try {
+        read(url, agent)
     } catch (e: SSLException) {
-        read(url.replaceFirst("https://", "http://"))
+        read(url.replaceFirst("https://", "http://"), agent)
     }
 
-    private fun read(url: String): String {
+    private fun read(url: String, agent: String? = null): String {
         val c = URL(url).openConnection() as HttpURLConnection
         c.connectTimeout = 8_000
         c.readTimeout = 10_000
+        // A host that answers only a named caller (OpenStreetMap turns away an anonymous one).
+        if (agent != null) c.setRequestProperty("User-Agent", agent)
         return try {
             c.inputStream.use { it.readBytes().decodeToString() }
         } finally {
