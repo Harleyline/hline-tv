@@ -411,7 +411,9 @@ body{font-family:'Inter TV','MiSans TV','NotoKR TV',-apple-system,'PingFang SC',
   /* hero — compact; buttons one row, minimal text */
   .hero{min-height:auto;min-height:0;padding:40px 0 44px}
   .scroll-hint{display:none}
-  /* hero title typography synced with desktop (weight/size/typeface) — layout only is mobile-specific */
+  /* hero title: light weight on mobile (CN via system CJK Light, EN via Inter Var), layout unchanged */
+  html:not([lang="en"]) .hero h1 .slogan{font-family:'Inter Var',-apple-system,'PingFang SC','HarmonyOS Sans SC','MiSans','Microsoft YaHei',sans-serif;font-weight:300}
+  .hero h1 .slogan.en{font-weight:300}
   .hero .lead{margin-top:12px;text-wrap:initial;font-size:14px;line-height:1.55;padding:0 4px}
   .hero .lead br{display:none}
   .hero .closer{margin-top:12px;font-size:16px}
