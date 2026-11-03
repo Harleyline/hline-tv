@@ -173,6 +173,7 @@
   .wx { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; row-gap: 2px; }
   .wx b { font-size: 30px; font-weight: 300; letter-spacing: -.02em; }
   .wx span { color: var(--secondary); font-size: 15px; }
+  .wx #wxPlaceEdit { font-size: 15px; margin-left: auto; }
   .field { display: flex; align-items: center; gap: 8px; }
   .field { gap: 10px; }
   .field input {
@@ -424,7 +425,13 @@
     <label class="item"><span class="txt" data-i18n="sw_weather"></span><input class="switch" type="checkbox" id="swWeather" data-setting="showWeather"></label>
     <label class="item" id="rowAqi"><span class="txt" data-i18n="sw_aqi"></span><input class="switch" type="checkbox" id="swAqi" data-setting="showAqi"></label>
     <label class="item" id="rowHumidity"><span class="txt" data-i18n="sw_humidity"></span><input class="switch" type="checkbox" id="swHumidity" data-setting="showHumidity"></label>
-    <div class="item wx"><b id="wxNow">—</b><span id="wxPlace"></span></div>
+    <div class="item wx"><b id="wxNow">—</b><span id="wxPlace"></span><button class="link" id="wxPlaceEdit" data-i18n="city_edit"></button></div>
+    <!-- The located town named by hand: WeChat never hands the phone's fix over, so the name is
+         typed here instead and the first answer to it becomes the place (the owner, 11-03). -->
+    <form class="item field" id="locForm" hidden>
+      <input id="locName" type="text" data-i18n-placeholder="city_ph" enterkeyhint="done" autocomplete="off">
+      <button class="link" type="submit" data-i18n="save"></button>
+    </form>
     <form class="item field" id="cityForm">
       <input id="city" type="text" data-i18n-placeholder="city_ph" enterkeyhint="search" autocomplete="off">
     </form>
@@ -496,7 +503,7 @@ let state = null, stateJson = '';
 
 // The language: ?lang=ru in the address, else the one picked under More (kept on the phone), else the
 // first of the phone's preferred languages that has a table, else English. Keys are in KEYS, one array of texts per language.
-const KEYS = ["screensaver", "screensaver_short", "ss_aerial", "ss_photos", "ss_clock", "focus", "focus_high", "focus_standard", "weather", "city_ph", "set", "upload_label", "feedback_h", "feedback_hint", "diag_show", "diag_copy", "diag_github", "hint_aerial", "hint_photos", "hint_clock", "g_live", "g_live_sub", "g_daily", "g_daily_sub", "g_photo", "g_builtin", "g_auto", "toast_wallpaper", "aria_delete", "confirm_delete", "wx_clear", "wx_partlycloudy", "wx_cloudy", "wx_fog", "wx_rain", "wx_snow", "wx_thunder", "wx_chosen", "wx_auto_btn", "toast_auto", "wx_guessed", "wx_none", "tag_source", "aria_rename", "toast_renamed", "toast_name_reset", "toast_rename_fail", "aria_reset_icon", "toast_icon_reset", "focus_hint_standard", "focus_hint_high", "daily_title", "daily_caption", "rotate_title", "rotate_caption", "empty_photos", "add_second", "toast_tv_updated", "sending_n", "toast_added", "toast_no_photos", "toast_send_fail", "toast_city_set", "toast_city_nf", "toast_set_fail", "toast_sending_icon", "toast_icon_set", "toast_icon_bad", "diag_collecting", "toast_diag_fail", "toast_copied", "toast_copy_manual", "language", "hint_follows", "ss_videos", "hint_videos", "videos_h", "videos_upload", "videos_hint", "videos_empty", "confirm_video_delete", "toast_videos_added", "toast_video_bad", "sending_video", "hint_system", "tab_home", "tab_more", "current_wp", "cancel", "save", "name_ph", "rename_hint", "change_icon", "this_tv", "folder_count", "folder_ph", "inputs_h", "inputs_hint", "rename_hint_app", "was_named", "arrange_hint", "arrange_unready", "hidden_h", "hidden_none", "hidden_locked", "show_app", "hide_app", "to_folder", "new_folder", "out_of_folder", "ungroup", "ungroup_confirm", "folder_hint", "toast_hidden", "toast_shown", "toast_in_folder", "toast_out_folder", "toast_ungrouped", "tab_looks", "looks_title", "show_on_home", "source_device", "source_plain", "source_device_hint", "tv_model", "sw_always", "sw_always_sub", "sw_weather", "sw_saver_time", "sw_saver_time_sub", "g_source_sub", "icon_h", "icon_library", "icon_own", "icon_custom", "toast_icon_picked", "drop_hint", "drop_sub", "drop_none", "toast_diag_paste", "wx_locate", "toast_locate_ok", "toast_locate_fail", "sw_aqi", "sw_humidity" , "crop_title_photo", "crop_title_icon", "crop_hint", "toast_crop_fail", "icon_prev", "toast_icon_prev", "conn_lost", "wx_cities", "wx_cities_hint", "city_add", "city_remove", "toast_city_added", "toast_city_removed", "toast_city_full", "locate_insecure", "locate_hint", "locate_denied", "locate_tap"];
+const KEYS = ["screensaver", "screensaver_short", "ss_aerial", "ss_photos", "ss_clock", "focus", "focus_high", "focus_standard", "weather", "city_ph", "set", "upload_label", "feedback_h", "feedback_hint", "diag_show", "diag_copy", "diag_github", "hint_aerial", "hint_photos", "hint_clock", "g_live", "g_live_sub", "g_daily", "g_daily_sub", "g_photo", "g_builtin", "g_auto", "toast_wallpaper", "aria_delete", "confirm_delete", "wx_clear", "wx_partlycloudy", "wx_cloudy", "wx_fog", "wx_rain", "wx_snow", "wx_thunder", "wx_chosen", "wx_auto_btn", "toast_auto", "wx_guessed", "wx_none", "tag_source", "aria_rename", "toast_renamed", "toast_name_reset", "toast_rename_fail", "aria_reset_icon", "toast_icon_reset", "focus_hint_standard", "focus_hint_high", "daily_title", "daily_caption", "rotate_title", "rotate_caption", "empty_photos", "add_second", "toast_tv_updated", "sending_n", "toast_added", "toast_no_photos", "toast_send_fail", "toast_city_set", "toast_city_nf", "toast_set_fail", "toast_sending_icon", "toast_icon_set", "toast_icon_bad", "diag_collecting", "toast_diag_fail", "toast_copied", "toast_copy_manual", "language", "hint_follows", "ss_videos", "hint_videos", "videos_h", "videos_upload", "videos_hint", "videos_empty", "confirm_video_delete", "toast_videos_added", "toast_video_bad", "sending_video", "hint_system", "tab_home", "tab_more", "current_wp", "cancel", "save", "name_ph", "rename_hint", "change_icon", "this_tv", "folder_count", "folder_ph", "inputs_h", "inputs_hint", "rename_hint_app", "was_named", "arrange_hint", "arrange_unready", "hidden_h", "hidden_none", "hidden_locked", "show_app", "hide_app", "to_folder", "new_folder", "out_of_folder", "ungroup", "ungroup_confirm", "folder_hint", "toast_hidden", "toast_shown", "toast_in_folder", "toast_out_folder", "toast_ungrouped", "tab_looks", "looks_title", "show_on_home", "source_device", "source_plain", "source_device_hint", "tv_model", "sw_always", "sw_always_sub", "sw_weather", "sw_saver_time", "sw_saver_time_sub", "g_source_sub", "icon_h", "icon_library", "icon_own", "icon_custom", "toast_icon_picked", "drop_hint", "drop_sub", "drop_none", "toast_diag_paste", "wx_locate", "toast_locate_ok", "toast_locate_fail", "sw_aqi", "sw_humidity" , "crop_title_photo", "crop_title_icon", "crop_hint", "toast_crop_fail", "icon_prev", "toast_icon_prev", "conn_lost", "wx_cities", "wx_cities_hint", "city_add", "city_remove", "toast_city_added", "toast_city_removed", "toast_city_full", "locate_insecure", "locate_hint", "locate_denied", "locate_tap", "city_edit"];
 const TEXTS = {
  "zh": [
   "屏幕保护程序",
@@ -662,6 +669,7 @@ const TEXTS = {
   "微信等内置浏览器可能读不到定位：请用手机自带浏览器打开本页，或直接搜索城市。",
   "微信没有定位权限：请在手机设置里允许微信使用「位置信息」，然后回到这里再点一次。",
   "已切换到安全页面：点一下「用手机定位」，在弹窗里选择允许即可。",
+  "修改",
  ],
  "zh-TW": [
   "螢幕保護程式",
@@ -827,6 +835,7 @@ const TEXTS = {
   "微信等內建瀏覽器可能讀不到定位：請用手機內建瀏覽器開啟本頁，或直接搜尋城市。",
   "微信沒有定位權限：請在手機設定裡允許微信使用「位置資訊」，然後回到這裡再點一次。",
   "已切換到安全頁面：點一下「用我的手機定位」，在彈窗裡選擇允許即可。",
+  "修改",
  ],
  "ja": [
   "スクリーンセーバー",
@@ -992,6 +1001,7 @@ const TEXTS = {
   "WeChat などのアプリ内ブラウザでは位置情報を取得できないことがあります。スマホ標準のブラウザで開くか、都市を検索してください。",
   "WeChat に位置情報の権限がありません。スマホの設定で WeChat に位置情報を許可してから、もう一度お試しください。",
   "安全なページに切り替えました。「スマホの位置情報を使う」を押し、表示される確認で許可してください。",
+  "変更",
  ],
  "ko": [
   "화면 보호기",
@@ -1157,6 +1167,7 @@ const TEXTS = {
   "WeChat 같은 앱 내 브라우저에서는 위치를 가져오지 못할 수 있습니다. 휴대폰 기본 브라우저로 열거나 도시를 검색하세요.",
   "WeChat에 위치 권한이 없습니다. 휴대폰 설정에서 WeChat의 위치 접근을 허용한 뒤 다시 시도하세요.",
   "보안 페이지로 전환했습니다. 「휴대폰 위치 사용」을 눌러 나타나는 창에서 허용하세요.",
+  "변경",
  ],
  "en": [
   "Screensaver",
@@ -1322,6 +1333,7 @@ const TEXTS = {
   "Browsers inside apps (WeChat and the like) often cannot read a location — open this page in your phone’s own browser, or just search for the city.",
   "WeChat has no location permission — allow location for WeChat in your phone’s settings, then tap again here.",
   "On the secure page now — tap “Use my phone’s location” and allow it in the prompt.",
+  "Change",
  ],
  "ru": [
   "Заставка",
@@ -1487,6 +1499,7 @@ const TEXTS = {
   "Встроенные браузеры (WeChat и подобные) часто не передают геопозицию — откройте страницу в браузере телефона или найдите город поиском.",
   "У WeChat нет разрешения на геопозицию — разрешите его в настройках телефона и нажмите ещё раз.",
   "Страница защищена — нажмите «По геолокации телефона» и разрешите доступ.",
+  "Изменить",
  ],
  "uk": [
   "Заставка",
@@ -1652,6 +1665,7 @@ const TEXTS = {
   "Вбудовані браузери (WeChat тощо) часто не передають геопозицію — відкрийте сторінку в браузері телефона або знайдіть місто пошуком.",
   "WeChat не має дозволу на геопозицію — дозвольте його в настройках телефона і натисніть ще раз.",
   "Сторінка захищена — натисніть «За геолокацією телефона» і дозвольте доступ.",
+  "Змінити",
  ],
  "kk": [
   "Экран қорғаушы",
@@ -1817,6 +1831,7 @@ const TEXTS = {
   "Кірістірілген браузерлер (WeChat т.б.) геолокацияны жиі бермейді — бетті телефон браузерінде ашыңыз немесе қаланы іздеңіз.",
   "WeChat-та геолокацияға рұқсат жоқ — телефон параметрлерінде рұқсат беріп, қайта басыңыз.",
   "Қорғалған бет ашылды — «Телефон орнын пайдалану» түймесін басып, рұқсат беріңіз.",
+  "Өзгерту",
  ]
 };
 const LANGS = Object.keys(TEXTS);
@@ -2482,6 +2497,37 @@ $('#cityForm').onsubmit = e => {
   clearTimeout(cityTimer);
   $('#city').blur();
   searchCities(q);
+};
+
+// The located town, named by hand. WeChat will not pass the phone's fix on, so the reader types
+// the town instead: the search answers with a point and a name, and its first answer becomes the
+// place — the same road the phone's own fix would have taken, walked one step at a time (11-03).
+$('#wxPlaceEdit').onclick = () => {
+  const form = $('#locForm'), open = form.hidden;
+  form.hidden = !open;
+  if (!open) return;
+  const f = $('#locName');
+  f.value = placeText(state.weather || {});
+  f.focus();
+  setTimeout(() => f.scrollIntoView({ block: 'center', behavior: 'smooth' }), 300);
+};
+$('#locForm').onsubmit = async e => {
+  e.preventDefault();
+  const q = $('#locName').value.trim();
+  if (!q) return;
+  const btn = $('#locForm button'); btn.disabled = true;
+  try {
+    const hits = (await api(`api/weather/search?q=${encodeURIComponent(q)}&lang=${LANG}`)).hits || [];
+    const h = hits[0];
+    if (!h) { toast(t('toast_city_nf', { name: q })); return; }
+    const next = await api('api/weather/locate', { lat: h.lat, lon: h.lon, name: h.name, ascii: h.ascii || h.name });
+    take(next);
+    $('#locName').blur();
+    $('#locForm').hidden = true;
+    $('#wxLocateHint').hidden = true;
+    toast(t('toast_locate_ok', { place: placeText(next.weather) }));
+  } catch (err) { toast(t('toast_locate_fail')); }
+  finally { btn.disabled = false; }
 };
 
 // The phone's own fix, and nothing else: behind a proxy an address hands back the proxy's town, and

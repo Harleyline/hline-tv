@@ -281,6 +281,7 @@
     <string name="st_group_clock">Сағат</string>
     <string name="st_cities_entry_hint">Ауа райы кезектесетін қалалар</string>
     <string name="st_cities_count">%1$d қала</string>
+    <string name="st_cities_add">Қала қосу</string>
     <string name="st_cities_hint">Ауа райы осы қалалар бойынша кезекпен көрсетіледі.</string>
     <string name="st_city_add">Қала қосу</string>
     <string name="st_city_pick">Қала таңдаңыз</string>

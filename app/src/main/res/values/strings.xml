@@ -289,6 +289,7 @@
     <string name="st_group_clock">Clock</string>
     <string name="st_cities_entry_hint">The towns the weather turns through</string>
     <string name="st_cities_count">%1$d cities</string>
+    <string name="st_cities_add">Add city</string>
     <string name="st_cities_hint">The weather moves through these towns in turn.</string>
     <string name="st_city_add">Add City</string>
     <string name="st_city_pick">Choose a City</string>

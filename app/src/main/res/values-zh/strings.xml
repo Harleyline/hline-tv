@@ -288,6 +288,7 @@
     <string name="st_group_clock">时钟</string>
     <string name="st_cities_entry_hint">天气轮换显示的城市</string>
     <string name="st_cities_count">%1$d 个城市</string>
+    <string name="st_cities_add">添加城市</string>
     <string name="st_cities_hint">天气在这些城市之间依次轮换。</string>
     <string name="st_city_add">添加城市</string>
     <string name="st_city_pick">选择城市</string>

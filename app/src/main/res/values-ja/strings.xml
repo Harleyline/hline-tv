@@ -288,6 +288,7 @@
     <string name="st_group_clock">時計</string>
     <string name="st_cities_entry_hint">天気を切り替えて表示する都市</string>
     <string name="st_cities_count">%1$d 都市</string>
+    <string name="st_cities_add">都市を追加</string>
     <string name="st_cities_hint">天気はこれらの都市を順に表示します。</string>
     <string name="st_city_add">都市を追加</string>
     <string name="st_city_pick">都市を選ぶ</string>

@@ -255,13 +255,19 @@ class PhoneServer private constructor(private val context: Context, private val 
                     json(state())
                 }
                 // The phone's own fix: a TV has no location of its own, and behind a proxy the
-                // address is the proxy's town. Named here, off the TV's main thread.
+                // address is the proxy's town. Named here, off the TV's main thread — and named by
+                // hand when the browser keeps its location to itself: the town typed on the phone
+                // is then the name it keeps (the owner, 11-03).
                 session.method == Method.POST && path == "/api/weather/locate" -> {
                     val f = form(session)
                     val lat = f["lat"]?.toDoubleOrNull()
                     val lon = f["lon"]?.toDoubleOrNull()
                     if (lat != null && lon != null && lat in -90.0..90.0 && lon in -180.0..180.0) {
-                        val named = runCatching { Weather.nameAt(lat, lon) }.getOrNull()
+                        val typed = f["name"].orEmpty().trim()
+                        val named = when {
+                            typed.isBlank() -> runCatching { Weather.nameAt(lat, lon) }.getOrNull()
+                            else -> typed to f["ascii"].orEmpty().trim().ifBlank { typed }
+                        }
                         runBlocking(Dispatchers.Main) { Weather.locate(lat, lon, named) }
                     }
                     json(state())

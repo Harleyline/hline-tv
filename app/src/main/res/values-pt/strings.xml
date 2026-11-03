@@ -288,6 +288,7 @@
     <string name="st_group_clock">Relógio</string>
     <string name="st_cities_entry_hint">As cidades por onde o clima passa</string>
     <string name="st_cities_count">%1$d cidades</string>
+    <string name="st_cities_add">Adicionar cidade</string>
     <string name="st_cities_hint">O clima passa de uma cidade para outra, em ordem.</string>
     <string name="st_city_add">Adicionar cidade</string>
     <string name="st_city_pick">Escolher cidade</string>

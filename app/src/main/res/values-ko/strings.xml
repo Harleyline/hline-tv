@@ -288,6 +288,7 @@
     <string name="st_group_clock">시계</string>
     <string name="st_cities_entry_hint">날씨를 번갈아 표시할 도시</string>
     <string name="st_cities_count">도시 %1$d곳</string>
+    <string name="st_cities_add">도시 추가</string>
     <string name="st_cities_hint">날씨가 이 도시들을 차례로 보여 줍니다.</string>
     <string name="st_city_add">도시 추가</string>
     <string name="st_city_pick">도시 선택</string>

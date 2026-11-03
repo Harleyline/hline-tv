@@ -575,18 +575,21 @@ fun WallpaperSheet(
                                                 AerialSettings.weatherRight, AerialSettings::chooseWeatherRight,
                                             )
                                         }
-                                        SettingRow(R.string.st_cities_title, stringResource(R.string.st_cities_entry_hint), note) {
-                                            // What the cities are for, said on the row itself: the
-                                            // place the weather stands for and its reading now,
-                                            // beside the count (the owner, 11-03).
-                                            val slot = Weather.slots.firstOrNull { it.located }
+                                        // The place the weather stands for and its reading now, said
+                                        // in the row's own line — the button beside it does one
+                                        // thing only, add a town, and says so (the owner, 11-03).
+                                        val reading = Weather.slots.firstOrNull { it.located }?.let { slot ->
                                             val here = Weather.placeName(slot, appLocale().language)
-                                            val temp = slot?.now?.celsius
+                                            val temp = slot.now?.celsius
+                                            if (here == null) null else if (temp != null) "$here $temp°" else here
+                                        }
+                                        SettingRow(
+                                            R.string.st_cities_title,
+                                            reading ?: stringResource(R.string.st_cities_entry_hint),
+                                            note,
+                                        ) {
                                             ActionChip(
-                                                listOfNotNull(
-                                                    here?.let { p -> if (temp != null) "$p ${temp}°" else p },
-                                                    stringResource(R.string.st_cities_count, Weather.extras.size + 1),
-                                                ).joinToString(" · "),
+                                                stringResource(R.string.st_cities_add),
                                                 Glyph.ChevronRight,
                                                 focusRequester = citiesChip,
                                             ) {

@@ -288,6 +288,7 @@
     <string name="st_group_clock">Uhr</string>
     <string name="st_cities_entry_hint">Die Städte, zwischen denen das Wetter wechselt</string>
     <string name="st_cities_count">%1$d Städte</string>
+    <string name="st_cities_add">Stadt hinzufügen</string>
     <string name="st_cities_hint">Das Wetter wechselt der Reihe nach zwischen diesen Städten.</string>
     <string name="st_city_add">Stadt hinzufügen</string>
     <string name="st_city_pick">Stadt wählen</string>

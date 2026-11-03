@@ -288,6 +288,7 @@
     <string name="st_group_clock">Reloj</string>
     <string name="st_cities_entry_hint">Las ciudades que recorre el tiempo</string>
     <string name="st_cities_count">%1$d ciudades</string>
+    <string name="st_cities_add">Añadir ciudad</string>
     <string name="st_cities_hint">El tiempo pasa de una ciudad a otra, por orden.</string>
     <string name="st_city_add">Añadir una ciudad</string>
     <string name="st_city_pick">Elegir una ciudad</string>

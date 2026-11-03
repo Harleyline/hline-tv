@@ -288,6 +288,7 @@
     <string name="st_group_clock">Horloge</string>
     <string name="st_cities_entry_hint">Les villes que la météo parcourt</string>
     <string name="st_cities_count">%1$d villes</string>
+    <string name="st_cities_add">Ajouter une ville</string>
     <string name="st_cities_hint">La météo passe d’une ville à l’autre, dans l’ordre.</string>
     <string name="st_city_add">Ajouter une ville</string>
     <string name="st_city_pick">Choisir une ville</string>

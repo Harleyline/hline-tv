@@ -281,6 +281,7 @@
     <string name="st_group_clock">Часы</string>
     <string name="st_cities_entry_hint">Города, между которыми переключается погода</string>
     <string name="st_cities_count">Городов: %1$d</string>
+    <string name="st_cities_add">Добавить город</string>
     <string name="st_cities_hint">Погода показывается по очереди в этих городах.</string>
     <string name="st_city_add">Добавить город</string>
     <string name="st_city_pick">Выберите город</string>

@@ -288,6 +288,7 @@
     <string name="st_group_clock">นาฬิกา</string>
     <string name="st_cities_entry_hint">เมืองที่สลับแสดงสภาพอากาศ</string>
     <string name="st_cities_count">%1$d เมือง</string>
+    <string name="st_cities_add">เพิ่มเมือง</string>
     <string name="st_cities_hint">สภาพอากาศจะสลับแสดงทีละเมืองตามลำดับ</string>
     <string name="st_city_add">เพิ่มเมือง</string>
     <string name="st_city_pick">เลือกเมือง</string>
