@@ -491,10 +491,59 @@ object Weather {
         )
     }.onFailure { Log.w(TAG, "aqicn unavailable", it) }.getOrNull() ?: AirReading()
 
+    /**
+     * The air's index abroad, worked out here rather than taken from the model's own [us_aqi]: that
+     * figure does not agree with the concentrations it reports (Tokyo read 139 while its own PM2.5,
+     * 16.8 µg/m³, is an AQI of about 60 — the owner, 11-03). EPA's breakpoints over the reported
+     * PM2.5, PM10 and ozone give the number every other app shows.
+     */
     private fun openMeteoAqi(lat: Float, lon: Float): Int? = runCatching {
-        val json = JSONObject(get("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=$lat&longitude=$lon&current=us_aqi&timezone=auto"))
-        json.getJSONObject("current").optDouble("us_aqi").takeIf { !it.isNaN() }?.roundToInt()
+        val json = JSONObject(
+            get("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=$lat&longitude=$lon" +
+                "&current=pm2_5,pm10,ozone,nitrogen_dioxide&timezone=auto")
+        )
+        val c = json.getJSONObject("current")
+        fun v(key: String) = c.optDouble(key).takeIf { !it.isNaN() }
+        listOfNotNull(
+            v("pm2_5")?.let { epaAqi(it, Pm25) },
+            v("pm10")?.let { epaAqi(it, Pm10) },
+            // Ozone and nitrogen dioxide come in µg/m³ and are graded in ppb.
+            v("ozone")?.let { epaAqi(it / 1.963, O3) },
+            v("nitrogen_dioxide")?.let { epaAqi(it / 1.88, No2) },
+        ).maxOrNull()
     }.onFailure { Log.w(TAG, "air quality unavailable", it) }.getOrNull()
+
+    /** One pollutant's part of the index: EPA's ranges, low to high, as (concentration, AQI). */
+    private fun epaAqi(conc: Double, table: List<Pair<Double, Double>>): Int? {
+        val c = conc.coerceAtLeast(0.0)
+        for (i in 1 until table.size) {
+            val (cHigh, iHigh) = table[i]
+            val (cLow, iLow) = table[i - 1]
+            if (c <= cHigh) {
+                val aqi = iLow + (iHigh - iLow) * (c - cLow) / (cHigh - cLow)
+                return Math.round(aqi).toInt().coerceIn(0, 500)
+            }
+        }
+        return 500
+    }
+
+    /** EPA's breakpoints for the pollutants the model reports, concentrations in µg/m³ except the
+     *  gases, which [epaAqi] is given in ppb. */
+    private val Pm25 = listOf(
+        0.0 to 0.0, 12.0 to 50.0, 35.4 to 100.0, 55.4 to 150.0,
+        150.4 to 200.0, 250.4 to 300.0, 500.4 to 500.0,
+    )
+    private val Pm10 = listOf(
+        0.0 to 0.0, 54.0 to 50.0, 154.0 to 100.0, 254.0 to 150.0,
+        354.0 to 200.0, 424.0 to 300.0, 604.0 to 500.0,
+    )
+    private val O3 = listOf(
+        0.0 to 0.0, 54.0 to 50.0, 70.0 to 100.0, 85.0 to 150.0, 105.0 to 200.0, 200.0 to 300.0,
+    )
+    private val No2 = listOf(
+        0.0 to 0.0, 53.0 to 50.0, 100.0 to 100.0, 360.0 to 150.0,
+        649.0 to 200.0, 1249.0 to 300.0, 2049.0 to 500.0,
+    )
 
     /**
      * A place chosen before 1.29 came from Open-Meteo's geocoder, which took 安庆 for a village in
