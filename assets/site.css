@@ -411,6 +411,11 @@ body{font-family:'Inter TV','MiSans TV','NotoKR TV',-apple-system,'PingFang SC',
   /* hero — compact; buttons one row, minimal text */
   .hero{min-height:auto;min-height:0;padding:40px 0 44px}
   .scroll-hint{display:none}
+  /* CN title on one line (mobile only) */
+  html:not([lang="en"]) .hero h1{height:auto}
+  html:not([lang="en"]) .hero h1 .slogan{font-size:clamp(32px,10.5vw,46px);line-height:1.15;white-space:nowrap}
+  html:not([lang="en"]) .hero h1 .slogan span{display:inline}
+  html:not([lang="en"]) .hero h1 .slogan span+span{margin-left:.35em}
   .hero .lead{margin-top:12px;text-wrap:initial;font-size:14px;line-height:1.55;padding:0 4px}
   .hero .lead br{display:none}
   .hero .closer{margin-top:12px;font-size:16px}
