@@ -495,7 +495,7 @@ let state = null, stateJson = '';
 
 // The language: ?lang=ru in the address, else the one picked under More (kept on the phone), else the
 // first of the phone's preferred languages that has a table, else English. Keys are in KEYS, one array of texts per language.
-const KEYS = ["screensaver", "screensaver_short", "ss_aerial", "ss_photos", "ss_clock", "focus", "focus_high", "focus_standard", "weather", "city_ph", "set", "upload_label", "feedback_h", "feedback_hint", "diag_show", "diag_copy", "diag_github", "hint_aerial", "hint_photos", "hint_clock", "g_live", "g_live_sub", "g_daily", "g_daily_sub", "g_photo", "g_builtin", "g_auto", "toast_wallpaper", "aria_delete", "confirm_delete", "wx_clear", "wx_partlycloudy", "wx_cloudy", "wx_fog", "wx_rain", "wx_snow", "wx_thunder", "wx_chosen", "wx_auto_btn", "toast_auto", "wx_guessed", "wx_none", "tag_source", "aria_rename", "toast_renamed", "toast_name_reset", "toast_rename_fail", "aria_reset_icon", "toast_icon_reset", "focus_hint_standard", "focus_hint_high", "daily_title", "daily_caption", "rotate_title", "rotate_caption", "empty_photos", "add_second", "toast_tv_updated", "sending_n", "toast_added", "toast_no_photos", "toast_send_fail", "toast_city_set", "toast_city_nf", "toast_set_fail", "toast_sending_icon", "toast_icon_set", "toast_icon_bad", "diag_collecting", "toast_diag_fail", "toast_copied", "toast_copy_manual", "language", "hint_follows", "ss_videos", "hint_videos", "videos_h", "videos_upload", "videos_hint", "videos_empty", "confirm_video_delete", "toast_videos_added", "toast_video_bad", "sending_video", "hint_system", "tab_home", "tab_more", "current_wp", "cancel", "save", "name_ph", "rename_hint", "change_icon", "this_tv", "folder_count", "folder_ph", "inputs_h", "inputs_hint", "rename_hint_app", "was_named", "arrange_hint", "arrange_unready", "hidden_h", "hidden_none", "hidden_locked", "show_app", "hide_app", "to_folder", "new_folder", "out_of_folder", "ungroup", "ungroup_confirm", "folder_hint", "toast_hidden", "toast_shown", "toast_in_folder", "toast_out_folder", "toast_ungrouped", "tab_looks", "looks_title", "show_on_home", "source_device", "source_plain", "source_device_hint", "tv_model", "sw_always", "sw_always_sub", "sw_weather", "sw_saver_time", "sw_saver_time_sub", "g_source_sub", "icon_h", "icon_library", "icon_own", "icon_custom", "toast_icon_picked", "drop_hint", "drop_sub", "drop_none", "toast_diag_paste", "wx_locate", "toast_locate_ok", "toast_locate_fail", "sw_aqi", "sw_humidity" , "crop_title_photo", "crop_title_icon", "crop_hint", "toast_crop_fail", "icon_prev", "toast_icon_prev", "conn_lost", "wx_cities", "wx_cities_hint", "city_add", "city_remove", "toast_city_added", "toast_city_removed", "toast_city_full"];
+const KEYS = ["screensaver", "screensaver_short", "ss_aerial", "ss_photos", "ss_clock", "focus", "focus_high", "focus_standard", "weather", "city_ph", "set", "upload_label", "feedback_h", "feedback_hint", "diag_show", "diag_copy", "diag_github", "hint_aerial", "hint_photos", "hint_clock", "g_live", "g_live_sub", "g_daily", "g_daily_sub", "g_photo", "g_builtin", "g_auto", "toast_wallpaper", "aria_delete", "confirm_delete", "wx_clear", "wx_partlycloudy", "wx_cloudy", "wx_fog", "wx_rain", "wx_snow", "wx_thunder", "wx_chosen", "wx_auto_btn", "toast_auto", "wx_guessed", "wx_none", "tag_source", "aria_rename", "toast_renamed", "toast_name_reset", "toast_rename_fail", "aria_reset_icon", "toast_icon_reset", "focus_hint_standard", "focus_hint_high", "daily_title", "daily_caption", "rotate_title", "rotate_caption", "empty_photos", "add_second", "toast_tv_updated", "sending_n", "toast_added", "toast_no_photos", "toast_send_fail", "toast_city_set", "toast_city_nf", "toast_set_fail", "toast_sending_icon", "toast_icon_set", "toast_icon_bad", "diag_collecting", "toast_diag_fail", "toast_copied", "toast_copy_manual", "language", "hint_follows", "ss_videos", "hint_videos", "videos_h", "videos_upload", "videos_hint", "videos_empty", "confirm_video_delete", "toast_videos_added", "toast_video_bad", "sending_video", "hint_system", "tab_home", "tab_more", "current_wp", "cancel", "save", "name_ph", "rename_hint", "change_icon", "this_tv", "folder_count", "folder_ph", "inputs_h", "inputs_hint", "rename_hint_app", "was_named", "arrange_hint", "arrange_unready", "hidden_h", "hidden_none", "hidden_locked", "show_app", "hide_app", "to_folder", "new_folder", "out_of_folder", "ungroup", "ungroup_confirm", "folder_hint", "toast_hidden", "toast_shown", "toast_in_folder", "toast_out_folder", "toast_ungrouped", "tab_looks", "looks_title", "show_on_home", "source_device", "source_plain", "source_device_hint", "tv_model", "sw_always", "sw_always_sub", "sw_weather", "sw_saver_time", "sw_saver_time_sub", "g_source_sub", "icon_h", "icon_library", "icon_own", "icon_custom", "toast_icon_picked", "drop_hint", "drop_sub", "drop_none", "toast_diag_paste", "wx_locate", "toast_locate_ok", "toast_locate_fail", "sw_aqi", "sw_humidity" , "crop_title_photo", "crop_title_icon", "crop_hint", "toast_crop_fail", "icon_prev", "toast_icon_prev", "conn_lost", "wx_cities", "wx_cities_hint", "city_add", "city_remove", "toast_city_added", "toast_city_removed", "toast_city_full", "locate_insecure"];
 const TEXTS = {
  "zh": [
   "屏幕保护程序",
@@ -657,6 +657,7 @@ const TEXTS = {
   "已加入：{place}",
   "已移除：{place}",
   "最多只能加 {n} 个城市",
+  "浏览器只在 https 页面提供定位，直接搜索城市即可。",
  ],
  "zh-TW": [
   "螢幕保護程式",
@@ -818,6 +819,7 @@ const TEXTS = {
   "已加入：{place}",
   "已移除：{place}",
   "最多只能加 {n} 個城市",
+  "瀏覽器只在 https 頁面提供定位，直接搜尋城市即可。",
  ],
  "ja": [
   "スクリーンセーバー",
@@ -979,6 +981,7 @@ const TEXTS = {
   "追加しました：{place}",
   "削除しました：{place}",
   "追加できるのは {n} つまでです",
+  "位置情報は https のページでのみ使えます。都市を検索してください。",
  ],
  "ko": [
   "화면 보호기",
@@ -1140,6 +1143,7 @@ const TEXTS = {
   "추가됨: {place}",
   "삭제됨: {place}",
   "최대 {n}개까지 추가할 수 있습니다",
+  "위치는 https 페이지에서만 사용할 수 있습니다. 도시를 검색하세요.",
  ],
  "en": [
   "Screensaver",
@@ -1301,6 +1305,7 @@ const TEXTS = {
   "Added: {place}",
   "Removed: {place}",
   "Up to {n} cities",
+  "Your browser only shares a location on https pages — search for the city instead.",
  ],
  "ru": [
   "Заставка",
@@ -1462,6 +1467,7 @@ const TEXTS = {
   "Добавлено: {place}",
   "Удалено: {place}",
   "Можно добавить не больше {n} городов",
+  "Браузер даёт геопозицию только на https-страницах — найдите город поиском.",
  ],
  "uk": [
   "Заставка",
@@ -1623,6 +1629,7 @@ const TEXTS = {
   "Додано: {place}",
   "Видалено: {place}",
   "Можна додати не більше {n} міст",
+  "Браузер надає геопозицію лише на https-сторінках — знайдіть місто пошуком.",
  ],
  "kk": [
   "Экран қорғаушы",
@@ -1784,6 +1791,7 @@ const TEXTS = {
   "Қосылды: {place}",
   "Жойылды: {place}",
   "{n} қаладан артық қосуға болмайды",
+  "Браузер геолокацияны тек https беттерде береді — қаланы іздеу арқылы табыңыз.",
  ]
 };
 const LANGS = Object.keys(TEXTS);
@@ -2461,8 +2469,15 @@ $('#wxLocate').onclick = async () => {
     take(next); toast(t('toast_locate_ok', { place: placeText(next.weather) }));
   };
   try {
-    // The phone's own fix only: behind a proxy an address hands back the proxy's town, and the
-    // phone is the one thing in the room that knows where the room is (the owner, 11-03).
+    // A browser shares a phone's own fix only on a secure page (https): this one is served from the
+    // TV over http, so there the tap says so and hands the owner to the search field instead of
+    // guessing from the address, which behind a proxy is the proxy's town (the owner, 11-03).
+    if (!window.isSecureContext) {
+      toast(t('locate_insecure'));
+      const input = $('#city'); input.focus();
+      btn.disabled = false;
+      return;
+    }
     if (!navigator.geolocation) throw new Error('no geolocation');
     const pos = await new Promise((ok, no) => navigator.geolocation.getCurrentPosition(ok, no, { enableHighAccuracy: true, timeout: 15000, maximumAge: 600000 }));
     await located(pos.coords.latitude, pos.coords.longitude, Math.round(pos.coords.accuracy));
