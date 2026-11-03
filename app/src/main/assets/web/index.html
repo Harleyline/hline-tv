@@ -2469,13 +2469,15 @@ $('#wxLocate').onclick = async () => {
     take(next); toast(t('toast_locate_ok', { place: placeText(next.weather) }));
   };
   try {
-    // A browser shares a phone's own fix only on a secure page (https): this one is served from the
-    // TV over http, so there the tap says so and hands the owner to the search field instead of
-    // guessing from the address, which behind a proxy is the proxy's town (the owner, 11-03).
+    // Over plain http a browser will not read the phone's location at all: the tap moves the page
+    // to its https twin (same token, five ports up), where the certificate is asked about once and
+    // the location can be read (the owner, 11-03: no dead ends — the search stays where it was).
     if (!window.isSecureContext) {
-      toast(t('locate_insecure'));
-      const input = $('#city'); input.focus();
-      btn.disabled = false;
+      const m = location.host.match(/^(.+):(\d+)$/);
+      const host = m ? m[1] : location.hostname;
+      const port = (m ? parseInt(m[2], 10) : 80) + 5;
+      try { sessionStorage.setItem('wx-locate-want', '1'); } catch (e) {}
+      location.href = `https://${host}:${port}${location.pathname}${location.hash}`;
       return;
     }
     if (!navigator.geolocation) throw new Error('no geolocation');
@@ -2488,6 +2490,14 @@ $('#wxLocate').onclick = async () => {
   }
   btn.disabled = false;
 };
+// Arrived from the plain page for the sake of the location: the tap is made again, once, so the
+// reader only ever presses the button a single time.
+try {
+  if (window.isSecureContext && sessionStorage.getItem('wx-locate-want') === '1') {
+    sessionStorage.removeItem('wx-locate-want');
+    setTimeout(() => $('#wxLocate').click(), 400);
+  }
+} catch (e) { /* a page kept from another session */ }
 
 let iconFor = null;
 $('#iconFile').onchange = async e => {

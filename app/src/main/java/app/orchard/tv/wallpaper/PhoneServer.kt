@@ -594,7 +594,7 @@ class PhoneServer private constructor(private val context: Context, private val 
          */
         @Synchronized
         fun listen(context: Context): PhoneServer? {
-            running?.let { if (it.isAlive) { listenSecure(context); return it } }
+            running?.let { if (it.isAlive) { listenSecure(context, it.listeningPort); return it } }
             // A force-stop that brings a new process up while the old socket is still being torn
             // down leaves the port in use for a few seconds: try again before giving up (2.10).
             // Something else may hold the port for good (another app on the TV, or a firmware
@@ -610,7 +610,7 @@ class PhoneServer private constructor(private val context: Context, private val 
                     }.onFailure { cause = it }.getOrNull()
                     if (server != null) {
                         if (port != PORT) Log.i(TAG, "listening on $port: $PORT was taken")
-                        listenSecure(context)
+                        listenSecure(context, port)
                         return server
                     }
                 }
@@ -622,8 +622,10 @@ class PhoneServer private constructor(private val context: Context, private val 
 
         /** The page over https, beside the plain one: a failure here leaves the plain address. */
         @Synchronized
-        private fun listenSecure(context: Context) {
+        private fun listenSecure(context: Context, besidePort: Int) {
             secureRunning?.let { if (it.isAlive) return }
+            // The secure page takes the port five above the plain one, so the page can send its
+            // reader from one to the other by arithmetic alone.
             // The certificate and the key ride along as DER: a PKCS12 made by a desktop keytool
             // carries key protection Android's own reader does not answer (PBKDF2, the owner's TV).
             val factory = runCatching {
@@ -640,7 +642,12 @@ class PhoneServer private constructor(private val context: Context, private val 
                 keys.init(store, KEY_PASS.toCharArray())
                 SSLContext.getInstance("TLS").apply { init(keys.keyManagers, null, null) }.serverSocketFactory
             }.onFailure { Log.w(TAG, "no certificate for the secure page", it) }.getOrNull() ?: return
-            for (port in SECURE_PORTS) {
+            val wanted = besidePort + 5
+            val ordered = SECURE_PORTS.toMutableList().apply {
+                val i = indexOf(wanted)
+                if (i > 0) { removeAt(i); add(0, wanted) }
+            }
+            for (port in ordered) {
                 val server = runCatching {
                     PhoneServer(context.applicationContext, token(context), port).also {
                         it.makeSecure(factory, null)
@@ -660,11 +667,9 @@ class PhoneServer private constructor(private val context: Context, private val 
         fun start(context: Context): String? {
             val ip = lanAddress(context) ?: return null
             val server = listen(context) ?: return null
-            // https where it could be had: only a secure page may read the phone's own location.
-            secureRunning?.takeIf { it.isAlive }?.let { that ->
-                val port = runCatching { that.listeningPort }.getOrDefault(SECURE_PORT)
-                return "https://$ip:$port/${that.token}/".also { DiagLog.i("phone page: $it") }
-            }
+            // The plain address in the QR code: it opens with no certificate warning, which a
+            // self-signed page cannot avoid. The page over https stands beside it for the one
+            // button that needs the phone's own location; the page itself sends the reader there.
             val port = runCatching { server.listeningPort }.getOrDefault(PORT)
             return "http://$ip:$port/${server.token}/".also { DiagLog.i("phone page: $it") }
         }
