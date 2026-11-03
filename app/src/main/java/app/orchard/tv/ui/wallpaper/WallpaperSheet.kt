@@ -94,6 +94,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import app.orchard.tv.BuildConfig
 import app.orchard.tv.R
 import app.orchard.tv.system.UsageReport
@@ -1789,8 +1790,13 @@ private fun PhoneCard(url: String?, qr: ImageBitmap?) {
         )
         if (url != null) {
             Spacer(Modifier.height(6.dp))
-            // The whole address, token and all, to type into a computer's browser.
-            BasicText(url.removePrefix("http://"), style = Type.Caption.copy(color = Palette.SecondaryLabel))
+            // The whole address, token and all, to type into a computer's browser — one line, in a
+            // size that holds it: wrapped over two it read like two addresses (the owner, 11-03).
+            BasicText(
+                url.removePrefix("http://").removePrefix("https://").trimEnd('/'),
+                style = Type.Caption.copy(color = Palette.SecondaryLabel, fontSize = 10.sp),
+                maxLines = 2,
+            )
         }
     }
 }
@@ -1822,7 +1828,11 @@ private fun WeatherPhoneCard(url: String?, qr: ImageBitmap?) {
         )
         if (url != null) {
             Spacer(Modifier.height(6.dp))
-            BasicText(url.removePrefix("http://"), style = Type.Caption.copy(color = Palette.SecondaryLabel))
+            BasicText(
+                url.removePrefix("http://").removePrefix("https://").trimEnd('/'),
+                style = Type.Caption.copy(color = Palette.SecondaryLabel, fontSize = 10.sp),
+                maxLines = 2,
+            )
         }
     }
 }
