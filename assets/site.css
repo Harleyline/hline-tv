@@ -394,28 +394,87 @@ body{font-family:'Inter TV','MiSans TV','NotoKR TV',-apple-system,'PingFang SC',
 
 /* ---- mobile layout fixes (<=760px only; desktop untouched) ---- */
 @media(max-width:760px){
-  .hero{--hz:clamp(42px,11.5vw,56px)}
-  .hero h1 .slogan span:first-child{letter-spacing:.08em;text-indent:.08em}
-  .hero h1 .slogan span+span{letter-spacing:.04em;text-indent:.04em}
+  /* header — compact, nothing wraps */
+  .brand img{height:26px;width:auto}
+  nav{gap:8px}
+  nav a,.lang-switch a,nav a.cta{white-space:nowrap}
+  .lang-switch{padding:2px}
+  .lang-switch a{padding:5px 9px;font-size:12px}
+  nav a.cta{padding:7px 16px;font-size:13px}
+
+  /* hero — own mobile scale */
+  .hero{--hz:clamp(34px,9.8vw,48px)}
+  .hero h1 .slogan span:first-child{letter-spacing:.06em;text-indent:.06em}
+  .hero h1 .slogan span+span{letter-spacing:.03em;text-indent:.03em}
   .hero .lead{text-wrap:initial;font-size:15px;line-height:1.7;padding:0 6px}
   .hero .lead br{display:none}
-  .actions{gap:12px}
-  .actions .btn{min-width:0;max-width:100%;padding:15px 24px;font-size:16px}
-  .actions .btn.primary{padding-left:28px;padding-right:28px}
-  .actions .btn .btn-name{font-size:17px}
-  .hero-meta{font-size:10.5px;letter-spacing:.08em}
+  .hero .closer{margin-top:24px;font-size:clamp(18px,5vw,21px)}
+  .actions{gap:10px;margin-top:28px}
+  .actions .btn{min-width:0;max-width:100%;padding:12px 22px;font-size:15px;gap:6px}
+  .actions .btn.primary{padding-left:26px;padding-right:26px}
+  .actions .btn.primary .btn-logo{width:20px;height:20px}
+  .actions .btn.primary .btn-name{font-size:15.5px}
+  .actions .btn.primary svg{width:18px;height:18px}
+  .hero-meta{margin-top:18px;font-size:10.5px;letter-spacing:.08em}
   .hero-meta span+span::before{margin:0 7px}
-  nav{gap:12px}
-  nav a.cta{padding:7px 14px;font-size:13px}
-  .stat b{font-size:26px}
-  .stat span{font-size:13px}
-  .section-far{padding-top:110px}
-  .section-gap{padding-top:96px}
-  .rows{margin-top:44px;gap:72px}
-  #features .rows{margin-top:44px}
-  .panel{padding:26px 22px}
-  .langs{gap:9px;margin-top:36px}
-  .langs span{padding:10px 20px;font-size:15.5px}
-  .term pre{font-size:12px;padding:16px;white-space:pre-wrap;overflow-wrap:anywhere}
-  .term-h{padding:14px 16px 0;font-size:15.5px}
+
+  /* stats */
+  .stat{padding:22px 12px}
+  .stat svg{width:20px;height:20px;margin-bottom:10px}
+  .stat b{font-size:24px}
+  .stat span{font-size:12.5px}
+
+  /* section headings — mobile type scale */
+  h2{font-size:clamp(24px,6.6vw,30px);line-height:1.2}
+  .eyebrow{font-size:10.5px}
+  .section-sub{margin-top:14px;font-size:15.5px;line-height:1.7}
+
+  /* before/after panels */
+  .compare{margin-top:36px}
+  .panel{padding:22px 20px}
+  .panel h3{font-size:18px}
+  .panel .tag{font-size:11px}
+  .panel ul{margin-top:14px}
+  .panel li{padding-left:25px;margin-bottom:11px;font-size:15px;line-height:1.55}
+
+  /* feature rows */
+  .rows{margin-top:40px;gap:64px}
+  #features .rows{margin-top:40px}
+  .row h3{font-size:clamp(20px,5.6vw,24px)}
+  .row p{margin-top:12px;font-size:15.5px;line-height:1.7}
+  .row-index{margin-bottom:12px}
+  .tv-note{font-size:14px}
+
+  /* statement + languages */
+  .section-far{padding-top:96px}
+  .section-gap{padding-top:84px}
+  .statement h3{font-size:clamp(22px,6vw,26px)}
+  .statement p{font-size:15.5px}
+  .langs{gap:8px;margin-top:30px}
+  .langs span{padding:9px 18px;font-size:15px}
+
+  /* devices */
+  .dev-groups{margin-top:30px}
+  .dev-row{gap:9px;padding:10px 0}
+  .dev-row h4{font-size:14.5px}
+  .chips{gap:7px}
+  .chip{font-size:12.5px;padding:7px 13px;letter-spacing:.06em}
+
+  /* install */
+  .steps{margin-top:32px;gap:14px}
+  .term-h{padding:13px 15px 0;font-size:15px}
+  .term pre{font-size:12px;padding:14px 15px;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}
+  .step-copy-body{padding:16px 18px 18px}
+  .step-copy h3{font-size:15.5px}
+  .step-copy p{font-size:14.5px}
+  .dl-meta{gap:8px;margin-top:20px}
+  .dl-meta span{font-size:11px}
+
+  /* faq + footer */
+  .faq{margin-top:32px}
+  details{padding:17px 0}
+  summary{font-size:15.5px;gap:14px}
+  summary::after{font-size:16px}
+  details p{margin-top:10px;font-size:14.5px}
+  footer{margin-top:90px;padding:32px 0 52px;font-size:13px}
 }
