@@ -422,8 +422,8 @@
   <h2 data-i18n="weather"></h2>
   <div class="list">
     <label class="item"><span class="txt" data-i18n="sw_weather"></span><input class="switch" type="checkbox" id="swWeather" data-setting="showWeather"></label>
-    <label class="item"><span class="txt" data-i18n="sw_aqi"></span><input class="switch" type="checkbox" id="swAqi" data-setting="showAqi"></label>
-    <label class="item"><span class="txt" data-i18n="sw_humidity"></span><input class="switch" type="checkbox" id="swHumidity" data-setting="showHumidity"></label>
+    <label class="item" id="rowAqi"><span class="txt" data-i18n="sw_aqi"></span><input class="switch" type="checkbox" id="swAqi" data-setting="showAqi"></label>
+    <label class="item" id="rowHumidity"><span class="txt" data-i18n="sw_humidity"></span><input class="switch" type="checkbox" id="swHumidity" data-setting="showHumidity"></label>
     <div class="item wx"><b id="wxNow">—</b><span id="wxPlace"></span></div>
     <form class="item field" id="cityForm">
       <input id="city" type="text" data-i18n-placeholder="city_ph" enterkeyhint="search" autocomplete="off">
@@ -2291,6 +2291,11 @@ function renderCities() {
 }
 function renderMore() {
   $('#swWeather').checked = state.showWeather !== false;
+  // No weather, nothing to put beside it: the air's index and the humidity are only ever shown
+  // with a reading, so their switches go with it (the owner, 11-03).
+  const weatherOn = state.showWeather !== false;
+  $('#rowAqi').hidden = !weatherOn;
+  $('#rowHumidity').hidden = !weatherOn;
   // The air's index and the humidity beside it: the same two switches as Personalize (2.16).
   $('#swAqi').checked = !!state.showAqi;
   $('#swHumidity').checked = !!state.showHumidity;
@@ -2446,32 +2451,9 @@ $('#cityForm').onsubmit = e => {
   searchCities(q);
 };
 
-// The TV has no location of its own (no GPS, no network location on a TV), and the address its
-// traffic leaves by is the proxy's town behind one. The phone knows where it is: one tap and the
-// weather stands for the town it is in (2.07).
-// Browsers only hand out the Geolocation permission on secure pages, and this one is served over
-// plain http://192.168… — so there the tap falls back to the phone's public IP (the router's town,
-// the same guess the TV makes for itself), which is close enough for weather (the owner, 11-02).
-async function ipGuess() {
-  // Tried in order, awaited one by one: a promise is always truthy, so `a() || b()` would never
-  // reach the second source. ipapi.co started rate-limiting in 2026, so it is not used at all.
-  const sources = [
-    ['https://ipwho.is/', j => ({ lat: Number(j.latitude), lon: Number(j.longitude) })],
-    ['https://get.geojs.io/v1/ip/geo.json', j => ({ lat: Number(j.latitude), lon: Number(j.longitude) })],
-    ['http://ip-api.com/json/?fields=status,lat,lon', j => j.status === 'success' ? { lat: Number(j.lat), lon: Number(j.lon) } : null]
-  ];
-  for (const [url, pick] of sources) {
-    const c = new AbortController(); const t = setTimeout(() => c.abort(), 8000);
-    try {
-      const r = await fetch(url, { signal: c.signal });
-      if (r.ok) {
-        const ll = pick(await r.json());
-        if (ll && Number.isFinite(ll.lat) && Number.isFinite(ll.lon) && ll.lat && ll.lon) return ll;
-      }
-    } catch (err) { /* next source */ } finally { clearTimeout(t); }
-  }
-  return null;
-}
+// The phone's own fix, and nothing else: behind a proxy an address hands back the proxy's town, and
+// a tap that quietly moved the weather to another country is worse than one that says it could not
+// find the phone (the owner, 11-03). The city is then named by the search above.
 $('#wxLocate').onclick = async () => {
   const btn = $('#wxLocate'); btn.disabled = true;
   const located = async (lat, lon, acc) => {
@@ -2479,17 +2461,16 @@ $('#wxLocate').onclick = async () => {
     take(next); toast(t('toast_locate_ok', { place: placeText(next.weather) }));
   };
   try {
-    if (window.isSecureContext && navigator.geolocation) {
-      const pos = await new Promise((ok, no) => navigator.geolocation.getCurrentPosition(ok, no, { enableHighAccuracy: true, timeout: 15000, maximumAge: 600000 }));
-      await located(pos.coords.latitude, pos.coords.longitude, Math.round(pos.coords.accuracy));
-      btn.disabled = false; return;
-    }
-  } catch (err) { /* fall through to the network guess */ }
-  try {
-    const ll = await ipGuess();
-    if (!ll) throw new Error('no guess');
-    await located(ll.lat, ll.lon, 40000);
-  } catch (err) { toast(t('toast_locate_fail')); }
+    // The phone's own fix only: behind a proxy an address hands back the proxy's town, and the
+    // phone is the one thing in the room that knows where the room is (the owner, 11-03).
+    if (!navigator.geolocation) throw new Error('no geolocation');
+    const pos = await new Promise((ok, no) => navigator.geolocation.getCurrentPosition(ok, no, { enableHighAccuracy: true, timeout: 15000, maximumAge: 600000 }));
+    await located(pos.coords.latitude, pos.coords.longitude, Math.round(pos.coords.accuracy));
+  } catch (err) {
+    // Nothing found: say so, and let the search above name the city — a guessed town from the
+    // proxy would be worse than none.
+    toast(t('toast_locate_fail'));
+  }
   btn.disabled = false;
 };
 
