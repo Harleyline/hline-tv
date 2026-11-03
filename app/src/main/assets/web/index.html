@@ -2505,6 +2505,12 @@ $('#wxLocate').onclick = async () => {
       // The mark travels in the address: sessionStorage belongs to an origin, and the secure page
       // is another one (scheme and port both change), so a mark left behind would never be read
       // (the owner, 11-03: one tap must be enough).
+      const hint = $('#wxLocateHint');
+      hint.textContent = t('locate_tap');
+      hint.hidden = false;
+      // The move can be turned down at the certificate's warning, and the page then stays here:
+      // the button comes back, and the hint above says what the next press is for.
+      setTimeout(() => { btn.disabled = false; }, 1200);
       location.href = `https://${host}:${port}${location.pathname}?locate=1${location.hash}`;
       return;
     }
