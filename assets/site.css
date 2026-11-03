@@ -409,11 +409,9 @@ body{font-family:'Inter TV','MiSans TV','NotoKR TV',-apple-system,'PingFang SC',
   .lang-switch a{padding:5px 9px;font-size:12px}
 
   /* hero — compact; buttons one row, minimal text */
-  .hero{--hz:clamp(30px,8.6vw,40px);min-height:auto;min-height:0;padding:40px 0 44px}
+  .hero{min-height:auto;min-height:0;padding:40px 0 44px}
   .scroll-hint{display:none}
-  .hero h1{height:calc(var(--hz)*2.4)}
-  .hero h1 .slogan span:first-child{letter-spacing:.06em;text-indent:.06em}
-  .hero h1 .slogan span+span{letter-spacing:.03em;text-indent:.03em}
+  /* hero title typography synced with desktop (weight/size/typeface) — layout only is mobile-specific */
   .hero .lead{margin-top:12px;text-wrap:initial;font-size:14px;line-height:1.55;padding:0 4px}
   .hero .lead br{display:none}
   .hero .closer{margin-top:12px;font-size:16px}
@@ -440,6 +438,7 @@ body{font-family:'Inter TV','MiSans TV','NotoKR TV',-apple-system,'PingFang SC',
   /* section rhythm — big desktop paddings gone */
   section{padding:44px 0 0}
   #why{padding-top:34px}
+  #features{padding-top:34px}
   .section-gap{padding-top:44px}
   .section-far{padding-top:48px}
 
@@ -448,13 +447,14 @@ body{font-family:'Inter TV','MiSans TV','NotoKR TV',-apple-system,'PingFang SC',
   .eyebrow{font-size:9.5px}
   .section-sub{margin-top:8px;font-size:14px;line-height:1.55}
 
-  /* before/after panels */
-  .compare{margin-top:18px;gap:12px}
-  .panel{padding:16px 14px}
-  .panel h3{font-size:15.5px}
-  .panel .tag{font-size:10px}
+  /* before/after — side-by-side on mobile */
+  .compare{margin-top:18px;gap:10px;grid-template-columns:1fr 1fr}
+  .panel{padding:14px 12px}
+  .panel h3{font-size:14px}
+  .panel .tag{font-size:9.5px}
   .panel ul{margin-top:9px}
-  .panel li{padding-left:21px;margin-bottom:7px;font-size:13.5px;line-height:1.5}
+  .panel li{padding-left:17px;margin-bottom:7px;font-size:12px;line-height:1.45}
+  .panel li::before{width:11px;height:11px;top:2px;background-size:11px 11px}
 
   /* feature rows */
   .rows{margin-top:24px;gap:30px}
@@ -464,6 +464,9 @@ body{font-family:'Inter TV','MiSans TV','NotoKR TV',-apple-system,'PingFang SC',
   .row p{margin-top:7px;font-size:14px;line-height:1.55}
   .row-index{margin-bottom:7px}
   .row .row-index svg{width:12px;height:12px}
+  /* 01 weather mockup + 02 wallpaper stack: slightly shorter, crop top/bottom */
+  .row .tvmock.tv-weather{aspect-ratio:2/1}
+  .row .row-media picture img{aspect-ratio:2/1;object-fit:cover}
 
   /* in use + languages */
   .gallery-wide{margin-top:16px}
