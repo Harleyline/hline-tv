@@ -333,7 +333,7 @@
     <string name="st_feedback_failed_hint">Отправить не удалось. Проверьте сеть и попробуйте ещё раз.</string>
     <string name="st_version_footer">HLine TV %1$s (%2$d)</string>
     <string name="st_cities_phone_title">Сканируйте, чтобы добавить город</string>
-    <string name="st_cities_phone_body">Отсканируйте код телефоном, найдите любой город мира и коснитесь его.</string>
+    <string name="st_cities_phone_body">Отсканируйте код телефоном, чтобы найти и добавить любой город мира.</string>
     <string name="st_cities_auto">По сети</string>
     <string name="st_cities_auto_busy">Определение…</string>
     <string name="st_cities_auto_done">Местоположение найдено</string>

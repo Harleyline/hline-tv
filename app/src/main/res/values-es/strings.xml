@@ -347,7 +347,7 @@
     <string name="st_feedback_failed_hint">No se ha podido enviar; comprueba la red e inténtalo otra vez.</string>
     <string name="st_version_footer">HLine TV %1$s (%2$d)</string>
     <string name="st_cities_phone_title">Escanea para añadir una ciudad</string>
-    <string name="st_cities_phone_body">Escanea con tu móvil, busca cualquier ciudad del mundo y tócala para aplicarla.</string>
+    <string name="st_cities_phone_body">Escanea con tu móvil para buscar y añadir ciudades de todo el mundo.</string>
     <string name="st_cities_auto">Por red</string>
     <string name="st_cities_auto_busy">Localizando…</string>
     <string name="st_cities_auto_done">Ubicación encontrada</string>

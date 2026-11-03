@@ -631,18 +631,32 @@ object Weather {
             URLEncoder.encode(page, "UTF-8")
         val res = runCatching { JSONArray(get(url, agent = "HLineTV/1.6 (Android TV launcher)")) }
             .onFailure { Log.w(TAG, "town search failed", it) }.getOrDefault(JSONArray())
+        // The name answers in the script the query was typed in: a town asked for as 서울 is
+        // answered as 서울, whatever the page speaks — the same rule as reading 香港 back as Hong
+        // Kong when asked for in Latin letters. A query in Chinese or Japanese characters stands
+        // for the page's own language, which both of them read.
+        val script = when {
+            q.any { it in '\uAC00'..'\uD7A3' } -> "ko" // Hangul
+            q.any { it in '\u3040'..'\u30FF' } -> "ja" // kana
+            q.any { it in '\u0E00'..'\u0E7F' } -> "th" // Thai
+            q.any { it in '\u0400'..'\u04FF' } -> "ru" // Cyrillic
+            q.any { it in '\u0600'..'\u06FF' } -> "ar" // Arabic
+            else -> page
+        }
         for (i in 0 until res.length()) {
             val r = res.optJSONObject(i) ?: continue
             val names = r.optJSONObject("namedetails") ?: JSONObject()
             // Some tags list alternatives ("东京都/東京都"); the first is the one to show.
             fun tag(key: String) = names.optString(key).substringBefore('/').trim()
+            fun one(s: String) = s.substringBefore('/').trim()
             val lat = r.optString("lat").toDoubleOrNull() ?: continue
             val lon = r.optString("lon").toDoubleOrNull() ?: continue
-            val local = tidyTown(tag("name:$page").ifBlank { tag("name:en") }.ifBlank { tag("name") }
-                .ifBlank { r.optString("name") })
+            val local = tidyTown(tag("name:$script").ifBlank { tag("name:$page").ifBlank { tag("name:en") } }
+                .ifBlank { tag("name").ifBlank { r.optString("name") } })
             val ascii = tidyTown(tag("name:en").ifBlank { r.optString("name") })
             val address = r.optJSONObject("address") ?: JSONObject()
-            val where = listOf(address.optString("state"), address.optString("country"))
+            // The country says itself twice in some languages ("韩国 / 南韩"): one of them is enough.
+            val where = listOf(one(address.optString("state")), one(address.optString("country")))
                 .filter { it.isNotBlank() }.distinct().joinToString(" · ")
             hits.put(JSONObject()
                 .put("lat", lat)
@@ -654,14 +668,12 @@ object Weather {
         return hits
     }
 
-    /** A town without the rank on it: 서울특별시 reads 서울, 東京都 reads 東京. */
-    private fun tidyTown(name: String): String {
-        for (suffix in listOf("특별자치시", "특별자치도", "특별시", "광역시")) {
-            if (name.endsWith(suffix) && name.length > suffix.length) return name.dropLast(suffix.length)
-        }
-        if (name.length > 2 && (name.endsWith("市") || name.endsWith("都"))) return name.dropLast(1)
-        return name
-    }
+    /** A town without the rank on it: 서울특별시 reads 서울. No guessing beyond the known ranks —
+     *  a blind cut turned 首尔特别市 into 首尔特别 (the owner, 11-03). */
+    private fun tidyTown(name: String): String =
+        listOf("특별자치시", "특별자치도", "광역시", "특별시")
+            .firstOrNull { name.endsWith(it) && name.length > it.length }
+            ?.let { name.dropLast(it.length) } ?: name
 
     /**
      * A city picked on the phone out of [search]'s answers: its point and its names stand as the

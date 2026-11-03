@@ -340,7 +340,7 @@
     <string name="st_feedback_failed_hint">送信できませんでした。ネットワークを確認してもう一度お試しください。</string>
     <string name="st_version_footer">HLine TV %1$s（%2$d）</string>
     <string name="st_cities_phone_title">スキャンして都市を追加</string>
-    <string name="st_cities_phone_body">スマホでスキャンして世界の都市を検索し、タップするだけで設定できます。</string>
+    <string name="st_cities_phone_body">スマホでスキャンして世界の都市を検索・追加できます。</string>
     <string name="st_cities_auto">ネットワーク位置情報</string>
     <string name="st_cities_auto_busy">位置を取得中…</string>
     <string name="st_cities_auto_done">位置を取得しました</string>

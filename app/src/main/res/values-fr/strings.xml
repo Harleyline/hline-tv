@@ -340,7 +340,7 @@
     <string name="st_feedback_failed_hint">L\'envoi a échoué. Vérifiez le réseau et réessayez.</string>
     <string name="st_version_footer">HLine TV %1$s (%2$d)</string>
     <string name="st_cities_phone_title">Scannez pour ajouter une ville</string>
-    <string name="st_cities_phone_body">Scannez avec votre téléphone, cherchez n’importe quelle ville et touchez-la pour l’appliquer.</string>
+    <string name="st_cities_phone_body">Scannez avec votre téléphone pour chercher et ajouter des villes du monde entier.</string>
     <string name="st_cities_auto">Par le réseau</string>
     <string name="st_cities_auto_busy">Localisation…</string>
     <string name="st_cities_auto_done">Position trouvée</string>

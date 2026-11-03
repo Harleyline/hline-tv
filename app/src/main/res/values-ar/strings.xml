@@ -347,7 +347,7 @@
     <string name="st_feedback_failed_hint">لم يتم الإرسال؛ تحقق من الشبكة وحاول مرة أخرى.</string>
     <string name="st_version_footer">HLine TV %1$s (%2$d)</string>
     <string name="st_cities_phone_title">امسح الرمز لإضافة مدينة</string>
-    <string name="st_cities_phone_body">امسح الرمز بهاتفك وابحث عن أي مدينة في العالم ثم المسها لتعيينها.</string>
+    <string name="st_cities_phone_body">امسح الرمز بهاتفك للبحث عن أي مدينة في العالم وإضافتها.</string>
     <string name="st_cities_auto">عبر الشبكة</string>
     <string name="st_cities_auto_busy">جارٍ تحديد الموقع…</string>
     <string name="st_cities_auto_done">تم تحديد الموقع</string>

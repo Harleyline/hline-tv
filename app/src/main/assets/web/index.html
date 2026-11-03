@@ -198,12 +198,12 @@
     box-shadow: 0 14px 34px rgba(0,0,0,.55);
     -webkit-backdrop-filter: saturate(180%) blur(22px); backdrop-filter: saturate(180%) blur(22px);
   }
-  /* The answers to a city search, in a sheet of their own: at the end of a long page they fell
-     behind the tab bar, so they stand over the page and above the tabs (the owner, 11-03). */
+  /* The answers to a city search, in a sheet of their own, hanging right under the field they
+     answer to — wherever the page is scrolled to, over everything behind it (the owner, 11-03). */
   #cityHits {
-    position: fixed; left: 50%; transform: translateX(-50%); z-index: 60;
-    width: min(calc(100% - 32px), 688px); bottom: calc(var(--tabbar) + 10px); margin: 0;
-    max-height: min(52vh, 430px); overflow-y: auto; -webkit-overflow-scrolling: touch;
+    position: absolute; left: 50%; transform: translateX(-50%); z-index: 60;
+    width: min(calc(100% - 32px), 688px); margin: 0;
+    max-height: 430px; overflow-y: auto; -webkit-overflow-scrolling: touch;
     background: var(--card2); border-radius: 18px; border: 1px solid rgba(255,255,255,.1);
     box-shadow: 0 20px 48px rgba(0,0,0,.6);
   }
@@ -2349,20 +2349,23 @@ document.querySelectorAll('#focus [data-style]').forEach(b => b.onclick = async 
 let cityTimer = null, cityHits = [], cityAsked = '';
 // A search never puts a town on by itself: the answers wait, and a tap on one sets it (the owner,
 // 11-03). Nothing is applied until the reader has seen the list.
-// The keyboard hides the bottom of the page, the tab bar with it: while it is up, the answers
-// stand over what is left of the view; when it is down, they stand over the tab bar.
+// The answers hang right under the field they answer to, and stop above the keyboard when it is
+// up; a scroll of the page carries them along, since they are placed in the page's own space.
 function placeHits() {
   const b = $('#cityHits');
   if (b.hidden) return;
+  const f = $('#cityForm').getBoundingClientRect();
+  b.style.top = `${Math.round(f.bottom + window.scrollY + 8)}px`;
   const vv = window.visualViewport;
-  const over = vv ? Math.round(window.innerHeight - vv.height - vv.offsetTop) : 0;
-  b.style.bottom = over > 60 ? `${over + 10}px` : '';
+  const kb = vv ? Math.round(window.innerHeight - vv.height - vv.offsetTop) : 0;
+  const room = Math.max(140, Math.round(window.innerHeight - f.bottom - kb - 14));
+  b.style.maxHeight = `${Math.min(430, room)}px`;
 }
 if (window.visualViewport) {
   window.visualViewport.addEventListener('resize', placeHits);
   window.visualViewport.addEventListener('scroll', placeHits);
 }
-function hideHits() { clearTimeout(cityTimer); cityHits = []; const b = $('#cityHits'); b.hidden = true; b.style.bottom = ''; b.replaceChildren(); }
+function hideHits() { clearTimeout(cityTimer); cityHits = []; const b = $('#cityHits'); b.hidden = true; b.style.top = ''; b.style.maxHeight = ''; b.replaceChildren(); }
 function renderHits() {
   const b = $('#cityHits'); b.replaceChildren();
   if (!cityHits.length) {
