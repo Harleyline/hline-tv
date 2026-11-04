@@ -118,14 +118,17 @@ document.addEventListener('contextmenu', (e) => {
   const langs = document.querySelector('.langs');
   if (!langs || !('ontouchstart' in window)) return;
   const spans = Array.from(langs.querySelectorAll('span'));
+  const rects = () => spans.map(sp => sp.getBoundingClientRect());
   let hot = -1;
   function setHot(i){
     if (i === hot) return;
     hot = i;
+    const rs = rects();
+    const sameRow = k => i > -1 && k > -1 && Math.abs((rs[k].top + rs[k].height/2) - (rs[i].top + rs[i].height/2)) < rs[i].height * 0.8;
     spans.forEach((sp, j) => {
       sp.classList.toggle('t-hot', j === i);
-      sp.classList.toggle('t-near-l', i > -1 && j === i - 1);
-      sp.classList.toggle('t-near-r', i > -1 && j === i + 1);
+      sp.classList.toggle('t-near-l', sameRow(j) && j === i - 1);
+      sp.classList.toggle('t-near-r', sameRow(j) && j === i + 1);
     });
   }
   function pick(x, y){
