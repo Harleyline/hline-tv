@@ -86,7 +86,7 @@
   .hero h1 .slogan.en span:first-child{letter-spacing:-.035em;text-indent:0}
   .hero h1 .slogan.en span+span{font-size:1em;letter-spacing:-.035em;text-indent:0}
   /* CN title: always one line, bottom-aligned in the shared h1 box — EN/CN switch feels like a translation slide */
-  html:not([lang="en"]) .hero h1 .slogan{font-size:clamp(54px,10.4vw,150px);line-height:1.15;white-space:nowrap}
+  html:not([lang="en"]) .hero h1 .slogan{font-size:clamp(54px,10.4vw,150px);line-height:1.15;white-space:nowrap;margin-bottom:calc(var(--hz)*0.32)}
   html:not([lang="en"]) .hero h1 .slogan span{display:inline}
   html:not([lang="en"]) .hero h1 .slogan span+span{margin-left:.35em;font-size:1em}
   .hero .lead{margin:26px auto 0;max-width:660px;font-size:clamp(17px,2vw,21px);color:rgba(240,246,251,.92);line-height:1.8;text-shadow:0 2px 22px rgba(0,0,0,.65);text-wrap:balance;min-height:5.4em}
