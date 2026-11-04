@@ -483,11 +483,21 @@ object Weather {
         if (json.optString("status") != "ok") return@runCatching AirReading()
         val data = json.getJSONObject("data")
         val iaqi = data.optJSONObject("iaqi")
-        fun figure(key: String) = iaqi?.optJSONObject(key)?.optDouble("v")?.takeIf { !it.isNaN() }?.roundToInt()
+        fun figure(key: String) = iaqi?.optJSONObject(key)?.optDouble("v")?.takeIf { !it.isNaN() }
+        // The feed's own "aqi" is the Chinese scale for stations in China: 30 µg/m³ of PM2.5 read
+        // 30 there and 88 on the US scale every other app shows (the owner, 1.63). Its
+        // concentrations are the same wherever they are read, so the index is worked out here
+        // from those — the same EPA breakpoints the model's numbers go through below.
         AirReading(
-            celsius = figure("t"),
-            humidity = figure("h")?.takeIf { it in 0..100 },
-            aqi = data.optString("aqi").toDoubleOrNull()?.roundToInt()?.takeIf { it > 0 },
+            celsius = figure("t")?.roundToInt(),
+            humidity = figure("h")?.roundToInt()?.takeIf { it in 0..100 },
+            aqi = listOfNotNull(
+                figure("pm25")?.let { epaAqi(it, Pm25) },
+                figure("pm10")?.let { epaAqi(it, Pm10) },
+                // Ozone and nitrogen dioxide come in µg/m³ and are graded in ppb.
+                figure("o3")?.let { epaAqi(it / 1.963, O3) },
+                figure("no2")?.let { epaAqi(it / 1.88, No2) },
+            ).maxOrNull() ?: data.optString("aqi").toDoubleOrNull()?.roundToInt()?.takeIf { it > 0 },
         )
     }.onFailure { Log.w(TAG, "aqicn unavailable", it) }.getOrNull() ?: AirReading()
 
