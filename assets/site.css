@@ -153,7 +153,7 @@
   /* AFTER panel: each line fills exactly one row - type scales with panel width */
   .panel.good{container-type:inline-size}
   .panel.good li{white-space:nowrap;font-size:calc((100cqw - 29px)/29.2);margin-bottom:16px}
-  html[lang="en"] .panel.now li{font-size:15.5px}
+  html[lang="en"] .panel.now li{font-size:14px}
   html[lang="en"] .panel.good li{font-size:calc((100cqw - 29px)/35.5);letter-spacing:-.03em}
   @media(max-width:760px){.compare{grid-template-columns:1fr}}
   .panel{position:relative;border:1px solid var(--line-soft);border-radius:var(--radius);padding:32px 30px;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012))}
@@ -514,7 +514,7 @@ body{font-family:'Inter TV','MiSans TV','NotoKR TV',-apple-system,'PingFang SC',
   .panel ul{margin-top:9px}
   .panel li{padding-left:17px;margin-bottom:7px;font-size:12px;line-height:1.45}
   .panel.good li{white-space:normal;font-size:12px;margin-bottom:7px}
-  html[lang="en"] .panel.good li{font-size:12px;letter-spacing:0}
+  html[lang="en"] .panel.good li{font-size:14px;letter-spacing:0}
   .panel .rows-d{display:none}
   .panel .rows-m{display:block}
   .panel li::before{width:11px;height:11px;top:2px;background-size:11px 11px}
