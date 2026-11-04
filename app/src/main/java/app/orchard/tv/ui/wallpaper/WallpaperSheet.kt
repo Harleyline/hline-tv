@@ -682,11 +682,13 @@ fun WallpaperSheet(
                                 }
                             }
 
-                            // The build this TV runs, and the one press that looks for a newer one.
-                            // A section of its own: at the foot of the sheet the button sat against
-                            // the screen's bottom edge and read as part of the version line (the
-                            // owner, 1.62).
-                            PersonalizeTab.Update -> {
+                            // The build this TV runs, and the two ways to have a word with the
+                            // developer about it: look for a newer one, or send the log when the one
+                            // it runs misbehaves. One section, because all three answer the same
+                            // question — what am I running, and how do I tell you about it — and two
+                            // items in the rail for one question made the rail read longer than the
+                            // sheet is (the owner, 1.62).
+                            PersonalizeTab.About -> {
                                 Group(stringResource(R.string.st_update_hint)) { note ->
                                     SettingRow(
                                         R.string.st_update_version,
@@ -701,21 +703,17 @@ fun WallpaperSheet(
                                         )
                                     }
                                 }
-                            }
-
-                            // What this TV tells the developer, and the way to tell the developer
-                            // something: one row, side by side, with the one-time question above it. A
-                            // section of its own so that neither is buried five rows down in General.
-                            PersonalizeTab.Privacy -> {
-                                // The feedback log alone. The anonymous install count had a row and a
+                                Spacer(Modifier.height(12.dp))
+                                // The log alone. The anonymous install count had a row and a
                                 // one-time question here; the owner asked for both to go, so the
-                                // section says one thing and does one thing (2.24).
+                                // row says one thing and does one thing (2.24).
                                 Group(stringResource(if (UsageReport.configured) R.string.st_feedback_hint else R.string.st_feedback_off_hint)) { note ->
                                     // The log's row, and it is a button whatever the build: 「上传」 on
-                                    // the right, the cursor lands on it (there is nothing else in the
-                                    // section to land on), and pressing it uploads at once. A build
-                                    // with no address says so under the row rather than replacing the
-                                    // button with a word the owner could not read as a control (2.23).
+                                    // the right, and pressing it uploads at once. A build with no
+                                    // address says so under the row rather than replacing the button
+                                    // with a word the owner could not read as a control (2.23). The
+                                    // cursor opens on the row above (the version), so this one is
+                                    // reached with Down rather than taken on the way in (1.62).
                                     SettingRow(
                                         R.string.st_feedback,
                                         stringResource(
@@ -729,10 +727,7 @@ fun WallpaperSheet(
                                         note,
                                         first = true,
                                     ) {
-                                        FeedbackChip(
-                                            sending, outcome,
-                                            focusRequester = firstRow,
-                                        ) {
+                                        FeedbackChip(sending, outcome) {
                                             if (sending) return@FeedbackChip
                                             sending = true
                                             // The diagnostics and the log take a moment to gather and a
@@ -1051,8 +1046,9 @@ private fun WallpaperCard(wp: Wallpaper, focusRequester: FocusRequester?, atStar
 
 /**
  * The sheet's sections, in the order a home is set up: the picture, the layout over it, the two
- * modules at the top, what replaces it when idle, the towns the weather turns through, and then the
- * app itself — its language, its pin, its version, and the log to send when something goes wrong.
+ * modules at the top, what replaces it when idle, the towns the weather turns through, the app's own
+ * settings — language, sounds, pin — and last what the app is and how to talk to its developer: the
+ * version, a look for a newer one, and the log to send when something goes wrong.
  * One at a time behind the rail, so each opens on one screen instead of four (the owner, 2.20).
  */
 private enum class PersonalizeTab(val label: Int, val glyph: Glyph) {
@@ -1061,13 +1057,10 @@ private enum class PersonalizeTab(val label: Int, val glyph: Glyph) {
     Top(R.string.st_tab_top, Glyph.CloudSun),
     Saver(R.string.wp_screensaver, Glyph.Moon),
     General(R.string.st_tab_general, Glyph.Gear),
-    // Between the box's settings and privacy: the one row that is not a setting but an action, and
-    // the one a viewer looks for when a new build is promised (the owner, 1.62).
-    Update(R.string.st_tab_update, Glyph.Download),
-    // Last, and on its own: the two settings that leave the box — the anonymous count and the log
-    // to send — and the one question asked about them. In General they made five rows, which ran
-    // past the bottom of the sheet (the owner, 2.20).
-    Privacy(R.string.st_tab_privacy, Glyph.Shield),
+    // Last, and on its own: the version, the press that looks for a newer one, and the log to send
+    // when the one it runs misbehaves — the three things that leave the box. It had two rail items
+    // for one question (the owner, 1.62).
+    About(R.string.st_tab_about, Glyph.Info),
 }
 
 /**

@@ -313,7 +313,7 @@
     <string name="phone_set_waiting">Готуємо QR-код…</string>
     <string name="st_tab_top">Годинник і погода</string>
     <string name="st_tab_general">Загальні</string>
-    <string name="st_tab_privacy">Приватність</string>
+    <string name="st_tab_about">Про застосунок</string>
     <string name="st_weather_off_hint">Якщо вимкнути, вгорі залишиться лише годинник.</string>
     <string name="st_clock_place">Бік годинника</string>
     <string name="st_stats">Анонімна статистика</string>
@@ -333,6 +333,9 @@
     <string name="st_feedback_retry">Повторити</string>
     <string name="st_feedback_failed_hint">Не вдалося надіслати. Перевірте мережу та спробуйте ще раз.</string>
     <string name="st_version_footer">HLine TV %1$s (%2$d)</string>
+    <string name="st_check_update">Перевірити оновлення</string>
+    <string name="st_update_version">Версія</string>
+    <string name="st_update_hint">Шукає новішу версію. Сторінка оновлення відкриється з результатом і встановить її, якщо вона є.</string>
     <string name="st_cities_phone_title">Скануйте, щоб додати місто</string>
     <string name="st_cities_phone_body">Відскануйте код телефоном, щоб знайти й додати будь-яке місто світу.</string>
     <string name="st_cities_auto">За мережею</string>

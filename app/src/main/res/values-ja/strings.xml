@@ -320,7 +320,7 @@
     <string name="phone_set_waiting">QRコードを準備しています…</string>
     <string name="st_tab_top">時計と天気</string>
     <string name="st_tab_general">一般</string>
-    <string name="st_tab_privacy">プライバシー</string>
+    <string name="st_tab_about">アプリについて</string>
     <string name="st_weather_off_hint">オフにすると、ホームの上部には時計だけが残ります。</string>
     <string name="st_clock_place">時計の位置</string>
     <string name="st_stats">匿名の統計</string>
@@ -340,6 +340,9 @@
     <string name="st_feedback_retry">再試行</string>
     <string name="st_feedback_failed_hint">送信できませんでした。ネットワークを確認してもう一度お試しください。</string>
     <string name="st_version_footer">HLine TV %1$s（%2$d）</string>
+    <string name="st_check_update">アップデートを確認</string>
+    <string name="st_update_version">バージョン</string>
+    <string name="st_update_hint">新しいバージョンがあるか確認します。結果はアップデート画面に表示され、あればそのままインストールできます。</string>
     <string name="st_cities_phone_title">スキャンして都市を追加</string>
     <string name="st_cities_phone_body">スマホでスキャンして世界の都市を検索・追加できます。</string>
     <string name="st_cities_auto">ネットワーク位置情報</string>
