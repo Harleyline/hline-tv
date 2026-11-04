@@ -107,3 +107,41 @@
   }
   tick(); setInterval(tick, 20000);
 })();
+
+// 长按语言/机型胶囊时，不弹系统的复制/翻译/链接菜单
+document.addEventListener('contextmenu', (e) => {
+  if (e.target.closest && e.target.closest('.langs span, .chips .chip')) e.preventDefault();
+});
+
+// 移动端：手指划过多语言气泡群，Apple Watch 式中间放大、两侧让位
+(function(){
+  const langs = document.querySelector('.langs');
+  if (!langs || !('ontouchstart' in window)) return;
+  const spans = Array.from(langs.querySelectorAll('span'));
+  let hot = -1;
+  function setHot(i){
+    if (i === hot) return;
+    hot = i;
+    spans.forEach((sp, j) => {
+      sp.classList.toggle('t-hot', j === i);
+      sp.classList.toggle('t-near-l', i > -1 && j === i - 1);
+      sp.classList.toggle('t-near-r', i > -1 && j === i + 1);
+    });
+  }
+  function pick(x, y){
+    let best = -1, bd = 1e9;
+    spans.forEach((sp, j) => {
+      const r = sp.getBoundingClientRect();
+      if (!r.width) return;
+      const dd = Math.hypot(x - (r.left + r.width/2), y - (r.top + r.height/2));
+      const reach = Math.max(r.width, r.height) * 0.75;
+      if (dd < reach && dd < bd) { bd = dd; best = j; }
+    });
+    return best;
+  }
+  const on = e => setHot(pick(e.touches[0].clientX, e.touches[0].clientY));
+  langs.addEventListener('touchstart', on, {passive:true});
+  langs.addEventListener('touchmove', on, {passive:true});
+  langs.addEventListener('touchend', () => setHot(-1), {passive:true});
+  langs.addEventListener('touchcancel', () => setHot(-1), {passive:true});
+})();

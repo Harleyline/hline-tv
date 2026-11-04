@@ -168,6 +168,7 @@
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236c747e' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M7 7l10 10M17 7L7 17'/%3E%3C/svg%3E");
     background-repeat:no-repeat;background-size:16px 16px}
   .panel.good li::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236ee7ff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7'/%3E%3C/svg%3E")}
+  .panel .rows-m{display:none}
   .panel.good li{color:#e6edf4}
 
   /* showcase rows */
@@ -197,6 +198,15 @@
 
   /* languages */
   .langs{display:flex;flex-wrap:wrap;gap:16px;margin-top:52px;justify-content:center}
+  @media(min-width:761px){
+    .langs{padding:14px 0 6px}
+    .langs span{animation:lang-float var(--fd,7.2s) ease-in-out var(--fdel,0s) infinite alternate}
+    .langs span:nth-child(2n){--fd:8.6s;--fdel:-2.4s}
+    .langs span:nth-child(3n){--fd:6.3s;--fdel:-4.2s}
+    .langs span:nth-child(5n){--fd:9.4s;--fdel:-1.3s}
+    .langs span:nth-child(7n){--fd:7.8s;--fdel:-5.5s}
+    @keyframes lang-float{from{translate:0 -7px}to{translate:0 8px}}
+  }
   .langs span{position:relative;border:1px solid var(--line-soft);border-radius:999px;padding:18px 34px;font-size:24px;color:#d6dde5;background:rgba(255,255,255,.028);backdrop-filter:blur(8px) saturate(1.15);-webkit-backdrop-filter:blur(8px) saturate(1.15);transition:color .25s ease,border-color .25s ease,box-shadow .3s ease,background .25s ease;overflow:hidden}
   .glow{position:relative}
   /* glow pills stay touch-glowy but never turn into selectable text on long-press */
@@ -205,11 +215,18 @@
   .glow:hover{box-shadow:0 0 0 1px rgba(170,225,255,.20),0 16px 46px rgba(80,170,255,.18),inset 0 1px 0 rgba(255,255,255,.16)}
   .langs span{transition:color .25s ease,border-color .25s ease,box-shadow .3s ease,background .25s ease,transform .35s cubic-bezier(.2,.7,.2,1)}
   @media(hover:hover){
-    .langs:hover span{transform:scale(.955)}
-    .langs span:hover{color:#fff;border-color:rgba(170,225,255,.6);background:rgba(255,255,255,.06);box-shadow:0 0 0 1px rgba(170,225,255,.22),0 12px 34px rgba(80,170,255,.22),inset 0 1px 0 rgba(255,255,255,.22);transform:scale(1.14)}
-    .langs span:has(+ span:hover){transform:scale(.955) translateX(-6px)}
-    .langs span:hover + span{transform:scale(.955) translateX(6px)}}
+    .langs:hover span{transform:scale(.93)}
+    .langs span:hover{color:#fff;border-color:rgba(190,235,255,.85);background:rgba(200,235,255,.10);box-shadow:0 0 0 1px rgba(190,235,255,.4),0 14px 44px rgba(80,170,255,.34),0 0 26px rgba(140,220,255,.28),inset 0 1px 0 rgba(255,255,255,.26);transform:scale(1.24)}
+    .langs span:has(+ span:hover){transform:scale(.92) translateX(-9px)}
+    .langs span:hover + span{transform:scale(.92) translateX(9px)}}
   .glow:hover::before,.langs span:hover::before{opacity:1}
+  @media(hover:none){
+    .langs span{transition:transform .28s cubic-bezier(.2,.7,.2,1),box-shadow .28s ease,border-color .28s ease}
+    .langs span.t-hot{color:#fff;border-color:rgba(190,235,255,.85);background:rgba(200,235,255,.10);box-shadow:0 0 0 1px rgba(190,235,255,.4),0 12px 36px rgba(80,170,255,.3);transform:scale(1.18)}
+    .langs span.t-near-l{transform:translateX(-7px) scale(.93)}
+    .langs span.t-near-r{transform:translateX(7px) scale(.93)}
+    .langs span.t-hot::before{opacity:1}
+  }
 
   /* install */
   .steps{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:52px}
@@ -445,7 +462,7 @@ body{font-family:'Inter TV','MiSans TV','NotoKR TV',-apple-system,'PingFang SC',
   html:not([lang="en"]) .hero h1 .slogan span{letter-spacing:-.1em;text-indent:0}
   html:not([lang="en"]) .hero h1 .slogan span+span{margin-left:.22em;letter-spacing:-.1em}
   /* EN hero: exactly two lines on every phone width - the type scales down instead of wrapping */
-  html[lang="en"] .hero h1 .slogan.en{white-space:nowrap;font-size:min(calc((100vw - 36px)/8.9),34px)}
+  html[lang="en"] .hero h1 .slogan.en{white-space:nowrap;font-size:min(calc((100vw - 36px)/6.95),56px)}
   html:not([lang="en"]) .hero .lead{margin-top:16px}
   html:not([lang="en"]) .hero .lead .lead-main{display:none}
   html:not([lang="en"]) .hero .lead .lead-alt{display:inline}
@@ -496,6 +513,8 @@ body{font-family:'Inter TV','MiSans TV','NotoKR TV',-apple-system,'PingFang SC',
   .panel ul{margin-top:9px}
   .panel li{padding-left:17px;margin-bottom:7px;font-size:12px;line-height:1.45}
   .panel.good li{white-space:normal;font-size:12px;margin-bottom:7px}
+  .panel .rows-d{display:none}
+  .panel .rows-m{display:block}
   .panel li::before{width:11px;height:11px;top:2px;background-size:11px 11px}
 
   /* feature rows */
