@@ -59,7 +59,7 @@
   nav{display:flex;gap:28px;align-items:center}
   nav a{font-size:14px;color:var(--sub);transition:color .18s}
   nav a:hover{color:var(--ink)}
-  nav a.cta{color:#07080a;background:#f4f7f9;border:1px solid transparent;padding:7px 28px;border-radius:999px;font-weight:600;box-shadow:0 8px 24px rgba(110,231,255,.22)}
+  nav a.cta{display:inline-flex;align-items:center;justify-content:center;min-width:96px;color:#07080a;background:#f4f7f9;border:1px solid transparent;padding:7px 20px;border-radius:999px;font-weight:600;box-shadow:0 8px 24px rgba(110,231,255,.22)}
   nav a.cta:hover{background:#fff;box-shadow:0 10px 28px rgba(110,231,255,.34)}
   @media(max-width:760px){nav a:not(.cta){display:none}}
 
@@ -86,7 +86,7 @@
   .hero h1 .slogan.en span:first-child{letter-spacing:-.035em;text-indent:0}
   .hero h1 .slogan.en span+span{font-size:1em;letter-spacing:-.035em;text-indent:0}
   /* CN title: always one line, bottom-aligned in the shared h1 box — EN/CN switch feels like a translation slide */
-  html:not([lang="en"]) .hero h1 .slogan{font-size:clamp(38px,7.2vw,104px);line-height:1.15;white-space:nowrap}
+  html:not([lang="en"]) .hero h1 .slogan{font-size:clamp(54px,10.4vw,150px);line-height:1.15;white-space:nowrap}
   html:not([lang="en"]) .hero h1 .slogan span{display:inline}
   html:not([lang="en"]) .hero h1 .slogan span+span{margin-left:.35em;font-size:1em}
   .hero .lead{margin:26px auto 0;max-width:660px;font-size:clamp(17px,2vw,21px);color:rgba(240,246,251,.92);line-height:1.8;text-shadow:0 2px 22px rgba(0,0,0,.65);text-wrap:balance;min-height:5.4em}
@@ -121,6 +121,15 @@
 
   /* the tv */
   .tv{position:relative;margin:clamp(80px,12vh,140px) auto 0;max-width:1040px}
+  /* comet: one bright dot orbiting the mockup border counter-clockwise, tail fading behind */
+  @property --beam{syntax:'<angle>';inherits:false;initial-value:0deg}
+  .tv::before{content:"";position:absolute;inset:-3px;border-radius:calc(var(--radius) + 3px);padding:3px;z-index:2;pointer-events:none;
+    background:conic-gradient(from var(--beam),transparent 0deg 285deg,rgba(110,231,255,.06) 296deg,rgba(110,231,255,.45) 322deg,rgba(190,240,255,.9) 350deg,#ffffff 358deg,transparent 360deg);
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;
+    animation:tv-beam 7s linear infinite reverse;filter:drop-shadow(0 0 8px rgba(110,231,255,.55))}
+  @keyframes tv-beam{to{--beam:360deg}}
+  @media(prefers-reduced-motion:reduce){.tv::before{animation:none;content:none}}
   .screen{position:relative;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.14);box-shadow:0 40px 120px rgba(0,0,0,.75),0 0 0 1px rgba(0,0,0,.6) inset;background:#000}
   .screen img{display:block;width:100%;height:auto}
   .screen::after{content:"";position:absolute;inset:0;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.10),transparent 18%,transparent 82%,rgba(0,0,0,.35));pointer-events:none}
@@ -150,7 +159,7 @@
   @media(max-width:760px){.compare{grid-template-columns:1fr}}
   .panel{position:relative;border:1px solid var(--line-soft);border-radius:var(--radius);padding:32px 30px;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012))}
   .panel.now{border-color:rgba(255,255,255,.16)}
-  .panel.good{border-color:rgba(110,231,255,.32);background:linear-gradient(180deg,rgba(110,231,255,.075),rgba(255,255,255,.012))}
+  .panel.good{border:1.5px solid rgba(110,231,255,.62);background:linear-gradient(180deg,rgba(110,231,255,.075),rgba(255,255,255,.012));box-shadow:0 0 0 1px rgba(110,231,255,.12),0 0 28px rgba(110,231,255,.14),inset 0 1px 0 rgba(140,235,255,.18)}
   .panel h3{margin:0 0 4px;font-size:20px;font-weight:650;letter-spacing:-.01em}
   .panel .tag{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
   .panel.good .tag{color:rgba(110,231,255,.85)}
@@ -193,7 +202,8 @@
   .glow{position:relative}
   .glow::before,.langs span::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(140px circle at var(--mx,50%) var(--my,50%),rgba(190,235,255,.30),rgba(120,170,255,.14) 44%,transparent 72%),radial-gradient(240px circle at var(--lx,50%) var(--ly,50%),rgba(130,190,255,.16),transparent 76%);opacity:0;transition:opacity .25s ease}
   .glow:hover{box-shadow:0 0 0 1px rgba(170,225,255,.20),0 16px 46px rgba(80,170,255,.18),inset 0 1px 0 rgba(255,255,255,.16)}
-  .langs span:hover{color:#fff;border-color:rgba(170,225,255,.6);background:rgba(255,255,255,.06);box-shadow:0 0 0 1px rgba(170,225,255,.22),0 12px 34px rgba(80,170,255,.22),inset 0 1px 0 rgba(255,255,255,.22);transform:translateY(-1px)}
+  .langs span{transition:color .25s ease,border-color .25s ease,box-shadow .3s ease,background .25s ease,transform .35s cubic-bezier(.2,.7,.2,1)}
+  @media(hover:hover){.langs:hover span{transform:scale(.955)}.langs span:hover{color:#fff;border-color:rgba(170,225,255,.6);background:rgba(255,255,255,.06);box-shadow:0 0 0 1px rgba(170,225,255,.22),0 12px 34px rgba(80,170,255,.22),inset 0 1px 0 rgba(255,255,255,.22);transform:scale(1.14)}}
   .glow:hover::before,.langs span:hover::before{opacity:1}
 
   /* install */
@@ -392,12 +402,16 @@ body{font-family:'Inter TV','MiSans TV','NotoKR TV',-apple-system,'PingFang SC',
              radial-gradient(200px circle at var(--lx,50%) var(--ly,50%),rgba(130,190,255,.16),transparent 76%);
   opacity:0;transition:opacity .25s ease}
 .chips .chip:hover::before{opacity:1}
-.chips .chip:hover{color:#fff;border-color:rgba(170,225,255,.6);
+.chips .chip{transition:transform .35s cubic-bezier(.2,.7,.2,1),color .2s,border-color .2s,box-shadow .3s}
+@media(hover:hover){.chips:hover .chip{transform:scale(.955)}.chips .chip:hover{color:#fff;border-color:rgba(170,225,255,.6);
   box-shadow:0 0 0 1px rgba(170,225,255,.22),0 12px 34px rgba(80,170,255,.22),inset 0 1px 0 rgba(255,255,255,.22);
-  transform:translateY(-1px)}
+  transform:scale(1.14)}}
 
 /* tile imgs must not inherit card-level radii (.gallery-wide img etc. made dock tiles pill-shaped) */
 .tm-tile img,.tg-cell img{border-radius:0}
+
+
+.hero .lead .lead-alt{display:none}
 
 /* ---- mobile layout fixes (<=760px only; desktop untouched) ---- */
 @media(max-width:760px){
@@ -416,15 +430,19 @@ body{font-family:'Inter TV','MiSans TV','NotoKR TV',-apple-system,'PingFang SC',
   .hero{min-height:auto;min-height:0;padding:40px 0 44px}
   .scroll-hint{display:none}
   /* CN title one line (global) — mobile just bumps the size a touch */
-  html:not([lang="en"]) .hero h1 .slogan{font-size:clamp(30px,9vw,40px)}
+  /* fill the available width exactly; adapts on narrow phones, never wraps */
+  html:not([lang="en"]) .hero h1 .slogan{font-size:min(calc((100vw - 36px)/7.15),56px)}
+  html:not([lang="en"]) .hero .lead{margin-top:16px}
+  html:not([lang="en"]) .hero .lead .lead-main{display:none}
+  html:not([lang="en"]) .hero .lead .lead-alt{display:inline}
   .hero .lead{margin-top:12px;text-wrap:initial;font-size:14px;line-height:1.55;padding:0 4px;min-height:4.65em}
   .hero .lead br{display:none}
   .hero .closer{margin-top:12px;font-size:16px}
   .actions{flex-wrap:nowrap;gap:10px;margin-top:18px}
-  .actions .btn{min-width:0;max-width:100%;height:46px;padding:0 16px;font-size:13.5px;gap:6px}
+  .actions .btn{min-width:0;max-width:100%;height:42px;padding:0 14px;font-size:13.5px;gap:6px}
   .actions .btn .btn-name{display:none}
-  .actions .btn.primary{flex:2.2 1 0;padding-left:18px;padding-right:18px}
-  .actions .btn.ghost{flex:1 1 0;padding-left:10px;padding-right:10px}
+  .actions .btn.primary{flex:1.7 1 0;padding-left:16px;padding-right:16px}
+  .actions .btn.ghost{flex:1.3 1 0;padding-left:10px;padding-right:10px}
   .actions .btn.primary .btn-logo{width:16px;height:16px}
   .actions .btn.primary svg{width:15px;height:15px}
   /* CN primary keeps the brand name in the logo typeface; EN stays text-only */
@@ -512,4 +530,5 @@ body{font-family:'Inter TV','MiSans TV','NotoKR TV',-apple-system,'PingFang SC',
   summary::after{font-size:14px}
   details p{margin-top:6px;font-size:13px;line-height:1.55}
   footer{margin-top:40px;padding:20px 0 36px;font-size:12px}
+  .tv::before{display:none}
 }
