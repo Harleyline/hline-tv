@@ -294,7 +294,7 @@ curl -fsSL https://raw.githubusercontent.com/Harleyline/hline-tv/main/tools/inst
       <div class="term reveal glow">
         <div class="term-bar"><i></i><i></i><i></i><span>ADB</span></div>
 <h3 class="term-h">Direct Connect &amp; Install</h3>
-<pre><span class="c"># if you already know your way around adb</span>
+<pre><span class="c"># if you already know your way around adb (TCL / FFALCON refuse it)</span>
 adb connect TV_IP:5555
 adb install HLine-TV.apk</pre>
       </div>
@@ -302,14 +302,14 @@ adb install HLine-TV.apk</pre>
         <div class="term-bar"><i></i><i></i><i></i><span>usb</span></div>
         <div class="step-copy-body">
           <h3><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2.5" width="6" height="9" rx="1.4"/><path d="M12 11.5V21"/><path d="M8.5 21h7"/></svg>Plug, Play &amp; Install</h3>
-          <p>Copy <code>HLine-TV.apk</code> onto a stick and open it from the TV's file manager.</p>
+          <p>Copy <code>HLine-TV.apk</code> onto a stick and open it from the TV's file manager. On TCL / FFALCON, copy <code>HLine-TV-Guard.apk</code> instead — the TV rejects the other one with an install error.</p>
         </div>
       </div>
       <div class="step-copy reveal glow">
         <div class="term-bar"><i></i><i></i><i></i><span>guard</span></div>
         <div class="step-copy-body">
           <h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.2-3 7.6-7 9-4-1.4-7-4.8-7-9V6z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg>Seamless Fallback for Locked Systems</h3>
-        <p>A few sets refuse apps that declare themselves as a home screen. Use <code>HLine-TV-Guard.apk</code> instead — it does not declare it, and takes over the Home key once installed. Where the ADB switch lives on each brand is in the <a href="https://github.com/Harleyline/hline-tv#turning-on-adb-debugging" style="color:#bfe9fb">README</a>.</p>
+        <p>Some firmware (most often TCL, FFALCON and OPPO) refuses to install an app that declares itself as a home screen. <code>HLine-TV-Guard.apk</code> is the same app without that declaration — it takes over the Home key through an accessibility service, and looks and works identically. Install it from a stick on these sets.</p>
         </div>
       </div>
     </div>
@@ -321,7 +321,8 @@ adb install HLine-TV.apk</pre>
     <div class="faq reveal">
       <details><summary>Does it affect the warranty? How do I go back?</summary><p>It doesn't root, flash or remove system apps — it only becomes the default home screen. To go back, pick the original home in the TV's settings, or uninstall HLine TV.</p></details>
       <details><summary>Which TVs and boxes are supported?</summary><p>Android TV 5.0 and later — televisions, boxes and projectors. Xiaomi, Redmi, TCL, FFALCON, Skyworth, Sony, Hisense, OPPO and others have been tried. Samsung (Tizen) and LG (webOS) are not Android and cannot run it.</p></details>
-      <details><summary>The APK won't install. What now?</summary><p>Some firmware refuses apps that declare the home category. Use <code>HLine-TV-Guard.apk</code>: it doesn't declare it, and takes over the Home key once installed.</p></details>
+      <details><summary>I get an install error and nothing installs.</summary><p>Usually the wrong file. <code>HLine-TV.apk</code> has to declare the home category to serve as a home screen, and firmware from TCL, FFALCON and OPPO refuses to install anything that does — on screen it is a plain install error, over adb it is <code>INSTALL_FAILED_VERIFICATION_FAILURE</code>. Use <code>HLine-TV-Guard.apk</code>: the same app without that declaration, taking over the Home key through an accessibility service, and it looks and works identically. TCL also refuses adb installs across the board, so install on the TV itself — a stick, or the TV's own file manager.</p></details>
+      <details><summary>Installed, but Home still opens the old screen.</summary><p>Xiaomi, TCL and Skyworth lock the home role to their own launcher, so a third-party app cannot claim it; HLine TV takes over the Home key through a home guard instead. Three steps, in order: ① allow HLine TV to use accessibility in the TV's settings (some sets also need notification access); ② open HLine TV once more; ③ restart the TV. If it still will not stay, that firmware starts its own launcher from a hard-coded component at power-on — some Skyworth sets do — and we would need to add support for that model. The app itself still works.</p></details>
       <details><summary>Does it collect data or show ads?</summary><p>The launcher records nothing about what you watch, and has no advertising slot anywhere. Only the features that need the network — weather, wallpapers, updates — use it.</p></details>
       <details><summary>How do updates work?</summary><p>When the control centre offers a new version, tap "Download and install". It installs over the old one, and your settings and layout stay.</p></details>
       <details><summary>Can I use my own photos and videos?</summary><p>Yes — from the phone page. Photos become wallpapers, videos become the screensaver, and both stay on the TV.</p></details>

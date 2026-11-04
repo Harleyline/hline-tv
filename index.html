@@ -297,7 +297,7 @@ curl -fsSL https://raw.githubusercontent.com/Harleyline/hline-tv/main/tools/inst
       <div class="term reveal glow">
         <div class="term-bar"><i></i><i></i><i></i><span>ADB</span></div>
 <h3 class="term-h">connect + install 快速连接</h3>
-<pre><span class="c"># 已经会用 adb 的话</span>
+<pre><span class="c"># 已经会用 adb 的话（TCL / 雷鸟不接受这种方式）</span>
 adb connect 电视IP:5555
 adb install HLine-TV.apk</pre>
       </div>
@@ -305,14 +305,14 @@ adb install HLine-TV.apk</pre>
         <div class="term-bar"><i></i><i></i><i></i><span>usb</span></div>
         <div class="step-copy-body">
           <h3><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2.5" width="6" height="9" rx="1.4"/><path d="M12 11.5V21"/><path d="M8.5 21h7"/></svg>即插即用，立竿见影</h3>
-          <p>将 <code>HLine-TV.apk</code> 拷入 U 盘，通过电视文件管理器打开即可安装。</p>
+          <p>将 <code>HLine-TV.apk</code> 拷入 U 盘，通过电视文件管理器打开即可安装。TCL / 雷鸟请改拷 <code>HLine-TV-Guard.apk</code>，否则电视会提示「安装异常」。</p>
         </div>
       </div>
       <div class="step-copy reveal glow">
         <div class="term-bar"><i></i><i></i><i></i><span>guard</span></div>
         <div class="step-copy-body">
           <h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.2-3 7.6-7 9-4-1.4-7-4.8-7-9V6z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg>兼容无忧，另有妙招</h3>
-        <p>少数电视限制「桌面类」应用，可换用 <code>HLine-TV-Guard.apk</code>。无声接管 Home 键，同样优雅。各品牌开 ADB 的位置见 <a href="https://github.com/Harleyline/hline-tv#打开电视的-adb-调试" style="color:#bfe9fb">README</a>。</p>
+        <p>有些固件（TCL、雷鸟、OPPO 最常见）拒绝安装声明了桌面类别的应用，电视上会提示「安装异常」。换用 <code>HLine-TV-Guard.apk</code> 即可：它不声明桌面，改由无障碍服务接管 Home 键，效果一样。这类电视请用 U 盘安装。</p>
         </div>
       </div>
     </div>
@@ -324,7 +324,8 @@ adb install HLine-TV.apk</pre>
     <div class="faq reveal">
       <details><summary>会影响电视保修吗？如何还原？</summary><p>不 Root、不刷机、不卸载系统应用，只是把 HLine TV 设为默认桌面。想还原：在电视设置里把默认桌面换回原来的，或者直接卸载 HLine TV。</p></details>
       <details><summary>支持哪些电视与盒子设备？</summary><p>Android 5.0 及以上的安卓电视、盒子和投影仪，小米、Redmi、TCL、雷鸟、创维、索尼、海尔、OPPO 等常见机型都试过。三星（Tizen）和 LG（webOS）不是安卓系统，装不了。</p></details>
-      <details><summary>遇到无法安装的情况怎么办？</summary><p>部分固件不允许安装声明了桌面类别的应用。用 <code>HLine-TV-Guard.apk</code>，它不声明桌面，装好后由它接管 Home 键。</p></details>
+      <details><summary>提示「安装异常」，装不上怎么办？</summary><p>多半是拷错了包。<code>HLine-TV.apk</code> 为了做默认桌面必须声明「桌面」类别，而 TCL、雷鸟、OPPO 这类固件会拒绝安装声明了桌面的应用——表现就是电视上弹「安装异常」，或电脑上 adb 报 <code>INSTALL_FAILED_VERIFICATION_FAILURE</code>。换成 <code>HLine-TV-Guard.apk</code> 即可：它不声明桌面，改用无障碍服务接管 Home 键，界面和功能完全一样。另外 TCL 全系都不接受通过电脑 adb 安装，请在电视上安装（U 盘，或用电视自带的文件管理器、应用商店的本地安装）。</p></details>
+      <details><summary>装好了，按 Home 键还是回原来的桌面？</summary><p>小米、TCL、创维等品牌把默认桌面锁在自家桌面上，第三方应用拿不到这个身份，所以要靠「桌面守护」接管 Home 键。按顺序试三步：① 在电视设置里允许 HLine TV 使用无障碍服务（部分机型还要开通知监听）；② 重新打开一次 HLine TV；③ 完整重启电视。还是不行，说明这台固件在开机时按写死的组件强制启动自家桌面（创维部分机型如此），只能等我们适配后续机型——不影响 HLine TV 本身的使用。</p></details>
       <details><summary>是否收集数据或包含广告？</summary><p>桌面本身不收集观看记录，也没有任何广告位。天气、壁纸这类需要联网的功能才会请求网络。</p></details>
       <details><summary>如何进行后续的版本更新？</summary><p>控制中心提示「新版本」时点「下载并安装」，系统安装器覆盖安装，设置和排列都保留。</p></details>
       <details><summary>能用我自己的照片和视频吗？</summary><p>能。手机扫码打开设置页就能传：照片当壁纸，视频当屏保，都存在电视本地，不上传。</p></details>
