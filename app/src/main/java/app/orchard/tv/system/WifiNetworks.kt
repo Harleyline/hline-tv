@@ -107,9 +107,12 @@ object WifiNetworks {
      * Joins [network], with [password] where it has one, and says whether the TV took it.
      *
      * A saved network is enabled again by its id; a new one is added to the TV's list first, and
-     * it is that list's own entry the TV then turns to. Only the one network is told to connect:
-     * [WifiManager.enableNetwork]'s second argument is what kept Aerial from dropping the network
-     * the owner was watching a film on.
+     * it is that list's own entry the TV then turns to. The move is forced: `enableNetwork` with
+     * its second argument false only marked the new network ready and the TV stayed on the one it
+     * was on, so a tap on a saved network did nothing at all (the owner, 1.62). With the argument
+     * true the old network is dropped and the new one comes up; the networks the move disabled are
+     * armed again right after, so a dropped signal still falls back on its own — enabling does not
+     * move the TV off the one just joined.
      */
     fun join(context: Context, network: WifiNetwork, password: String): Boolean {
         val wm = context.applicationContext.getSystemService<WifiManager>() ?: return false
@@ -139,8 +142,15 @@ object WifiNetworks {
                 DiagLog.i("wifi: the TV would not add ${network.ssid}")
                 false
             } else {
-                wm.enableNetwork(id, false)
+                wm.enableNetwork(id, true)
                 wm.reconnect()
+                // The forced move disabled the networks it left; arm them again so the TV can
+                // fall back on its own when the one it is on drops (the owner, 1.62).
+                runCatching {
+                    wm.configuredNetworks.orEmpty()
+                        .filter { it.status == WifiConfiguration.Status.DISABLED && it.networkId != id }
+                        .forEach { wm.enableNetwork(it.networkId, false) }
+                }
                 DiagLog.i("wifi: joining ${network.ssid}${if (network.saved) " (saved)" else ""}")
                 true
             }
