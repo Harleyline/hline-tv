@@ -121,24 +121,8 @@
 
   /* the tv */
   .tv{position:relative;margin:clamp(80px,12vh,140px) auto 0;max-width:1040px}
-  /* soft halo (same palette as the langs glow) hiding BEHIND the screen image,
-     gliding around the mockup border like the langs hover halo - no bar, no ring */
-  @property --gx{syntax:'<percentage>';inherits:false;initial-value:0%}
-  @property --gy{syntax:'<percentage>';inherits:false;initial-value:0%}
   .tv-stage{position:relative}
   .tv .tvmock{position:relative;z-index:1}
-  .tv-stage::before,.tv-stage::after{content:"";position:absolute;z-index:-1;pointer-events:none;border-radius:50%;
-    left:var(--gx);top:var(--gy);transform:translate(-50%,-50%);
-    animation:tv-gx 16s linear infinite,tv-gy 16s linear infinite}
-  /* wide soft halo, same blues as .langs span::before */
-  .tv-stage::before{width:360px;height:360px;filter:blur(22px);opacity:.9;
-    background:radial-gradient(closest-side,rgba(190,235,255,.34),rgba(120,170,255,.17) 46%,transparent 74%)}
-  /* brighter compact core inside the halo */
-  .tv-stage::after{width:150px;height:150px;filter:blur(12px);opacity:.8;
-    background:radial-gradient(closest-side,rgba(222,246,255,.55),rgba(140,190,255,.20) 52%,transparent 76%)}
-  @keyframes tv-gx{0%{--gx:0%}25%{--gx:100%}50%{--gx:100%}75%{--gx:0%}100%{--gx:0%}}
-  @keyframes tv-gy{0%{--gy:0%}25%{--gy:0%}50%{--gy:100%}75%{--gy:100%}100%{--gy:0%}}
-  @media(prefers-reduced-motion:reduce){.tv-stage::before,.tv-stage::after{animation:none;content:none}}
   .screen{position:relative;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.14);box-shadow:0 40px 120px rgba(0,0,0,.75),0 0 0 1px rgba(0,0,0,.6) inset;background:#000}
   .screen img{display:block;width:100%;height:auto}
   .screen::after{content:"";position:absolute;inset:0;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.10),transparent 18%,transparent 82%,rgba(0,0,0,.35));pointer-events:none}
@@ -209,6 +193,8 @@
   .langs{display:flex;flex-wrap:wrap;gap:16px;margin-top:52px;justify-content:center}
   .langs span{position:relative;border:1px solid var(--line-soft);border-radius:999px;padding:18px 34px;font-size:24px;color:#d6dde5;background:rgba(255,255,255,.028);backdrop-filter:blur(8px) saturate(1.15);-webkit-backdrop-filter:blur(8px) saturate(1.15);transition:color .25s ease,border-color .25s ease,box-shadow .3s ease,background .25s ease;overflow:hidden}
   .glow{position:relative}
+  /* glow pills stay touch-glowy but never turn into selectable text on long-press */
+  .langs span,.chips .chip{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
   .glow::before,.langs span::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(140px circle at var(--mx,50%) var(--my,50%),rgba(190,235,255,.30),rgba(120,170,255,.14) 44%,transparent 72%),radial-gradient(240px circle at var(--lx,50%) var(--ly,50%),rgba(130,190,255,.16),transparent 76%);opacity:0;transition:opacity .25s ease}
   .glow:hover{box-shadow:0 0 0 1px rgba(170,225,255,.20),0 16px 46px rgba(80,170,255,.18),inset 0 1px 0 rgba(255,255,255,.16)}
   .langs span{transition:color .25s ease,border-color .25s ease,box-shadow .3s ease,background .25s ease,transform .35s cubic-bezier(.2,.7,.2,1)}
@@ -448,7 +434,12 @@ body{font-family:'Inter TV','MiSans TV','NotoKR TV',-apple-system,'PingFang SC',
   .scroll-hint{display:none}
   /* CN title one line (global) — mobile just bumps the size a touch */
   /* fill the available width exactly; adapts on narrow phones, never wraps */
-  html:not([lang="en"]) .hero h1 .slogan{font-size:min(calc((100vw - 36px)/7.15),56px)}
+  /* CN hero: tighter tracking + larger type so the line feels intentionally snug, edge to edge */
+  html:not([lang="en"]) .hero h1 .slogan{font-size:min(calc((100vw - 28px)/5.76),64px);letter-spacing:-.1em}
+  html:not([lang="en"]) .hero h1 .slogan span{letter-spacing:-.1em;text-indent:0}
+  html:not([lang="en"]) .hero h1 .slogan span+span{margin-left:.22em;letter-spacing:-.1em}
+  /* EN hero: exactly two lines on every phone width - the type scales down instead of wrapping */
+  html[lang="en"] .hero h1 .slogan.en{white-space:nowrap;font-size:min(calc((100vw - 36px)/8.9),34px)}
   html:not([lang="en"]) .hero .lead{margin-top:16px}
   html:not([lang="en"]) .hero .lead .lead-main{display:none}
   html:not([lang="en"]) .hero .lead .lead-alt{display:inline}
@@ -548,5 +539,4 @@ body{font-family:'Inter TV','MiSans TV','NotoKR TV',-apple-system,'PingFang SC',
   summary::after{font-size:14px}
   details p{margin-top:6px;font-size:13px;line-height:1.55}
   footer{margin-top:40px;padding:20px 0 36px;font-size:12px}
-  .tv-stage::before,.tv-stage::after{display:none}
 }
