@@ -151,6 +151,8 @@ fun WallpaperSheet(
     onHiddenApps: () -> Unit,
     onStartScreensaver: () -> Unit,
     onPin: (on: Boolean) -> Unit,
+    /** The version line's button: look for a new build, then show the update page. */
+    onCheckUpdate: () -> Unit = {},
     /** The sheet is all the way in (true) or not: Home need not draw under it then ([SheetCovers]). */
     onSettled: (Boolean) -> Unit = {},
     /** Draw the closed sheet once, nearly clear, so that its first opening is not its first draw (HomeScreen). */
@@ -680,6 +682,27 @@ fun WallpaperSheet(
                                 }
                             }
 
+                            // The build this TV runs, and the one press that looks for a newer one.
+                            // A section of its own: at the foot of the sheet the button sat against
+                            // the screen's bottom edge and read as part of the version line (the
+                            // owner, 1.62).
+                            PersonalizeTab.Update -> {
+                                Group(stringResource(R.string.st_update_hint)) { note ->
+                                    SettingRow(
+                                        R.string.st_update_version,
+                                        stringResource(R.string.st_version_footer, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE),
+                                        note,
+                                        first = true,
+                                    ) {
+                                        ActionChip(
+                                            stringResource(R.string.st_check_update), Glyph.Download,
+                                            focusRequester = firstRow,
+                                            onClick = onCheckUpdate,
+                                        )
+                                    }
+                                }
+                            }
+
                             // What this TV tells the developer, and the way to tell the developer
                             // something: one row, side by side, with the one-time question above it. A
                             // section of its own so that neither is buried five rows down in General.
@@ -1038,6 +1061,9 @@ private enum class PersonalizeTab(val label: Int, val glyph: Glyph) {
     Top(R.string.st_tab_top, Glyph.CloudSun),
     Saver(R.string.wp_screensaver, Glyph.Moon),
     General(R.string.st_tab_general, Glyph.Gear),
+    // Between the box's settings and privacy: the one row that is not a setting but an action, and
+    // the one a viewer looks for when a new build is promised (the owner, 1.62).
+    Update(R.string.st_tab_update, Glyph.Download),
     // Last, and on its own: the two settings that leave the box — the anonymous count and the log
     // to send — and the one question asked about them. In General they made five rows, which ran
     // past the bottom of the sheet (the owner, 2.20).

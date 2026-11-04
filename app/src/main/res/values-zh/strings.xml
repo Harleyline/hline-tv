@@ -45,7 +45,7 @@
     <string name="wifi_join">连接</string>
     <string name="wifi_failed">电视连不上这个网络，可以改用电视自己的网络页面。</string>
     <string name="wifi_settings">网络设置</string>
-    <string name="wifi_hint">有密码的网络会先要密码；电视认识的网络或开放网络直接连。Android 10 起只有系统能添加网络。</string>
+    <string name="wifi_hint">电视已经认识的网络、没有密码的开放网络，点一下直接连。其他网络会用电视自己的页面，在那儿用遥控器输密码。</string>
 
     <string name="input_live_tv">直播电视</string>
     <string name="input_antenna">天线</string>
@@ -348,6 +348,10 @@
     <string name="st_feedback_retry">重试</string>
     <string name="st_feedback_failed_hint">没有上传成功，检查网络后再试一次。</string>
     <string name="st_version_footer">HLine TV %1$s（%2$d）</string>
+    <string name="st_check_update">检查更新</string>
+    <string name="st_tab_update">更新</string>
+    <string name="st_update_version">版本</string>
+    <string name="st_update_hint">看看有没有新版本。有的话会打开更新页，在那里下载安装。</string>
     <string name="st_cities_phone_title">扫码添加城市</string>
     <string name="st_cities_phone_body">手机扫码，搜索并添加全球城市。</string>
     <string name="st_cities_auto">网络定位</string>

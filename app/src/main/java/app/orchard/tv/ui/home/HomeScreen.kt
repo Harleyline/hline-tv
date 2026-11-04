@@ -1147,6 +1147,9 @@ fun HomeScreen(
                 if (on) vm.overlay = Overlay.Pin(PinMode.Create) { vm.overlay = Overlay.Wallpaper }
                 else vm.whenUnlocked { AerialSettings.choosePin(null); vm.overlay = Overlay.Wallpaper }
             },
+            // The sheet gives way to the update page, which is where the result of the check and
+            // the "Download and install" button both live.
+            onCheckUpdate = { vm.checkUpdate() },
         )
 
         val pin = overlay as? Overlay.Pin

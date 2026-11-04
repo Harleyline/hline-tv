@@ -45,7 +45,7 @@
     <string name="wifi_join">加入</string>
     <string name="wifi_failed">電視沒有加入這個網路，可以用它自己的網路設定頁面。</string>
     <string name="wifi_settings">電視的網路設定</string>
-    <string name="wifi_hint">需要密碼的網路才會讓你輸入；電視已經儲存過的、或者沒有密碼的，直接連上。Android 10 起只有系統能新增網路，這些電視上就用它自己的頁面。</string>
+    <string name="wifi_hint">電視已經儲存過的網路、沒有密碼的開放網路，點一下直接連。其他網路會用電視自己的頁面，在那裡用遙控器輸入密碼。</string>
 
     <string name="input_live_tv">電視直播</string>
     <string name="input_antenna">類比電視</string>
@@ -340,6 +340,10 @@
     <string name="st_feedback_retry">重試</string>
     <string name="st_feedback_failed_hint">沒有上傳成功，請確認網路後再試一次。</string>
     <string name="st_version_footer">HLine TV %1$s（%2$d）</string>
+    <string name="st_check_update">檢查更新</string>
+    <string name="st_tab_update">更新</string>
+    <string name="st_update_version">版本</string>
+    <string name="st_update_hint">看看有沒有新版本。有的話會開啟更新頁，在那裡下載安裝。</string>
     <string name="st_cities_phone_title">掃碼新增城市</string>
     <string name="st_cities_phone_body">手機掃碼，搜尋並新增全球城市。</string>
     <string name="st_cities_auto">網路定位</string>

@@ -99,7 +99,7 @@ import app.orchard.tv.system.SourceKind
 import app.orchard.tv.system.Sounds
 import app.orchard.tv.system.Standby
 import app.orchard.tv.system.SystemProbe
-import app.orchard.tv.system.WifiNetworks
+import app.orchard.tv.system.WifiNetwork
 import app.orchard.tv.ui.components.Pressable
 import app.orchard.tv.ui.components.consumeTaps
 import app.orchard.tv.ui.components.dismissOnTap
@@ -757,7 +757,6 @@ private fun WifiPage(vm: HomeViewModel, takeFocus: Boolean, onOpen: (android.con
     val connected = stringResource(R.string.input_connected)
     val saved = stringResource(R.string.wifi_saved)
     val openLabel = stringResource(R.string.wifi_open)
-    val elsewhere = stringResource(R.string.wifi_in_settings)
     /** The TV's own network page, the last row here and what Aerial falls back on. */
     fun tvSettings() {
         val pages = SystemProbe.networkSettingsIntents(context, ethernet = vm.network.kind == NetKind.Ethernet)
@@ -780,9 +779,11 @@ private fun WifiPage(vm: HomeViewModel, takeFocus: Boolean, onOpen: (android.con
                 text = net.ssid,
                 trailing = when {
                     net.current -> connected
-                    net.closed || !WifiNetworks.canJoin -> elsewhere
                     net.saved -> saved
                     net.open -> openLabel
+                    // Nothing for the rest: a row that leads to the TV's own page says so by
+                    // going there, and a label on every one of them crowded the list (the owner,
+                    // 1.62).
                     else -> null
                 },
                 focusRequester = if (i == 0) first else null,

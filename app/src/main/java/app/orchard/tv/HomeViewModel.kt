@@ -36,6 +36,7 @@ import app.orchard.tv.system.TvSource
 import app.orchard.tv.system.VolumeStatus
 import app.orchard.tv.system.WifiNetwork
 import app.orchard.tv.system.WifiNetworks
+import app.orchard.tv.update.Updates
 import app.orchard.tv.ui.home.PinMode
 import app.orchard.tv.ui.home.ScreensaverSkips
 import app.orchard.tv.ui.home.TileFaces
@@ -574,10 +575,10 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
             if (!wifiRefused) refreshNetwork()
             WifiStep.Done
         }
-        else -> {
-            wifiAsking = network
-            WifiStep.Password
-        }
+        // One the TV does not know yet: its own page takes the password, with the keyboard the
+        // viewer already knows from every other setting there. Aerial's list joins the networks it
+        // has been on and the open ones, and leaves the typing to the TV (the owner, 1.62).
+        else -> WifiStep.InSettings
     }
 
     /** Joins the network being asked about, with the password typed into the TV's keyboard. */
@@ -602,6 +603,16 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun clearWifiRefusal() { wifiRefused = false }
+
+    /**
+     * The version line's button in Personalize: look for a new build now rather than on the next
+     * scheduled look, then hand the sheet over to the update page, which says what came of it and
+     * carries the button that installs it.
+     */
+    fun checkUpdate() {
+        Updates.checkIfStale(force = true)
+        overlay = Overlay.ControlCenter(CcPage.Update)
+    }
 
     /**
      * For the volume broadcast, one per step. It used to run refreshSystem, which read the level,

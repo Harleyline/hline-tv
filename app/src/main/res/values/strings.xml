@@ -46,7 +46,7 @@
     <string name="wifi_join">Join</string>
     <string name="wifi_failed">The TV would not join it. Its own network page can.</string>
     <string name="wifi_settings">Network settings</string>
-    <string name="wifi_hint">A network with a password asks for it; one the TV knows, or one with none, joins as it stands. Android 10 lets only the system add a network.</string>
+    <string name="wifi_hint">One the TV already knows joins as it stands, and so does an open one. Anything else opens the TV’s own page, where its password is typed with the remote.</string>
 
     <string name="input_live_tv">Live TV</string>
     <string name="input_antenna">Antenna</string>
@@ -349,6 +349,10 @@
     <string name="st_feedback_retry">Retry</string>
     <string name="st_feedback_failed_hint">It did not go through. Check the network and try again.</string>
     <string name="st_version_footer">HLine TV %1$s (%2$d)</string>
+    <string name="st_check_update">Check for Updates</string>
+    <string name="st_tab_update">Updates</string>
+    <string name="st_update_version">Version</string>
+    <string name="st_update_hint">Look for a newer build. The update page opens with what came of it, and installs it if there is one.</string>
     <string name="st_cities_phone_title">Scan to add a city</string>
     <string name="st_cities_phone_body">Scan with your phone to search and add cities worldwide.</string>
     <string name="st_cities_auto">Use network location</string>
