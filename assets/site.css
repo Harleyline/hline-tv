@@ -149,11 +149,12 @@
   .section-sub{margin:20px 0 0;color:var(--sub);max-width:780px;font-size:clamp(17px,1.8vw,20px);line-height:1.75}
 
   /* compare */
-  .compare{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,8fr);gap:20px;margin-top:56px;align-items:start}
+  .compare{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,9fr);gap:20px;margin-top:56px;align-items:start}
   /* AFTER panel: each line fills exactly one row - type scales with panel width */
   .panel.good{container-type:inline-size}
   .panel.good li{white-space:nowrap;font-size:calc((100cqw - 29px)/29.2);margin-bottom:16px}
-  html[lang="en"] .panel.good li{font-size:calc((100cqw - 29px)/46.5)}
+  html[lang="en"] .panel.now li{font-size:15.5px}
+  html[lang="en"] .panel.good li{font-size:calc((100cqw - 29px)/35.5);letter-spacing:-.03em}
   @media(max-width:760px){.compare{grid-template-columns:1fr}}
   .panel{position:relative;border:1px solid var(--line-soft);border-radius:var(--radius);padding:32px 30px;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012))}
   .panel.now{border-color:rgba(255,255,255,.16)}
