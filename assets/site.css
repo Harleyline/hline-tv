@@ -71,7 +71,7 @@
     radial-gradient(62% 50% at 50% 44%,rgba(10,7,4,.30),rgba(10,7,4,.48) 68%,rgba(10,7,4,.82) 100%),
     linear-gradient(180deg,rgba(10,7,4,.66) 0%,rgba(10,7,4,.16) 24%,rgba(10,7,4,.26) 58%,rgba(10,7,4,.86) 88%,var(--bg) 100%)}
   .hero-inner{position:relative;z-index:1;width:100%;max-width:1140px;margin:0 auto;padding:0 28px}
-  .chip{display:inline-flex;align-items:center;gap:9px;padding:7px 15px;border:1px solid rgba(255,255,255,.18);border-radius:999px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#d3dbe3;background:rgba(6,8,12,.48);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  .chip{display:inline-flex;align-items:center;gap:9px;padding:7px 15px;border:1px solid rgba(255,255,255,.18);border-radius:999px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#d3dbe3;background:rgba(6,8,12,.48)}
   .chip i{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
   .hero h1{margin:0;font-size:inherit;font-weight:700;letter-spacing:0;display:flex;align-items:flex-end;justify-content:center;height:calc(var(--hz)*2.34)}
   .hero h1 .brandmark{display:block;font-family:"Didot","Bodoni 72","Songti SC","Times New Roman",serif;font-weight:400;font-size:18px;letter-spacing:.72em;text-indent:.72em;text-transform:uppercase;color:rgba(255,255,255,.95)}
@@ -128,6 +128,9 @@
   .screen img{display:block;width:100%;height:auto}
   .screen::after{content:"";position:absolute;inset:0;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.10),transparent 18%,transparent 82%,rgba(0,0,0,.35));pointer-events:none}
   .tv-note{margin:18px 0 0;font-size:15px;color:var(--faint);text-align:center}
+
+  /* off-screen sections skip layout/paint entirely - big win on phones */
+  #why,#features,#devices,#install,#faq,footer{content-visibility:auto;contain-intrinsic-size:auto 900px}
 
   /* stats */
   .stats{margin:clamp(36px,5vh,64px) 0 0;border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);display:grid;grid-template-columns:repeat(4,1fr)}
@@ -209,7 +212,7 @@
     .langs span:nth-child(7n){--fd:7.8s;--fdel:-5.5s}
     @keyframes lang-float{from{translate:0 -13px}to{translate:0 15px}}
   }
-  .langs span{position:relative;border:1px solid var(--line-soft);border-radius:999px;padding:18px 34px;font-size:24px;color:#d6dde5;background:rgba(255,255,255,.028);backdrop-filter:blur(8px) saturate(1.15);-webkit-backdrop-filter:blur(8px) saturate(1.15);transition:color .25s ease,border-color .25s ease,box-shadow .3s ease,background .25s ease;overflow:hidden}
+  .langs span{position:relative;border:1px solid var(--line-soft);border-radius:999px;padding:18px 34px;font-size:24px;color:#d6dde5;background:rgba(255,255,255,.028);transition:color .25s ease,border-color .25s ease,box-shadow .3s ease,background .25s ease;overflow:hidden}
   .glow{position:relative}
   /* glow pills stay touch-glowy but never turn into selectable text on long-press */
   .langs span,.chips .chip{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
@@ -217,7 +220,7 @@
   .glow:hover{box-shadow:0 0 0 1px rgba(170,225,255,.20),0 16px 46px rgba(80,170,255,.18),inset 0 1px 0 rgba(255,255,255,.16)}
   .langs span{transition:color .25s ease,border-color .25s ease,box-shadow .3s ease,background .25s ease,transform .35s cubic-bezier(.2,.7,.2,1)}
   @media(hover:hover){
-    .lang-row span:hover{position:relative;z-index:5;color:#fff;border-color:rgba(190,235,255,.85);background:rgba(200,235,255,.10);box-shadow:0 0 0 1px rgba(190,235,255,.4),0 14px 44px rgba(80,170,255,.34),0 0 26px rgba(140,220,255,.28),inset 0 1px 0 rgba(255,255,255,.26);transform:scale(1.22)}
+    .lang-row span:hover{position:relative;z-index:5;will-change:transform;color:#fff;border-color:rgba(190,235,255,.85);background:rgba(200,235,255,.10);box-shadow:0 0 0 1px rgba(190,235,255,.4),0 14px 44px rgba(80,170,255,.34),0 0 26px rgba(140,220,255,.28),inset 0 1px 0 rgba(255,255,255,.26);transform:scale(1.22)}
     .lang-row span:has(+ span:hover){transform:scale(.92) translateX(-9px)}
     .lang-row span:hover + span{transform:scale(.92) translateX(9px)}}
   .glow:hover::before,.langs span:hover::before{opacity:1}
@@ -279,7 +282,7 @@
   .dev-row:last-child{border-bottom:1px solid var(--line-soft)}
   .dev-row h4{margin:4px 0 0;font-size:15.5px;font-weight:650;color:#dbe3ea;letter-spacing:-.01em}
   .chips{display:flex;flex-wrap:wrap;gap:9px}
-  .chip{font-size:15px;padding:9px 17px;border-radius:999px;border:1px solid rgba(255,255,255,.14);color:#dbe3ea;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.03));box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 14px rgba(0,0,0,.35);letter-spacing:.08em;font-family:var(--mono);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .chip{font-size:15px;padding:9px 17px;border-radius:999px;border:1px solid rgba(255,255,255,.14);color:#dbe3ea;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.03));box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 14px rgba(0,0,0,.35);letter-spacing:.08em;font-family:var(--mono)}
   .chip:hover{color:#fff;border-color:rgba(170,225,255,.45);background:rgba(255,255,255,.06)}
   @media(max-width:760px){.dev-row{grid-template-columns:1fr;gap:12px}}
 

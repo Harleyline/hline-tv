@@ -15,14 +15,16 @@
   const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let queued = false;
 
+  let heroH = heroEl ? heroEl.offsetHeight : 800;
+  window.addEventListener('resize', () => { heroH = heroEl ? heroEl.offsetHeight : 800; }, {passive:true});
   function onScroll() {
     const y = window.scrollY || window.pageYOffset;
     if (head) head.classList.toggle('solid', y > 40);
-    if (heroBg && !still && y < heroEl.offsetHeight * 1.5) {
+    if (heroBg && !still && y < heroH * 1.5) {
       heroBg.style.transform = 'translate3d(0,' + (y * 0.28).toFixed(2) + 'px,0)';
     }
     if (slogan) {
-      const p = Math.min(Math.max(y / (heroEl.offsetHeight * 0.26), 0), 1);
+      const p = Math.min(Math.max(y / (heroH * 0.26), 0), 1);
       slogan.style.opacity = Math.pow(1 - p, 1.25).toFixed(3);
       slogan.style.transform = 'translate3d(0,' + (-y * 0.16).toFixed(2) + 'px,0)';
     }
