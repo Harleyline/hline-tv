@@ -371,7 +371,7 @@ private fun UpdatePage(vm: HomeViewModel, takeFocus: Boolean) {
     var qr by remember { mutableStateOf<ImageBitmap?>(null) }
     LaunchedEffect(Unit) {
         val ip = PhoneServer.lanAddress(context)
-        val url = "https://harleyline.github.io/hline-tv/help/#v=${Updates.current}&f=${BuildConfig.FLAVOR}" + (ip?.let { "&tv=$it" } ?: "")
+        val url = "https://hlinetv.com/help/#v=${Updates.current}&f=${BuildConfig.FLAVOR}" + (ip?.let { "&tv=$it" } ?: "")
         qr = withContext(Dispatchers.Default) { PhoneServer.qr(url).asImageBitmap() }
     }
     Column {
@@ -456,7 +456,7 @@ private fun SetupPage(vm: HomeViewModel, takeFocus: Boolean, onOpen: (android.co
     var qr by remember { mutableStateOf<ImageBitmap?>(null) }
     LaunchedEffect(Unit) {
         val ip = PhoneServer.lanAddress(context)
-        val url = "https://harleyline.github.io/hline-tv/help/#setup=1&v=${Updates.current}&f=${BuildConfig.FLAVOR}" + (ip?.let { "&tv=$it" } ?: "")
+        val url = "https://hlinetv.com/help/#setup=1&v=${Updates.current}&f=${BuildConfig.FLAVOR}" + (ip?.let { "&tv=$it" } ?: "")
         qr = withContext(Dispatchers.Default) { PhoneServer.qr(url).asImageBitmap() }
     }
     Column {
