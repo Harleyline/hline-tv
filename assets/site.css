@@ -121,24 +121,24 @@
 
   /* the tv */
   .tv{position:relative;margin:clamp(80px,12vh,140px) auto 0;max-width:1040px}
-  /* comet: one bright dot orbiting the mockup border counter-clockwise, tail fading behind */
-  @property --beam{syntax:'<angle>';inherits:false;initial-value:0deg}
-  /* the glow hides BEHIND the mockup: only a soft halo leaks past the edge, no visible bar */
+  /* soft halo (same palette as the langs glow) hiding BEHIND the screen image,
+     gliding around the mockup border like the langs hover halo - no bar, no ring */
+  @property --gx{syntax:'<percentage>';inherits:false;initial-value:0%}
+  @property --gy{syntax:'<percentage>';inherits:false;initial-value:0%}
+  .tv-stage{position:relative}
   .tv .tvmock{position:relative;z-index:1}
-  .tv::before{content:"";position:absolute;inset:-5px;border-radius:calc(var(--radius) + 5px);padding:5px;z-index:0;pointer-events:none;
-    background:conic-gradient(from var(--beam),transparent 0deg 275deg,rgba(255,205,70,.10) 292deg,rgba(255,205,70,.34) 322deg,rgba(255,235,170,.6) 350deg,rgba(255,246,216,.75) 358deg,transparent 360deg);
-    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-    -webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;
-    animation:tv-beam 16s linear infinite;filter:blur(7px);opacity:.8}
-  /* faint sparkler, blurred into the halo */
-  .tv::after{content:"";position:absolute;inset:-5px;border-radius:calc(var(--radius) + 5px);padding:5px;z-index:0;pointer-events:none;
-    background:conic-gradient(from calc(var(--beam) + 2deg),transparent 0deg 1deg,rgba(255,225,130,.8) 2.2deg 3deg,transparent 4.6deg 6.5deg,rgba(255,242,190,.75) 8deg 8.7deg,transparent 10.5deg 12.5deg,rgba(255,205,80,.7) 14.4deg 15deg,transparent 17deg 360deg);
-    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-    -webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;
-    animation:tv-beam 16s linear infinite,tv-spark 1.1s ease-in-out infinite alternate;filter:blur(4px);opacity:.55}
-  @keyframes tv-beam{to{--beam:360deg}}
-  @keyframes tv-spark{from{opacity:.25}to{opacity:.6}}
-  @media(prefers-reduced-motion:reduce){.tv::before,.tv::after{animation:none;content:none}}
+  .tv-stage::before,.tv-stage::after{content:"";position:absolute;z-index:-1;pointer-events:none;border-radius:50%;
+    left:var(--gx);top:var(--gy);transform:translate(-50%,-50%);
+    animation:tv-gx 16s linear infinite,tv-gy 16s linear infinite}
+  /* wide soft halo, same blues as .langs span::before */
+  .tv-stage::before{width:360px;height:360px;filter:blur(22px);opacity:.9;
+    background:radial-gradient(closest-side,rgba(190,235,255,.34),rgba(120,170,255,.17) 46%,transparent 74%)}
+  /* brighter compact core inside the halo */
+  .tv-stage::after{width:150px;height:150px;filter:blur(12px);opacity:.8;
+    background:radial-gradient(closest-side,rgba(222,246,255,.55),rgba(140,190,255,.20) 52%,transparent 76%)}
+  @keyframes tv-gx{0%{--gx:0%}25%{--gx:100%}50%{--gx:100%}75%{--gx:0%}100%{--gx:0%}}
+  @keyframes tv-gy{0%{--gy:0%}25%{--gy:0%}50%{--gy:100%}75%{--gy:100%}100%{--gy:0%}}
+  @media(prefers-reduced-motion:reduce){.tv-stage::before,.tv-stage::after{animation:none;content:none}}
   .screen{position:relative;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.14);box-shadow:0 40px 120px rgba(0,0,0,.75),0 0 0 1px rgba(0,0,0,.6) inset;background:#000}
   .screen img{display:block;width:100%;height:auto}
   .screen::after{content:"";position:absolute;inset:0;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.10),transparent 18%,transparent 82%,rgba(0,0,0,.35));pointer-events:none}
@@ -548,5 +548,5 @@ body{font-family:'Inter TV','MiSans TV','NotoKR TV',-apple-system,'PingFang SC',
   summary::after{font-size:14px}
   details p{margin-top:6px;font-size:13px;line-height:1.55}
   footer{margin-top:40px;padding:20px 0 36px;font-size:12px}
-  .tv::before,.tv::after{display:none}
+  .tv-stage::before,.tv-stage::after{display:none}
 }
