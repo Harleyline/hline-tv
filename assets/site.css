@@ -507,12 +507,13 @@ body{font-family:'Inter TV','MiSans TV','NotoKR TV',-apple-system,'PingFang SC',
   .section-sub{margin-top:8px;font-size:14px;line-height:1.55}
 
   /* before/after — side-by-side on mobile */
-  .compare{margin-top:18px;gap:10px;grid-template-columns:1fr 1fr}
+  .compare{margin-top:18px;gap:10px;grid-template-columns:minmax(0,4fr) minmax(0,5.6fr)}
   .panel{padding:14px 12px}
   .panel h3{font-size:14px}
   .panel .tag{font-size:9.5px}
   .panel ul{margin-top:9px}
-  .panel li{padding-left:17px;margin-bottom:7px;font-size:12px;line-height:1.45}
+  .panel li{padding-left:15px;margin-bottom:7px;font-size:11px;line-height:1.45}
+  html[lang="en"] .panel.now li{font-size:12px}
   .panel.good li{white-space:normal;font-size:12px;margin-bottom:7px}
   html[lang="en"] .panel.good li{font-size:14px;letter-spacing:0}
   .panel .rows-d{display:none}
