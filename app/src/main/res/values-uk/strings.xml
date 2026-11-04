@@ -188,6 +188,7 @@
     <string name="device_speaker">Саундбар</string>
     <string name="cc_update_available">Нова версія: %s</string>
     <string name="cc_update_title">Версія %s</string>
+    <string name="cc_update_title_none">Оновлення ПЗ</string>
     <string name="cc_update_current">На цьому телевізорі встановлено версію %s.</string>
     <string name="cc_update_keeps">Ваші застосунки, розкладка, шпалери та налаштування залишаться без змін.</string>
     <string name="cc_update_scan">Відскануйте телефоном, щоб дізнатися, як оновитися (скопіювати команду встановлення або передати її ШІ-агенту).</string>

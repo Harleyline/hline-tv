@@ -375,12 +375,22 @@ private fun UpdatePage(vm: HomeViewModel, takeFocus: Boolean) {
         qr = withContext(Dispatchers.Default) { PhoneServer.qr(url).asImageBitmap() }
     }
     Column {
+        // "A new version X" when there is one; without one the page is reached from Personalize's
+        // check button too, and calling the build the viewer already runs "new" read as a promise
+        // the download could not keep — it fetched the older release and was refused (the owner,
+        // 1.62).
         MenuRow(
-            Glyph.ChevronLeft, stringResource(R.string.cc_update_title, Updates.available ?: Updates.current),
-            focusRequester = if (canInstall) null else first,
+            Glyph.ChevronLeft,
+            Updates.available?.let { stringResource(R.string.cc_update_title, it) }
+                ?: stringResource(R.string.cc_update_title_none),
+            focusRequester = if (canInstall && Updates.available != null) null else first,
             onClick = { vm.overlay = Overlay.ControlCenter(CcPage.Main) },
         )
-        if (canInstall) {
+        // The button only when there is something newer to fetch: without it, pressing it fetched
+        // the older release and was refused after eleven megabytes — the page said so in a line the
+        // press had already contradicted (the owner, 1.62). The QR below still carries the upgrade
+        // ways, and the check runs again in three hours.
+        if (canInstall && Updates.available != null) {
             val state = Updates.install
             MenuRow(
                 Glyph.Download,

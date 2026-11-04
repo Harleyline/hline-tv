@@ -200,6 +200,7 @@
     <string name="device_speaker">Soundbar</string>
     <string name="cc_update_available">Neue Version %s</string>
     <string name="cc_update_title">Neue Version %s</string>
+    <string name="cc_update_title_none">Software-Update</string>
     <string name="cc_update_current">Auf diesem Fernseher läuft %s.</string>
     <string name="cc_update_keeps">Apps, Reihenfolge, Hintergrund und Einstellungen bleiben erhalten.</string>
     <string name="cc_update_scan">Mit dem Handy scannen, um das Aktualisieren zu sehen: Installationsbefehl kopieren oder einem KI-Assistenten geben.</string>

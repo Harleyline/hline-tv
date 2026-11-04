@@ -200,6 +200,7 @@
     <string name="device_speaker">사운드바</string>
     <string name="cc_update_available">새 버전 %s</string>
     <string name="cc_update_title">버전 %s</string>
+    <string name="cc_update_title_none">소프트웨어 업데이트</string>
     <string name="cc_update_current">이 TV에는 %s이(가) 있습니다.</string>
     <string name="cc_update_keeps">앱, 배치, 배경화면, 설정은 그대로 유지됩니다.</string>
     <string name="cc_update_scan">휴대폰으로 스캔하면 업데이트 방법(설치 명령어 복사, AI 에이전트에게 넘기기)을 볼 수 있습니다.</string>

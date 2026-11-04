@@ -200,6 +200,7 @@
     <string name="device_speaker">Barra de sonido</string>
     <string name="cc_update_available">Nueva versión %s</string>
     <string name="cc_update_title">Nueva versión %s</string>
+    <string name="cc_update_title_none">Actualización de software</string>
     <string name="cc_update_current">En este televisor hay la %s.</string>
     <string name="cc_update_keeps">Las apps, el orden, el fondo y los ajustes se conservan.</string>
     <string name="cc_update_scan">Escanea con el móvil para ver cómo actualizar: puedes copiar el comando de instalación o pasárselo a un asistente de IA.</string>
