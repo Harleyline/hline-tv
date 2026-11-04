@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+/* The old address: anyone who scanned a code or kept a bookmark before hlinetv.com
+   lands on the same page there, path and hash kept (the help page carries the
+   version and the TV's address in the hash). */
+(function () {
+  if (location.hostname !== "harleyline.github.io") return;
+  location.replace("https://hlinetv.com" +
+    location.pathname.replace(/^\/hline-tv/, "") + location.search + location.hash);
+})();
+</script>
+
 <meta charset="utf-8">
 <meta name="color-scheme" content="dark">
 <meta name="viewport" content="width=device-width, initial-scale=1">
