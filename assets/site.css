@@ -76,13 +76,13 @@
   .hero h1{margin:0;font-size:inherit;font-weight:700;letter-spacing:0;display:flex;align-items:flex-end;justify-content:center;height:calc(var(--hz)*2.34)}
   .hero h1 .brandmark{display:block;font-family:"Didot","Bodoni 72","Songti SC","Times New Roman",serif;font-weight:400;font-size:18px;letter-spacing:.72em;text-indent:.72em;text-transform:uppercase;color:rgba(255,255,255,.95)}
   .slogan.oneline{font-family:'Inter Var','MiSans TV',sans-serif;font-weight:830;font-size:clamp(38px,7.2vw,104px);letter-spacing:-.03em;white-space:nowrap}
-.slogan{display:block;font-family:'Inter Var','PingFang SC','HarmonyOS Sans SC','MiSans','Microsoft YaHei',sans-serif;margin:0;font-size:var(--hz);line-height:1.12;letter-spacing:-.042em;font-weight:300;
+.slogan{display:block;font-family:'Inter Var','PingFang SC','HarmonyOS Sans SC','MiSans','Microsoft YaHei',sans-serif;margin:0;font-size:var(--hz);line-height:1.12;letter-spacing:-.042em;font-weight:100;
     background:linear-gradient(98deg,#ffffff 6%,#e4f5ff 40%,#d3caff 96%);-webkit-background-clip:text;background-clip:text;color:transparent;
     filter:drop-shadow(0 18px 50px rgba(0,0,0,.55))}
   .hero h1 .slogan span{display:block}
   .hero h1 .slogan span:first-child{letter-spacing:.17em;text-indent:.17em}
   .hero h1 .slogan span+span{font-size:1.08em;letter-spacing:.06em;text-indent:.06em}
-  .slogan.en{font-family:'Inter Var','MiSans TV',sans-serif;font-weight:250;font-size:calc(var(--hz)*.74);line-height:1.06;letter-spacing:0}
+  .slogan.en{font-family:'Inter Var','MiSans TV',sans-serif;font-weight:100;font-size:min(calc((100vw - 56px)/6.95),156px,calc(var(--hz)*1.1));line-height:1.06;letter-spacing:0}
   .hero h1 .slogan.en span:first-child{letter-spacing:0;text-indent:0}
   .hero h1 .slogan.en span+span{font-size:1em;letter-spacing:0;text-indent:0}
   /* CN title: always one line, bottom-aligned in the shared h1 box — EN/CN switch feels like a translation slide */
@@ -149,7 +149,11 @@
   .section-sub{margin:20px 0 0;color:var(--sub);max-width:780px;font-size:clamp(17px,1.8vw,20px);line-height:1.75}
 
   /* compare */
-  .compare{display:grid;grid-template-columns:1fr 1.3fr;gap:20px;margin-top:56px;align-items:start}
+  .compare{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,8fr);gap:20px;margin-top:56px;align-items:start}
+  /* AFTER panel: each line fills exactly one row - type scales with panel width */
+  .panel.good{container-type:inline-size}
+  .panel.good li{white-space:nowrap;font-size:calc((100cqw - 29px)/29.2);margin-bottom:16px}
+  html[lang="en"] .panel.good li{font-size:calc((100cqw - 29px)/46.5)}
   @media(max-width:760px){.compare{grid-template-columns:1fr}}
   .panel{position:relative;border:1px solid var(--line-soft);border-radius:var(--radius);padding:32px 30px;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012))}
   .panel.now{border-color:rgba(255,255,255,.16)}
@@ -490,6 +494,7 @@ body{font-family:'Inter TV','MiSans TV','NotoKR TV',-apple-system,'PingFang SC',
   .panel .tag{font-size:9.5px}
   .panel ul{margin-top:9px}
   .panel li{padding-left:17px;margin-bottom:7px;font-size:12px;line-height:1.45}
+  .panel.good li{white-space:normal;font-size:12px;margin-bottom:7px}
   .panel li::before{width:11px;height:11px;top:2px;background-size:11px 11px}
 
   /* feature rows */
