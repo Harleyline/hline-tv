@@ -353,6 +353,7 @@
     <string name="st_check_update">Check for Updates</string>
     <string name="st_update_version">Version</string>
     <string name="st_update_hint">Look for a newer build. The update page opens with what came of it, and installs it if there is one.</string>
+    <string name="st_air_source">Air quality data: World Air Quality Index (aqicn.org)</string>
     <string name="st_cities_phone_title">Scan to add a city</string>
     <string name="st_cities_phone_body">Scan with your phone to search and add cities worldwide.</string>
     <string name="st_cities_auto">Use network location</string>

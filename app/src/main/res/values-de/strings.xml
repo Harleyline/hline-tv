@@ -351,6 +351,7 @@
     <string name="st_check_update">Nach Updates suchen</string>
     <string name="st_update_version">Version</string>
     <string name="st_update_hint">Sucht nach einer neueren Version. Die Update-Seite öffnet sich mit dem Ergebnis und installiert sie, falls es eine gibt.</string>
+    <string name="st_air_source">Luftqualitätsdaten: World Air Quality Index (aqicn.org)</string>
     <string name="st_cities_phone_title">Stadt per Scan hinzufügen</string>
     <string name="st_cities_phone_body">Mit dem Handy scannen und Städte weltweit suchen und hinzufügen.</string>
     <string name="st_cities_auto">Per Netzwerk</string>

@@ -337,6 +337,7 @@
     <string name="st_check_update">Жаңартуларды тексеру</string>
     <string name="st_update_version">Нұсқа</string>
     <string name="st_update_hint">Жаңарақ нұсқаны іздейді. Нәтижесі жаңарту бетінде ашылады, бар болса сол жерде орнатылады.</string>
+    <string name="st_air_source">Ауа сапасы деректері: World Air Quality Index (aqicn.org)</string>
     <string name="st_cities_phone_title">Қала қосу үшін сканерлеңіз</string>
     <string name="st_cities_phone_body">Телефонмен кодты сканерлеп, әлемнің кез келген қаласын қосыңыз.</string>
     <string name="st_cities_auto">Желі арқылы</string>

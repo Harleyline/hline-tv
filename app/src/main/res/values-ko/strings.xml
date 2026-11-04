@@ -344,6 +344,7 @@
     <string name="st_check_update">업데이트 확인</string>
     <string name="st_update_version">버전</string>
     <string name="st_update_hint">새 버전이 있는지 확인합니다. 결과는 업데이트 화면에 표시되고, 있으면 거기서 설치합니다.</string>
+    <string name="st_air_source">대기질 데이터: World Air Quality Index (aqicn.org)</string>
     <string name="st_cities_phone_title">스캔해서 도시 추가</string>
     <string name="st_cities_phone_body">휴대폰으로 스캔해 전 세계 도시를 추가하세요.</string>
     <string name="st_cities_auto">네트워크 위치</string>

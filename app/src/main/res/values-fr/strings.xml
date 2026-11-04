@@ -344,6 +344,7 @@
     <string name="st_check_update">Rechercher des mises à jour</string>
     <string name="st_update_version">Version</string>
     <string name="st_update_hint">Cherche une version plus récente. La page de mise à jour s’ouvre avec le résultat et l’installe s’il y en a une.</string>
+    <string name="st_air_source">Données de qualité de l’air : World Air Quality Index (aqicn.org)</string>
     <string name="st_cities_phone_title">Scannez pour ajouter une ville</string>
     <string name="st_cities_phone_body">Scannez avec votre téléphone pour chercher et ajouter des villes du monde entier.</string>
     <string name="st_cities_auto">Par le réseau</string>

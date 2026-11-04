@@ -344,6 +344,7 @@
     <string name="st_check_update">檢查更新</string>
     <string name="st_update_version">版本</string>
     <string name="st_update_hint">看看有沒有新版本。有的話會開啟更新頁，在那裡下載安裝。</string>
+    <string name="st_air_source">空氣品質資料：World Air Quality Index (aqicn.org)</string>
     <string name="st_cities_phone_title">掃碼新增城市</string>
     <string name="st_cities_phone_body">手機掃碼，搜尋並新增全球城市。</string>
     <string name="st_cities_auto">網路定位</string>

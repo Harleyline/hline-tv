@@ -352,6 +352,7 @@
     <string name="st_check_update">检查更新</string>
     <string name="st_update_version">版本</string>
     <string name="st_update_hint">看看有没有新版本。有的话会打开更新页，在那里下载安装。</string>
+    <string name="st_air_source">空气质量数据：World Air Quality Index (aqicn.org)</string>
     <string name="st_cities_phone_title">扫码添加城市</string>
     <string name="st_cities_phone_body">手机扫码，搜索并添加全球城市。</string>
     <string name="st_cities_auto">网络定位</string>

@@ -351,6 +351,7 @@
     <string name="st_check_update">ตรวจหาอัปเดต</string>
     <string name="st_update_version">เวอร์ชัน</string>
     <string name="st_update_hint">ค้นหาเวอร์ชันใหม่ หน้าอัปเดตจะเปิดพร้อมผลลัพธ์ และติดตั้งให้ถ้ามี</string>
+    <string name="st_air_source">ข้อมูลคุณภาพอากาศ: World Air Quality Index (aqicn.org)</string>
     <string name="st_cities_phone_title">สแกนเพื่อเพิ่มเมือง</string>
     <string name="st_cities_phone_body">สแกนด้วยมือถือเพื่อค้นหาและเพิ่มเมืองทั่วโลก</string>
     <string name="st_cities_auto">ใช้ตำแหน่งจากเครือข่าย</string>

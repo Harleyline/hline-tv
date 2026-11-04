@@ -337,6 +337,7 @@
     <string name="st_check_update">Перевірити оновлення</string>
     <string name="st_update_version">Версія</string>
     <string name="st_update_hint">Шукає новішу версію. Сторінка оновлення відкриється з результатом і встановить її, якщо вона є.</string>
+    <string name="st_air_source">Дані про якість повітря: World Air Quality Index (aqicn.org)</string>
     <string name="st_cities_phone_title">Скануйте, щоб додати місто</string>
     <string name="st_cities_phone_body">Відскануйте код телефоном, щоб знайти й додати будь-яке місто світу.</string>
     <string name="st_cities_auto">За мережею</string>

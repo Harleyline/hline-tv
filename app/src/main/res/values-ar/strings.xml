@@ -351,6 +351,7 @@
     <string name="st_check_update">التحقق من التحديثات</string>
     <string name="st_update_version">الإصدار</string>
     <string name="st_update_hint">ابحث عن إصدار أحدث. تُفتح صفحة التحديث بنتيجة البحث، وتثبّت الإصدار إن وُجد.</string>
+    <string name="st_air_source">بيانات جودة الهواء: World Air Quality Index (aqicn.org)</string>
     <string name="st_cities_phone_title">امسح الرمز لإضافة مدينة</string>
     <string name="st_cities_phone_body">امسح الرمز بهاتفك للبحث عن أي مدينة في العالم وإضافتها.</string>
     <string name="st_cities_auto">عبر الشبكة</string>

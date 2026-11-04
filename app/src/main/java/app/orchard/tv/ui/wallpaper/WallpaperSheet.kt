@@ -741,6 +741,15 @@ fun WallpaperSheet(
                                         }
                                     }
                                 }
+                                // Where the air's figures come from: the station network is free to
+                                // use and asks for the credit, so it is on the page that says what
+                                // this app is (the owner, 1.62).
+                                Spacer(Modifier.height(10.dp))
+                                BasicText(
+                                    stringResource(R.string.st_air_source),
+                                    style = Type.Caption.copy(color = Palette.SecondaryLabel),
+                                    modifier = Modifier.padding(start = 20.dp, end = 16.dp),
+                                )
                             }
                         }
                         Spacer(Modifier.height(14.dp))
