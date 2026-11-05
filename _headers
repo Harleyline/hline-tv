@@ -1,0 +1,22 @@
+# Cloudflare Pages: what may be kept, and for how long.
+#
+# The pictures and the fonts never change under the same name, and a visitor who has
+# them keeps them — the second visit, and every scroll after it, comes off the disk
+# instead of the network. The HTML is not listed: Pages already answers it with
+# max-age=0, must-revalidate, which is what a page that carries the version of every
+# asset needs.
+#
+#   /img/apps/*    app banners and icons, replaced only with a new name
+#   /assets/*      site.css and site.js, requested as ?v=<build>, the fonts under fixed
+#                  names (a new face comes with a new name too)
+
+/img/*
+  Cache-Control: public, max-age=2592000
+
+/assets/*
+  Cache-Control: public, max-age=604800
+
+# The icons the TV itself fetches (app.orchard.tv's IconLibrary): the same files, read by
+# an app that keeps its own copy, so a long life costs nothing.
+/icons/*
+  Cache-Control: public, max-age=2592000

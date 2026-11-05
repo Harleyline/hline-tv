@@ -130,7 +130,7 @@
   .tv-note{margin:18px 0 0;font-size:15px;color:var(--faint);text-align:center}
 
   /* off-screen sections skip layout/paint entirely - big win on phones */
-  #why,#features,#devices,#install,#faq,footer{content-visibility:auto;contain-intrinsic-size:auto 900px}
+  
 
   /* stats */
   .stats{margin:clamp(36px,5vh,64px) 0 0;border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);display:grid;grid-template-columns:repeat(4,1fr)}

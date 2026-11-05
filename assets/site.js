@@ -150,3 +150,35 @@ document.addEventListener('contextmenu', (e) => {
   langs.addEventListener('touchend', () => setHot(-1), {passive:true});
   langs.addEventListener('touchcancel', () => setHot(-1), {passive:true});
 })();
+
+// 首屏安顿好之后，把下面还没到的图提前取回来。
+// 从大陆到 Cloudflare 的一次往返就要一秒上下，滑到那儿才开始请求，看到的就是空白；
+// 全页图片不到 1 MB，趁后台空闲取完，往后怎么滑都是从本地缓存里出。
+(function(){
+  const idle = window.requestIdleCallback || function(fn){ return setTimeout(fn, 900); };
+  let queue = [];
+
+  function warm(){
+    const batch = queue.splice(0, 6);
+    if (!batch.length) return;
+    batch.forEach(img => {
+      const src = img.currentSrc || img.getAttribute('src');
+      if (!src) return;
+      const pre = new Image();
+      pre.decoding = 'async';
+      if (img.getAttribute('sizes')) pre.setAttribute('sizes', img.getAttribute('sizes'));
+      if (img.getAttribute('srcset')) pre.setAttribute('srcset', img.getAttribute('srcset'));
+      pre.src = src;                       // 与屏幕上那张选同一个尺寸，命中同一份缓存
+    });
+    setTimeout(warm, 140);
+  }
+
+  function collect(){
+    queue = Array.from(document.images).filter(img => img.getAttribute('loading') === 'lazy');
+    warm();
+  }
+
+  function start(){ idle(collect, {timeout: 2600}); }
+  if (document.readyState === 'complete') start();
+  else window.addEventListener('load', start, {once: true});
+})();
