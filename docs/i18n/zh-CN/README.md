@@ -7,15 +7,16 @@
 电视亮起来的第一眼：时间、天气、你的 App，和一张会动的壁纸。没有广告，没有推荐位，没有会员
 角标。装在普通的安卓电视上，看起来比它的价格贵得多。
 
+[![English](https://img.shields.io/badge/English-5856d6?style=for-the-badge)](../../../README.md) [![简体中文](https://img.shields.io/badge/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-111111?style=for-the-badge)](README.md)
+
 [![下载 APK](https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD%20APK-34a853?style=for-the-badge&logo=android&logoColor=white)](https://github.com/Harleyline/hline-tv/releases/latest)
-[![官网](https://img.shields.io/badge/%E5%AE%98%E7%BD%91-hline--tv-111111?style=for-the-badge)](https://harleyline.github.io/hline-tv/)
+[![官网](https://img.shields.io/badge/%E5%AE%98%E7%BD%91-hline--tv-111111?style=for-the-badge)](https://hlinetv.com)
 [![版本](https://img.shields.io/github/v/release/Harleyline/hline-tv?style=flat-square&label=%E7%89%88%E6%9C%AC&color=2997ff)](https://github.com/Harleyline/hline-tv/releases/latest)
 ![Android 5.0+](https://img.shields.io/badge/Android-5.0%2B-3ddc84?style=flat-square&logo=android&logoColor=white)
 ![11 MB](https://img.shields.io/badge/%E4%BD%93%E7%A7%AF-11%20MB-8e8e93?style=flat-square)
 ![14 种语言](https://img.shields.io/badge/%E8%AF%AD%E8%A8%80-14%20%E7%A7%8D-5856d6?style=flat-square)
 [![MIT](https://img.shields.io/badge/%E8%AE%B8%E5%8F%AF%E8%AF%81-MIT-555555?style=flat-square)](LICENSE)
 
-[English](../../../README.md) · 简体中文
 
 <img src="../../img/home.jpg" alt="HLine TV 首页：航拍壁纸、日期与天气、玻璃底板上一排 App" width="100%">
 
