@@ -82,9 +82,10 @@
 
 // the drawn TV keeps real time, and reads the date in the page's own language
 (function(){
-  const timeEl = document.querySelector('[data-live-clock]');
-  const dateEl = document.querySelector('[data-live-date]');
-  if(!timeEl && !dateEl) return;
+  // 一页里可能有多台「电视」（首屏、屏保示例、多语言展示），全部一起走真实时间
+  const timeEls = Array.from(document.querySelectorAll('[data-live-clock]'));
+  const dateEls = Array.from(document.querySelectorAll('[data-live-date]'));
+  if(!timeEls.length && !dateEls.length) return;
   const wd = {en:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
               zh:['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
               ja:['日曜日','月曜日','火曜日','水曜日','木曜日','金曜日','土曜日'],
@@ -105,29 +106,76 @@
   }
   function tick(){
     const d = new Date();
-    if(timeEl) timeEl.textContent = d.getHours() + ':' + pad(d.getMinutes());
-    if(dateEl){
-      const lang = (document.documentElement.lang||'en').toLowerCase();
-      const zh = lang.startsWith('zh');
-      const ja = lang.startsWith('ja');
-      const ko = lang.startsWith('ko');
-      const m = d.getMonth() + 1, day = d.getDate(), w = d.getDay();
-      let head;
-      if (zh) head = m + '月' + day + '日 ' + wd.zh[w];
-      else if (ja) head = m + '月' + day + '日 ' + wd.ja[w];
-      else if (ko) head = m + '월 ' + day + '일 ' + wd.ko[w];
-      else head = wd.en[w] + ', ' + mo[d.getMonth()] + ' ' + day;
+    const lang = (document.documentElement.lang||'en').toLowerCase();
+    const zh = lang.startsWith('zh');
+    const ja = lang.startsWith('ja');
+    const ko = lang.startsWith('ko');
+    const m = d.getMonth() + 1, day = d.getDate(), w = d.getDay();
+    let head;
+    if (zh) head = m + '月' + day + '日 ' + wd.zh[w];
+    else if (ja) head = m + '月' + day + '日 ' + wd.ja[w];
+    else if (ko) head = m + '월 ' + day + '일 ' + wd.ko[w];
+    else head = wd.en[w] + ', ' + mo[d.getMonth()] + ' ' + day;
+    const clock = d.getHours() + ':' + pad(d.getMinutes());
+    timeEls.forEach(el => { el.textContent = clock; });
+    dateEls.forEach(el => {
       if(zh){
         const l = lunarOf(d);
-        dateEl.innerHTML = '';
-        dateEl.append(head);
-        if(l){ const s = document.createElement('span'); s.className='tm-lunar'; s.textContent = '  ' + l; dateEl.append(s); }
+        el.innerHTML = '';
+        el.append(head);
+        if(l){ const s = document.createElement('span'); s.className='tm-lunar'; s.textContent = '  ' + l; el.append(s); }
       } else {
-        dateEl.textContent = head;
+        el.textContent = head;
       }
-    }
+    });
   }
   tick(); setInterval(tick, 20000);
+})();
+
+// 演示画面里的天气：济州实时数据，缓存一小时、整点对齐后每小时更新一次
+(function(){
+  const box = document.querySelector('[data-weather="jeju"] .tm-status');
+  if(!box) return;
+  const items = box.querySelectorAll('.tm-item');
+  if(items.length < 4) return;
+  const KEY = 'hlinetv-wx-jeju', TTL = 3600000;
+  const setText = (el, v) => { const n = el && el.lastChild; if(n && n.nodeType === 3) n.textContent = v; };
+  function render(d){
+    setText(items[0], '제주');
+    setText(items[1], Math.round(d.temp) + '°');
+    setText(items[2], String(Math.round(d.aqi)));
+    setText(items[3], Math.round(d.hum) + '%');
+  }
+  function cached(){
+    try{
+      const c = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if(c && Date.now() - c.t < TTL){ render(c); return c.t; }
+    }catch(e){}
+    return 0;
+  }
+  async function refresh(){
+    const q = 'latitude=33.4996&longitude=126.5312&timezone=Asia%2FSeoul';
+    const [w, a] = await Promise.all([
+      fetch('https://api.open-meteo.com/v1/forecast?' + q + '&current=temperature_2m,relative_humidity_2m').then(r => r.json()),
+      fetch('https://air-quality-api.open-meteo.com/v1/air-quality?' + q + '&current=us_aqi').then(r => r.json())
+    ]);
+    const wc = w.current || {}, ac = a.current || {};
+    const d = {
+      temp: wc.temperature_2m != null ? wc.temperature_2m : 15,
+      hum:  wc.relative_humidity_2m != null ? wc.relative_humidity_2m : 56,
+      aqi:  ac.us_aqi != null ? ac.us_aqi : 64,
+      t: Date.now()
+    };
+    render(d);
+    try{ localStorage.setItem(KEY, JSON.stringify(d)); }catch(e){}
+  }
+  const last = cached();
+  if(Date.now() - last >= TTL) refresh().catch(() => {});
+  // 先对齐到下一个整点，之后严格每一小时拉一次
+  setTimeout(function hourly(){
+    refresh().catch(() => {});
+    setInterval(() => refresh().catch(() => {}), TTL);
+  }, TTL - (Date.now() % TTL));
 })();
 
 // 长按语言/机型胶囊时，不弹系统的复制/翻译/链接菜单
