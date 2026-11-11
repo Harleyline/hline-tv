@@ -49,7 +49,7 @@
   section[id]{scroll-margin-top:calc(76px - var(--sec-pad,0px))}
   div[id]{scroll-margin-top:84px}
   #why,#features{--sec-pad:clamp(96px,13vh,160px)}
-  #install,#faq{--sec-pad:clamp(170px,23vh,270px)}
+  #install,#faq,#devices{--sec-pad:clamp(170px,23vh,270px)}
 
   header{position:sticky;top:0;z-index:30;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(6,7,10,0);border-bottom:1px solid transparent;transition:background .35s ease,border-color .35s ease}
   header.solid{background:rgba(6,7,10,.74);border-bottom-color:var(--line-soft)}
@@ -503,6 +503,9 @@ body{font-family:'Inter TV','MiSans TV','NotoKR TV',-apple-system,'PingFang SC',
   #features{padding-top:34px}
   .section-gap{padding-top:44px}
   .section-far{padding-top:48px}
+  /* Anchor compensation follows the smaller mobile paddings too (11-11). */
+  #why,#features{--sec-pad:34px}
+  #install,#faq,#devices{--sec-pad:44px}
 
   /* headings — one size smaller */
   h2{margin-top:10px;font-size:clamp(20px,5.4vw,24px);line-height:1.22}
