@@ -8,15 +8,16 @@ The first thing your TV shows when it wakes up: the time, the weather, your apps
 that moves. No ads, no sponsored rows, no membership badges. Installed on a plain TV, it looks
 like it cost a lot more than it did.
 
+[![English](https://img.shields.io/badge/English-111111?style=for-the-badge)](README.md) [![简体中文](https://img.shields.io/badge/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-5856d6?style=for-the-badge)](docs/i18n/zh-CN/README.md)
+
 [![Download APK](https://img.shields.io/badge/Download%20APK-34a853?style=for-the-badge&logo=android&logoColor=white)](https://github.com/Harleyline/hline-tv/releases/latest)
-[![Website](https://img.shields.io/badge/Website-hline--tv-111111?style=for-the-badge)](https://harleyline.github.io/hline-tv/)
+[![Website](https://img.shields.io/badge/Website-hline--tv-111111?style=for-the-badge)](https://hlinetv.com)
 [![Version](https://img.shields.io/github/v/release/Harleyline/hline-tv?style=flat-square&label=version&color=2997ff)](https://github.com/Harleyline/hline-tv/releases/latest)
 ![Android 5.0+](https://img.shields.io/badge/Android-5.0%2B-3ddc84?style=flat-square&logo=android&logoColor=white)
 ![Size 11 MB](https://img.shields.io/badge/size-11%20MB-8e8e93?style=flat-square)
 ![Languages 14](https://img.shields.io/badge/languages-14-5856d6?style=flat-square)
 [![MIT](https://img.shields.io/badge/license-MIT-555555?style=flat-square)](LICENSE)
 
-[English](README.md) · [简体中文](docs/i18n/zh-CN/README.md)
 
 <img src="docs/img/home-en.jpg" alt="HLine TV home: aerial wallpaper, date and weather, a row of apps on a glass shelf" width="100%">
 
