@@ -10,6 +10,8 @@ like it cost a lot more than it did.
 
 [![English](https://img.shields.io/badge/English-111111?style=for-the-badge)](README.md) [![简体中文](https://img.shields.io/badge/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-5856d6?style=for-the-badge)](docs/i18n/zh-CN/README.md)
 
+<sub>App interface languages (14):<br>简体中文 · 繁體中文 · English · 日本語 · 한국어<br>Русский · Українська · Қазақша · Français · Español<br>Deutsch · ไทย · Português · العربية</sub>
+
 [![Download APK](https://img.shields.io/badge/Download%20APK-34a853?style=for-the-badge&logo=android&logoColor=white)](https://github.com/Harleyline/hline-tv/releases/latest)
 [![Website](https://img.shields.io/badge/Website-hline--tv-111111?style=for-the-badge)](https://hlinetv.com)
 [![Version](https://img.shields.io/github/v/release/Harleyline/hline-tv?style=flat-square&label=version&color=2997ff)](https://github.com/Harleyline/hline-tv/releases/latest)
