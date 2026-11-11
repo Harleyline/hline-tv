@@ -9,6 +9,8 @@
 
 [![English](https://img.shields.io/badge/English-5856d6?style=for-the-badge)](../../../README.md) [![简体中文](https://img.shields.io/badge/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-111111?style=for-the-badge)](README.md)
 
+<sub>界面支持 14 种语言：<br>简体中文 · 繁體中文 · English · 日本語 · 한국어<br>Русский · Українська · Қазақша · Français · Español<br>Deutsch · ไทย · Português · العربية</sub>
+
 [![下载 APK](https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD%20APK-34a853?style=for-the-badge&logo=android&logoColor=white)](https://github.com/Harleyline/hline-tv/releases/latest)
 [![官网](https://img.shields.io/badge/%E5%AE%98%E7%BD%91-hline--tv-111111?style=for-the-badge)](https://hlinetv.com)
 [![版本](https://img.shields.io/github/v/release/Harleyline/hline-tv?style=flat-square&label=%E7%89%88%E6%9C%AC&color=2997ff)](https://github.com/Harleyline/hline-tv/releases/latest)
