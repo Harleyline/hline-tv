@@ -29,4 +29,24 @@
       <image:title>HLine TV home screen, English interface</image:title>
     </image:image>
   </url>
+  <url>
+    <loc>https://hlinetv.com/ja/</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://hlinetv.com/img/home-en.jpg</image:loc>
+      <image:title>HLine TV 日本語版ホーム画面</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://hlinetv.com/ko/</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://hlinetv.com/img/home-en.jpg</image:loc>
+      <image:title>HLine TV 한국어 홈 화면</image:title>
+    </image:image>
+  </url>
 </urlset>

@@ -86,7 +86,9 @@
   const dateEl = document.querySelector('[data-live-date]');
   if(!timeEl && !dateEl) return;
   const wd = {en:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
-              zh:['星期日','星期一','星期二','星期三','星期四','星期五','星期六']};
+              zh:['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
+              ja:['日曜日','月曜日','火曜日','水曜日','木曜日','金曜日','土曜日'],
+              ko:['일요일','월요일','화요일','수요일','목요일','금요일','토요일']};
   const mo = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const pad = n => String(n).padStart(2,'0');
   // the Chinese calendar's day, written the way a lock screen writes it: 初一 … 三十
@@ -106,10 +108,15 @@
     if(timeEl) timeEl.textContent = d.getHours() + ':' + pad(d.getMinutes());
     if(dateEl){
       const lang = (document.documentElement.lang||'en').toLowerCase();
-      const zh = lang.startsWith('zh') || lang.startsWith('ja');
-      const head = zh
-        ? (d.getMonth()+1) + '月' + d.getDate() + '日 ' + wd.zh[d.getDay()]
-        : wd.en[d.getDay()] + ', ' + mo[d.getMonth()] + ' ' + d.getDate();
+      const zh = lang.startsWith('zh');
+      const ja = lang.startsWith('ja');
+      const ko = lang.startsWith('ko');
+      const m = d.getMonth() + 1, day = d.getDate(), w = d.getDay();
+      let head;
+      if (zh) head = m + '月' + day + '日 ' + wd.zh[w];
+      else if (ja) head = m + '月' + day + '日 ' + wd.ja[w];
+      else if (ko) head = m + '월 ' + day + '일 ' + wd.ko[w];
+      else head = wd.en[w] + ', ' + mo[d.getMonth()] + ' ' + day;
       if(zh){
         const l = lunarOf(d);
         dateEl.innerHTML = '';

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script>
+/* The old address: anyone who scanned a code or kept a bookmark before hlinetv.com
+   lands on the same page there, path and hash kept (the help page carries the
+   version and the TV's address in the hash). */
+(function () {
+  if (location.hostname !== "harleyline.github.io") return;
+  location.replace("https://hlinetv.com" +
+    location.pathname.replace(/^\/hline-tv/, "") + location.search + location.hash);
+})();
+</script>
+
+<meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HLine TV — Android TV를 위한 깔끔한 홈 화면</title>
+<meta name="description" content="광고 없음, 추천 행 없음, 멤버십 배지 없음. 시간과 날씨, 내 앱, 그리고 천천히 바뀌는 배경화면뿐. Android 5.0 이상, 무료 · 오픈 소스.">
+<meta name="keywords" content="HLine TV,Android TV 런처,홈 화면,광고 없는 런처,깔끔한 TV 화면,커스텀 런처">
+<meta name="author" content="HLine TV">
+<link rel="canonical" href="https://hlinetv.com/ko/">
+<link rel="alternate" hreflang="zh-CN" href="https://hlinetv.com/">
+<link rel="alternate" hreflang="en" href="https://hlinetv.com/en/">
+<link rel="alternate" hreflang="ja" href="https://hlinetv.com/ja/">
+<link rel="alternate" hreflang="ko" href="https://hlinetv.com/ko/">
+<link rel="alternate" hreflang="x-default" href="https://hlinetv.com/">
+<link rel="preload" as="image" href="../img/hero-hollywood.webp" type="image/webp" fetchpriority="high" imagesrcset="../img/hero-hollywood-900.webp 900w, ../img/hero-hollywood.webp 1600w" imagesizes="100vw">
+    <link rel="preload" as="font" href="../assets/inter-var.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="../assets/inter-tv.woff2" type="font/woff2" crossorigin>
+<meta name="robots" content="index,follow">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="HLine TV">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="HLine TV — Android TV를 위한 깔끔한 홈 화면">
+<meta property="og:description" content="광고도, 추천 행도, 멤버십 배지도 없습니다. 시간과 날씨, 내 앱, 바뀌는 배경화면뿐.">
+<meta property="og:url" content="https://hlinetv.com/ko/">
+<meta property="og:image" content="https://hlinetv.com/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="HLine TV — Android TV를 위한 깔끔한 홈 화면">
+<meta name="twitter:description" content="광고 없이, 추천 행 없이. Android TV를 위한 깔끔한 오픈 소스 런처.">
+<meta name="twitter:image" content="https://hlinetv.com/img/og.jpg">
+<meta name="theme-color" content="#06070a">
+<link rel="icon" href="../img/icon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="../img/icon-32.png">
+<link rel="icon" type="image/png" sizes="128x128" href="../img/icon-128.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../img/icon-180.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "HLine TV",
+  "alternateName": ["HLine"],
+  "applicationCategory": "UtilitiesApplication",
+  "applicationSubCategory": "Android TV launcher",
+  "operatingSystem": "Android 5.0 and up",
+  "softwareVersion": "1.61",
+  "inLanguage": ["en","zh-CN","zh-TW","ja","ko","ru","uk","kk","fr","es","de","th","pt","ar"],
+  "url": "https://hlinetv.com/ko/",
+  "downloadUrl": "https://github.com/Harleyline/hline-tv/releases/latest/download/HLine-TV.apk",
+  "installUrl": "https://github.com/Harleyline/hline-tv/releases/latest",
+  "fileSize": "11MB",
+  "screenshot": ["https://hlinetv.com/img/home-en.jpg",
+                 "https://hlinetv.com/img/apps.jpg"],
+  "description": "광고·추천 행·멤버십 배지 없는 Android TV 홈 화면. 시간, 날씨, 내 앱, 그리고 바뀌는 배경화면뿐.",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "license": "https://github.com/Harleyline/hline-tv/blob/main/LICENSE",
+  "sameAs": ["https://github.com/Harleyline/hline-tv"]
+}
+</script>
+<link rel="stylesheet" href="../assets/site.css?v=1113">
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="brand" href="../">
+      <img src="../img/logo-horizontal.svg" width="133" height="35" alt="HLine TV" fetchpriority="high" decoding="async">
+    </a>
+    <nav>
+      <a href="#why">바꾸는 이유</a>
+      <a href="#features">기능</a>
+      <a href="#devices">지원 기기</a>
+      <a href="#install">설치</a>
+      <a href="#faq">자주 묻는 질문</a>
+      <div class="lang-switch"><a href="../">中文</a><a href="../en/">EN</a><a href="../ja/">日本語</a><a href="./" aria-current="true">한국어</a></div>
+      <a class="cta" href="https://github.com/Harleyline/hline-tv/releases/latest/download/HLine-TV.apk">다운로드</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-bg" aria-hidden="true">
+      <picture>
+        <picture><source srcset="../img/hero-hollywood-900.webp 900w, ../img/hero-hollywood.webp 1600w" sizes="100vw" type="image/webp"><img src="../img/hero-hollywood.jpg" width="1600" height="900" alt="" fetchpriority="high" decoding="async"></picture>
+      </picture>
+    </div>
+    <div class="hero-inner">
+      <h1>
+        <span class="slogan en"><span>큰 화면에</span><span>여백을.</span></span>
+      </h1>
+      <p class="lead">광고도, 불필요한 정보도 없습니다. 화면이 켜지는 순간 남는 것은 빛과 그림자, 그리고 당신의 풍경뿐.</p>
+      <p class="closer">이제 TV는 온전히 당신의 것입니다.</p>
+      <div class="actions">
+        <a class="btn primary" href="https://github.com/Harleyline/hline-tv/releases/latest/download/HLine-TV.apk" aria-label="HLine TV 다운로드"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10"/><path d="M8 11l4 4 4-4"/><path d="M5 19h14"/></svg>다운로드<img class="btn-logo" src="../img/mark-dark.svg" width="26" height="26" alt="" shape-rendering="geometricPrecision" decoding="async"><span class="btn-name">HLINE TV</span></a>
+        <a class="btn ghost" href="https://github.com/Harleyline/hline-tv">GitHub 보기</a>
+      </div>
+      <p class="hero-meta"><span>Android 5.0+</span><span>루팅 불필요</span><span>언제든 복구 가능</span></p>
+    </div>
+    <a class="scroll-hint" href="#why" aria-label="아래로 스크롤">
+      <span>아래로</span>
+      <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+    </a>
+  </section>
+
+  <div class="wrap">
+    <div class="tv reveal">
+      <div class="tv-stage">
+            <div class="tvmock" role="img" aria-label="HLine TV 홈 화면: 맨해튼 노을, 시계, 날씨와 앱 선반">
+        <!-- 壁纸本身就是一张图：想换风格，换这一张即可 -->
+        <img class="tvmock-wall" srcset="../img/wall-manhattan-900.webp 900w, ../img/wall-manhattan.webp 1280w" sizes="(max-width:760px) 96vw, 1064px" src="../img/wall-manhattan.webp" alt="" decoding="async">
+        <div class="tm-ui">
+      <div class="tm-status"><span class="tm-item"><svg class="" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M452-112q-14-5-25-15-65-60-115-117t-83.5-110.5q-33.5-53.5-51-103T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 45-17.5 94.5t-51 103Q698-301 648-244T533-127q-11 10-25 15t-28 5q-14 0-28-5Zm84.5-391.5Q560-527 560-560t-23.5-56.5Q513-640 480-640t-56.5 23.5Q400-593 400-560t23.5 56.5Q447-480 480-480t56.5-23.5Z"/></svg>로스앤젤레스</span><span class="tm-item"><svg class="" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M251-160q-88 0-149.5-61.5T40-371q0-78 50-137t127-71q20-97 94-158.5T482-799q112 0 189 81.5T748-522v24q72-2 122 46.5T920-329q0 69-50 119t-119 50H251Z"/></svg>13°</span><span class="tm-item"><svg class="" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M461-160q-38 0-69-22t-41-59q-3-13 6.5-23t23.5-10q11 0 19 7.5t13 18.5q6 14 19.5 21t28.5 7q23 0 38.5-15.5T515-274q0-23-15.5-38.5T461-328H110q-13 0-21.5-8.5T80-358q0-13 8.5-21.5T110-388h351q48 0 81 33t33 81q0 48-33 81t-81 33ZM110-568q-13 0-21.5-8.5T80-598q0-13 8.5-21.5T110-628h513q32 0 54-22t22-54q0-32-22-54t-54-22q-23 0-42 12t-26 33q-4 11-12.5 19t-19.5 8q-14 0-22.5-9.5T495-740q11-45 46.5-72.5T623-840q57 0 96.5 39.5T759-704q0 57-39.5 96.5T623-568H110Zm670 321q-13 2-22.5-6.5T748-276q0-11 8-19.5t19-12.5q22-7 33.5-26t11.5-42q0-30-21-51t-51-21H110q-13 0-21.5-8.5T80-478q0-13 8.5-21.5T110-508h638q55 0 93.5 38.5T880-376q0 47-27.5 83T780-247Z"/></svg>63</span><span class="tm-item tm-last"><svg class="" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M251.5-174Q160-268 160-408q0-62 28-124t70-119q42-57 91-107t91-87q8-8 18.5-11.5T480-860q11 0 21.5 3.5T520-845q42 37 91 87t91 107q42 57 70 119t28 124q0 140-91.5 234T480-80q-137 0-228.5-94ZM491-200q12-1 20.5-9.5T520-230q0-14-9-22.5t-23-7.5q-41 3-87-22.5T343-375q-2-11-10.5-18t-19.5-7q-14 0-23 10.5t-6 24.5q17 91 80 130t127 35Z"/></svg>81%</span><span class="tm-pill"><svg class="" viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M480-127q-36 0-63-27t-27-63q0-36 27-63t63-27q36 0 63 27t27 63q0 36-27 63t-63 27Zm0-433q78 0 146 27.5T757-451q14 12 15 30.5T759-388q-14 14-32 13t-33-13q-53-44-106.5-63T480-470q-54 0-107.5 19T266-388q-15 12-33 13t-32-13q-14-14-13-32.5t15-30.5q63-54 131-81.5T480-560Zm0-240q128 0 241.5 48.5T926-622q14 13 15.5 31.5T929-558q-14 14-33.5 13.5T861-558q-83-70-178-111t-203-41q-108 0-203 41T99-558q-15 13-34 13.5T32-558q-14-14-13-32.5T34-622q91-81 204.5-129.5T480-800Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="0.96" y="1.92" width="22.08" height="8.64" rx="4.32" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="5.28" cy="6.24" r="4.32" fill="currentColor"/><path fill="currentColor" fill-rule="evenodd" d="M5.28 13.44H18.72A4.32 4.32 0 0 1 23.04 17.76V18.72A4.32 4.32 0 0 1 18.72 23.04H5.28A4.32 4.32 0 0 1 0.96 18.72V17.76A4.32 4.32 0 0 1 5.28 13.44ZM18.72 14.94A2.82 2.82 0 1 0 18.72 20.58A2.82 2.82 0 1 0 18.72 14.94Z"/></svg></span></div>
+      <div class="tm-clock">
+  <div class="tm-date" data-live-date></div>
+  <div class="tm-time" data-live-clock>12:08</div>
+</div>
+      <div class="tm-shelf"><div class="tm-tile"><img src="../img/apps/banner-en-1.webp" alt="YouTube TV" decoding="async"></div><div class="tm-tile"><img src="../img/apps/banner-en-2.webp" alt="Netflix" decoding="async"></div><div class="tm-tile"><img src="../img/apps/banner-en-3.webp" alt="Tubi" decoding="async"></div><div class="tm-tile"><img src="../img/apps/banner-en-4.webp" alt="Max" decoding="async"></div><div class="tm-tile"><img src="../img/apps/banner-en-5.webp" alt="Disney+" decoding="async"></div></div>
+    </div>
+      </div>
+      </div>
+      <p class="tv-note">플래그십 TV의 품격을, 지금 가진 TV에서.</p>
+    </div>
+
+    <div class="stats reveal">
+      <div class="stat">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg>
+        <b>0</b><span>광고 · 추천 행</span>
+      </div>
+      <div class="stat">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg>
+        <b>14</b><span>지원 언어</span>
+      </div>
+      <div class="stat">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.4"/><path d="M10.5 18.5h3"/></svg>
+        <b>5.0+</b><span>Android 버전</span>
+      </div>
+      <div class="stat">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7l-5 5 5 5"/><path d="M15 7l5 5-5 5"/></svg>
+        <b>MIT</b><span>오픈 소스</span>
+      </div>
+    </div>
+  </div>
+
+  <section id="why" class="wrap reveal">
+    <span class="eyebrow">바꾸는 이유</span>
+    <h2>당신을 위한 화면.</h2>
+    <p class="section-sub">기본 홈 화면은 다른 누군가를 위해 만들어집니다. HLine TV는 그 화면을 당신에게 돌려줍니다.</p>
+    <div class="compare">
+      <div class="panel now">
+        <span class="tag">바꾸기 전</span>
+        <h3>기본 런처</h3>
+        <ul class="rows-d">
+          <li>전원을 켜면 광고부터</li>
+          <li>추천 콘텐츠로 가득한 홈</li>
+          <li>내 앱은 몇 번의 클릭 너머</li>
+          <li>삭제할 수 없는 기본 앱</li>
+        </ul>
+        <ul class="rows-m">
+          <li>켤 때마다 광고</li>
+          <li>복잡한 홈 피드</li>
+          <li>앱이 깊숙이 숨겨짐</li>
+          <li>지울 수 없는 기본 앱</li>
+        </ul>
+      </div>
+      <div class="panel good glow">
+        <span class="tag">바꾼 뒤</span>
+        <h3>HLine TV</h3>
+        <ul class="rows-d">
+          <li>바로 보입니다 — 시간, 날씨, 자주 쓰는 앱을 한 화면에</li>
+          <li>방해하지 않습니다 — 화면 어디에도 광고 없이 균형을 유지합니다</li>
+          <li>손닿는 곳에 — 자주 쓰는 앱은 화면 아래에 고정</li>
+          <li>부담 없이 — 루팅 없이, 언제든 기본 화면으로 복귀</li>
+        </ul>
+        <ul class="rows-m">
+          <li>시간 · 날씨 · 자주 쓰는 앱을 한눈에</li>
+          <li>광고 없이, 중요한 것에만 집중</li>
+          <li>자주 쓰는 앱은 화면 아래에</li>
+          <li>루팅 불필요, 언제든 복구</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="wrap">
+    <span class="eyebrow reveal">사용 경험</span>
+    <h2 class="reveal">조용하지만, 눈을 떼기 어렵습니다.</h2>
+    <p class="section-sub reveal">필요한 것만. 그 외에는 아무것도.</p>
+
+    <div class="rows">
+      <div class="row reveal">
+        <div>
+          <span class="row-index"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 15h18"/></svg>01 · 홈</span>
+          <h3>날씨는 한눈에.</h3>
+          <p>화면 한쪽에 기온 · 공기질 · 도시 이름. 전원을 켜는 순간부터 그 자리에 있습니다.<br><br><b>시간은 원하는 곳에.</b> 시간과 날씨는 각각 따로 조절할 수 있습니다. 크기, 위치, 표시 여부까지 모두 자유롭습니다.</p>
+        </div>
+        <div class="row-media"><div class="tvmock tv-weather" role="img" aria-label="HLine TV 홈 화면 오른쪽 위: 도시, 기온, 공기질, 습도"><img class="tvmock-wall" loading="lazy" decoding="async" srcset="../img/wall-ny-900.webp 900w, ../img/wall-ny.webp 1280w" sizes="(max-width:760px) 96vw, 1064px" src="../img/wall-ny.webp" alt=""><div class="tm-ui"><div class="tm-status"><span class="tm-item"><svg viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M452-112q-14-5-25-15-65-60-115-117t-83.5-110.5q-33.5-53.5-51-103T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 45-17.5 94.5t-51 103Q698-301 648-244T533-127q-11 10-25 15t-28 5q-14 0-28-5Zm84.5-391.5Q560-527 560-560t-23.5-56.5Q513-640 480-640t-56.5 23.5Q400-593 400-560t23.5 56.5Q447-480 480-480t56.5-23.5Z"/></svg>로스앤젤레스</span><span class="tm-item"><svg viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M251-160q-88 0-149.5-61.5T40-371q0-78 50-137t127-71q20-97 94-158.5T482-799q112 0 189 81.5T748-522v24q72-2 122 46.5T920-329q0 69-50 119t-119 50H251Z"/></svg>13°</span><span class="tm-item"><svg viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M461-160q-38 0-69-22t-41-59q-3-13 6.5-23t23.5-10q11 0 19 7.5t13 18.5q6 14 19.5 21t28.5 7q23 0 38.5-15.5T515-274q0-23-15.5-38.5T461-328H110q-13 0-21.5-8.5T80-358q0-13 8.5-21.5T110-388h351q48 0 81 33t33 81q0 48-33 81t-81 33ZM110-568q-13 0-21.5-8.5T80-598q0-13 8.5-21.5T110-628h513q32 0 54-22t22-54q0-32-22-54t-54-22q-23 0-42 12t-26 33q-4 11-12.5 19t-19.5 8q-14 0-22.5-9.5T495-740q11-45 46.5-72.5T623-840q57 0 96.5 39.5T759-704q0 57-39.5 96.5T623-568H110Zm670 321q-13 2-22.5-6.5T748-276q0-11 8-19.5t19-12.5q22-7 33.5-26t11.5-42q0-30-21-51t-51-21H110q-13 0-21.5-8.5T80-478q0-13 8.5-21.5T110-508h638q55 0 93.5 38.5T880-376q0 47-27.5 83T780-247Z"/></svg>63</span><span class="tm-item tm-last"><svg viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M251.5-174Q160-268 160-408q0-62 28-124t70-119q42-57 91-107t91-87q8-8 18.5-11.5T480-860q11 0 21.5 3.5T520-845q42 37 91 87t91 107q42 57 70 119t28 124q0 140-91.5 234T480-80q-137 0-228.5-94ZM491-200q12-1 20.5-9.5T520-230q0-14-9-22.5t-23-7.5q-41 3-87-22.5T343-375q-2-11-10.5-18t-19.5-7q-14 0-23 10.5t-6 24.5q17 91 80 130t127 35Z"/></svg>81%</span><span class="tm-pill"><svg viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M480-127q-36 0-63-27t-27-63q0-36 27-63t63-27q36 0 63 27t27 63q0 36-27 63t-63 27Zm0-433q78 0 146 27.5T757-451q14 12 15 30.5T759-388q-14 14-32 13t-33-13q-53-44-106.5-63T480-470q-54 0-107.5 19T266-388q-15 12-33 13t-32-13q-14-14-13-32.5t15-30.5q63-54 131-81.5T480-560Zm0-240q128 0 241.5 48.5T926-622q14 13 15.5 31.5T929-558q-14 14-33.5 13.5T861-558q-83-70-178-111t-203-41q-108 0-203 41T99-558q-15 13-34 13.5T32-558q-14-14-13-32.5T34-622q91-81 204.5-129.5T480-800Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="0.96" y="1.92" width="22.08" height="8.64" rx="4.32" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="5.28" cy="6.24" r="4.32" fill="currentColor"/><path fill="currentColor" fill-rule="evenodd" d="M5.28 13.44H18.72A4.32 4.32 0 0 1 23.04 17.76V18.72A4.32 4.32 0 0 1 18.72 23.04H5.28A4.32 4.32 0 0 1 0.96 18.72V17.76A4.32 4.32 0 0 1 5.28 13.44ZM18.72 14.94A2.82 2.82 0 1 0 18.72 20.58A2.82 2.82 0 1 0 18.72 14.94Z"/></svg></span></div></div></div></div>      </div>
+
+      <div class="row flip reveal">
+        <div>
+          <span class="row-index"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.6"/><path d="M4 17l5-5 4 4 3-3 4 4"/></svg>02 · 배경화면</span>
+          <h3>움직이는 아름다움.</h3>
+          <p>영화 같은 항공 영상, 엄선된 사진, 혹은 당신의 추억이 담긴 한 장. 볼 때마다 새롭습니다.</p>
+        </div>
+        <div class="row-media"><picture>
+          <source srcset="../img/w-stack.webp" type="image/webp">
+          <img src="../img/w-stack.jpg" width="1400" height="910" alt="기본 배경화면: 파도, 야경, 스카이라인, 사구" loading="lazy" decoding="async">
+        </picture></div>
+      </div>
+
+      <div class="row reveal">
+        <div>
+          <span class="row-index"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>03 · 화면 보호기</span>
+          <h3>쉬는 순간에도 아름답게.</h3>
+          <p>자리를 비우면 항공 영상, 배경화면 전환, 조용한 시계 중에서 골라 보세요. 1분부터 몇 시간까지 설정할 수 있습니다. 손을 대지 않아도 화면은 아름답습니다.</p>
+        </div>
+        <div class="row-media"><div class="tvmock tv-saver" role="img" aria-label="화면 보호기: 도시 스카이라인, 시계와 날씨, 아래쪽 즐겨찾는 앱"><img class="tvmock-wall" loading="lazy" decoding="async" srcset="../img/wall-city-900.webp 900w, ../img/wall-city.webp 1280w" sizes="(max-width:760px) 96vw, 1064px" src="../img/wall-city.webp" alt=""><div class="tm-ui"><div class="tm-status"><span class="tm-item"><svg viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M452-112q-14-5-25-15-65-60-115-117t-83.5-110.5q-33.5-53.5-51-103T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 45-17.5 94.5t-51 103Q698-301 648-244T533-127q-11 10-25 15t-28 5q-14 0-28-5Zm84.5-391.5Q560-527 560-560t-23.5-56.5Q513-640 480-640t-56.5 23.5Q400-593 400-560t23.5 56.5Q447-480 480-480t56.5-23.5Z"/></svg>뉴욕</span><span class="tm-item"><svg viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M251-160q-88 0-149.5-61.5T40-371q0-78 50-137t127-71q20-97 94-158.5T482-799q112 0 189 81.5T748-522v24q72-2 122 46.5T920-329q0 69-50 119t-119 50H251Z"/></svg>15°</span><span class="tm-item"><svg viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M461-160q-38 0-69-22t-41-59q-3-13 6.5-23t23.5-10q11 0 19 7.5t13 18.5q6 14 19.5 21t28.5 7q23 0 38.5-15.5T515-274q0-23-15.5-38.5T461-328H110q-13 0-21.5-8.5T80-358q0-13 8.5-21.5T110-388h351q48 0 81 33t33 81q0 48-33 81t-81 33ZM110-568q-13 0-21.5-8.5T80-598q0-13 8.5-21.5T110-628h513q32 0 54-22t22-54q0-32-22-54t-54-22q-23 0-42 12t-26 33q-4 11-12.5 19t-19.5 8q-14 0-22.5-9.5T495-740q11-45 46.5-72.5T623-840q57 0 96.5 39.5T759-704q0 57-39.5 96.5T623-568H110Zm670 321q-13 2-22.5-6.5T748-276q0-11 8-19.5t19-12.5q22-7 33.5-26t11.5-42q0-30-21-51t-51-21H110q-13 0-21.5-8.5T80-478q0-13 8.5-21.5T110-508h638q55 0 93.5 38.5T880-376q0 47-27.5 83T780-247Z"/></svg>64</span><span class="tm-item tm-last"><svg viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M251.5-174Q160-268 160-408q0-62 28-124t70-119q42-57 91-107t91-87q8-8 18.5-11.5T480-860q11 0 21.5 3.5T520-845q42 37 91 87t91 107q42 57 70 119t28 124q0 140-91.5 234T480-80q-137 0-228.5-94ZM491-200q12-1 20.5-9.5T520-230q0-14-9-22.5t-23-7.5q-41 3-87-22.5T343-375q-2-11-10.5-18t-19.5-7q-14 0-23 10.5t-6 24.5q17 91 80 130t127 35Z"/></svg>56%</span><span class="tm-pill"><svg viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M480-127q-36 0-63-27t-27-63q0-36 27-63t63-27q36 0 63 27t27 63q0 36-27 63t-63 27Zm0-433q78 0 146 27.5T757-451q14 12 15 30.5T759-388q-14 14-32 13t-33-13q-53-44-106.5-63T480-470q-54 0-107.5 19T266-388q-15 12-33 13t-32-13q-14-14-13-32.5t15-30.5q63-54 131-81.5T480-560Zm0-240q128 0 241.5 48.5T926-622q14 13 15.5 31.5T929-558q-14 14-33.5 13.5T861-558q-83-70-178-111t-203-41q-108 0-203 41T99-558q-15 13-34 13.5T32-558q-14-14-13-32.5T34-622q91-81 204.5-129.5T480-800Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="0.96" y="1.92" width="22.08" height="8.64" rx="4.32" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="5.28" cy="6.24" r="4.32" fill="currentColor"/><path fill="currentColor" fill-rule="evenodd" d="M5.28 13.44H18.72A4.32 4.32 0 0 1 23.04 17.76V18.72A4.32 4.32 0 0 1 18.72 23.04H5.28A4.32 4.32 0 0 1 0.96 18.72V17.76A4.32 4.32 0 0 1 5.28 13.44ZM18.72 14.94A2.82 2.82 0 1 0 18.72 20.58A2.82 2.82 0 1 0 18.72 14.94Z"/></svg></span></div><div class="tm-clock"><div class="tm-date">10월 31일 토요일</div><div class="tm-time">15:43</div></div><div class="tm-shelf"><div class="tm-tile"><img src="../img/apps/banner-01.webp" alt="YouTube" decoding="async" loading="lazy"></div><div class="tm-tile"><img src="../img/apps/banner-02.webp" alt="tv+" decoding="async" loading="lazy"></div><div class="tm-tile"><img src="../img/apps/banner-03.webp" alt="VidHub" decoding="async" loading="lazy"></div><div class="tm-tile"><img src="../img/apps/banner-en-6.webp" alt="Pluto TV" decoding="async" loading="lazy"></div><div class="tm-tile"><img src="../img/apps/banner-en-7.webp" alt="Prime Video" decoding="async" loading="lazy"></div></div></div></div></div>      </div>
+
+      <div class="row flip reveal">
+        <div>
+          <span class="row-index"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.6"/><rect x="14" y="3" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6"/></svg>04 · 정리</span>
+          <h3>원하는 대로, 간편하게.</h3>
+          <p>길게 눌러 이동 · 그룹화 · 숨기기 · 삭제. 휴대폰에서 로컬 링크를 열면 배경화면과 도시 변경도 리모컨 없이 가능합니다.</p>
+        </div>
+        <div class="row-media"><div class="tvmock tv-apps" role="img" aria-label="전체 앱 그리드: 이동, 폴더, 숨기기, 삭제"><img class="tvmock-wall" loading="lazy" decoding="async" srcset="../img/wall-city-900.webp 900w, ../img/wall-city.webp 1280w" sizes="(max-width:760px) 96vw, 1064px" src="../img/wall-city.webp" alt=""><div class="tm-ui"><div class="tg-row r1"><div class="tg-cell"><img src="../img/apps/u-netflix.webp" alt="Netflix" decoding="async" loading="lazy"></div><div class="tg-cell"><img src="../img/apps/u-disney.webp" alt="Disney+" decoding="async" loading="lazy"></div><div class="tg-cell"><img src="../img/apps/u-max.webp" alt="Max" decoding="async" loading="lazy"></div><div class="tg-cell"><img src="../img/apps/u-tubi.webp" alt="Tubi" decoding="async" loading="lazy"></div><div class="tg-cell"><img src="../img/apps/t-tvplus.webp" alt="tv+" decoding="async" loading="lazy"></div></div><div class="tg-row r2"><div class="tg-cell tg-focus"><img src="../img/apps/u-hulu.webp" alt="Hulu" decoding="async" loading="lazy"><span class="tg-name">CIBN酷喵</span></div><div class="tg-cell"><img src="../img/apps/u-prime.webp" alt="Prime Video" decoding="async" loading="lazy"></div><div class="tg-cell"><img src="../img/apps/u-pluto.webp" alt="Pluto TV" decoding="async" loading="lazy"></div><div class="tg-cell"><img src="../img/apps/u-espn.webp" alt="ESPN" decoding="async" loading="lazy"></div><div class="tg-cell"><img src="../img/apps/t-dark.webp" alt="Folder" decoding="async" loading="lazy"></div></div><div class="tg-row r3"><div class="tg-cell"><img src="../img/apps/t-youtube.webp" alt="YouTube" decoding="async" loading="lazy"></div><div class="tg-cell"><img src="../img/apps/t-kodi.webp" alt="KODI" decoding="async" loading="lazy"></div><div class="tg-cell"><img src="../img/apps/u-crunchyroll.webp" alt="Crunchyroll" decoding="async" loading="lazy"></div><div class="tg-cell"><img src="../img/apps/u-crackle.webp" alt="Crackle" decoding="async" loading="lazy"></div><div class="tg-cell"><img src="../img/apps/t-settings.webp" alt="설정" decoding="async" loading="lazy"></div></div></div></div></div>      </div>
+
+      <div class="row reveal">
+        <div>
+          <span class="row-index"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/><path d="M9 8l2 2 4-4"/></svg>05 · 나답게</span>
+          <h3>아이콘도, 이름도, 당신 마음대로.</h3>
+          <p>기본 TV에서는 제조사가 아이콘을 정합니다. 여기선 QR 코드를 찍어 휴대폰 설정 화면에서 사진으로 바꾸거나 이름을 고칠 수 있고, 마음이 바뀌면 되돌릴 수 있습니다.</p>
+        </div>
+        <div class="row-media"><div class="tvmock tv-set" role="img" aria-label="휴대폰 설정 화면: 배경화면, 아이콘, 이름"><img class="tvmock-wall" loading="lazy" decoding="async" srcset="../img/wall-dunes-900.webp 900w, ../img/wall-dunes.webp 1280w" sizes="(max-width:760px) 96vw, 1064px" src="../img/wall-dunes.webp" alt=""><div class="tm-ui"><div class="ts-panel"><div class="ts-side"><div class="ts-item ts-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 15l4.5-4.5L12 15l3.5-3.5L21 17"/><circle cx="9" cy="9" r="1.4" fill="currentColor" stroke="none"/></svg>배경화면</div><div class="ts-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="7" height="7" rx="1.8"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.8"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.8"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.8"/></svg>홈 레이아웃</div><div class="ts-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4"/></svg>날씨와 시간</div><div class="ts-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.6 14.2A8.6 8.6 0 0 1 9.8 3.4 8.6 8.6 0 1 0 20.6 14.2Z"/></svg>화면 보호기</div><div class="ts-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.2"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3 1a7 7 0 0 0-2-1.2L14.2 3h-4l-.4 2.5a7 7 0 0 0-2 1.2l-2.3-1-2 3.4 2 1.5A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 2 1.2l.4 2.5h4l.4-2.5a7 7 0 0 0 2-1.2l2.3 1 2-3.4-2-1.5c.1-.4.1-.8.1-1.2Z"/></svg>일반</div><div class="ts-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v6c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3Z"/><path d="M9 12l2 2 4-4.5"/></svg>개인정보</div></div><div class="ts-title">배경화면</div><div class="ts-thumbs"><figure class="ts-thumb"><div class="ph"><img loading="lazy" decoding="async" src="../img/thumb-aerial.jpg" alt="항공 영상"><span class="play"><svg viewBox="0 0 24 24" fill="#14181f"><path d="M8 5v14l11-7Z"/></svg></span></div><figcaption>항공 영상</figcaption></figure><figure class="ts-thumb"><div class="ph"><img loading="lazy" decoding="async" src="../img/thumb-daily.jpg" alt="오늘의 사진"></div><figcaption>오늘의 사진</figcaption></figure><figure class="ts-thumb sm"><div class="ph"><img loading="lazy" decoding="async" src="../img/thumb-dunes.jpg" alt="사구 · 골드"></div><figcaption>사구 · 골드</figcaption></figure></div><div class="ts-phone"><div class="ts-qr"><img loading="lazy" decoding="async" src="../img/qr.webp" alt="QR"></div><div class="ts-ptitle">휴대폰으로 설정</div><div class="ts-pbody">TV와 같은 Wi-Fi에서 접속해 배경화면과 아이콘을 설정하세요.</div><div class="ts-purl">192.168.31.231:8790/kd9hhb75</div></div><div class="ts-ver">HLine TV 1.61 (156)</div></div></div></div></div>      </div>
+    </div>
+
+  </section>
+
+  <section class="wrap section-gap">
+    <span class="eyebrow reveal">실제 화면</span>
+    <h2 class="reveal">언어를 바꿔도, 자연스럽게.</h2>
+    <div class="gallery-wide reveal">
+      <figure>
+        <div class="tvmock" role="img" aria-label="HLine TV 한국어 홈 화면: 골든게이트, 날짜, 뉴욕 날씨와 앱 선반"><img class="tvmock-wall" loading="lazy" decoding="async" srcset="../img/wall-goldengate-900.webp 900w, ../img/wall-goldengate.webp 1280w" sizes="(max-width:760px) 96vw, 1064px" src="../img/wall-goldengate.webp" alt=""><div class="tm-ui"><div class="tm-status"><span class="tm-item"><svg viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M452-112q-14-5-25-15-65-60-115-117t-83.5-110.5q-33.5-53.5-51-103T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 45-17.5 94.5t-51 103Q698-301 648-244T533-127q-11 10-25 15t-28 5q-14 0-28-5Zm84.5-391.5Q560-527 560-560t-23.5-56.5Q513-640 480-640t-56.5 23.5Q400-593 400-560t23.5 56.5Q447-480 480-480t56.5-23.5Z"/></svg>뉴욕</span><span class="tm-item"><svg viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M251-160q-88 0-149.5-61.5T40-371q0-78 50-137t127-71q20-97 94-158.5T482-799q112 0 189 81.5T748-522v24q72-2 122 46.5T920-329q0 69-50 119t-119 50H251Z"/></svg>15°</span><span class="tm-item"><svg viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M461-160q-38 0-69-22t-41-59q-3-13 6.5-23t23.5-10q11 0 19 7.5t13 18.5q6 14 19.5 21t28.5 7q23 0 38.5-15.5T515-274q0-23-15.5-38.5T461-328H110q-13 0-21.5-8.5T80-358q0-13 8.5-21.5T110-388h351q48 0 81 33t33 81q0 48-33 81t-81 33ZM110-568q-13 0-21.5-8.5T80-598q0-13 8.5-21.5T110-628h513q32 0 54-22t22-54q0-32-22-54t-54-22q-23 0-42 12t-26 33q-4 11-12.5 19t-19.5 8q-14 0-22.5-9.5T495-740q11-45 46.5-72.5T623-840q57 0 96.5 39.5T759-704q0 57-39.5 96.5T623-568H110Zm670 321q-13 2-22.5-6.5T748-276q0-11 8-19.5t19-12.5q22-7 33.5-26t11.5-42q0-30-21-51t-51-21H110q-13 0-21.5-8.5T80-478q0-13 8.5-21.5T110-508h638q55 0 93.5 38.5T880-376q0 47-27.5 83T780-247Z"/></svg>64</span><span class="tm-item tm-last"><svg viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M251.5-174Q160-268 160-408q0-62 28-124t70-119q42-57 91-107t91-87q8-8 18.5-11.5T480-860q11 0 21.5 3.5T520-845q42 37 91 87t91 107q42 57 70 119t28 124q0 140-91.5 234T480-80q-137 0-228.5-94ZM491-200q12-1 20.5-9.5T520-230q0-14-9-22.5t-23-7.5q-41 3-87-22.5T343-375q-2-11-10.5-18t-19.5-7q-14 0-23 10.5t-6 24.5q17 91 80 130t127 35Z"/></svg>56%</span><span class="tm-pill"><svg viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M480-127q-36 0-63-27t-27-63q0-36 27-63t63-27q36 0 63 27t27 63q0 36-27 63t-63 27Zm0-433q78 0 146 27.5T757-451q14 12 15 30.5T759-388q-14 14-32 13t-33-13q-53-44-106.5-63T480-470q-54 0-107.5 19T266-388q-15 12-33 13t-32-13q-14-14-13-32.5t15-30.5q63-54 131-81.5T480-560Zm0-240q128 0 241.5 48.5T926-622q14 13 15.5 31.5T929-558q-14 14-33.5 13.5T861-558q-83-70-178-111t-203-41q-108 0-203 41T99-558q-15 13-34 13.5T32-558q-14-14-13-32.5T34-622q91-81 204.5-129.5T480-800Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="0.96" y="1.92" width="22.08" height="8.64" rx="4.32" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="5.28" cy="6.24" r="4.32" fill="currentColor"/><path fill="currentColor" fill-rule="evenodd" d="M5.28 13.44H18.72A4.32 4.32 0 0 1 23.04 17.76V18.72A4.32 4.32 0 0 1 18.72 23.04H5.28A4.32 4.32 0 0 1 0.96 18.72V17.76A4.32 4.32 0 0 1 5.28 13.44ZM18.72 14.94A2.82 2.82 0 1 0 18.72 20.58A2.82 2.82 0 1 0 18.72 14.94Z"/></svg></span></div><div class="tm-clock"><div class="tm-date">11월 3일 화요일</div><div class="tm-time">1:18</div></div><div class="tm-shelf"><div class="tm-tile"><img src="../img/apps/banner-en-8.webp" alt="Hulu" decoding="async" loading="lazy"></div><div class="tm-tile"><img src="../img/apps/banner-en-9.webp" alt="Freevee" decoding="async" loading="lazy"></div><div class="tm-tile"><img src="../img/apps/banner-en-10.webp" alt="Crackle" decoding="async" loading="lazy"></div><div class="tm-tile"><img src="../img/apps/banner-en-11.webp" alt="ESPN" decoding="async" loading="lazy"></div><div class="tm-tile"><img src="../img/apps/banner-en-12.webp" alt="Crunchyroll" decoding="async" loading="lazy"></div></div></div></div>
+        <figcaption>언어를 바꾸면 화면 전체가 자연스럽게 어울립니다. 뉴욕의 풍경도 그대로 조화롭게.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="wrap section-far">
+    <span class="eyebrow reveal">지원 언어</span>
+    <h2 class="reveal">어떤 언어에서도 익숙하게.</h2>
+    <p class="section-sub reveal">시스템 언어에 맞춰 HLine TV가 자연스럽게 따라갑니다.</p>
+
+    <div class="langs reveal">
+      <div class="lang-row"><span>English</span><span>简体中文</span><span>繁體中文</span><span>日本語</span><span>한국어</span></div>
+      <div class="lang-row"><span>Русский</span><span>Українська</span><span>Қазақша</span><span>Français</span><span>Español</span></div>
+      <div class="lang-row"><span>Deutsch</span><span>ไทย</span><span>Português</span><span>العربية</span></div>
+    </div>
+  </section>
+
+  <section id="devices" class="wrap section-gap">
+    <span class="eyebrow reveal">지원 기기</span>
+    <h2 class="reveal">27개 기종, 하나하나 실기로 확인.</h2>
+    <p class="section-sub reveal">ADB 메뉴, 막히기 쉬운 지점, 우회 방법까지 문서에 정리했습니다.<br>목록에 없어도 Android 5.0 이상이면 사용할 수 있습니다.</p>
+    <div class="dev-groups reveal">
+      <div class="dev-row"><h4>Xiaomi / Redmi</h4><div class="chips"><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/xiaomi-mitv-mffu0.md">MFFU0</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/xiaomi-mitv-mftp0.md">MFTP0</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/xiaomi-mitv-mftr0.md">MFTR0</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/xiaomi-mitv-mtsu0.md">MTSU0</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/xiaomi-mitv-nsop0.md">NSOP0</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/xiaomi-android6.md">Android 6 기종</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/xiaomi-ultraman-projector.md">프로젝터</a></div></div>
+      <div class="dev-row"><h4>TCL / FFALCON</h4><div class="chips"><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/tcl-m7221-cn.md">M7221</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/tcl-mt5879-cn.md">MT5879</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/tcl-mt9655-cn.md">MT9655</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/ffalcon-t966d5.md">T966D5</a></div></div>
+      <div class="dev-row"><h4>Skyworth</h4><div class="chips"><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/skyworth-e900v21f.md">E900V21F</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/skyworth-p3-box.md">P3 box</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/skyworth-coocaa.md">Coocaa</a></div></div>
+      <div class="dev-row"><h4>Hisense</h4><div class="chips"><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/hisense-vidaa.md">Vidaa</a></div></div>
+      <div class="dev-row"><h4>Sony</h4><div class="chips"><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/sony-bravia.md">BRAVIA</a></div></div>
+      <div class="dev-row"><h4>OPPO</h4><div class="chips"><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/oppo-coloros-tv.md">ColorOS TV</a></div></div>
+      <div class="dev-row"><h4>Konka / Letv</h4><div class="chips"><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/konka-kktv-u86v9.md">KKTV U86V9</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/letv-x3-65.md">X3-65</a></div></div>
+      <div class="dev-row"><h4>프로젝터</h4><div class="chips"><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/xgimi-h3.md">H3</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/xgimi-xk03u-android8.md">XK03U</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/xgimi-z7x.md">Z7X</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/obe-r3-ultra.md">R3 Ultra</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/obe-x7.md">X7</a></div></div>
+      <div class="dev-row"><h4>해외 브랜드</h4><div class="chips"><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/adb-by-brand.md">Sony BRAVIA</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/adb-by-brand.md">Philips</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/adb-by-brand.md">Panasonic</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/adb-by-brand.md">Toshiba</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/adb-by-brand.md">Sharp</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/adb-by-brand.md">Chromecast / Google TV</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/adb-by-brand.md">NVIDIA Shield</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/adb-by-brand.md">Mi Box / Mi TV Stick</a></div></div>
+      <div class="dev-row"><h4>셋톱박스</h4><div class="chips"><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/cm311-1-android9-atv.md">CM311-1</a><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/tencent-aurora-box.md">Aurora box</a></div></div>
+      <div class="dev-row"><h4>기타</h4><div class="chips"><a class="chip" href="https://github.com/Harleyline/hline-tv/blob/main/docs/devices/adb-by-brand.md">브랜드별 ADB 안내</a></div></div>
+    </div>
+  </section>
+
+  <section id="install" class="wrap section-gap">
+    <span class="eyebrow reveal">설치</span>
+    <h2 class="reveal">설치는 몇 초면 끝.</h2>
+    <p class="section-sub reveal">간편한 설치, 깔끔한 복원.<br>루팅이나 시스템 파일 수정이 필요 없으며, 언제든 되돌릴 수 있습니다.</p>
+    <div class="dl-meta reveal">
+      <span>v1.61</span><span>11 MB</span><span>Android 5.0+</span><span>MIT 오픈 소스</span><span>14개 언어</span>
+    </div>
+    <div class="steps">
+      <div class="term reveal glow">
+        <div class="term-bar"><i></i><i></i><i></i><span>터미널</span></div>
+<h3 class="term-h">curl 한 줄 설치</h3>
+<pre><span class="c"># TV와 컴퓨터를 같은 네트워크에 연결하고 TV에서 ADB를 켜 주세요</span>
+curl -fsSL https://raw.githubusercontent.com/Harleyline/hline-tv/main/tools/install.sh \
+  | TV=192.168.1.20 bash</pre>
+      </div>
+      <div class="term reveal glow">
+        <div class="term-bar"><i></i><i></i><i></i><span>ADB</span></div>
+<h3 class="term-h">직접 연결해 설치</h3>
+<pre><span class="c"># adb에 익숙하다면 (TCL / FFALCON은 adb 설치를 거부합니다)</span>
+adb connect TV_IP:5555
+adb install HLine-TV.apk</pre>
+      </div>
+      <div class="step-copy reveal glow">
+        <div class="term-bar"><i></i><i></i><i></i><span>usb</span></div>
+        <div class="step-copy-body">
+          <h3><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2.5" width="6" height="9" rx="1.4"/><path d="M12 11.5V21"/><path d="M8.5 21h7"/></svg>USB로 꽂고 열기만 하면</h3>
+          <p><code>HLine-TV.apk</code>를 USB에 복사해 TV의 파일 관리자에서 여세요. TCL / FFALCON에서는 대신 <code>HLine-TV-Guard.apk</code>를 사용하세요. 다른 파일은 설치 오류가 납니다.</p>
+        </div>
+      </div>
+      <div class="step-copy reveal glow">
+        <div class="term-bar"><i></i><i></i><i></i><span>guard</span></div>
+        <div class="step-copy-body">
+          <h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4.2-3 7.6-7 9-4-1.4-7-4.8-7-9V6z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg>설치가 막힌 기기를 위한 대안</h3>
+        <p>일부 펌웨어(주로 TCL, FFALCON, OPPO)는 홈 화면임을 선언한 앱의 설치를 거부합니다. <code>HLine-TV-Guard.apk</code>는 그 선언만 뺀 같은 앱으로, 접근성 서비스로 홈 키를 대신 처리합니다. 모양과 동작은 동일합니다. 이 기종들은 USB로 설치하세요.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="wrap section-gap">
+    <span class="eyebrow reveal">자주 묻는 질문</span>
+    <h2 class="reveal">HLine TV에 대해 더 알아보기</h2>
+    <div class="faq reveal">
+      <details><summary>보증에 영향이 있나요? 어떻게 되돌리나요?</summary><p>루팅, 펌웨어 수정, 시스템 앱 삭제는 하지 않으며 기본 홈 화면이 될 뿐입니다. 돌아가려면 TV 설정에서 기존 홈을 선택하거나 HLine TV를 삭제하세요.</p></details>
+      <details><summary>어떤 TV와 셋톱박스에서 되나요?</summary><p>Android TV 5.0 이상의 TV · 셋톱박스 · 프로젝터. Xiaomi, Redmi, TCL, FFALCON, Skyworth, Sony, Hisense, OPPO 등에서 확인했습니다. Samsung(Tizen)과 LG(webOS)는 Android가 아니라 사용할 수 없습니다.</p></details>
+      <details><summary>설치 오류가 나고 아무것도 설치되지 않습니다.</summary><p>대부분 파일을 잘못 고른 경우입니다. <code>HLine-TV.apk</code>는 홈 화면이 되기 위해 홈 카테고리를 선언해야 하는데, TCL / FFALCON / OPPO 펌웨어는 그런 앱을 거부합니다. 화면에는 단순한 설치 오류, adb에서는 <code>INSTALL_FAILED_VERIFICATION_FAILURE</code>로 표시됩니다. <code>HLine-TV-Guard.apk</code>를 쓰세요. 선언만 뺀 같은 앱이며 접근성 서비스로 홈 키를 처리하고 모양과 동작도 동일합니다. TCL은 adb 설치 자체를 막으므로 USB나 TV의 파일 관리자에서 설치하세요.</p></details>
+      <details><summary>설치했는데 홈 키를 누르면 예전 화면이 열립니다.</summary><p>Xiaomi, TCL, Skyworth는 홈 역할을 자사 런처로 고정해 서드파티 앱이 가져갈 수 없습니다. HLine TV는 홈 가드로 홈 키를 대신 처리합니다. 순서대로 ① TV 설정에서 HLine TV의 접근성을 허용하고(일부 기종은 알림 접근도 필요), ② HLine TV를 한 번 더 연 뒤, ③ TV를 재시작하세요. 그래도 유지되지 않으면 해당 펌웨어가 전원을 켤 때 고정된 컴포넌트로 자사 런처를 띄우는 경우입니다(일부 Skyworth). 그 기종 지원을 추가해야 하지만 앱 자체는 정상 동작합니다.</p></details>
+      <details><summary>데이터를 수집하거나 광고를 보여주나요?</summary><p>시청 기록을 남기지 않으며 광고 자리도 어디에 없습니다. 네트워크는 날씨 · 배경화면 · 업데이트 등 필요한 기능만 사용합니다.</p></details>
+      <details><summary>업데이트는 어떻게 하나요?</summary><p>컨트롤 센터에 새 버전이 표시되면 '다운로드 및 설치'를 누르세요. 덮어써서 설치되며 설정과 배치는 그대로 유지됩니다.</p></details>
+      <details><summary>내 사진과 동영상을 쓸 수 있나요?</summary><p>네. 휴대폰 설정 화면에서 추가할 수 있습니다. 사진은 배경화면, 동영상은 화면 보호기가 되며 모두 TV에 저장됩니다.</p></details>
+      <details><summary>업데이트해도 배치가 유지되나요?</summary><p>네. 앱, 순서, 폴더, 사용자 아이콘, 배경화면, 설정이 모두 유지됩니다.</p></details>
+      <details><summary>무료이고 오픈 소스인가요?</summary><p>무료 · MIT 라이선스이며 소스는 <a href="https://github.com/Harleyline/hline-tv">GitHub</a>에 있습니다. 계정이나 인앱 결제도 없습니다.</p></details>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap row">
+    <div>
+      <strong style="color:#cbd4dd">HLine TV</strong> · Android TV를 위한 깔끔한 홈 화면<br>
+      Apple, Xiaomi, Sony 등 어떤 회사와도 관련이 없습니다. 서드파티 자산 목록은 저장소의 CREDITS에 있습니다.
+    </div>
+    <div style="text-align:right">
+      <a href="https://github.com/Harleyline/hline-tv">GitHub</a> ·
+      <a href="https://github.com/Harleyline/hline-tv/releases/latest">릴리스</a> ·
+      <a href="https://github.com/Harleyline/hline-tv/blob/main/CHANGELOG.md">변경 이력</a> ·
+      <a href="../">简体中文</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/site.js?v=1113" defer></script>
+</body>
+</html>
