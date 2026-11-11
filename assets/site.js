@@ -8,25 +8,33 @@
   });
 
   // 首屏背景视差 + 顶栏渐显 + 标语上推渐隐
+  // .slogan 是 background-clip:text 的渐变字：直接给它加 translate3d/opacity 会让 Chrome
+  // 为它单独建合成层，滚回顶部后这层不再重绘，大标题就会永久空白。
+  // 所以视差只作用在外层 h1 上，并且回到顶部时把内联样式彻底清掉、交还给 CSS。
   const heroBg = document.querySelector('.hero-bg');
   const heroEl = document.querySelector('.hero');
-  const slogan = document.querySelector('.hero .slogan');
+  const sloganBox = document.querySelector('.hero h1');
   const head = document.querySelector('header');
   const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let queued = false;
 
   let heroH = heroEl ? heroEl.offsetHeight : 800;
-  window.addEventListener('resize', () => { heroH = heroEl ? heroEl.offsetHeight : 800; }, {passive:true});
+  window.addEventListener('resize', () => { heroH = heroEl ? heroEl.offsetHeight : 800; onScroll(); }, {passive:true});
   function onScroll() {
-    const y = window.scrollY || window.pageYOffset;
+    const y = window.scrollY || window.pageYOffset || 0;
     if (head) head.classList.toggle('solid', y > 40);
     if (heroBg && !still && y < heroH * 1.5) {
       heroBg.style.transform = 'translate3d(0,' + (y * 0.28).toFixed(2) + 'px,0)';
     }
-    if (slogan) {
-      const p = Math.min(Math.max(y / (heroH * 0.26), 0), 1);
-      slogan.style.opacity = Math.pow(1 - p, 1.25).toFixed(3);
-      slogan.style.transform = 'translate3d(0,' + (-y * 0.16).toFixed(2) + 'px,0)';
+    if (sloganBox) {
+      if (y <= 1) {
+        sloganBox.style.removeProperty('opacity');
+        sloganBox.style.removeProperty('transform');
+      } else {
+        const p = Math.min(y / Math.max(heroH * 0.26, 1), 1);
+        sloganBox.style.opacity = Math.pow(1 - p, 1.25).toFixed(3);
+        sloganBox.style.transform = 'translateY(' + (-y * 0.16).toFixed(2) + 'px)';
+      }
     }
     queued = false;
   }
@@ -65,6 +73,11 @@
   window.addEventListener('scroll', () => {
     if (!queued) { queued = true; requestAnimationFrame(onScroll); }
   }, { passive: true });
+  // 快速甩回顶部时最后一个 scroll 事件未必落在 y=0；滚动停稳、从后台回来、
+  // bfcache 恢复时都无条件再同步一次，保证标题状态一定能复原。
+  window.addEventListener('scrollend', onScroll, { passive: true });
+  window.addEventListener('pageshow', onScroll);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) onScroll(); });
   onScroll();
 
 // the drawn TV keeps real time, and reads the date in the page's own language
