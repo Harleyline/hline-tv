@@ -63,7 +63,7 @@ import app.orchard.tv.ui.home.TileFaces
 import app.orchard.tv.ui.theme.FontWarmup
 import app.orchard.tv.ui.theme.canvasDensity
 import app.orchard.tv.ui.components.UhdCanvas
-import app.orchard.tv.settings.AerialSettings
+import app.orchard.tv.settings.HLineSettings
 import app.orchard.tv.wallpaper.PhoneServer
 import app.orchard.tv.wallpaper.Wallpapers
 import app.orchard.tv.system.BootOpen
@@ -99,11 +99,11 @@ import kotlinx.coroutines.withTimeoutOrNull
 class MainActivity : ComponentActivity() {
 
     // The language chosen in Personalize, applied to everything this activity resolves: strings,
-    // dates, the weather's place. Read straight from the prefs, as attach runs before AerialSettings
+    // dates, the weather's place. Read straight from the prefs, as attach runs before HLineSettings
     // has necessarily started. A test hook on top: `adb shell settings put global
     // aerial_locale_preview ja-JP` renders this build in that locale whatever the setting says.
     override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(app.orchard.tv.settings.AerialSettings.localized(newBase))
+        super.attachBaseContext(app.orchard.tv.settings.HLineSettings.localized(newBase))
     }
 
     private val vm by viewModels<HomeViewModel>()
@@ -194,7 +194,7 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        DiagLog.catchCrashes()
+        DiagLog.catchCrashes(this)
         if (!GuardSetup.isUserUnlocked(this)) {
             super.onCreate(null)
             if (handOverToFirmwareFallbackHome()) return
@@ -235,13 +235,13 @@ class MainActivity : ComponentActivity() {
         IconLibrary.init(this)
         SourceLooks.init(this)
         AppNames.init(this)
-        AerialSettings.init(this)
+        HLineSettings.init(this)
         // The anonymous install line, once per version, and only once the owner said yes to the
         // card in Personalize (system/UsageReport): a build without an address sends nothing.
         UsageReport.start(this)
         // The families follow the language: on this Android the two scripts no TV ships can only
         // be the base family, so the styles are built for the one the app is speaking.
-        app.orchard.tv.ui.theme.Type.applyLanguage(AerialSettings.localeTag(this))
+        app.orchard.tv.ui.theme.Type.applyLanguage(HLineSettings.localeTag(this))
         // After the settings: the artwork's size follows the number of apps a row.
         TileArtFactory.useCanvasDensity(canvasDensity(resources.displayMetrics) * uhd)
         Sounds.init(this)
@@ -391,12 +391,12 @@ class MainActivity : ComponentActivity() {
      * so wait for them a moment. Several routes may fire for one wake; the first wins.
      */
     private fun openBootSource(reason: String, again: Boolean = false) {
-        val id = AerialSettings.bootSource
-        val pkg = AerialSettings.bootApp
+        val id = HLineSettings.bootSource
+        val pkg = HLineSettings.bootApp
         if (id == null && pkg == null) return
         if (!again && SystemClock.elapsedRealtime() - bootSourceOpenedAt < 15_000) return
         if (!again && !BootOpen.due(this)) {
-            android.util.Log.i("Aerial", "$reason: already opened ${id ?: pkg} since the TV came on")
+            android.util.Log.i("HLine", "$reason: already opened ${id ?: pkg} since the TV came on")
             return
         }
         bootSourceOpenedAt = SystemClock.elapsedRealtime()
@@ -418,7 +418,7 @@ class MainActivity : ComponentActivity() {
                     else vm.entry(pkg!!)?.let { it.label to it.launchIntent() }
                 }.filterNotNull().first()
             } ?: run {
-                android.util.Log.w("Aerial", "$reason: ${id ?: pkg} not listed; not opening it")
+                android.util.Log.w("HLine", "$reason: ${id ?: pkg} not listed; not opening it")
                 return@launch
             }
             // A live TV app opened before the network is up shows an error and stays on it: a box
@@ -428,7 +428,7 @@ class MainActivity : ComponentActivity() {
                     while (SystemProbe.network(this@MainActivity).kind == NetKind.Offline) delay(500)
                 }
             }
-            android.util.Log.i("Aerial", "$reason: opening ${intent.first}, what the TV starts on")
+            android.util.Log.i("HLine", "$reason: opening ${intent.first}, what the TV starts on")
             BootOpen.noteOpened(this@MainActivity)
             openedAppSinceHome = true
             open(intent.second)
@@ -451,7 +451,7 @@ class MainActivity : ComponentActivity() {
      */
     private fun preferSmoothestRefreshRate() {
         // Twice the frames is twice the GPU's work: Lite stays at the rate the TV chose.
-        if (AerialSettings.lite) return DiagLog.i("refresh rate left as it is (lite effects)")
+        if (HLineSettings.lite) return DiagLog.i("refresh rate left as it is (lite effects)")
         if (!DeviceClass.capable(this)) return DiagLog.i("refresh rate left as it is (no headroom: ${DeviceClass.describe(this)})")
         val d = display() ?: return
         val current = d.mode
@@ -569,7 +569,7 @@ class MainActivity : ComponentActivity() {
      * starts nothing on the timer, and Back starts the firmware's.
      */
     private fun startScreensaver(asked: Boolean) {
-        AerialSettings.relock()
+        HLineSettings.relock()
         if (Wallpapers.screensaver == ScreensaverMode.System) {
             if (asked && !SystemScreensaver.startFirmware(this)) DiagLog.i("no system screensaver to start")
             return
@@ -636,9 +636,9 @@ class MainActivity : ComponentActivity() {
         TvLight.put(this, false)
         idleHandler.removeCallbacks(holdStandby)
         idleHandler.removeCallbacks(standbyNow)
-        idleHandler.postDelayed(holdStandby, AerialSettings.standbyAfterMs)
+        idleHandler.postDelayed(holdStandby, HLineSettings.standbyAfterMs)
         idleHandler.removeCallbacks(showScreensaver)
-        if (AerialSettings.screensaverMinutes != AerialSettings.NEVER) {
+        if (HLineSettings.screensaverMinutes != HLineSettings.NEVER) {
             idleHandler.postDelayed(showScreensaver, idleBeforeScreensaver())
             if (holdsOffTheDream() && window.attributes.flags and WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON == 0) {
                 window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -667,7 +667,7 @@ class MainActivity : ComponentActivity() {
         runCatching { Settings.System.getLong(contentResolver, Settings.System.SCREEN_OFF_TIMEOUT) }.getOrDefault(0L) >= 24 * 60 * 60 * 1000L
 
     private fun idleBeforeScreensaver(): Long {
-        val chosen = AerialSettings.screensaverMinutes * 60_000L
+        val chosen = HLineSettings.screensaverMinutes * 60_000L
         // Where Aerial's dream is the TV's screensaver, the TV starts it on its own after
         // screen_off_timeout (TCL MT5879: 2 minutes); Home starts its own first, so that the
         // aerial wallpaper's film can carry on (startScreensaver).
@@ -693,7 +693,7 @@ class MainActivity : ComponentActivity() {
     private fun holdsOffTheDream(): Boolean {
         if (firmwareScreensaverDelay() != null) return false
         val dream = dreamDelay() ?: return false
-        return AerialSettings.screensaverMinutes * 60_000L > dream - 15_000L
+        return HLineSettings.screensaverMinutes * 60_000L > dream - 15_000L
     }
 
     private fun hideScreensaver() {
@@ -809,10 +809,11 @@ class MainActivity : ComponentActivity() {
             },
             ContextCompat.RECEIVER_NOT_EXPORTED,
         )
-        getSystemService<ConnectivityManager>()?.let { cm ->
-            if (Build.VERSION.SDK_INT >= 24) cm.registerDefaultNetworkCallback(networkCallback)
-            // A request leaves VPNs out unless told otherwise; the status pill shows one coming up (issue #809).
-            else cm.registerNetworkCallback(NetworkRequest.Builder().removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN).build(), networkCallback)
+        runCatching {
+            getSystemService<ConnectivityManager>()?.let { cm ->
+                if (Build.VERSION.SDK_INT >= 24) cm.registerDefaultNetworkCallback(networkCallback)
+                else cm.registerNetworkCallback(NetworkRequest.Builder().removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN).build(), networkCallback)
+            }
         }
         // Apps can change while Aerial is in the background without it hearing about it.
         vm.reload()
@@ -840,7 +841,7 @@ class MainActivity : ComponentActivity() {
         if (SystemClock.uptimeMillis() - dreamAskedAt < 1_000) idleHandler.postDelayed(dreamCheck, 1_500)
         restartIdleTimer()
         GuardSetup.setHomeInFront(this, true)
-        HomeGuardService.onAerialResumed()
+        HomeGuardService.onHomeResumed()
         Updates.onHomeResumed()
         vm.refreshSystem()
         // Back in front by any route (Home was handled in onNewIntent, which runs first; Back from
@@ -860,7 +861,7 @@ class MainActivity : ComponentActivity() {
         vm.resumed = false
         DiagLog.i("onPause")
         GuardSetup.setHomeInFront(this, false)
-        if (HomeGuardService.onAerialPaused()) {
+        if (HomeGuardService.onHomePaused()) {
             // Only Home's bounce: the film plays on, unless Aerial is not back soon after all
             // (Home pressed again and again, the recent apps opened).
             vm.homeBounce = true
@@ -880,7 +881,7 @@ class MainActivity : ComponentActivity() {
         idleHandler.removeCallbacks(endHomeBounce)
         vm.homeBounce = false
         // An app, the screensaver or standby in front: the PIN is asked again, as in Lite (#718).
-        AerialSettings.relock()
+        HLineSettings.relock()
         unregisterReceiver(packageReceiver)
         unregisterReceiver(volumeReceiver)
         unregisterReceiver(dayReceiver)
@@ -890,7 +891,7 @@ class MainActivity : ComponentActivity() {
     /** Opens an app, growing it out of its tile. */
     private fun launch(app: AppEntry, bounds: Rect?) {
         // The TV's settings app behind the parental PIN as well, not only Control Center's button.
-        if (AerialSettings.locked && SystemProbe.isSettingsApp(this, app.packageName)) {
+        if (HLineSettings.locked && SystemProbe.isSettingsApp(this, app.packageName)) {
             vm.whenUnlocked { launch(app, bounds) }
             return
         }
@@ -979,17 +980,17 @@ class MainActivity : ComponentActivity() {
         const val WAKE_QUIET_MS = 400L
 
         /**
-         * When the system's screensaver (AerialDream) last ended on a key, in uptime: a second press
+         * When the system's screensaver (HLineDream) last ended on a key, in uptime: a second press
          * the remote sent with it reaches Home, which takes it as waking too.
          */
         @Volatile
         var dreamWokeAt = 0L
 
         /**
-         * The key that woke AerialDream, until its lift. The rest of that press (its repeats and its
+         * The key that woke HLineDream, until its lift. The rest of that press (its repeats and its
          * lift) comes to Home once the dream is gone; on TCL MT5879 the dream's teardown can hold
          * the lift back long enough for Android to repeat the key, and one Down moved focus several
-         * rows. Set by AerialDream.
+         * rows. Set by HLineDream.
          */
         @Volatile var dreamWokeKey = -1
     }

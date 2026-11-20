@@ -28,13 +28,13 @@ import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import app.orchard.tv.ui.components.FilmSlot
-import app.orchard.tv.settings.AerialSettings
+import app.orchard.tv.settings.HLineSettings
 import app.orchard.tv.system.DiagLog
 import app.orchard.tv.ui.theme.Motion
 import app.orchard.tv.wallpaper.Aerial
 import app.orchard.tv.wallpaper.AerialFormats
 import app.orchard.tv.wallpaper.AerialQuality
-import app.orchard.tv.wallpaper.AerialStream
+import app.orchard.tv.wallpaper.HLineStream
 import app.orchard.tv.wallpaper.Aerials
 import app.orchard.tv.wallpaper.Wallpapers
 import kotlinx.coroutines.Dispatchers
@@ -176,10 +176,10 @@ fun LiveWallpaper(
         val spot = (if (atPicture) Wallpapers.livePictureSpot() else Wallpapers.liveSpot()).takeIf { !fresh }
         fresh = false
         val resume = spot?.let { (id, _) -> all.firstOrNull { it.id == id } }
-        val films = if (resume != null) listOf(resume) + (all - resume) else AerialStream.withOpenerFirst(context, all, quality)
+        val films = if (resume != null) listOf(resume) + (all - resume) else HLineStream.withOpenerFirst(context, all, quality)
         var failures = 0
         var rendered = false
-        return AerialStream.player(context, quality).apply {
+        return HLineStream.player(context, quality).apply {
             addListener(object : Player.Listener {
                 override fun onRenderedFirstFrame() {
                     rendered = true
@@ -202,7 +202,7 @@ fun LiveWallpaper(
                     // The failing film's cached opener is dropped first: corrupt cached bytes (a
                     // prefetch cut short) err the same way however often they are replayed.
                     films.firstOrNull { it.id == id }?.let {
-                        AerialStream.dropOpener(context, it, quality)
+                        HLineStream.dropOpener(context, it, quality)
                         DiagLog.i("wallpaper film opener dropped for $id")
                     }
                     // Three in a row: Apple's host is out of reach; the picture stays as it is.
@@ -211,7 +211,7 @@ fun LiveWallpaper(
                     prepare()
                 }
             })
-            setMediaItems(films.map { AerialStream.mediaItem(it, quality, overHttp) }, 0, if (resume != null) spot?.second ?: 0L else 0L)
+            setMediaItems(films.map { HLineStream.mediaItem(it, quality, overHttp) }, 0, if (resume != null) spot?.second ?: 0L else 0L)
             surface?.let { setVideoSurfaceView(it) }
             prepare()
             live.player = this
@@ -263,14 +263,14 @@ fun LiveWallpaper(
     // fresh start after a Dolby Vision screensaver (only the screensaver's quality had them).
     LaunchedEffect(live.film, showing) {
         val film = live.film ?: return@LaunchedEffect
-        if (showing) AerialStream.prepareOpener(context, Aerials.all(context), film, AerialFormats.forWallpaper(context), Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
+        if (showing) HLineStream.prepareOpener(context, Aerials.all(context), film, AerialFormats.forWallpaper(context), Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
     }
 
     // The shelf of films chosen in Personalize (1.81): a shelf picked while a film of the old one
     // played kept that film until it was let go. Now the film is let go and the new shelf opens.
     var shelf by remember { mutableStateOf(Aerials.kind()) }
     var reopen by remember { mutableStateOf(0) }
-    LaunchedEffect(AerialSettings.aerialKind) {
+    LaunchedEffect(HLineSettings.aerialKind) {
         val chosen = Aerials.kind()
         if (chosen == shelf) return@LaunchedEffect
         shelf = chosen
@@ -285,13 +285,13 @@ fun LiveWallpaper(
         if (films.isNotEmpty()) {
             // Not one of the new shelf, so it counts as a candidate even where the shelf has a
             // single film (space and cities are one film each now).
-            AerialStream.prepareOpener(context, films, live.film ?: NoFilm, AerialFormats.forWallpaper(context), Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
+            HLineStream.prepareOpener(context, films, live.film ?: NoFilm, AerialFormats.forWallpaper(context), Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
         }
     }
 
     // A wallpaper chosen while a panel is up: run the film for a moment so the choice shows, then
     // stand it still (the owner, 2.02). On Home it plays anyway, so this is for the panels only.
-    LaunchedEffect(AerialSettings.aerialKind, Wallpapers.selectedId) {
+    LaunchedEffect(HLineSettings.aerialKind, Wallpapers.selectedId) {
         if (!panel) return@LaunchedEffect
         peek++
     }
@@ -550,7 +550,7 @@ private const val SAVER_COVERS_MS = 1_400L
  * every time, 16 frames dropped each (frames of 4K reaching the screen: 24 a second, 30 with none
  * taken; 1080p films were not held up). Remembered for the process, as [pixelCopy] is.
  */
-internal val glassFrames: Boolean get() = !glassCostly && !AerialSettings.lite
+internal val glassFrames: Boolean get() = !glassCostly && !HLineSettings.lite
 
 private var glassCostly = false
 
@@ -720,7 +720,7 @@ private class FrameReader(private val context: android.content.Context) {
         if (openFor == id) retriever?.let { return it }
         close0()
         val film = Aerials.all(context).firstOrNull { it.id == id } ?: return null
-        val url = AerialStream.url(film, AerialQuality.Hd, Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
+        val url = HLineStream.url(film, AerialQuality.Hd, Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
         val started = android.os.SystemClock.elapsedRealtime()
         val mmr = open(url, ranged = urlRefused) ?: run {
             // TCL x32a0 (Android 9): the retriever fails at once on Apple's https address that

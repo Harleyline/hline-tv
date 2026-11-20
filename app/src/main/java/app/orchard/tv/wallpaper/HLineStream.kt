@@ -46,8 +46,8 @@ import java.io.File
  *   then starts from disk. Playback itself never writes to the cache.
  */
 @OptIn(UnstableApi::class)
-object AerialStream {
-    private const val TAG = "AerialStream"
+object HLineStream {
+    private const val TAG = "HLineStream"
 
     /** About 3 s of film at Apple's 2K bitrate (15–20 Mbps): enough to start without the network. */
     private const val HEAD_BYTES = 8L * 1024 * 1024

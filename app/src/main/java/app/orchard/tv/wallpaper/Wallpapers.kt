@@ -17,7 +17,7 @@ import app.orchard.tv.ui.components.UhdCanvas
 import app.orchard.tv.BuildConfig
 import app.orchard.tv.R
 import app.orchard.tv.guard.GuardSetup
-import app.orchard.tv.settings.AerialSettings
+import app.orchard.tv.settings.HLineSettings
 import app.orchard.tv.settings.AppLanguage
 import app.orchard.tv.system.DiagLog
 import kotlinx.coroutines.CoroutineScope
@@ -78,7 +78,7 @@ enum class ScreensaverMode(val key: String) {
  * State is Compose snapshot state, written on the main thread only.
  */
 object Wallpapers {
-    private const val TAG = "AerialWallpaper"
+    private const val TAG = "HLineWallpaper"
     const val LATEST_DAILY = "daily:latest"
     private const val DAILY_RETRY_MS = 30 * 60 * 1000L
     const val AUTO = "auto"
@@ -163,7 +163,7 @@ object Wallpapers {
      * Plays as soon as Home shows it and keys do not stop it: the aerial wallpaper always; the
      * owner's videos when set to (issue #360).
      */
-    val keepsMoving: Boolean get() = selectedId == LIVE || AerialSettings.wallpaperAlwaysMoves
+    val keepsMoving: Boolean get() = selectedId == LIVE || HLineSettings.wallpaperAlwaysMoves
 
     fun isSource(id: String = selectedId) = id.startsWith(SOURCE_PREFIX)
 
@@ -255,7 +255,7 @@ object Wallpapers {
     private fun languageOf(context: Context): String =
         android.provider.Settings.Global.getString(context.contentResolver, "aerial_locale_preview")
             ?.takeIf { it.isNotEmpty() }
-            ?: AerialSettings.localeTag(context)
+            ?: HLineSettings.localeTag(context)
             ?: java.util.Locale.getDefault().toLanguageTag()
 
     private fun relabel(context: Context) {
@@ -675,7 +675,7 @@ object Wallpapers {
         }
         // Every name is a string resource read in the language chosen in Personalize rather than
         // in the system's, so the picker says «Дюны · Золото» on a Russian TV (the owner, 2.17).
-        val names = AerialSettings.localized(app)
+        val names = HLineSettings.localized(app)
         val builtins = Gradients.presets.map {
             Wallpaper("grad:${it.key}", WallpaperKind.Builtin, names.getString(it.nameRes))
         }
@@ -752,7 +752,7 @@ object Wallpapers {
                 // The market sets the language of the captions; Bing has no Russian, Ukrainian or
                 // Korean ones (it answers those markets in English), so everything but Chinese asks
                 // for English. The app's own language leads; System falls back to the TV's.
-                val market = when (AerialSettings.language) {
+                val market = when (HLineSettings.language) {
                     AppLanguage.Zh, AppLanguage.ZhTw -> "zh-CN"
                     AppLanguage.System -> if (Locale.getDefault().language == "zh") "zh-CN" else "en-US"
                     else -> "en-US"

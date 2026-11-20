@@ -16,8 +16,8 @@ android {
         // Android 5.0. Compose 1.10 and later need 6.0, so the Compose BOM below stays on 1.9.
         minSdk = 21
         targetSdk = 34
-        versionCode = 158
-        versionName = "1.63"
+        versionCode = 159
+        versionName = "1.64"
         // The free air-quality token from aqicn.org/data-platform/token (weather/Weather.kt). Kept out
         // of version control like the signing key; without one the weather falls back to Open-Meteo.
         val waqi = rootProject.file("local/waqi.token").takeIf { it.isFile }?.readText()?.trim()
@@ -63,7 +63,7 @@ android {
     signingConfigs {
         if (signingProps.exists()) {
             val p = Properties().apply { signingProps.inputStream().use { load(it) } }
-            create("aerial") {
+            create("hline") {
                 storeFile = rootProject.file("local/" + p.getProperty("storeFile"))
                 storePassword = p.getProperty("storePassword")
                 keyAlias = p.getProperty("keyAlias")
@@ -77,7 +77,7 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            signingConfig = signingConfigs.findByName("aerial") ?: signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.findByName("hline") ?: signingConfigs.getByName("debug")
         }
     }
 

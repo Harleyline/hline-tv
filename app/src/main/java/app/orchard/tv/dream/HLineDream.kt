@@ -36,7 +36,7 @@ import app.orchard.tv.wallpaper.Wallpapers
  * set by tools/install.sh in place of the maker's own, which on TCL advertises a paid membership.
  * Xiaomi runs its own screensaver outside this mechanism; there Aerial's Home timer covers it.
  */
-class AerialDream : DreamService(), LifecycleOwner, SavedStateRegistryOwner {
+class HLineDream : DreamService(), LifecycleOwner, SavedStateRegistryOwner {
     private val registry = LifecycleRegistry(this)
     private val savedState = SavedStateRegistryController.create(this)
     private val skips = ScreensaverSkips()
@@ -97,7 +97,7 @@ class AerialDream : DreamService(), LifecycleOwner, SavedStateRegistryOwner {
     /**
      * Ends the dream as the screen goes off, so its film lets the decoder go before the TV
      * suspends, as Home's own screensaver does. TCL tc8000_ay30a2 (Amlogic, Android 11, firmware
-     * 2026) could not be woken from standby whenever AerialDream was the system screensaver, even
+     * 2026) could not be woken from standby whenever HLineDream was the system screensaver, even
      * with the guard out; with Home's in-app screensaver playing as the power key was pressed, it
      * woke every time (issue #371, the reporter's experiments).
      */
@@ -133,7 +133,7 @@ class AerialDream : DreamService(), LifecycleOwner, SavedStateRegistryOwner {
 
     companion object {
         /** The dream on screen in this process, if any. Main thread only. */
-        private var running: AerialDream? = null
+        private var running: HLineDream? = null
 
         /**
          * Ends the dream for a Home press the guard took before the system saw it. The system never

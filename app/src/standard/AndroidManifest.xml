@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application>
+        <!-- TCL / FFALCON launcher whitelist marker (allows standard install & in-app update). -->
+        <meta-data
+            android:name="com.tcl.app.type"
+            android:value="com.tcl.ui" />
+
         <activity android:name="app.orchard.tv.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            <!-- Coocaa's private Home category, which its firmware picks the launcher by (Skyworth
-                 9S52_Q4A, Android 6, issue #397; also what makes Dangbei's launcher selectable there).
-                 Not verified to change the boot launcher yet. -->
+            <!-- Coocaa's private Home category, which its firmware picks the launcher by. -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.HOME.CC" />

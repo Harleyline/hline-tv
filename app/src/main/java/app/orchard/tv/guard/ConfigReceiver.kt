@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import app.orchard.tv.apps.CustomIcons
 import app.orchard.tv.apps.TileSheet
-import app.orchard.tv.settings.AerialSettings
+import app.orchard.tv.settings.HLineSettings
 import app.orchard.tv.settings.Effects
 import app.orchard.tv.settings.UiSounds
 import app.orchard.tv.system.DeviceProfile
@@ -62,7 +62,7 @@ class ConfigReceiver : BroadcastReceiver() {
             val had = CustomIcons.has(pkg)
             CustomIcons.clear(pkg)
             if (had) {
-                android.util.Log.i("AerialDiag", "icon cleared: $pkg")
+                android.util.Log.i("HLineDiag", "icon cleared: $pkg")
                 CustomIcons.changed()
             }
             resultData = "clear_icon: $pkg ${if (had) "dropped" else "had no picture"}"
@@ -84,7 +84,7 @@ class ConfigReceiver : BroadcastReceiver() {
                 else -> {
                     val saved = src.inputStream().use { CustomIcons.save(pkg, it, context.cacheDir) }
                     if (saved) {
-                        android.util.Log.i("AerialDiag", "icon imported: $pkg <- ${src.name}")
+                        android.util.Log.i("HLineDiag", "icon imported: $pkg <- ${src.name}")
                         CustomIcons.changed()   // onReceive is on the main thread already; PhoneServer needs onMain because its threads are its own
                     }
                     "import_icon: $pkg ${if (saved) "ok from ${src.name}" else "could not be decoded"}"
@@ -140,14 +140,14 @@ class ConfigReceiver : BroadcastReceiver() {
             return
         }
         if (intent.getBooleanExtra("clear_pin", false)) {
-            AerialSettings.init(context)
-            AerialSettings.choosePin(null)
+            HLineSettings.init(context)
+            HLineSettings.choosePin(null)
         }
         // ... --ez dump_settings true   (how Home looks, on one line, in the broadcast's result: the
         //                                 values below, ready to be written into another TV)
         if (intent.getBooleanExtra("dump_settings", false)) {
-            AerialSettings.init(context)
-            resultData = AerialSettings.summary()
+            HLineSettings.init(context)
+            resultData = HLineSettings.summary()
             return
         }
         // ... --ez dump_network true   (what the Control Center's network chip has to show, and
@@ -162,50 +162,50 @@ class ConfigReceiver : BroadcastReceiver() {
             return
         }
         val layout = mapOf<String, (Boolean) -> Unit>(
-            "large_clock" to AerialSettings::chooseLargeClock,
-            "clock_right" to AerialSettings::chooseClockRight,
-            "one_row_home" to AerialSettings::chooseOneRowHome,
-            "peek_next_row" to AerialSettings::choosePeekNextRow,
-            "home_plate" to AerialSettings::chooseHomePlate,
-            "show_all_names" to AerialSettings::chooseShowAllNames,
-            "show_weather" to AerialSettings::chooseShowWeather,
-            "weather_right" to AerialSettings::chooseWeatherRight,
-            "weather_large" to AerialSettings::chooseWeatherLarge,
-            "screensaver_clock" to AerialSettings::chooseScreensaverClock,
-            "wallpaper_moves" to AerialSettings::chooseWallpaperAlwaysMoves,
-            "back_screensaver" to AerialSettings::chooseBackStartsScreensaver,
+            "large_clock" to HLineSettings::chooseLargeClock,
+            "clock_right" to HLineSettings::chooseClockRight,
+            "one_row_home" to HLineSettings::chooseOneRowHome,
+            "peek_next_row" to HLineSettings::choosePeekNextRow,
+            "home_plate" to HLineSettings::chooseHomePlate,
+            "show_all_names" to HLineSettings::chooseShowAllNames,
+            "show_weather" to HLineSettings::chooseShowWeather,
+            "weather_right" to HLineSettings::chooseWeatherRight,
+            "weather_large" to HLineSettings::chooseWeatherLarge,
+            "screensaver_clock" to HLineSettings::chooseScreensaverClock,
+            "wallpaper_moves" to HLineSettings::chooseWallpaperAlwaysMoves,
+            "back_screensaver" to HLineSettings::chooseBackStartsScreensaver,
         ).filterKeys { intent.hasExtra(it) }
         if (layout.isNotEmpty()) {
-            AerialSettings.init(context)
+            HLineSettings.init(context)
             layout.forEach { (key, choose) -> choose(intent.getBooleanExtra(key, false)) }
         }
         // ... --ei standby_minutes 10   (the idle policy: suspend this many minutes after the last key)
         if (intent.hasExtra("standby_minutes")) {
-            AerialSettings.init(context)
-            AerialSettings.chooseStandbyMinutes(intent.getIntExtra("standby_minutes", 5))
+            HLineSettings.init(context)
+            HLineSettings.chooseStandbyMinutes(intent.getIntExtra("standby_minutes", 5))
         }
-        if (intent.hasExtra("preview_apps")) AerialSettings.previewApps = intent.getIntExtra("preview_apps", 0).coerceAtLeast(0)
+        if (intent.hasExtra("preview_apps")) HLineSettings.previewApps = intent.getIntExtra("preview_apps", 0).coerceAtLeast(0)
         if (intent.hasExtra("home_columns")) {
-            AerialSettings.init(context)
-            AerialSettings.chooseHomeColumns(intent.getIntExtra("home_columns", 5))
+            HLineSettings.init(context)
+            HLineSettings.chooseHomeColumns(intent.getIntExtra("home_columns", 5))
         }
         // ... --es ui_sounds tv|aerial|off --es effects auto|full|lite
         //     --es aerial_quality auto|1080p|4k|dolby_vision --ei screensaver_minutes 5
         if (intent.hasExtra("ui_sounds") || intent.hasExtra("effects") ||
             intent.hasExtra("aerial_quality") || intent.hasExtra("screensaver_minutes")
         ) {
-            AerialSettings.init(context)
+            HLineSettings.init(context)
             intent.getStringExtra("ui_sounds")?.let { key ->
-                UiSounds.entries.firstOrNull { it.key == key }?.let { AerialSettings.chooseUiSounds(it) }
+                UiSounds.entries.firstOrNull { it.key == key }?.let { HLineSettings.chooseUiSounds(it) }
             }
             intent.getStringExtra("effects")?.let { key ->
-                Effects.entries.firstOrNull { it.key == key }?.let(AerialSettings::chooseEffects)
+                Effects.entries.firstOrNull { it.key == key }?.let(HLineSettings::chooseEffects)
             }
             intent.getStringExtra("aerial_quality")?.let { key ->
-                AerialQuality.entries.firstOrNull { it.key == key }?.let(AerialSettings::chooseAerialQuality)
+                AerialQuality.entries.firstOrNull { it.key == key }?.let(HLineSettings::chooseAerialQuality)
             }
             if (intent.hasExtra("screensaver_minutes")) {
-                AerialSettings.chooseScreensaverMinutes(intent.getIntExtra("screensaver_minutes", 5))
+                HLineSettings.chooseScreensaverMinutes(intent.getIntExtra("screensaver_minutes", 5))
             }
         }
         // ... --ez diag true / --ez mode_switch false / --ez soft_layer true   (see DiagLog;
@@ -269,12 +269,12 @@ class ConfigReceiver : BroadcastReceiver() {
         // ... --es effects auto|full|lite / --es aerial_quality auto|1080p|4k|dolby_vision
         //                                 (as in Personalize; for comparing frame times of each)
         intent.getStringExtra("effects")?.let { key ->
-            AerialSettings.init(context)
-            Effects.entries.firstOrNull { it.key == key }?.let(AerialSettings::chooseEffects)
+            HLineSettings.init(context)
+            Effects.entries.firstOrNull { it.key == key }?.let(HLineSettings::chooseEffects)
         }
         intent.getStringExtra("aerial_quality")?.let { key ->
-            AerialSettings.init(context)
-            AerialQuality.entries.firstOrNull { it.key == key }?.let(AerialSettings::chooseAerialQuality)
+            HLineSettings.init(context)
+            AerialQuality.entries.firstOrNull { it.key == key }?.let(HLineSettings::chooseAerialQuality)
         }
         // Opt-in for an input ("*" = any recognized Apple TV input). Empty input disables.
         // Optional player and current-input setting key allow testing other firmware routes.

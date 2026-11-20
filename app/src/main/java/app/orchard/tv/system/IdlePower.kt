@@ -2,10 +2,10 @@ package app.orchard.tv.system
 
 import android.content.Context
 import android.provider.Settings
-import app.orchard.tv.settings.AerialSettings
+import app.orchard.tv.settings.HLineSettings
 
 /**
- * What the desktop does when nobody touches the remote: after the minutes in [AerialSettings] the
+ * What the desktop does when nobody touches the remote: after the minutes in [HLineSettings] the
  * TV goes to standby, and any key arms the delay again.
  *
  * The standby is the TV's: the system's screen-off delay is written to the mark, so the firmware
@@ -47,7 +47,7 @@ object IdlePower {
             val cleared = runCatching { Settings.Global.putInt(r, Settings.Global.STAY_ON_WHILE_PLUGGED_IN, 0) }.isSuccess
             DiagLog.i("idle power: stay-awake was $stayOn, ${if (cleared) "cleared" else "could not be cleared"}")
         }
-        val delay = AerialSettings.standbyAfterMs.toInt()
+        val delay = HLineSettings.standbyAfterMs.toInt()
         val current = runCatching { Settings.System.getInt(r, Settings.System.SCREEN_OFF_TIMEOUT) }.getOrNull()
         if (current == delay) return
         val ok = runCatching { Settings.System.putInt(r, Settings.System.SCREEN_OFF_TIMEOUT, delay) }.isSuccess

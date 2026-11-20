@@ -42,7 +42,7 @@ import java.net.URL
  * checked in the morning kept offering nothing until the next day (1.22 to 1.25 on 2026-10-22).
  */
 object Updates {
-    private const val TAG = "AerialUpdates"
+    private const val TAG = "HLineUpdates"
     private const val PREFS = "updates"
 
     /**

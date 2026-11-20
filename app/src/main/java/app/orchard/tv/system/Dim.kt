@@ -11,7 +11,7 @@ import androidx.compose.runtime.setValue
  * TvService's getBacklightStatus returns -1, and the mitv picture manager throws
  * ExceptionInInitializerError in the vendor's private AIPQ library — and its panel does not follow
  * Settings.System screen_brightness either: written 79 -> 63, the picture stayed as it was (the
- * owner's test, 2026-10-30, AerialDiag "brightness: asked 26 -> 25, screen_brightness 66 -> 63").
+ * owner's test, 2026-10-30, HLineDiag "brightness: asked 26 -> 25, screen_brightness 66 -> 63").
  *
  * So the last resort is a black veil Aerial draws over its own screen: it cannot go brighter than
  * the panel, but it can go darker, stepped like a slider. 100% is the panel as it is.

@@ -2,7 +2,7 @@ package app.orchard.tv.system
 
 import android.app.Application
 import android.content.Context
-import app.orchard.tv.settings.AerialSettings
+import app.orchard.tv.settings.HLineSettings
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -39,11 +39,11 @@ class UsageReportTest {
 
     @Test
     fun theAnswerToTheConsentCardIsKept() {
-        AerialSettings.init(application)
-        AerialSettings.chooseReportConsent(false)
-        assertEquals(false, AerialSettings.reportConsent)
-        AerialSettings.chooseReportConsent(true)
-        assertTrue(AerialSettings.reportConsent == true)
+        HLineSettings.init(application)
+        HLineSettings.chooseReportConsent(false)
+        assertEquals(false, HLineSettings.reportConsent)
+        HLineSettings.chooseReportConsent(true)
+        assertTrue(HLineSettings.reportConsent == true)
         assertEquals(
             "yes",
             application.getSharedPreferences("settings", Context.MODE_PRIVATE).getString("report_consent", null),

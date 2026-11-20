@@ -72,7 +72,7 @@ data class CitySlot(
  * Compose state, written on the main thread only.
  */
 object Weather {
-    private const val TAG = "AerialWeather"
+    private const val TAG = "HLineWeather"
     private const val PREFS = "weather"
     /**
      * The reading is fetched again this often, by whether anyone is in front of it (the owner,

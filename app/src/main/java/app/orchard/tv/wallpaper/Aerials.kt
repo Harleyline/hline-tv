@@ -1,7 +1,7 @@
 package app.orchard.tv.wallpaper
 
 import android.content.Context
-import app.orchard.tv.settings.AerialSettings
+import app.orchard.tv.settings.HLineSettings
 import android.media.MediaCodecInfo
 import android.media.MediaCodecList
 import android.media.MediaFormat
@@ -79,7 +79,7 @@ object AerialFormats {
      * wallpaper's film on plays this too (Screensaver), so the two are one, with no switch.
      */
     fun forWallpaper(context: Context): AerialQuality =
-        resolve(context, AerialSettings.aerialQuality).let { if (it == AerialQuality.DolbyVision) AerialQuality.Uhd else it }
+        resolve(context, HLineSettings.aerialQuality).let { if (it == AerialQuality.DolbyVision) AerialQuality.Uhd else it }
 
     /**
      * Whether a screensaver of aerials over the aerial wallpaper carries the wallpaper's film on, in
@@ -88,12 +88,12 @@ object AerialFormats {
      * chosen by hand is played whatever that costs, from the wallpaper's film and moment.
      */
     fun screensaverCarriesWallpaper(context: Context): Boolean =
-        !(AerialSettings.aerialQuality == AerialQuality.DolbyVision && AerialQuality.DolbyVision in supported(context))
+        !(HLineSettings.aerialQuality == AerialQuality.DolbyVision && AerialQuality.DolbyVision in supported(context))
 
     /** What a screensaver of aerials starts in; [overWallpaper]: it begins from the aerial wallpaper's film. */
     fun forScreensaver(context: Context, overWallpaper: Boolean): AerialQuality =
         if (overWallpaper && screensaverCarriesWallpaper(context)) forWallpaper(context)
-        else resolve(context, AerialSettings.aerialQuality)
+        else resolve(context, HLineSettings.aerialQuality)
 
     /** One step down, after a decoder failed on [quality]. */
     fun lower(quality: AerialQuality): AerialQuality = when (quality) {
@@ -150,7 +150,7 @@ object Aerials {
         }
     }
 
-    fun kind(): String = AerialSettings.aerialKind.takeIf { it in KINDS } ?: "space"
+    fun kind(): String = HLineSettings.aerialKind.takeIf { it in KINDS } ?: "space"
 
     private fun load(context: Context, kind: String): List<Aerial> {
         val root = JSONObject(context.assets.open("aerials.json").bufferedReader().use { it.readText() })

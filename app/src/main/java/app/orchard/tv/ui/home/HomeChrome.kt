@@ -94,7 +94,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import app.orchard.tv.R
-import app.orchard.tv.settings.AerialSettings
+import app.orchard.tv.settings.HLineSettings
 import app.orchard.tv.system.DiagLog
 import app.orchard.tv.wallpaper.Images
 import app.orchard.tv.wallpaper.Wallpapers
@@ -692,7 +692,7 @@ fun ShelfClock(
                 .toSaverClock(toSaver, Type.ModuleNumber.fontSize, 0.dp, drift),
         )
         val slot = Weather.shown
-        slot?.now?.takeIf { AerialSettings.showWeather }?.let { w ->
+        slot?.now?.takeIf { HLineSettings.showWeather }?.let { w ->
             val place = Weather.placeName(slot, appLocale().language)?.takeIf { it.length <= 12 }
             val range = if (w.high != null && w.low != null) stringResource(R.string.weather_high_low, w.high, w.low) else null
             val detail = listOfNotNull(place, stringResource(conditionName(w.kind)), range).joinToString(" · ")
@@ -733,7 +733,7 @@ fun WeatherModule(
     /** Its head sits on the pill's own line: the row is then exactly the pill's height. */
     onPillLine: Boolean = true,
 ) {
-    if (!AerialSettings.showWeather) return
+    if (!HLineSettings.showWeather) return
     val slot = Weather.shown ?: return
     val w = slot.now ?: return
     val place = Weather.placeName(slot, appLocale().language)?.takeIf { it.length <= 12 }
@@ -750,8 +750,8 @@ fun WeatherModule(
     // little that the degrees did not, so it only stands in when the air quality did not arrive.
     // The index is on the EPA's scale and is shown bare — no band's name beside it, which put a
     // word where a figure sufficed.
-    val air = w.usAqi.takeIf { AerialSettings.showAqi }
-    val humidity = w.humidity.takeIf { AerialSettings.showHumidity }
+    val air = w.usAqi.takeIf { HLineSettings.showAqi }
+    val humidity = w.humidity.takeIf { HLineSettings.showHumidity }
     // What the block puts on screen, for the diagnostics: the owner reads the screen, the log
     // says what was handed to it.
     LaunchedEffect(place, w.celsius, w.high, w.low, w.humidity, air, large) {
@@ -1025,11 +1025,11 @@ private fun Modifier.toSaverClock(progress: () -> Float, fontSize: TextUnit, cap
             scaleX = k
             scaleY = k
             val targetCapTop = SaverClockTop.toPx() + SaverClockStyle.fontSize.toPx() * CAP_TOP
-            val targetLeft = if (AerialSettings.clockRight) rootW - SaverClockSide.toPx() - box.width * s else SaverClockSide.toPx()
+            val targetLeft = if (HLineSettings.clockRight) rootW - SaverClockSide.toPx() - box.width * s else SaverClockSide.toPx()
             translationX = p * (targetLeft - box.left + drift.x.toPx())
             translationY = p * (targetCapTop - s * capTop.toPx() - box.top + drift.y.toPx())
             // The screensaver shows no time: Home's goes as the screensaver comes.
-            if (!AerialSettings.screensaverClock) alpha = 1f - p
+            if (!HLineSettings.screensaverClock) alpha = 1f - p
             // Its shadow lies outside the capBox: an offscreen buffer would cut it as it fades.
             compositingStrategy = CompositingStrategy.ModulateAlpha
         }
@@ -1072,7 +1072,7 @@ fun CornerClock(now: LocalDateTime, modifier: Modifier = Modifier, toSaver: () -
             modifier = Modifier.toSaverClock(toSaver, Type.Title.fontSize, Type.Title.fontSize.value.dp * CAP_TOP, drift),
         )
         val corner = Weather.shown
-        corner?.now?.takeIf { AerialSettings.showWeather }?.let { w ->
+        corner?.now?.takeIf { HLineSettings.showWeather }?.let { w ->
             val aside = Modifier.graphicsLayer {
                 alpha = 1f - (toSaver() * 2.5f).coerceIn(0f, 1f)
                 compositingStrategy = CompositingStrategy.ModulateAlpha

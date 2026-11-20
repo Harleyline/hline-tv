@@ -25,7 +25,7 @@ import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import app.orchard.tv.ui.components.FilmSlot
-import app.orchard.tv.settings.AerialSettings
+import app.orchard.tv.settings.HLineSettings
 import app.orchard.tv.system.DiagLog
 import app.orchard.tv.ui.theme.Motion
 import app.orchard.tv.wallpaper.ScreensaverVideos
@@ -61,7 +61,7 @@ fun VideoWallpaper(
         delay(START_AFTER_MS)
         idle = true
     }
-    val play = moving && (idle || AerialSettings.wallpaperAlwaysMoves)
+    val play = moving && (idle || HLineSettings.wallpaperAlwaysMoves)
     val keepNow by rememberUpdatedState(keep)
 
     fun release() {

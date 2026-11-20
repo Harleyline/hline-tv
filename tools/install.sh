@@ -320,7 +320,7 @@ fi
 # TVs on Android's standard screensaver (TCL's carries a membership upsell) get Aerial's instead,
 # so it also starts while another app sits idle. Xiaomi uses its own; Aerial covers it from Home.
 if [ "$(adb shell settings get secure screensaver_enabled | tr -d '\r')" = 1 ]; then
-  adb shell settings put secure screensaver_components "$PKG/$PKG.dream.AerialDream"
+  adb shell settings put secure screensaver_components "$PKG/$PKG.dream.HLineDream"
   # Some firmwares (TCL) put their own back on every boot; Aerial restores it when it starts.
   adb shell am broadcast -a "$PKG.CONFIG" -n "$PKG/.guard.ConfigReceiver" --ez own_screensaver true >/dev/null
   echo "Aerial's screensaver is now the TV's screensaver."

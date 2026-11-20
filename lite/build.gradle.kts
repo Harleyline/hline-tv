@@ -28,7 +28,7 @@ android {
     signingConfigs {
         if (signingProps.exists()) {
             val p = Properties().apply { signingProps.inputStream().use { load(it) } }
-            create("aerial") {
+            create("hline") {
                 storeFile = rootProject.file("local/" + p.getProperty("storeFile"))
                 storePassword = p.getProperty("storePassword")
                 keyAlias = p.getProperty("keyAlias")
@@ -42,7 +42,7 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            signingConfig = signingConfigs.findByName("aerial") ?: signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.findByName("hline") ?: signingConfigs.getByName("debug")
         }
     }
 

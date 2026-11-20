@@ -2635,10 +2635,10 @@ $('#diagCopy').onclick = () => toast(t(copyDiag() ? 'toast_copied' : 'toast_copy
 $('#diagGithub').onclick = (e) => {
   const text = $('#diag').textContent, q = new URLSearchParams({ template: 'device.yml' });
   const model = (text.match(/^Device +(.+?) \(device /m) || [])[1]?.split(' / ').pop();
-  const version = (text.match(/^Aerial +(\S+) \(/m) || [])[1];
+  const version = (text.match(/^(?:HLine TV|Aerial) +(\S+) \(/m) || [])[1];
   const profile = (text.match(/\*\*Device profile\*\* \(ThisTv\)\n```json\n(.+)\n```/) || [])[1];
   if (model) { q.set('title', '[机型] ' + model); q.set('model', model); }
-  if (version) q.set('version', 'Aerial ' + version);
+  if (version) q.set('version', 'HLine TV ' + version);
   if (profile) q.set('profile', profile);
   e.currentTarget.href = 'https://github.com/Harleyline/hline-tv/issues/new?' + q;
   toast(t(copyDiag() ? 'toast_diag_paste' : 'toast_copy_manual'));

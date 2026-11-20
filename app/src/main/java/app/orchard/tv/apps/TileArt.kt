@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.drawscope.CanvasDrawScope
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
-import app.orchard.tv.settings.AerialSettings
+import app.orchard.tv.settings.HLineSettings
 import app.orchard.tv.ui.theme.Glyph
 import app.orchard.tv.ui.theme.drawGlyph
 import androidx.compose.ui.graphics.ImageBitmap
@@ -93,12 +93,12 @@ object TileArtFactory {
     }
 
     /**
-     * Sizes the artwork for AerialSettings.homeColumns; true when that changed it, and the tiles
+     * Sizes the artwork for HLineSettings.homeColumns; true when that changed it, and the tiles
      * want drawing again. 176dp: the 147dp tile of five a row at its 1.15× focus scale, with a
      * little to spare; 222dp the 187dp one of four. Six a row stays at five's: it is smaller still.
      */
     fun fitColumns(): Boolean {
-        val dp = if (AerialSettings.homeColumns == 4) 222 else 176
+        val dp = if (HLineSettings.homeColumns == 4) 222 else 176
         val w = (dp * density).roundToInt().coerceIn(352, 888)
         if (w == W) return false
         W = w

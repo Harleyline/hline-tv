@@ -32,7 +32,7 @@ import android.util.Log
  * switching ADB off on wake is another. Nothing is synced; the sync only starts Aerial's process.
  */
 object RevivalSync {
-    const val TAG = "AerialGuard"
+    const val TAG = "HLineGuard"
     private const val AUTHORITY = "settings"
 
     fun ensure(context: Context) {
@@ -43,7 +43,7 @@ object RevivalSync {
             val accountType = context.packageName
             val accounts = AccountManager.get(context)
             val account = accounts.getAccountsByType(accountType).firstOrNull()
-                ?: Account("Aerial", accountType).also {
+                ?: Account("HLine TV", accountType).also {
                     if (!accounts.addAccountExplicitly(it, null, null)) return
                     Log.i(TAG, "added the account that lets the sync framework revive Aerial")
                 }

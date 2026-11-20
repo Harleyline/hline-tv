@@ -3,7 +3,7 @@ package app.orchard.tv.system
 import android.content.Context
 import android.os.Build
 import app.orchard.tv.BuildConfig
-import app.orchard.tv.settings.AerialSettings
+import app.orchard.tv.settings.HLineSettings
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
@@ -59,7 +59,7 @@ object UsageReport {
      * thread of its own and says nothing on failure — the next start tries again.
      */
     fun start(context: Context) {
-        if (!configured || AerialSettings.reportConsent != true) return
+        if (!configured || HLineSettings.reportConsent != true) return
         val version = "${BuildConfig.VERSION_NAME}+${BuildConfig.VERSION_CODE}"
         val app = context.applicationContext
         val p = prefs(app)
@@ -141,7 +141,7 @@ object UsageReport {
             .put("version", BuildConfig.VERSION_NAME)
             .put("code", BuildConfig.VERSION_CODE)
             .put("flavor", BuildConfig.FLAVOR)
-            .put("lang", AerialSettings.language.tag)
+            .put("lang", HLineSettings.language.tag)
         if (report != null) {
             body.put("report", report.take(MAX_REPORT))
             if (report.length > MAX_REPORT) body.put("truncated", true)

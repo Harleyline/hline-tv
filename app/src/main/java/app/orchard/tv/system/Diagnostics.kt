@@ -17,7 +17,7 @@ import androidx.core.content.getSystemService
 import app.orchard.tv.BuildConfig
 import app.orchard.tv.guard.GuardSetup
 import app.orchard.tv.guard.HomeGuardService
-import app.orchard.tv.settings.AerialSettings
+import app.orchard.tv.settings.HLineSettings
 import app.orchard.tv.wallpaper.PhoneServer
 import app.orchard.tv.wallpaper.Wallpapers
 import org.json.JSONArray
@@ -47,8 +47,8 @@ object Diagnostics {
         "com.dangbeimarket",
     )
 
-    // AerialDiag is in DiagLog already; AerialWeather names the city.
-    private val LOG_TAGS = listOf("AerialGuard", "AerialUpdates", "AerialStream", "AerialWallpaper", "AerialKonkaSources", "AndroidRuntime")
+    // HLineDiag is in DiagLog already; HLineWeather names the city.
+    private val LOG_TAGS = listOf("HLineGuard", "HLineUpdates", "HLineStream", "HLineWallpaper", "HLineKonkaSources", "AndroidRuntime")
 
     /**
      * Whether ART has compiled Aerial with its profile yet. Installed without install.sh (which runs
@@ -75,10 +75,10 @@ object Diagnostics {
 
     fun report(context: Context): String = buildString {
         val pm = context.packageManager
-        appendLine("### Aerial diagnostics")
+        appendLine("### HLine TV diagnostics")
         appendLine()
         appendLine("```")
-        appendLine("Aerial      ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) ${BuildConfig.FLAVOR}, package ${context.packageName}, installer ${installer(context) ?: "-"}")
+        appendLine("HLine TV    ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) ${BuildConfig.FLAVOR}, package ${context.packageName}, installer ${installer(context) ?: "-"}")
         appendLine("Device      ${Build.MANUFACTURER} / ${Build.BRAND} / ${Build.MODEL} (device ${Build.DEVICE}, product ${Build.PRODUCT}, hardware ${Build.HARDWARE}, board ${Build.BOARD})")
         appendLine("Android     ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT})" + if (Build.VERSION.SDK_INT >= 23) ", patch ${Build.VERSION.SECURITY_PATCH}" else "")
         appendLine("Build       ${Build.DISPLAY}")
@@ -118,11 +118,11 @@ object Diagnostics {
         appendLine("ADB         adb_enabled=${global(context, Settings.Global.ADB_ENABLED)} keep_adb=${GuardSetup.keepAdb(context)} guard_off_in_standby=${GuardSetup.offInStandby(context)}")
         appendLine("Screensaver enabled=${secure(context, "screensaver_enabled")} components=${secure(context, "screensaver_components")} Aerial's=${Wallpapers.screensaver}")
         appendLine("Sounds      sound_effects_enabled=${system(context, Settings.System.SOUND_EFFECTS_ENABLED)}")
-        appendLine("Effects     ${AerialSettings.effects.key}, lite=${AerialSettings.lite}; ${DeviceClass.describe(context)}")
+        appendLine("Effects     ${HLineSettings.effects.key}, lite=${HLineSettings.lite}; ${DeviceClass.describe(context)}")
         appendLine("Compiled    ${compiled(context)}")
         appendLine("Frames      ${FrameStats.summary()}")
-        appendLine("Settings    focus=${AerialSettings.focusStyle.key} one_row=${AerialSettings.oneRowHome} columns=${AerialSettings.homeColumns} peek=${AerialSettings.peekNextRow} names=${AerialSettings.showAllNames} boot_source=${AerialSettings.bootSource != null} boot_app=${AerialSettings.bootApp}")
-        appendLine("            wallpaper=${app.orchard.tv.wallpaper.Wallpapers.selectedId.substringBefore('/')} always_moves=${AerialSettings.wallpaperAlwaysMoves} quality=${AerialSettings.aerialQuality.key} weather=${AerialSettings.showWeather} saver_clock=${AerialSettings.screensaverClock}")
+        appendLine("Settings    focus=${HLineSettings.focusStyle.key} one_row=${HLineSettings.oneRowHome} columns=${HLineSettings.homeColumns} peek=${HLineSettings.peekNextRow} names=${HLineSettings.showAllNames} boot_source=${HLineSettings.bootSource != null} boot_app=${HLineSettings.bootApp}")
+        appendLine("            wallpaper=${app.orchard.tv.wallpaper.Wallpapers.selectedId.substringBefore('/')} always_moves=${HLineSettings.wallpaperAlwaysMoves} quality=${HLineSettings.aerialQuality.key} weather=${HLineSettings.showWeather} saver_clock=${HLineSettings.screensaverClock}")
         appendLine("```")
 
         appendLine()

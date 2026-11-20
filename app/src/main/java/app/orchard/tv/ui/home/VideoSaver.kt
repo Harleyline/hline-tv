@@ -36,7 +36,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.withContext
 
-/** A local, silent playlist, shared by Home and AerialDream. An empty or broken set falls back. */
+/** A local, silent playlist, shared by Home and HLineDream. An empty or broken set falls back. */
 @Composable
 internal fun VideoSaver(steps: SharedFlow<Int>, onUnavailable: () -> Unit) {
     val context = LocalContext.current

@@ -366,21 +366,50 @@ object AppCatalog {
      * square icon declared again (遥遥电视助手 on Xiaomi MiTV-MFTR0); covering the tile with it
      * blows the logo up past the edges.
      */
-    private fun banner(pm: PackageManager, info: ActivityInfo, leanback: Boolean): android.graphics.drawable.Drawable? {
-        val activity = densest(pm, info, info.bannerResource) ?: runCatching { info.loadBanner(pm) }.getOrNull()
-        // The application's banner too, and whether the launcher is declared for Android TV or not:
-        // a TV app that does not say so still ships the artwork it made for a TV, and showing that
-        // is what the owner asks for — a tile drawn from a phone icon beside the real thing looks
-        // wrong next to the apps that have one (2.05).
-        val app = runCatching { info.applicationInfo.loadBanner(pm) }.getOrNull()
-            ?: runCatching { pm.getApplicationInfo(info.packageName, 0).loadBanner(pm) }.getOrNull()
-        val chosen = if (leanback) activity ?: app else activity ?: app
-        return chosen?.takeIf { it.intrinsicWidth >= it.intrinsicHeight * 4 / 3 }
-            ?: app?.takeIf { it.intrinsicWidth >= it.intrinsicHeight * 4 / 3 }
+    private fun isWideArtwork(d: android.graphics.drawable.Drawable): Boolean {
+        val w = d.intrinsicWidth
+        val h = d.intrinsicHeight
+        return w > 0 && h > 0 && w * 100 >= h * 125
     }
 
-    /** Raised when the way a tile is drawn changes: every tile is drawn anew (2.05). */
-    private const val ART_VERSION = 8L
+    private fun banner(pm: PackageManager, info: ActivityInfo, leanback: Boolean): android.graphics.drawable.Drawable? {
+        val activityBanner = densest(pm, info, info.bannerResource)
+            ?: runCatching { info.loadBanner(pm) }.getOrNull()
+        if (activityBanner != null && isWideArtwork(activityBanner)) return activityBanner
+
+        val appBanner = densest(pm, info, info.applicationInfo.banner)
+            ?: runCatching { info.applicationInfo.loadBanner(pm) }.getOrNull()
+            ?: runCatching { pm.getApplicationInfo(info.packageName, 0).loadBanner(pm) }.getOrNull()
+        if (appBanner != null && isWideArtwork(appBanner)) return appBanner
+
+        if (!leanback) {
+            val lb = runCatching {
+                pm.queryIntentActivities(
+                    Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LEANBACK_LAUNCHER).setPackage(info.packageName),
+                    0,
+                ).firstOrNull()?.activityInfo
+            }.getOrNull()
+            if (lb != null) {
+                val lbBanner = densest(pm, lb, lb.bannerResource) ?: runCatching { lb.loadBanner(pm) }.getOrNull()
+                if (lbBanner != null && isWideArtwork(lbBanner)) return lbBanner
+            }
+        }
+
+        val logo = densest(pm, info, info.logoResource)
+            ?: runCatching { info.loadLogo(pm) }.getOrNull()
+            ?: densest(pm, info, info.applicationInfo.logo)
+            ?: runCatching { info.applicationInfo.loadLogo(pm) }.getOrNull()
+        if (logo != null && isWideArtwork(logo)) return logo
+
+        val icon = densest(pm, info, info.iconResource)
+            ?: runCatching { info.loadIcon(pm) }.getOrNull()
+        if (icon != null && isWideArtwork(icon)) return icon
+
+        return null
+    }
+
+    /** Raised when the way a tile is drawn changes: every tile is drawn anew. */
+    private const val ART_VERSION = 9L
 
     /** The tile drawn from the app's own art: its recipe's glyph, its banner, or its icon. */
     private fun fromApp(pm: PackageManager, info: ActivityInfo, banner: android.graphics.drawable.Drawable?, recipe: TileRecipe?): TileArt = when {

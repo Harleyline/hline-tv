@@ -19,7 +19,7 @@ import app.orchard.tv.apps.IconLibrary
 import app.orchard.tv.apps.SourceDevice
 import app.orchard.tv.apps.SourceLooks
 import app.orchard.tv.apps.TileArtFactory
-import app.orchard.tv.settings.AerialSettings
+import app.orchard.tv.settings.HLineSettings
 import app.orchard.tv.system.Diagnostics
 import app.orchard.tv.system.currentNetwork
 import app.orchard.tv.settings.FocusStyle
@@ -91,18 +91,18 @@ class PhoneServer private constructor(private val context: Context, private val 
                     val f = form(session)
                     val on = f["on"] == "1"
                     val known = when (f["key"]) {
-                        "wallpaperAlwaysMoves" -> { onMain { AerialSettings.chooseWallpaperAlwaysMoves(on) }; true }
-                        "showWeather" -> { onMain { AerialSettings.chooseShowWeather(on) }; true }
-                        "screensaverClock" -> { onMain { AerialSettings.chooseScreensaverClock(on) }; true }
-                        "showAqi" -> { onMain { AerialSettings.chooseShowAqi(on) }; true }
-                        "showHumidity" -> { onMain { AerialSettings.chooseShowHumidity(on) }; true }
+                        "wallpaperAlwaysMoves" -> { onMain { HLineSettings.chooseWallpaperAlwaysMoves(on) }; true }
+                        "showWeather" -> { onMain { HLineSettings.chooseShowWeather(on) }; true }
+                        "screensaverClock" -> { onMain { HLineSettings.chooseScreensaverClock(on) }; true }
+                        "showAqi" -> { onMain { HLineSettings.chooseShowAqi(on) }; true }
+                        "showHumidity" -> { onMain { HLineSettings.chooseShowHumidity(on) }; true }
                         else -> false
                     }
                     json(state().put("saved", known))
                 }
                 session.method == Method.POST && path == "/api/focus" -> {
                     val style = FocusStyle.of(form(session)["style"])
-                    onMain { AerialSettings.chooseFocusStyle(style) }
+                    onMain { HLineSettings.chooseFocusStyle(style) }
                     json(state())
                 }
                 session.method == Method.POST && path == "/api/delete" -> {
@@ -315,7 +315,7 @@ class PhoneServer private constructor(private val context: Context, private val 
             .put("selected", selected)
             // The page follows the language the TV speaks (the owner): the app's own choice, or,
             // when that follows the TV, the TV system's language. An empty tag means System.
-            .put("lang", AerialSettings.language.tag.ifEmpty { java.util.Locale.getDefault().toLanguageTag() })
+            .put("lang", HLineSettings.language.tag.ifEmpty { java.util.Locale.getDefault().toLanguageTag() })
             .put("latestDaily", Wallpapers.LATEST_DAILY)
             .put("rotatePhotos", Wallpapers.ROTATE_PHOTOS)
             .put("screensaver", Wallpapers.screensaver.key)
@@ -323,12 +323,12 @@ class PhoneServer private constructor(private val context: Context, private val 
             .put("videos", JSONArray().apply {
                 ScreensaverVideos.all(context).forEach { put(JSONObject().put("id", it.id).put("name", it.name)) }
             })
-            .put("focusStyle", AerialSettings.focusStyle.key)
-            .put("wallpaperAlwaysMoves", AerialSettings.wallpaperAlwaysMoves)
-            .put("showWeather", AerialSettings.showWeather)
-            .put("showAqi", AerialSettings.showAqi)
-            .put("showHumidity", AerialSettings.showHumidity)
-            .put("screensaverClock", AerialSettings.screensaverClock)
+            .put("focusStyle", HLineSettings.focusStyle.key)
+            .put("wallpaperAlwaysMoves", HLineSettings.wallpaperAlwaysMoves)
+            .put("showWeather", HLineSettings.showWeather)
+            .put("showAqi", HLineSettings.showAqi)
+            .put("showHumidity", HLineSettings.showHumidity)
+            .put("screensaverClock", HLineSettings.screensaverClock)
             .put("wallpapers", list)
             .put("apps", JSONArray().apply {
                 // Pinned inputs first, then apps by the name Home shows. [default] is the name a
@@ -366,7 +366,7 @@ class PhoneServer private constructor(private val context: Context, private val 
                     val look = SourceLooks.of(src.id)
                     put(JSONObject().put("id", src.id).put("port", src.label).put("device", src.deviceName ?: "")
                         .put("name", look?.let { it.name ?: it.device?.let { d -> context.getString(d.label) } } ?: "")
-                        .put("pinned", src.id in AerialSettings.pinnedSources))
+                        .put("pinned", src.id in HLineSettings.pinnedSources))
                 }
             })
             .put("folders", JSONArray().apply {
@@ -410,13 +410,13 @@ class PhoneServer private constructor(private val context: Context, private val 
         val folders = JSONObject()
         AppCatalog.folderApps.forEach { (id, apps) -> folders.put(id, JSONArray().apply { apps.forEach { put(tile(it)) } }) }
         // With the parental PIN on, hidden apps stay hidden from here: on the TV, seeing them takes the PIN.
-        val locked = AerialSettings.locked
+        val locked = HLineSettings.locked
         return JSONObject()
             .put("home", JSONArray().apply { AppCatalog.home.forEach { put(tile(it)) } })
             .put("folders", folders)
             .put("hidden", JSONArray().apply { if (!locked) AppCatalog.hiddenApps.forEach { put(tile(it)) } })
             .put("hiddenCount", AppCatalog.hiddenApps.size)
-            .put("columns", AerialSettings.homeColumns)
+            .put("columns", HLineSettings.homeColumns)
             .put("locked", locked)
             .put("ready", AppCatalog.layout != null)
     }
@@ -436,7 +436,7 @@ class PhoneServer private constructor(private val context: Context, private val 
             "move" -> if (key in known && target in known) ({ ops.move(key, target) }) else null
             "movein" -> if (key in known && target in known) ({ ops.moveInFolder(key, target) }) else null
             "hide" -> if (key in known) ({ ops.hide(key) }) else null
-            "unhide" -> if (key in known && !AerialSettings.locked) ({ ops.unhide(key) }) else null
+            "unhide" -> if (key in known && !HLineSettings.locked) ({ ops.unhide(key) }) else null
             "folder" -> if (key in known && !key.startsWith(FOLDER_KEY_PREFIX)) ({ ops.toFolder(key, folder.ifEmpty { null }) }) else null
             "unfolder" -> if (key in known) ({ ops.outOfFolder(key) }) else null
             "ungroup" -> if (folder in AppCatalog.folderApps) ({ ops.ungroup(folder) }) else null

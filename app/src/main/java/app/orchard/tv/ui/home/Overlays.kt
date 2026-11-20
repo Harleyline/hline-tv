@@ -71,7 +71,7 @@ import app.orchard.tv.ui.components.consumeTaps
 import app.orchard.tv.ui.components.dismissOnTap
 import app.orchard.tv.ui.components.liquidGlass
 import app.orchard.tv.wallpaper.PhoneServer
-import app.orchard.tv.settings.AerialSettings
+import app.orchard.tv.settings.HLineSettings
 import app.orchard.tv.ui.theme.Glyph
 import app.orchard.tv.ui.theme.GlyphIcon
 import app.orchard.tv.ui.theme.Motion
@@ -272,7 +272,7 @@ fun AppMenu(
                             // What a remote cannot do well: sending pictures, cropping, typing names.
                             MenuRow(Glyph.Globe, stringResource(R.string.menu_phone_set), { page = MenuPage.Phone })
                             // What the TV starts on, for homes that switch it on to watch television.
-                            val boots = shownApp.source?.let { it.id == AerialSettings.bootSource } ?: (shownApp.key == AerialSettings.bootApp)
+                            val boots = shownApp.source?.let { it.id == HLineSettings.bootSource } ?: (shownApp.key == HLineSettings.bootApp)
                             MenuRow(
                                 if (boots) Glyph.Check else Glyph.Power,
                                 stringResource(if (boots) R.string.menu_boot_off else R.string.menu_boot_on),

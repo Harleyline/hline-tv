@@ -31,8 +31,8 @@ import android.view.accessibility.AccessibilityManager
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import app.orchard.tv.MainActivity
-import app.orchard.tv.dream.AerialDream
-import app.orchard.tv.settings.AerialSettings
+import app.orchard.tv.dream.HLineDream
+import app.orchard.tv.settings.HLineSettings
 import app.orchard.tv.system.BootOpen
 import app.orchard.tv.system.DeviceProfile
 import app.orchard.tv.system.DiagLog
@@ -637,8 +637,8 @@ class HomeGuardService : AccessibilityService() {
     }
 
     private fun hasBootSource(): Boolean = runCatching {
-        AerialSettings.init(this)
-        AerialSettings.hasBootTarget
+        HLineSettings.init(this)
+        HLineSettings.hasBootTarget
     }.getOrDefault(false)
 
     /**
@@ -793,8 +793,8 @@ class HomeGuardService : AccessibilityService() {
         // with one connected nothing is filtered: Home goes to the system, and the guard brings
         // Aerial back from the stock launcher.
         val wanted = !keysPassThrough && !screenOff && !padGame && !mouseAttached &&
-            (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R || aerialInFront)
-        val homeWanted = wanted && !isDefaultHome()
+            (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R || aerialInFront || filterHomeAlways)
+        val homeWanted = wanted && (!isDefaultHome() || filterHomeAlways)
         val cecWanted = !screenOff && !mouseAttached && CecHome.active(this, lastWindow?.first)
         filteringForCecOnly = cecWanted && !homeWanted
         var want = if (homeWanted || cecWanted) info.flags or flag else info.flags and flag.inv()
@@ -875,6 +875,11 @@ class HomeGuardService : AccessibilityService() {
         VIDAA_PACKAGES.any { runCatching { packageManager.getPackageInfo(it, 0) }.isSuccess }
     }
 
+    /** Coocaa / Skyworth firmwares intercept Home before broadcasts; keep filtering Home continuously. */
+    private val filterHomeAlways by lazy {
+        COOCAA_HOME_PACKAGES.any { runCatching { packageManager.getPackageInfo(it, 0) }.isSuccess }
+    }
+
     override fun onKeyEvent(event: KeyEvent): Boolean {
         if (!GuardSetup.isUserUnlocked(this)) return false
         if (event.keyCode in VOLUME_KEYS) return if (filteringForCecOnly) false else takeVolumeKey(event)
@@ -882,7 +887,7 @@ class HomeGuardService : AccessibilityService() {
         if (event.action == KeyEvent.ACTION_UP) volumeSeen = volumeNow()
         if (event.keyCode != KeyEvent.KEYCODE_HOME) return false
         if (takeCecHome(event)) return true
-        if (isDefaultHome()) return false
+        if (isDefaultHome() && !filterHomeAlways) return false
         // Held, Home is the firmware's task center, which taking the key hid (Xiaomi, issue #185):
         // open the recent apps instead, and leave Home alone when the key comes up. Timed here:
         // the filter sees keys before Android makes the repeats that would say the key is held.
@@ -906,7 +911,7 @@ class HomeGuardService : AccessibilityService() {
                 Log.i(TAG, "Home key taken before the system saw it")
                 // Over Aerial's screensaver, Home closes it. Not counted toward a double press: an IR
                 // remote's press can come twice (TCL MT5879), and the second opened the recent apps.
-                lastHomeUpAt = if (AerialDream.endForHome()) Long.MIN_VALUE / 2 else event.eventTime
+                lastHomeUpAt = if (HLineDream.endForHome()) Long.MIN_VALUE / 2 else event.eventTime
                 goHome()
                 closeSystemDialogs()
             }
@@ -1359,7 +1364,7 @@ class HomeGuardService : AccessibilityService() {
     }
 
     companion object {
-        private const val TAG = "AerialGuard"
+        private const val TAG = "HLineGuard"
         private const val BOOT_WINDOW_MS = 3 * 60 * 1000L
         private const val HOME_KEY_CHECK_MS = 1500L
         /**
@@ -1402,7 +1407,13 @@ class HomeGuardService : AccessibilityService() {
         private const val VIDAA_LAUNCHER = "com.jamdeo.tv.vod"
 
         /** Stock launchers that come to the front with no window change; see foregroundCheck. */
-        private val INVISIBLE_LAUNCHERS = setOf(VIDAA_LAUNCHER, "com.ktcp.launcher")
+        private val INVISIBLE_LAUNCHERS = setOf(VIDAA_LAUNCHER, "com.ktcp.launcher", PATCHWALL)
+        private val COOCAA_HOME_PACKAGES = setOf(
+            "com.tianci.movieplatform",
+            "com.coocaa.aigc.home",
+            "com.skyworth.officehomepage",
+            "com.skyworth.panasonichome",
+        )
         /** Actions the firmware's own task centre answers, tried in order before SystemUI's recents. */
         private val TASK_CENTRE_ACTIONS = listOf("com.dangbei.recentstask.action.SHOW_RECENTS_FOR_USER")
         private const val VOLUME_REPEAT_MAX_MS = 8_000L
@@ -1494,6 +1505,13 @@ class HomeGuardService : AccessibilityService() {
             // stayed over Aerial (MiTV-MOOQ0, Android 11; dumpsys window on device). Its input
             // source popup is another activity in the package, and stays.
             "com.mitv.tvhome.atv" to listOf("com.mitv.tvhome.atv.app.PatchWallActivity"),
+            // Xiaomi PatchWall main screens returned to when exiting Kids Mode or system pages.
+            "com.mitv.tvhome" to listOf(
+                "com.mitv.tvhome.MainActivity",
+                "com.mitv.tvhome.MainActivityUserMode",
+                "com.mitv.tvhome.ui.MainActivity",
+            ),
+            "com.xiaomi.mitv.tvhome" to listOf("com.xiaomi.mitv.tvhome.MainActivity"),
         )
 
         /**
@@ -1581,7 +1599,7 @@ class HomeGuardService : AccessibilityService() {
         private var aerialResumedAt = Long.MIN_VALUE / 2
 
         /** Called when Aerial comes back to the front: the stock launcher is fair game again. */
-        fun onAerialResumed() {
+        fun onHomeResumed() {
             aerialResumed = true
             aerialResumedAt = SystemClock.uptimeMillis()
             val s = instance ?: return
@@ -1599,7 +1617,7 @@ class HomeGuardService : AccessibilityService() {
          * Called when Aerial leaves the front: keys are no longer filtered from Android 12 on.
          * True when the pause is only Home's bounce (backOnPause) and Aerial is on its way back.
          */
-        fun onAerialPaused(): Boolean {
+        fun onHomePaused(): Boolean {
             aerialResumed = false
             val s = instance ?: return false
             s.updateKeyFilter()

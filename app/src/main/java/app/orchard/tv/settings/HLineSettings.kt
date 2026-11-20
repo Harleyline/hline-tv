@@ -73,7 +73,7 @@ enum class AppLanguage(val tag: String) {
 }
 
 /** Aerial's own preferences. Compose state, written on the main thread only. */
-object AerialSettings {
+object HLineSettings {
     private const val PREFS = "settings"
     private var started = false
     private lateinit var app: Context

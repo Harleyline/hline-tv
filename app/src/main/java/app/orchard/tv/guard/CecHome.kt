@@ -80,7 +80,7 @@ internal object CecHome {
                 isAppleTv(vendor, name)
             }
             val report = "CEC input=${port.id} device=$label manualApple=$manualAppleTv apple=$recognized"
-            if (report != lastReport) { lastReport = report; Log.i("AerialGuard", report) }
+            if (report != lastReport) { lastReport = report; Log.i("HLineGuard", report) }
             if (!recognized) return@mapNotNull null
             val address = Regex("HDMI[0-9a-fA-F]{4}([0-9a-fA-F]{2})$")
                 .find(device.id)?.groupValues?.get(1)?.toIntOrNull(16)
@@ -109,18 +109,18 @@ internal object CecHome {
                     try {
                         val press = byteArrayOf(address.toByte(), 0x44, 0x09)
                         val result = Os.write(fd, press, 0, press.size)
-                        Log.i("AerialGuard", "CEC Home press result=$result")
+                        Log.i("HLineGuard", "CEC Home press result=$result")
                         Thread.sleep(100)
                     } finally {
                         val release = byteArrayOf(address.toByte(), 0x45)
                         val result = Os.write(fd, release, 0, release.size)
-                        Log.i("AerialGuard", "CEC Home release result=$result")
+                        Log.i("HLineGuard", "CEC Home release result=$result")
                     }
                 } finally {
                     Os.close(fd)
                 }
-                Log.i("AerialGuard", "CEC Home sent to logical address $address")
-            }.onFailure { Log.w("AerialGuard", "CEC Home send failed", it) }
+                Log.i("HLineGuard", "CEC Home sent to logical address $address")
+            }.onFailure { Log.w("HLineGuard", "CEC Home send failed", it) }
         }
     }
 }

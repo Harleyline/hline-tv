@@ -81,7 +81,7 @@ import app.orchard.tv.apps.SourceLooks
 import app.orchard.tv.HomeViewModel
 import app.orchard.tv.Overlay
 import app.orchard.tv.R
-import app.orchard.tv.settings.AerialSettings
+import app.orchard.tv.settings.HLineSettings
 import app.orchard.tv.apps.AppEntry
 import app.orchard.tv.ui.control.ControlCenter
 import app.orchard.tv.ui.wallpaper.SheetCovers
@@ -167,7 +167,7 @@ private val GridMargin = 56.dp
 private val RowAboveTop = 72.dp
 
 /**
- * The gap between tiles for [columns] a row (AerialSettings.homeColumns): about a fifth of a tile,
+ * The gap between tiles for [columns] a row (HLineSettings.homeColumns): about a fifth of a tile,
  * as tvOS keeps it when it fits six, so four or six look like five scaled rather than packed.
  */
 internal fun gridGap(columns: Int): Dp = when (columns) {
@@ -324,7 +324,7 @@ fun HomeScreen(
     var pillFocused by remember { mutableStateOf(false) }
     var lastFocusedIndex by remember { mutableStateOf(0) }
     val focusedIndex = apps.indexOfFirst { it.key == focusedKey }
-    val columns = AerialSettings.homeColumns
+    val columns = HLineSettings.homeColumns
     val focusedRow = if (pillFocused || focusedIndex < 0) 0 else focusedIndex / columns
     val gridEnabled = overlay == Overlay.None
 
@@ -480,7 +480,7 @@ fun HomeScreen(
         dragged = false
         // Handled even when that is turned off: unhandled, Back would close Home itself.
         if (focusedRow > 0 || scrolled) focusApp(focusedIndex.coerceAtLeast(0) % columns)
-        else if (AerialSettings.backStartsScreensaver) onStartScreensaver()
+        else if (HLineSettings.backStartsScreensaver) onStartScreensaver()
     }
 
     BoxWithConstraints(
@@ -533,40 +533,40 @@ fun HomeScreen(
     ) {
         val rows = (apps.size + columns - 1) / columns
         // With a single row of apps the two-row layout would leave the bottom of the screen empty.
-        val oneRow = AerialSettings.oneRowHome || rows <= 1
+        val oneRow = HLineSettings.oneRowHome || rows <= 1
         // In two rows the second is on screen already: down to it stays on the shelf, under the
         // same picture and plate, and only the row after it goes into the grid (issue #633: the
         // grid's frosted picture flashed up on the way to an app in the second row).
         val inGrid = focusedRow >= if (oneRow) 1 else 2
         val saverFadeOffscreen = remember { DiagLog.saverFadeOffscreen(appContext) }
         // With every name shown, the top row's go on its glass plate, which grows to hold them.
-        val plateNames = AerialSettings.showAllNames && AerialSettings.homePlate
-        val peek = AerialSettings.peekNextRow
-        val hasPlate = AerialSettings.homePlate
+        val plateNames = HLineSettings.showAllNames && HLineSettings.homePlate
+        val peek = HLineSettings.peekNextRow
+        val hasPlate = HLineSettings.homePlate
         // The pill's own width, measured: the blocks on the right stop short of it. 72 dp until the
         // first frame has it (two 17 dp glyphs and the pill's 14 dp sides).
         var pillW by remember { mutableStateOf(72.dp) }
         // Where each block landed, for the diagnostics (and for checking the top line's alignment
         // without a picture of the screen).
         val moduleBox = remember { mutableStateMapOf<String, String>() }
-        val showWeather = AerialSettings.showWeather
+        val showWeather = HLineSettings.showWeather
         // The clock can be turned off, as the weather can (2.23): everything below treats it as an
         // absent block rather than a small one.
-        val showClock = AerialSettings.showClock
+        val showClock = HLineSettings.showClock
         // Two large blocks cannot share the screen: when both are set large, the weather keeps the
         // side it was given and the clock takes the other one. Not a random pick, and not a layout
         // that has to fit two 100 dp blocks over the rows.
-        val bothLarge = showWeather && AerialSettings.weatherLarge && showClock && AerialSettings.largeClock
-        val weatherRightNow = AerialSettings.weatherRight
-        val clockRightNow = if (bothLarge) !weatherRightNow else AerialSettings.clockRight
-        val largeClock = showClock && (AerialSettings.largeClock || AerialSettings.weatherLarge)
+        val bothLarge = showWeather && HLineSettings.weatherLarge && showClock && HLineSettings.largeClock
+        val weatherRightNow = HLineSettings.weatherRight
+        val clockRightNow = if (bothLarge) !weatherRightNow else HLineSettings.clockRight
+        val largeClock = showClock && (HLineSettings.largeClock || HLineSettings.weatherLarge)
         // What the taller side holds: each block keeps the room it draws in, and two on one side
         // stack with a gap. The rows below must clear whichever side is lower.
         val gap = 8.dp
         val weatherH = if (showWeather) {
-            if (AerialSettings.weatherLarge) ModuleWeatherLarge else ModuleWeatherSmall
+            if (HLineSettings.weatherLarge) ModuleWeatherLarge else ModuleWeatherSmall
         } else 0.dp
-        val clockH = if (!showClock) 0.dp else if (AerialSettings.largeClock) ModuleClockLarge else ModuleClockSmall
+        val clockH = if (!showClock) 0.dp else if (HLineSettings.largeClock) ModuleClockLarge else ModuleClockSmall
         fun sideHeight(right: Boolean): Dp {
             val weatherHere = showWeather && weatherRightNow == right
             val clockHere = showClock && clockRightNow == right
@@ -726,7 +726,7 @@ fun HomeScreen(
             // there are, which sit at its left: sized to three apps it read as a stray panel (#284).
             // In two rows it holds both: under the top row alone, the second sat beside it on the
             // bare wallpaper, as if left off the shelf.
-            val plate = if (apps.isEmpty() || !AerialSettings.homePlate) null else with(density) {
+            val plate = if (apps.isEmpty() || !HLineSettings.homePlate) null else with(density) {
                 val second = if (metrics.shelfRows > 1) metrics.shelfSecond else 0.dp
                 Rect(
                     (metrics.margin - PlatePadH).toPx(),
@@ -795,8 +795,8 @@ fun HomeScreen(
                     val belowPill = right && both
                     // Small on top, large under it: the bigger block anchors the bottom.
                     val order = listOfNotNull(
-                        if (weatherHere) "w" to AerialSettings.weatherLarge else null,
-                        if (clockHere) "c" to AerialSettings.largeClock else null,
+                        if (weatherHere) "w" to HLineSettings.weatherLarge else null,
+                        if (clockHere) "c" to HLineSettings.largeClock else null,
                     ).sortedBy { if (it.second) 1 else 0 }
                     Column(
                         modifier = Modifier
@@ -823,7 +823,7 @@ fun HomeScreen(
                             val inset = if (onPill && right) pillW + 2.dp else 0.dp
                             if (kind == "w") {
                                 WeatherModule(
-                                    large = AerialSettings.weatherLarge,
+                                    large = HLineSettings.weatherLarge,
                                     alignEnd = right,
                                     headInset = inset,
                                     onPillLine = onPill,
@@ -831,13 +831,13 @@ fun HomeScreen(
                             } else {
                                 ClockModule(
                                     now = now,
-                                    large = AerialSettings.largeClock,
+                                    large = HLineSettings.largeClock,
                                     alignEnd = right,
                                     headInset = inset,
                                     onPillLine = onPill,
                                     // The large clock's time rises into the screensaver's; the
                                     // small one goes with the rest of Home.
-                                    toSaver = { if (AerialSettings.largeClock) clockToSaver.value else toSaver.value },
+                                    toSaver = { if (HLineSettings.largeClock) clockToSaver.value else toSaver.value },
                                     saving = vm.screensaverVisible,
                                     away = carrying,
                                 )
@@ -1092,8 +1092,8 @@ fun HomeScreen(
                 val entry = vm.entry(key)
                 val source = entry?.source
                 when {
-                    source != null -> vm.chooseBootTarget(sourceId = source.id.takeIf { it != AerialSettings.bootSource })
-                    entry != null -> vm.chooseBootTarget(pkg = key.takeIf { it != AerialSettings.bootApp })
+                    source != null -> vm.chooseBootTarget(sourceId = source.id.takeIf { it != HLineSettings.bootSource })
+                    entry != null -> vm.chooseBootTarget(pkg = key.takeIf { it != HLineSettings.bootApp })
                 }
             },
             onSourceDevice = { id, device ->
@@ -1145,7 +1145,7 @@ fun HomeScreen(
             },
             onPin = { on ->
                 if (on) vm.overlay = Overlay.Pin(PinMode.Create) { vm.overlay = Overlay.Wallpaper }
-                else vm.whenUnlocked { AerialSettings.choosePin(null); vm.overlay = Overlay.Wallpaper }
+                else vm.whenUnlocked { HLineSettings.choosePin(null); vm.overlay = Overlay.Wallpaper }
             },
             // The sheet gives way to the update page, which is where the result of the check and
             // the "Download and install" button both live.

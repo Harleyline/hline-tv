@@ -55,8 +55,8 @@ class RevivalListener : NotificationListenerService() {
 
     override fun onListenerConnected() {
         if (destroyed) return
-        // The line docs/HANDOFF.md and the issues look for after a kill (logcat -s AerialGuard).
-        Log.i("AerialGuard", "revived by the notification listener binding")
+        // The line docs/HANDOFF.md and the issues look for after a kill (logcat -s HLineGuard).
+        Log.i("HLineGuard", "revived by the notification listener binding")
         trace("notification listener connected")
         // Keep the quick path on wake. The delayed checks also cover a binding that did not
         // arrive after this write; none of the paths may touch credential storage while locked.

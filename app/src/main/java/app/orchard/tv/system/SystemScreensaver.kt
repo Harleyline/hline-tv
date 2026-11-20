@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import android.util.Log
-import app.orchard.tv.dream.AerialDream
+import app.orchard.tv.dream.HLineDream
 
 /**
  * The TV's own screensaver: Android's dream where the firmware uses it (TCL, most Android TVs), or
@@ -30,7 +30,7 @@ object SystemScreensaver {
 
     /** Aerial's own dream is the TV's screensaver (tools/install.sh sets it where dreams are on). */
     fun isAerials(context: Context): Boolean =
-        dreamsOn(context) && component(context).split(',').firstOrNull() == ComponentName(context, AerialDream::class.java).flattenToString()
+        dreamsOn(context) && component(context).split(',').firstOrNull() == ComponentName(context, HLineDream::class.java).flattenToString()
 
     /** The dream the firmware came with, or null where it has none on record. */
     fun firmwareDream(context: Context): String? =

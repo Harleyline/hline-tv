@@ -98,7 +98,7 @@ import androidx.compose.ui.unit.sp
 import app.orchard.tv.BuildConfig
 import app.orchard.tv.R
 import app.orchard.tv.system.UsageReport
-import app.orchard.tv.settings.AerialSettings
+import app.orchard.tv.settings.HLineSettings
 import app.orchard.tv.settings.AppLanguage
 import app.orchard.tv.settings.UiSounds
 import app.orchard.tv.settings.Effects
@@ -435,7 +435,7 @@ fun WallpaperSheet(
                                             "cities" to R.string.st_aerial_cities,
                                             "underwater" to R.string.st_aerial_underwater,
                                         ),
-                                        AerialSettings.aerialKind, AerialSettings::chooseAerialKind, first = true,
+                                        HLineSettings.aerialKind, HLineSettings::chooseAerialKind, first = true,
                                         // The kinds belong to the aerial card above them: Up goes back
                                         // to it, then Down returns here with the cursor where it was
                                         // (the owner, 2.23).
@@ -447,7 +447,7 @@ fun WallpaperSheet(
                                     Choices(
                                         R.string.st_play, stringResource(R.string.st_play_hint), note,
                                         listOf(false to R.string.st_play_still, true to R.string.st_play_always),
-                                        AerialSettings.wallpaperAlwaysMoves, AerialSettings::chooseWallpaperAlwaysMoves, first = true,
+                                        HLineSettings.wallpaperAlwaysMoves, HLineSettings::chooseWallpaperAlwaysMoves, first = true,
                                     )
                                 }
                             }
@@ -461,32 +461,32 @@ fun WallpaperSheet(
                                 SettingRow(R.string.st_layout, stringResource(R.string.st_home_layout_hint), note, first = true) {
                                     Picker(
                                         listOf(true to R.string.st_home_one_row, false to R.string.st_home_standard),
-                                        AerialSettings.oneRowHome, AerialSettings::chooseOneRowHome, firstRow,
+                                        HLineSettings.oneRowHome, HLineSettings::chooseOneRowHome, firstRow,
                                     )
                                 }
                                 SettingRow(R.string.st_columns, stringResource(R.string.st_columns_hint), note) {
                                     Picker(
-                                        AerialSettings.HOME_COLUMNS.map { it to it.toString() },
-                                        AerialSettings.homeColumns, AerialSettings::chooseHomeColumns,
+                                        HLineSettings.HOME_COLUMNS.map { it to it.toString() },
+                                        HLineSettings.homeColumns, HLineSettings::chooseHomeColumns,
                                     )
                                 }
                                 SettingRow(R.string.st_names, stringResource(R.string.st_names_hint), note) {
                                     Picker(
                                         listOf(false to R.string.st_names_focused, true to R.string.st_names_all),
-                                        AerialSettings.showAllNames, AerialSettings::chooseShowAllNames,
+                                        HLineSettings.showAllNames, HLineSettings::chooseShowAllNames,
                                     )
                                 }
                                 SettingRow(R.string.st_plate, stringResource(R.string.st_plate_hint), note) {
                                     Picker(
                                         listOf(true to R.string.st_plate_glass, false to R.string.st_plate_none),
-                                        AerialSettings.homePlate, AerialSettings::chooseHomePlate,
+                                        HLineSettings.homePlate, HLineSettings::chooseHomePlate,
                                     )
                                 }
                                 // Two rows show the second row whole; only one row has a peek to hide.
-                                if (AerialSettings.oneRowHome) SettingRow(R.string.st_peek, stringResource(R.string.st_peek_hint), note) {
+                                if (HLineSettings.oneRowHome) SettingRow(R.string.st_peek, stringResource(R.string.st_peek_hint), note) {
                                     Picker(
                                         listOf(true to R.string.st_peek_show, false to R.string.st_peek_hide),
-                                        AerialSettings.peekNextRow, AerialSettings::choosePeekNextRow,
+                                        HLineSettings.peekNextRow, HLineSettings::choosePeekNextRow,
                                     )
                                 }
                                 SettingRow(R.string.st_hidden_apps, stringResource(R.string.st_hidden_apps_hint), note) {
@@ -503,7 +503,7 @@ fun WallpaperSheet(
                                             Wallpapers.screensaver == ScreensaverMode.Videos -> stringResource(R.string.ss_videos_hint)
                                             Wallpapers.screensaver == ScreensaverMode.System -> stringResource(R.string.ss_system_hint)
                                             Wallpapers.screensaverFollows -> stringResource(R.string.ss_follow_hint)
-                                            AerialSettings.backStartsScreensaver -> stringResource(R.string.ss_back_hint)
+                                            HLineSettings.backStartsScreensaver -> stringResource(R.string.ss_back_hint)
                                             else -> null
                                         },
                                         note, first = true,
@@ -515,7 +515,7 @@ fun WallpaperSheet(
                                             listOf(AerialQuality.Auto to R.string.ss_quality_auto, AerialQuality.Hd to R.string.ss_quality_hd) +
                                                 listOf(AerialQuality.Uhd to R.string.ss_quality_uhd, AerialQuality.DolbyVision to R.string.ss_quality_dv)
                                                     .filter { it.first in qualities },
-                                            AerialSettings.aerialQuality, AerialSettings::chooseAerialQuality,
+                                            HLineSettings.aerialQuality, HLineSettings::chooseAerialQuality,
                                         )
                                     }
                                     // The firmware's screensaver starts on the firmware's timer: Aerial's
@@ -537,19 +537,19 @@ fun WallpaperSheet(
                                         // same line: five fixed delays in one capsule pushed the row
                                         // wider than the section, and the label beside it was cut (2.23).
                                         Minutes(
-                                            AerialSettings.screensaverMinutes,
-                                            AerialSettings.SCREENSAVER_MINUTES,
-                                            AerialSettings::chooseScreensaverMinutes,
-                                            never = { AerialSettings.chooseScreensaverMinutes(AerialSettings.NEVER) },
+                                            HLineSettings.screensaverMinutes,
+                                            HLineSettings.SCREENSAVER_MINUTES,
+                                            HLineSettings::chooseScreensaverMinutes,
+                                            never = { HLineSettings.chooseScreensaverMinutes(HLineSettings.NEVER) },
                                         )
                                     }
                                     // The clock screensaver is its clock, and the others show none.
                                     val showClock = Wallpapers.screensaver == ScreensaverMode.Aerial || Wallpapers.screensaver == ScreensaverMode.Photos
                                     SettingRow(R.string.ss_back, stringResource(R.string.ss_back_choice_hint), note) {
-                                        SwitchPill(AerialSettings.backStartsScreensaver, choose = AerialSettings::chooseBackStartsScreensaver)
+                                        SwitchPill(HLineSettings.backStartsScreensaver, choose = HLineSettings::chooseBackStartsScreensaver)
                                     }
                                     if (showClock) SettingRow(R.string.ss_show_time, stringResource(R.string.ss_show_time_hint), note) {
-                                        SwitchPill(AerialSettings.screensaverClock, choose = AerialSettings::chooseScreensaverClock)
+                                        SwitchPill(HLineSettings.screensaverClock, choose = HLineSettings::chooseScreensaverClock)
                                     }
                                 }
                             }
@@ -565,16 +565,16 @@ fun WallpaperSheet(
                                 Group { note ->
                                     SettingRow(
                                         R.string.wp_weather,
-                                        stringResource(if (AerialSettings.showWeather) R.string.st_weather_size_hint else R.string.st_weather_off_hint),
+                                        stringResource(if (HLineSettings.showWeather) R.string.st_weather_size_hint else R.string.st_weather_off_hint),
                                         note, first = true,
                                     ) { WeatherSize(firstRow) }
                                     // Where it is only while there is one: a side for a block that is
                                     // not on screen asked a question with no answer.
-                                    if (AerialSettings.showWeather) {
+                                    if (HLineSettings.showWeather) {
                                         SettingRow(R.string.st_weather_place, stringResource(R.string.st_weather_place_hint), note) {
                                             Picker(
                                                 listOf(false to R.string.st_clock_left, true to R.string.st_clock_right),
-                                                AerialSettings.weatherRight, AerialSettings::chooseWeatherRight,
+                                                HLineSettings.weatherRight, HLineSettings::chooseWeatherRight,
                                             )
                                         }
                                         // The place the weather stands for and its reading now, said
@@ -600,10 +600,10 @@ fun WallpaperSheet(
                                             }
                                         }
                                         SettingRow(R.string.st_air, null, note) {
-                                            SwitchPill(AerialSettings.showAqi, choose = AerialSettings::chooseShowAqi)
+                                            SwitchPill(HLineSettings.showAqi, choose = HLineSettings::chooseShowAqi)
                                         }
                                         SettingRow(R.string.st_humidity, null, note) {
-                                            SwitchPill(AerialSettings.showHumidity, choose = AerialSettings::chooseShowHumidity)
+                                            SwitchPill(HLineSettings.showHumidity, choose = HLineSettings::chooseShowHumidity)
                                         }
                                     }
                                 }
@@ -616,10 +616,10 @@ fun WallpaperSheet(
                                     SettingRow(R.string.st_clock_size, stringResource(R.string.st_clock_size_hint), note, first = true) {
                                         ClockSize()
                                     }
-                                    if (AerialSettings.showClock) SettingRow(R.string.st_clock_place, stringResource(R.string.st_clock_hint), note) {
+                                    if (HLineSettings.showClock) SettingRow(R.string.st_clock_place, stringResource(R.string.st_clock_hint), note) {
                                         Picker(
                                             listOf(false to R.string.st_clock_left, true to R.string.st_clock_right),
-                                            AerialSettings.clockRight, AerialSettings::chooseClockRight,
+                                            HLineSettings.clockRight, HLineSettings::chooseClockRight,
                                         )
                                     }
                                 }
@@ -634,7 +634,7 @@ fun WallpaperSheet(
                                     // reader who cannot read the rest comes looking for (the owner, 2.21).
                                     SettingRow(R.string.st_language, stringResource(R.string.st_language_hint), note, first = true) {
                                         ActionChip(
-                                            languageName(AerialSettings.language), Glyph.ChevronRight,
+                                            languageName(HLineSettings.language), Glyph.ChevronRight,
                                             focusRequester = firstRow,
                                             onClick = {
                                                 pickerWas = "language"
@@ -644,30 +644,30 @@ fun WallpaperSheet(
                                     }
                                     SettingRow(
                                         R.string.st_sounds,
-                                        stringResource(if (AerialSettings.uiSounds == UiSounds.Tv) R.string.st_sounds_hint else R.string.st_sounds_off_hint),
+                                        stringResource(if (HLineSettings.uiSounds == UiSounds.Tv) R.string.st_sounds_hint else R.string.st_sounds_off_hint),
                                         note,
                                     ) {
-                                        SwitchPill(AerialSettings.uiSounds == UiSounds.Tv) { on -> AerialSettings.chooseUiSounds(if (on) UiSounds.Tv else UiSounds.Off) }
+                                        SwitchPill(HLineSettings.uiSounds == UiSounds.Tv) { on -> HLineSettings.chooseUiSounds(if (on) UiSounds.Tv else UiSounds.Off) }
                                     }
                                     SettingRow(
                                         R.string.st_effects,
                                         stringResource(
-                                            if (AerialSettings.effects == Effects.Auto && AerialSettings.lowEnd) R.string.st_effects_auto_lite_hint
+                                            if (HLineSettings.effects == Effects.Auto && HLineSettings.lowEnd) R.string.st_effects_auto_lite_hint
                                             else R.string.st_effects_hint,
                                         ),
                                         note,
                                     ) {
                                         Picker(
                                             listOf(Effects.Auto to R.string.st_effects_auto, Effects.Full to R.string.st_effects_full, Effects.Lite to R.string.st_effects_lite),
-                                            AerialSettings.effects, AerialSettings::chooseEffects,
+                                            HLineSettings.effects, HLineSettings::chooseEffects,
                                         )
                                     }
                                     SettingRow(R.string.st_pin, stringResource(R.string.st_pin_hint), note) {
                                         // One capsule, as every other switch in the panel: 关 / 开, the
                                         // cursor on one of them, OK to commit (the owner, 2.23).
                                         SwitchPill(
-                                            AerialSettings.pinSet == true,
-                                            choose = { on -> if (AerialSettings.pinSet != on) onPin(on) },
+                                            HLineSettings.pinSet == true,
+                                            choose = { on -> if (HLineSettings.pinSet != on) onPin(on) },
                                         )
                                     }
                                     // The TV's own sleep: what the desktop does with the remote
@@ -675,8 +675,8 @@ fun WallpaperSheet(
                                     // box's behaviour rather than under the screensaver (2.20).
                                     SettingRow(R.string.st_standby, stringResource(R.string.st_standby_hint), note) {
                                         Minutes(
-                                            AerialSettings.standbyMinutes, AerialSettings.STANDBY_MINUTES,
-                                            AerialSettings::chooseStandbyMinutes,
+                                            HLineSettings.standbyMinutes, HLineSettings.STANDBY_MINUTES,
+                                            HLineSettings::chooseStandbyMinutes,
                                         )
                                     }
                                 }
@@ -820,15 +820,15 @@ fun WallpaperSheet(
             AppLanguage.entries.forEachIndexed { index, language ->
                 PickerRow(
                     languageName(language),
-                    on = AerialSettings.language == language,
+                    on = HLineSettings.language == language,
                     focusRequester = if (index == 0) first else null,
                     // Tibetan and Uyghur in their own cut: the list names all the languages at
                     // once, so the two no TV has a font for must carry it themselves.
                     family = scriptFamily(language.tag),
                 ) {
                     languagePicker = false
-                    if (AerialSettings.language != language) {
-                        AerialSettings.chooseLanguage(language)
+                    if (HLineSettings.language != language) {
+                        HLineSettings.chooseLanguage(language)
                         (context as? Activity)?.recreate()
                     }
                 }
@@ -1353,8 +1353,8 @@ private fun SettingRow(label: Int, hint: String?, note: (String?) -> Unit, first
 @Composable
 private fun WeatherSize(focusRequester: FocusRequester? = null) {
     val size = when {
-        !AerialSettings.showWeather -> 0
-        AerialSettings.weatherLarge -> 2
+        !HLineSettings.showWeather -> 0
+        HLineSettings.weatherLarge -> 2
         else -> 1
     }
     Picker(
@@ -1362,8 +1362,8 @@ private fun WeatherSize(focusRequester: FocusRequester? = null) {
         size,
         focusRequester = focusRequester,
         choose = { pick ->
-            AerialSettings.chooseShowWeather(pick != 0)
-            if (pick != 0) AerialSettings.chooseWeatherLarge(pick == 2)
+            HLineSettings.chooseShowWeather(pick != 0)
+            if (pick != 0) HLineSettings.chooseWeatherLarge(pick == 2)
         },
     )
 }
@@ -1373,8 +1373,8 @@ private fun WeatherSize(focusRequester: FocusRequester? = null) {
 @Composable
 private fun ClockSize(focusRequester: FocusRequester? = null) {
     val size = when {
-        !AerialSettings.showClock -> 0
-        AerialSettings.largeClock -> 2
+        !HLineSettings.showClock -> 0
+        HLineSettings.largeClock -> 2
         else -> 1
     }
     Picker(
@@ -1382,8 +1382,8 @@ private fun ClockSize(focusRequester: FocusRequester? = null) {
         size,
         focusRequester = focusRequester,
         choose = { pick ->
-            AerialSettings.chooseShowClock(pick != 0)
-            if (pick != 0) AerialSettings.chooseLargeClock(pick == 2)
+            HLineSettings.chooseShowClock(pick != 0)
+            if (pick != 0) HLineSettings.chooseLargeClock(pick == 2)
         },
     )
 }
@@ -1615,7 +1615,7 @@ private fun Minutes(minutes: Int, range: IntRange, choose: (Int) -> Unit, never:
         ) {
             StepKey(Glyph.Minus, live && cursor == 0, enabled = minutes > range.first)
             BasicText(
-                if (minutes == AerialSettings.NEVER) "—" else stringResource(R.string.ss_minutes, minutes),
+                if (minutes == HLineSettings.NEVER) "—" else stringResource(R.string.ss_minutes, minutes),
                 style = Type.Body.copy(color = Palette.Label, textAlign = TextAlign.Center),
                 modifier = Modifier.widthIn(min = 56.dp).padding(horizontal = 4.dp),
             )
@@ -1626,7 +1626,7 @@ private fun Minutes(minutes: Int, range: IntRange, choose: (Int) -> Unit, never:
                         .padding(start = 4.dp)
                         .clip(RoundedCornerShape(50))
                         .background(when {
-                            minutes == AerialSettings.NEVER -> Palette.Focus
+                            minutes == HLineSettings.NEVER -> Palette.Focus
                             live && cursor == 2 -> Palette.FillStrong
                             else -> Color.Transparent
                         })
@@ -1639,7 +1639,7 @@ private fun Minutes(minutes: Int, range: IntRange, choose: (Int) -> Unit, never:
                 ) {
                     BasicText(
                         stringResource(R.string.ss_never),
-                        style = Type.Body.copy(color = if (minutes == AerialSettings.NEVER) Palette.OnFocus else Palette.Label),
+                        style = Type.Body.copy(color = if (minutes == HLineSettings.NEVER) Palette.OnFocus else Palette.Label),
                         maxLines = 1,
                     )
                 }
@@ -1672,8 +1672,8 @@ private fun StepKey(glyph: Glyph, cursor: Boolean, enabled: Boolean) {
 private fun PinChoice(onPin: (on: Boolean) -> Unit, onFocused: () -> Unit) {
     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
         listOf(false to R.string.st_pin_off, true to R.string.st_pin_on).forEach { (on, label) ->
-            Chip(stringResource(label), on = AerialSettings.pinSet == on, onFocused = onFocused) {
-                if (AerialSettings.pinSet != on) onPin(on)
+            Chip(stringResource(label), on = HLineSettings.pinSet == on, onFocused = onFocused) {
+                if (HLineSettings.pinSet != on) onPin(on)
             }
         }
     }

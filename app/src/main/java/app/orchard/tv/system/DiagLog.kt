@@ -22,14 +22,14 @@ import java.util.concurrent.Executors
  * also written to Android/data/app.orchard.tv/files/aerial-diag.log, which `adb pull` can fetch.
  */
 object DiagLog {
-    private const val TAG = "AerialDiag"
+    private const val TAG = "HLineDiag"
     private const val KEEP = 600
     private const val FILE_LIMIT = 1 shl 20
 
     private val lines = ArrayDeque<String>()
     // Made on the first line written to the file, so a release build without diag has no thread.
     private val writer by lazy {
-        Executors.newSingleThreadExecutor { Thread(it, "AerialDiag").apply { isDaemon = true } }
+        Executors.newSingleThreadExecutor { Thread(it, "HLineDiag").apply { isDaemon = true } }
     }
     private val stamp = SimpleDateFormat("MM-dd HH:mm:ss.SSS", Locale.US)
     @Volatile private var file: File? = null
@@ -89,8 +89,12 @@ object DiagLog {
 
     fun e(message: String, error: Throwable) = i("$message: ${Log.getStackTraceString(error)}")
 
-    /** Logs whatever kills the process before it goes. */
-    fun catchCrashes() {
+    @Volatile private var appContext: Context? = null
+    private val handlingCrash = java.util.concurrent.atomic.AtomicBoolean(false)
+
+    /** Logs whatever kills the process and shows [CrashActivity] so the user can photograph the error. */
+    fun catchCrashes(context: Context? = null) {
+        if (context != null) appContext = context.applicationContext
         val previous = Thread.getDefaultUncaughtExceptionHandler()
         if (previous is Crashes) return
         Thread.setDefaultUncaughtExceptionHandler(Crashes(previous))
@@ -102,20 +106,30 @@ object DiagLog {
             val line = "${synchronized(lines) { stamp.format(Date()) }} crash on ${t.name}: ${Log.getStackTraceString(e)}"
             Log.e(TAG, line)
             if (f != null) runCatching { f.appendText(line + "\n") }
+            val ctx = appContext
+            if (ctx != null && handlingCrash.compareAndSet(false, true)) {
+                val shown = runCatching {
+                    CrashActivity.launch(ctx, t, e, device(), recent(15).joinToString("\n"))
+                }.isSuccess
+                if (shown) {
+                    android.os.Process.killProcess(android.os.Process.myPid())
+                    kotlin.system.exitProcess(10)
+                }
+            }
             previous?.uncaughtException(t, e)
         }
     }
 
     fun device(): String =
         "${Build.MANUFACTURER} ${Build.MODEL} (${Build.DEVICE}, ${Build.HARDWARE}, ${Build.BOARD}), " +
-            "Android ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT}), ${Build.FINGERPRINT}, " +
-            "Aerial ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+            "Android ${Build.VERSION.RELEASE} (SDK ${Build.VERSION_SDK_INT}), ${Build.FINGERPRINT}, " +
+            "HLine TV ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
 
     /** The last [n] lines, oldest first. */
     fun recent(n: Int): List<String> = synchronized(lines) { lines.toList().takeLast(n) }
 
     fun dump(writer: PrintWriter) {
-        writer.println("Aerial log (${device()}):")
+        writer.println("HLine TV log (${device()}):")
         synchronized(lines) { lines.forEach { writer.println("  $it") } }
     }
 }

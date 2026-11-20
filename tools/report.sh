@@ -132,7 +132,7 @@ set +e
     sh_ am start -n "$PKG/.MainActivity" >/dev/null
     sleep 4
   fi
-  APP=$(sh_ dumpsys activity "$PKG/.MainActivity" report | sed -n '/^### Aerial diagnostics/,$p')
+  APP=$(sh_ dumpsys activity "$PKG/.MainActivity" report | sed -n '/^### HLine TV diagnostics/,$p')
   if [ -n "$APP" ]; then echo "$APP"; else echo "(Aerial's own report is missing: Aerial is older than 1.32 or is not running.)"; fi
 } > "$OUT"
 

@@ -193,7 +193,7 @@ object AppCatalog {
         val component = ComponentName(pkg, info.name)
         val fw = faceW
         val fh = faceH
-        val key = "v2|$stamp|$fw|$fh"
+        val key = "v3|$stamp|$fw|$fh"
         val file = File(dir, "$pkg.png")
         val cached = index.getString(pkg, null)
         if (cached != null && cached.startsWith("$key|") && file.exists()) {
@@ -256,10 +256,28 @@ object AppCatalog {
     }
 
     /** The app's TV banner (Android 5.0+); a "banner" that is not wide is its icon declared again. */
+    private fun isWideArtwork(d: Drawable): Boolean {
+        val w = d.intrinsicWidth
+        val h = d.intrinsicHeight
+        return w > 0 && h > 0 && w * 100 >= h * 125
+    }
+
     private fun banner(pm: PackageManager, info: ActivityInfo, leanback: Boolean): Drawable? {
-        if (!leanback || Build.VERSION.SDK_INT < 21) return null
-        val d = densest(pm, info, info.bannerResource) ?: runCatching { info.loadBanner(pm) }.getOrNull()
-        return d?.takeIf { it.intrinsicWidth >= it.intrinsicHeight * 4 / 3 }
+        if (Build.VERSION.SDK_INT >= 21) {
+            val activityBanner = densest(pm, info, info.bannerResource) ?: runCatching { info.loadBanner(pm) }.getOrNull()
+            if (activityBanner != null && isWideArtwork(activityBanner)) return activityBanner
+            val appBanner = densest(pm, info, info.applicationInfo.banner)
+                ?: runCatching { info.applicationInfo.loadBanner(pm) }.getOrNull()
+            if (appBanner != null && isWideArtwork(appBanner)) return appBanner
+        }
+        val logo = densest(pm, info, info.logoResource)
+            ?: runCatching { info.loadLogo(pm) }.getOrNull()
+            ?: densest(pm, info, info.applicationInfo.logo)
+            ?: runCatching { info.applicationInfo.loadLogo(pm) }.getOrNull()
+        if (logo != null && isWideArtwork(logo)) return logo
+        val icon = densest(pm, info, info.iconResource) ?: runCatching { info.loadIcon(pm) }.getOrNull()
+        if (icon != null && isWideArtwork(icon)) return icon
+        return null
     }
 
     /**

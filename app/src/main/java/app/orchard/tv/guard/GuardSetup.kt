@@ -17,7 +17,7 @@ import android.provider.Settings
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import android.util.Log
-import app.orchard.tv.dream.AerialDream
+import app.orchard.tv.dream.HLineDream
 import app.orchard.tv.system.DiagLog
 import app.orchard.tv.system.SystemScreensaver
 
@@ -30,7 +30,7 @@ import app.orchard.tv.system.SystemScreensaver
  * it cannot be granted any other way) Aerial can put the service back each time it starts.
  */
 object GuardSetup {
-    private const val TAG = "AerialGuard"
+    private const val TAG = "HLineGuard"
 
     /** elapsedRealtime of the last time the guard had to be switched back on. */
     @Volatile
@@ -407,7 +407,7 @@ object GuardSetup {
         val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         val key = "screensaver_components"
         val current = Settings.Secure.getString(resolver, key).orEmpty()
-        val mine = ComponentName(context, AerialDream::class.java).flattenToString()
+        val mine = ComponentName(context, HLineDream::class.java).flattenToString()
         // 1.6 and earlier: the class was OrchardDream, and install.sh had claimed the screensaver.
         val renamed = "${context.packageName}/${context.packageName}.dream.OrchardDream" in current
         if (renamed) prefs.edit().putBoolean(KEY_OWN_SCREENSAVER, true).apply()
@@ -432,7 +432,7 @@ object GuardSetup {
         val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         runCatching {
             if (off) {
-                val mine = ComponentName(context, AerialDream::class.java).flattenToString()
+                val mine = ComponentName(context, HLineDream::class.java).flattenToString()
                 if (Settings.Secure.getString(resolver, "screensaver_components") != mine) return
                 if (Settings.Secure.getInt(resolver, KEY_SCREENSAVER_ENABLED, 1) == 0) return
                 Settings.Secure.putInt(resolver, KEY_SCREENSAVER_ENABLED, 0)
@@ -459,7 +459,7 @@ object GuardSetup {
         if (!prefs.getBoolean(KEY_OWN_SCREENSAVER, false)) return
         if (!systemChosen(context)) { keepScreensaver(context); return }
         val resolver = context.contentResolver
-        val mine = ComponentName(context, AerialDream::class.java).flattenToString()
+        val mine = ComponentName(context, HLineDream::class.java).flattenToString()
         val firmware = SystemScreensaver.firmwareDream(context) ?: return
         if (Settings.Secure.getString(resolver, "screensaver_components").orEmpty() != mine) return
         runCatching {

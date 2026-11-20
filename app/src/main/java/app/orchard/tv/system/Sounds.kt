@@ -6,7 +6,7 @@ import android.os.Build
 import android.os.SystemClock
 import android.provider.Settings
 import android.view.KeyEvent
-import app.orchard.tv.settings.AerialSettings
+import app.orchard.tv.settings.HLineSettings
 import app.orchard.tv.settings.UiSounds
 
 /**
@@ -83,6 +83,6 @@ object Sounds {
     }
 
     private fun play(effect: Int) {
-        if (AerialSettings.uiSounds == UiSounds.Tv) playTvEffect(effect)
+        if (HLineSettings.uiSounds == UiSounds.Tv) playTvEffect(effect)
     }
 }

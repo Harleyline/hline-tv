@@ -34,7 +34,7 @@ enum class Effects(val key: String) {
 }
 
 /**
- * Lite's preferences, under the full app's names and defaults (settings/AerialSettings.kt), so the
+ * Lite's preferences, under the full app's names and defaults (settings/HLineSettings.kt), so the
  * two read alike and the phone page's settings mean the same. Main thread only.
  */
 object LiteSettings {
