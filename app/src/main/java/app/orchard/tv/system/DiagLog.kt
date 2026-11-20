@@ -122,7 +122,7 @@ object DiagLog {
 
     fun device(): String =
         "${Build.MANUFACTURER} ${Build.MODEL} (${Build.DEVICE}, ${Build.HARDWARE}, ${Build.BOARD}), " +
-            "Android ${Build.VERSION.RELEASE} (SDK ${Build.VERSION_SDK_INT}), ${Build.FINGERPRINT}, " +
+            "Android ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT}), ${Build.FINGERPRINT}, " +
             "HLine TV ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
 
     /** The last [n] lines, oldest first. */

@@ -55,8 +55,7 @@ class CrashActivity : Activity() {
 
         // Device & metadata bar
         val meta = TextView(this).apply {
-            text = "$timeText  |  Thread: $threadName
-$deviceInfo"
+            text = "$timeText  |  Thread: $threadName\n$deviceInfo"
             setTextColor(Color.parseColor("#A1A1A6"))
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
             setPadding(0, dp(6), 0, dp(12))
@@ -83,10 +82,7 @@ $deviceInfo"
         val bodyText = buildString {
             append(stack.trim())
             if (recentLog.isNotBlank()) {
-                append("
-
---- Recent HLineDiag ---
-")
+                append("\n\n--- Recent HLineDiag ---\n")
                 append(recentLog.trim())
             }
         }
