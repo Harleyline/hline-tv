@@ -22,8 +22,8 @@ wrangler login
 wrangler kv namespace create REPORT
 
 # 2. 三个密钥
-wrangler secret put GITHUB_TOKEN   # 细粒度 token，只勾 hline-tv 的 Issues: Read and write
-wrangler secret put GITHUB_REPO    # Harleyline/hline-tv
+wrangler secret put GITHUB_TOKEN   # 细粒度 token，只勾 hline-home 的 Issues: Read and write
+wrangler secret put GITHUB_REPO    # Harleyline/hline-home
 wrangler secret put STATS_KEY      # 查看汇总页的口令，自己定
 # 可选
 wrangler secret put REPORT_KEY     # 和 App 的 reportKey 对上，挡掉乱发的请求
