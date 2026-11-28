@@ -1,6 +1,6 @@
 # CREDITS · 素材来源与许可
 
-HLine TV 在 Aerial（MIT License, © pengchujin and contributors）与 ClearYourTV 的思路上构建。本项目沿用 MIT 许可证，见 [LICENSE](LICENSE)。
+HLine Home 在 Aerial（MIT License, © pengchujin and contributors）与 ClearYourTV 的思路上构建。本项目沿用 MIT 许可证，见 [LICENSE](LICENSE)。
 
 ## 字体（SIL Open Font License 1.1）
 
