@@ -1,6 +1,6 @@
 <div align="center">
 
-# HLine TV
+# HLine Home
 
 **A clean home screen for Android TV. Nothing on it is for sale.**
 
@@ -12,16 +12,16 @@ like it cost a lot more than it did.
 
 <sub>App interface languages (14):<br>简体中文 · 繁體中文 · English · 日本語 · 한국어<br>Русский · Українська · Қазақша · Français · Español<br>Deutsch · ไทย · Português · العربية</sub>
 
-[![Download APK](https://img.shields.io/badge/Download%20APK-34a853?style=for-the-badge&logo=android&logoColor=white)](https://github.com/Harleyline/hline-tv/releases/latest)
+[![Download APK](https://img.shields.io/badge/Download%20APK-34a853?style=for-the-badge&logo=android&logoColor=white)](https://github.com/Harleyline/hline-home/releases/latest)
 [![Website](https://img.shields.io/badge/Website-hline--tv-111111?style=for-the-badge)](https://hlinetv.com)
-[![Version](https://img.shields.io/github/v/release/Harleyline/hline-tv?style=flat-square&label=version&color=2997ff)](https://github.com/Harleyline/hline-tv/releases/latest)
+[![Version](https://img.shields.io/github/v/release/Harleyline/hline-home?style=flat-square&label=version&color=2997ff)](https://github.com/Harleyline/hline-home/releases/latest)
 ![Android 5.0+](https://img.shields.io/badge/Android-5.0%2B-3ddc84?style=flat-square&logo=android&logoColor=white)
 ![Size 11 MB](https://img.shields.io/badge/size-11%20MB-8e8e93?style=flat-square)
 ![Languages 14](https://img.shields.io/badge/languages-14-5856d6?style=flat-square)
 [![MIT](https://img.shields.io/badge/license-MIT-555555?style=flat-square)](LICENSE)
 
 
-<img src="docs/img/home-en.jpg" alt="HLine TV home: aerial wallpaper, date and weather, a row of apps on a glass shelf" width="100%">
+<img src="docs/img/home-en.jpg" alt="HLine Home home: aerial wallpaper, date and weather, a row of apps on a glass shelf" width="100%">
 
 <img src="docs/img/apps.jpg" width="49%" alt="All apps: banner tiles in rows, focus on one">
 <img src="docs/img/home.jpg" width="49%" alt="The same home screen in Chinese">
@@ -30,7 +30,7 @@ like it cost a lot more than it did.
 
 ## Why people replace the stock launcher
 
-|  | Most stock Android TV homes | HLine TV |
+|  | Most stock Android TV homes | HLine Home |
 |---|---|---|
 | Ads, sponsored rows, membership badges | Often there, rarely removable | None. There is nowhere to put them |
 | A recommendation rail | Fixed | Doesn't exist |
@@ -69,7 +69,7 @@ No root. No system apps touched. Uninstall any time and the stock launcher is ex
 **One command.** Turn on ADB debugging on the TV (table below), then from your computer:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Harleyline/hline-tv/main/tools/install.sh | TV=192.168.1.20 bash
+curl -fsSL https://raw.githubusercontent.com/Harleyline/hline-home/main/tools/install.sh | TV=192.168.1.20 bash
 ```
 
 **Or by hand:**
@@ -79,9 +79,9 @@ adb connect TV_IP:5555
 adb install HLine-TV.apk
 ```
 
-Then accept the prompt that offers HLine TV as the home app.
+Then accept the prompt that offers HLine Home as the home app.
 
-| File (on the [Releases](https://github.com/Harleyline/hline-tv/releases/latest) page) | What it is |
+| File (on the [Releases](https://github.com/Harleyline/hline-home/releases/latest) page) | What it is |
 |---|---|
 | `HLine-TV.apk` | Standard build, Android 5.0+. Try this one first |
 | `HLine-TV-Guard.apk` | For TVs that refuse to install a launcher — same app, different package handling |
@@ -135,7 +135,7 @@ partition, and no root is involved.
 
 **Do I lose the stock launcher?** No. It stays installed and can be chosen again.
 
-**How do I go back?** Settings → Apps → HLine TV → uninstall, or pick the stock home in the
+**How do I go back?** Settings → Apps → HLine Home → uninstall, or pick the stock home in the
 default-app settings.
 
 **The APK won't install.** Some TVs block launcher apps by name. Use `HLine-TV-Guard.apk`.
@@ -159,7 +159,7 @@ Thai.
 
 Installed once, updated from the TV: when the control centre offers a new version, tap
 "Download and install". Everything is kept. Every build is on the
-[Releases](https://github.com/Harleyline/hline-tv/releases) page, and
+[Releases](https://github.com/Harleyline/hline-home/releases) page, and
 [CHANGELOG.md](CHANGELOG.md) has the details.
 
 ## Credits and licence
@@ -167,7 +167,7 @@ Installed once, updated from the TV: when the control centre offers a new versio
 Thanks to everyone whose open work made this possible. Third-party assets and their licences are
 listed in [CREDITS.md](CREDITS.md).
 
-HLine TV is an independent personal project, not affiliated with Apple, Xiaomi, Sony or any other
+HLine Home is an independent personal project, not affiliated with Apple, Xiaomi, Sony or any other
 company named here. The flyover films are streamed from publicly available addresses; this project
 does not host or redistribute them. Please follow the laws of your country when using this
 software.
