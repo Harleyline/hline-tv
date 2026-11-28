@@ -1,6 +1,6 @@
 <div align="center">
 
-# HLine TV
+# HLine Home
 
 **一个干净的安卓电视桌面，上面没有一样东西是拿来卖的。**
 
@@ -11,16 +11,16 @@
 
 <sub>界面支持 14 种语言：<br>简体中文 · 繁體中文 · English · 日本語 · 한국어<br>Русский · Українська · Қазақша · Français · Español<br>Deutsch · ไทย · Português · العربية</sub>
 
-[![下载 APK](https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD%20APK-34a853?style=for-the-badge&logo=android&logoColor=white)](https://github.com/Harleyline/hline-tv/releases/latest)
+[![下载 APK](https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD%20APK-34a853?style=for-the-badge&logo=android&logoColor=white)](https://github.com/Harleyline/hline-home/releases/latest)
 [![官网](https://img.shields.io/badge/%E5%AE%98%E7%BD%91-hline--tv-111111?style=for-the-badge)](https://hlinetv.com)
-[![版本](https://img.shields.io/github/v/release/Harleyline/hline-tv?style=flat-square&label=%E7%89%88%E6%9C%AC&color=2997ff)](https://github.com/Harleyline/hline-tv/releases/latest)
+[![版本](https://img.shields.io/github/v/release/Harleyline/hline-home?style=flat-square&label=%E7%89%88%E6%9C%AC&color=2997ff)](https://github.com/Harleyline/hline-home/releases/latest)
 ![Android 5.0+](https://img.shields.io/badge/Android-5.0%2B-3ddc84?style=flat-square&logo=android&logoColor=white)
 ![11 MB](https://img.shields.io/badge/%E4%BD%93%E7%A7%AF-11%20MB-8e8e93?style=flat-square)
 ![14 种语言](https://img.shields.io/badge/%E8%AF%AD%E8%A8%80-14%20%E7%A7%8D-5856d6?style=flat-square)
 [![MIT](https://img.shields.io/badge/%E8%AE%B8%E5%8F%AF%E8%AF%81-MIT-555555?style=flat-square)](LICENSE)
 
 
-<img src="../../img/home.jpg" alt="HLine TV 首页：航拍壁纸、日期与天气、玻璃底板上一排 App" width="100%">
+<img src="../../img/home.jpg" alt="HLine Home 首页：航拍壁纸、日期与天气、玻璃底板上一排 App" width="100%">
 
 <img src="../../img/apps.jpg" width="49%" alt="全部 App：三排横幅图标，焦点在一个上">
 <img src="../../img/home-en.jpg" width="49%" alt="同一套桌面的英文界面">
@@ -29,7 +29,7 @@
 
 ## 为什么换掉原厂桌面
 
-|  | 多数原厂安卓电视桌面 | HLine TV |
+|  | 多数原厂安卓电视桌面 | HLine Home |
 |---|---|---|
 | 广告、推广位、会员角标 | 常有，且删不掉 | 没有，也没地方放 |
 | 推荐流 | 固定，不可关 | 不存在 |
@@ -66,7 +66,7 @@
 **一条命令。** 先在电视上打开 ADB 调试（见下表），然后在电脑上：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Harleyline/hline-tv/main/tools/install.sh | TV=192.168.1.20 bash
+curl -fsSL https://raw.githubusercontent.com/Harleyline/hline-home/main/tools/install.sh | TV=192.168.1.20 bash
 ```
 
 **或者手动：**
@@ -76,9 +76,9 @@ adb connect 电视IP:5555
 adb install HLine-TV.apk
 ```
 
-装好后按系统提示，把 HLine TV 选成桌面即可。
+装好后按系统提示，把 HLine Home 选成桌面即可。
 
-| 文件（在 [Releases](https://github.com/Harleyline/hline-tv/releases/latest) 页面） | 说明 |
+| 文件（在 [Releases](https://github.com/Harleyline/hline-home/releases/latest) 页面） | 说明 |
 |---|---|
 | `HLine-TV.apk` | 标准版，Android 5.0 及以上，先试这个 |
 | `HLine-TV-Guard.apk` | 电视不允许安装桌面类应用时用，功能一样，打包方式不同 |
@@ -129,7 +129,7 @@ adb install HLine-TV.apk
 
 **原厂桌面会消失吗？** 不会，还在，随时能切回去。
 
-**怎么回到原来的桌面？** 设置 → 应用 → HLine TV → 卸载；或在默认应用设置里重新选原厂桌面。
+**怎么回到原来的桌面？** 设置 → 应用 → HLine Home → 卸载；或在默认应用设置里重新选原厂桌面。
 
 **APK 装不上怎么办？** 有些电视会拦桌面类应用，换用 `HLine-TV-Guard.apk`。
 
@@ -149,15 +149,15 @@ adb install HLine-TV.apk
 ## 更新
 
 装一次，之后在电视上更新：控制中心出现新版本时点「下载并安装」，所有设置都保留。每个版本都在
-[Releases](https://github.com/Harleyline/hline-tv/releases) 页，改了什么见
+[Releases](https://github.com/Harleyline/hline-home/releases) 页，改了什么见
 [CHANGELOG.md](../../../CHANGELOG.md)。
 
 ## 致谢与许可
 
-HLine TV 基于 Aerial（MIT）与 ClearYourTV 的思路构建，感谢原作者与贡献者。第三方素材与许可见
+HLine Home 基于 Aerial（MIT）与 ClearYourTV 的思路构建，感谢原作者与贡献者。第三方素材与许可见
 [CREDITS.md](../../../CREDITS.md)。
 
-HLine TV 是独立的个人项目，与 Apple、小米、索尼等公司无关。航拍影片来自公开可用的流媒体地址，
+HLine Home 是独立的个人项目，与 Apple、小米、索尼等公司无关。航拍影片来自公开可用的流媒体地址，
 本项目不存储、不再分发这些影片。请遵守你所在地区的法律法规使用本软件。
 
 MIT 许可。
