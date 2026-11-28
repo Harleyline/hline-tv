@@ -1,7 +1,7 @@
 # 索尼 BRAVIA（Sony）
 
 结论先说：**能装**。2015 年至今的安卓 BRAVIA（Android TV 5.0 → Google TV 14）都满足
-HLine TV 的 minSdk 21，装法和其他安卓电视一样，用 `tools/install.sh` 或 `adb install`。
+HLine Home 的 minSdk 21，装法和其他安卓电视一样，用 `tools/install.sh` 或 `adb install`。
 真正会挡路的不是系统版本，而是索尼自己的三件事：
 
 1. **未知来源**默认关着（Android 8 起是按来源授权，不是一个总开关）；
@@ -17,7 +17,7 @@ HLine TV 的 minSdk 21，装法和其他安卓电视一样，用 `tools/install.
 
 | 代 | 系统 | 芯片 | 报告过的机型（`ro.product.model`） | 备注 |
 |---|---|---|---|---|
-| 2015–2017 | Android 5.0.2 / 6.0 / 7.0 / 8.0 | MT5891 / MT5893 | `BRAVIA_ATV3_4K`（KD-55X，4K，**1.5 GB 内存**） | 内存 1.5 GB，HLine TV 自动判为低端，效果走「流畅」 |
+| 2015–2017 | Android 5.0.2 / 6.0 / 7.0 / 8.0 | MT5891 / MT5893 | `BRAVIA_ATV3_4K`（KD-55X，4K，**1.5 GB 内存**） | 内存 1.5 GB，HLine Home 自动判为低端，效果走「流畅」 |
 | 2018–2020 | Android 8.0 / 9.0 | MT5893 / MT5895 | `BRAVIA 4K GB`（#840）、A8G、X90J（#20）、85X95EK（#659） | 这一代的菜单是「设备偏好设置 → 安全和限制」 |
 | 2021+ | Google TV，Android 10 / 12 / 14 | MT5895 / XR | `BRAVIA VH1`（#2）、`BRAVIA 4K AE2`（#433）、X90K（#645）、XR90（#259） | 多数只有无线调试（#747） |
 
@@ -79,7 +79,7 @@ adb shell cmd package set-home-activity app.orchard.tv/app.orchard.tv.MainActivi
 ## 四、索尼上要顺手改的一项系统设置：节能
 
 设置 → 系统 → 电源（或「节能」）→ **节能模式：关**（有的固件叫「电视待机」而不是「关机」）。
-索尼在「节能/深度待机」下会断网并冻结后台，HLine TV 的守护和屏保就活不下来，ADB 也连不上
+索尼在「节能/深度待机」下会断网并冻结后台，HLine Home 的守护和屏保就活不下来，ADB 也连不上
 （这台待机时网络休眠，唤不醒，要遥控器开机——TCL 上已经踩过一次，见 `docs/HANDOFF.md`）。
 默认的「电视待机」不会影响保修，也不改动任何系统应用。
 
@@ -88,7 +88,7 @@ adb shell cmd package set-home-activity app.orchard.tv/app.orchard.tv.MainActivi
 | 现象 | 处理 | 出处 |
 |---|---|---|
 | 控制中心调亮度：系统亮度值变了，屏幕背光不动 | 索尼走的是自己的图像设置，`DISPLAY_SETTINGS` 解析到 `com.sony.dtv.configsettings`，控制中心直接打开索尼的图像菜单 | `system/Brightness.kt`，BRAVIA VH1 / Android 12 / #2 |
-| 默认没有按键音 | 索尼固件常把系统按键音关掉，HLine TV 的界面音默认用自带音效 | `settings/AerialSettings.kt` 的 `UiSounds`，#160 #169 |
+| 默认没有按键音 | 索尼固件常把系统按键音关掉，HLine Home 的界面音默认用自带音效 | `settings/AerialSettings.kt` 的 `UiSounds`，#160 #169 |
 | 语音搜索的虚拟输入设备 `virtual-search` 自称是手柄 | 守护的按键过滤把它当虚拟设备放行，否则按 Home 会走错分支 | `guard/HomeGuardService.kt`，#840 |
 | 4K 面板但界面层只有 1080p | 4K 画布（`UhdCanvas`）在 MT5895 上默认不开：1.51 按「显示模式是界面 2 倍」自动开，X90K 上控制中心和网格掉帧、4K 屏保缩在左上角 | `ui/components/UhdCanvas.kt`，#645 |
 | 两个调谐器同名 | 标成「模拟/数字电视」区分 | `system/SystemState.kt`，#433 |
