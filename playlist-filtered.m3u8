@@ -5592,6 +5592,28 @@ https://cd198.anystream.uk:9092/iqapp/s2tve/playlist.m3u8
 https://cd198.anystream.uk:9092/iqapp/s4ne/playlist.m3u8
 #EXTINF:-1 tvg-name="K24 TV" tvg-logo="https://i.imgur.com/ce2P9Y4" tvg-id="K24.ke" tvg-chno="5" tvg-country="KE" group-title="24 非洲",K24 TV
 https://livecdn.premiumfree.tv/afxpstr/K24Backup/index.m3u8
+#EXTINF:-1 tvg-name="TVBS NEWS" group-title="97 YouTube 预留",TVBS NEWS
+https://www.youtube.com/@TVBSNEWS01/live
+#EXTINF:-1 tvg-name="东森新闻 EBC" group-title="97 YouTube 预留",东森新闻 EBC
+https://www.youtube.com/@newsebc/live
+#EXTINF:-1 tvg-name="东森财经新闻" group-title="97 YouTube 预留",东森财经新闻
+https://www.youtube.com/@57ETFN/live
+#EXTINF:-1 tvg-name="民视新闻 FTV" group-title="97 YouTube 预留",民视新闻 FTV
+https://www.youtube.com/@FTV_News/live
+#EXTINF:-1 tvg-name="镜新闻 mnews" group-title="97 YouTube 预留",镜新闻 mnews
+https://www.youtube.com/@mnews-tw/live
+#EXTINF:-1 tvg-name="凤凰卫视 Phoenix TV" group-title="97 YouTube 预留",凤凰卫视 Phoenix TV
+https://www.youtube.com/@phoenixtvglobal/live
+#EXTINF:-1 tvg-name="TBS NEWS DIG" group-title="97 YouTube 预留",TBS NEWS DIG
+https://www.youtube.com/@tbsnewsdig/live
+#EXTINF:-1 tvg-name="ANNnewsCH 朝日新闻" group-title="97 YouTube 预留",ANNnewsCH 朝日新闻
+https://www.youtube.com/@ANNnewsCH/live
+#EXTINF:-1 tvg-name="YTN 24小时新闻" group-title="97 YouTube 预留",YTN 24小时新闻
+https://www.youtube.com/@ytnnews24/live
+#EXTINF:-1 tvg-name="연합뉴스TV 韩联社" group-title="97 YouTube 预留",연합뉴스TV 韩联社
+https://www.youtube.com/channel/UCTHCOPwqNfZ0uiKOvFyhGwg/live
+#EXTINF:-1 tvg-name="Sky News 英国" group-title="97 YouTube 预留",Sky News 英国
+https://www.youtube.com/@SkyNews/live
 #EXTINF:-1 tvg-name="ERT News" tvg-logo="https://i.imgur.com/saIGLvr.png" tvg-id="ERTNews.gr" tvg-chno="4" tvg-country="GR" group-title="99 其他",ERT News
 https://ert-ucdn.broadpeak-aas.com/bpk-tv/ERTNews/default/index.mpd
 #EXTINF:-1 tvg-name="ERT Cosmos" tvg-logo="https://i.imgur.com/KsMTWYw.png" tvg-id="ERTWorld.gr" tvg-chno="5" tvg-country="GR" group-title="99 其他",ERT Cosmos
